@@ -1,2 +1,2 @@
-# Run all specs
-specs:
+# Lint all the files
+lint:
