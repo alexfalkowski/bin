@@ -6,7 +6,7 @@ jobs:
       - image: alexfalkowski/go:1.18
     steps:
       - checkout
-      - run: make specs
+      - run: make lint
     resource_class: large
   release:
     docker:
