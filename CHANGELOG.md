@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.3.0](https://github.com/alexfalkowski/bin/releases/tag/v1.3.0) - 2023-01-13
+
+- [`ee668a4`](https://github.com/alexfalkowski/bin/commit/ee668a49c47b7ce3389c6575e98a42cbae29ea24) feat(quality): exclude from file .go.cov (#5)
+- [`84b7062`](https://github.com/alexfalkowski/bin/commit/84b70626152e682624a621c1ae902076c9decdc6) ci: use release 3.1 (#4)
+- [`4fd3a4a`](https://github.com/alexfalkowski/bin/commit/4fd3a4a94cd830328d60b1d96dd03f47f1900bec) ci: use release 3.0 (#3)
+
 ## [v1.2.0](https://github.com/alexfalkowski/bin/releases/tag/v1.2.0) - 2022-06-18
 
 - [`ed84b9e`](https://github.com/alexfalkowski/bin/commit/ed84b9edc0c0e323a9c85ba7786fc30b497aa705) feat: add scripts (#2)
