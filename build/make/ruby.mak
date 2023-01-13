@@ -1,4 +1,6 @@
-# Set up bundler.
+# Setup all needed.
+setup: setup-bundler
+
 setup-bundler:
 	gem install bundler
 	bundle config set path 'vendor/bundle'
