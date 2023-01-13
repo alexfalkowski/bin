@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.8.2](https://github.com/alexfalkowski/bin/releases/tag/v1.8.2) - 2023-01-13
+
+- [`da809a7`](https://github.com/alexfalkowski/bin/commit/da809a7676d3531139b5f6a7b790cfe4cf6ef904) fix(build): remove buf prefix (#13)
+
 ## [v1.8.1](https://github.com/alexfalkowski/bin/releases/tag/v1.8.1) - 2023-01-13
 
 - [`ee1a821`](https://github.com/alexfalkowski/bin/commit/ee1a8214f3e5a70df340b7203bd7e497223ab476) fix(build): make sure we have setup for ruby (#12)
