@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.8.1](https://github.com/alexfalkowski/bin/releases/tag/v1.8.1) - 2023-01-13
+
+- [`ee1a821`](https://github.com/alexfalkowski/bin/commit/ee1a8214f3e5a70df340b7203bd7e497223ab476) fix(build): make sure we have setup for ruby (#12)
+
 ## [v1.8.0](https://github.com/alexfalkowski/bin/releases/tag/v1.8.0) - 2023-01-13
 
 - [`d748974`](https://github.com/alexfalkowski/bin/commit/d748974d4d038caee045c3ceb8492921058f34ba) feat(ruby): add makefile (#11)
