@@ -1,3 +1,8 @@
+# Get git submodule
+submodule:
+	git submodule sync
+	git submodule update --init
+
 download:
 	go mod download
 
