@@ -17,7 +17,7 @@ We will break these executables into higher level categories. These will be as f
 
 ## Usage
 
-Best to use this repository as a [Submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules)
+Best to use this repository as a [Submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules).
 
 ### Circle CI
 
