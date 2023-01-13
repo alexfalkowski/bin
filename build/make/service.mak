@@ -1,8 +1,3 @@
-# Get git submodule
-submodule:
-	git submodule sync
-	git submodule update --init
-
 # Setup ruby.
 ruby-setup:
 	make -C test setup
