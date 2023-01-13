@@ -1,11 +1,14 @@
 #!/usr/bin/env ruby
 
+file = '.go.cov'
+exclude = File.exists?(file) ? File.read(file).split.join('|') : '.pb|main.go'
+
 Dir['test/reports/*.cov'].each do |f|
   nf = "#{File.dirname(f)}/#{File.basename(f, File.extname(f))}-new#{File.extname(f)}"
 
   File.open(nf, 'w') do |out_file|
     File.foreach(f) do |line|
-      out_file.puts line unless line =~ /(.pb|main.go)/
+      out_file.puts line unless line =~ /(#{exclude})/
     end
   end
 end
