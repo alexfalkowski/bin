@@ -1,15 +1,15 @@
 # Lint buf.
-buf-lint:
+lint:
 	buf lint
 
 # Format buf.
-buf-format:
+format:
 	buf format -w
 
 # Update all of buf deps.
-buf-update-all:
+update-all:
 	buf mod update
 
 # Generate buf.
-buf-generate:
+generate:
 	buf generate
