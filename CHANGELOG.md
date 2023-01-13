@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.4.0](https://github.com/alexfalkowski/bin/releases/tag/v1.4.0) - 2023-01-13
+
+- [`bc28ac6`](https://github.com/alexfalkowski/bin/commit/bc28ac62ed11d30a977ecf709415e1c285416ad3) feat(build): add make files (#6)
+
 ## [v1.3.0](https://github.com/alexfalkowski/bin/releases/tag/v1.3.0) - 2023-01-13
 
 - [`ee668a4`](https://github.com/alexfalkowski/bin/commit/ee668a49c47b7ce3389c6575e98a42cbae29ea24) feat(quality): exclude from file .go.cov (#5)
