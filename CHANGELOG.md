@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.7.0](https://github.com/alexfalkowski/bin/releases/tag/v1.7.0) - 2023-01-13
+
+- [`908c612`](https://github.com/alexfalkowski/bin/commit/908c612620f2fee94cd1d786968edfa2cb8f5de1) feat(build): add buf (#10)
+- [`a673bed`](https://github.com/alexfalkowski/bin/commit/a673bedac493a505ff9f3bf777ea30262159704f) style: add mak to editorconfig (#9)
+
 ## [v1.6.0](https://github.com/alexfalkowski/bin/releases/tag/v1.6.0) - 2023-01-13
 
 - [`b777db8`](https://github.com/alexfalkowski/bin/commit/b777db89474fa2bb360c8a131708b7141c1ecef6) Revert "feat(build): add submodule (#7)" (#8)
