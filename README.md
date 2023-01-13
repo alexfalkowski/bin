@@ -19,6 +19,8 @@ We will break these executables into higher level categories. These will be as f
 
 Best to use this repository as a [Submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules).
 
+For convenience we have added a target called `submodule` under `build/make`
+
 ### Circle CI
 
 As Circle CI does not seem to support submodules, so we need to do some [work](https://circleci.com/docs/configuration-reference/#checkout).
