@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.8.3](https://github.com/alexfalkowski/bin/releases/tag/v1.8.3) - 2023-01-18
+
+- [`1456215`](https://github.com/alexfalkowski/bin/commit/14562157572131c4427f40850c1d7814c7dc0b80) fix(ruby): do not clean reports (#14)
+
 ## [v1.8.2](https://github.com/alexfalkowski/bin/releases/tag/v1.8.2) - 2023-01-13
 
 - [`da809a7`](https://github.com/alexfalkowski/bin/commit/da809a7676d3531139b5f6a7b790cfe4cf6ef904) fix(build): remove buf prefix (#13)
