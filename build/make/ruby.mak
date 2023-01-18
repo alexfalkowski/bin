@@ -23,7 +23,7 @@ update-all:
 	bundle update
 
 # Run all features.
-features: clean-reports
+features:
 	bundle exec cucumber --profile report --fail-fast $(feature)
 
 # Clean the reports.
