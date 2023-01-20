@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.9.0](https://github.com/alexfalkowski/bin/releases/tag/v1.9.0) - 2023-01-20
+
+- [`ead2d63`](https://github.com/alexfalkowski/bin/commit/ead2d63c8f44d3bfd66ba20366363609cab2f960) feat(build): add specs for service (#15)
+
 ## [v1.8.3](https://github.com/alexfalkowski/bin/releases/tag/v1.8.3) - 2023-01-18
 
 - [`1456215`](https://github.com/alexfalkowski/bin/commit/14562157572131c4427f40850c1d7814c7dc0b80) fix(ruby): do not clean reports (#14)
