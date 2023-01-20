@@ -60,6 +60,10 @@ fix-lint: go-fix-lint ruby-fix-lint proto-format
 features: build-test
 	make -C test features
 
+# Run all the specs.
+specs:
+	go test -race -mod vendor -v -covermode=atomic -coverpkg=./... -coverprofile=test/reports/profile.cov ./...
+
 # Get go dep.
 go-get:
 	go get $(module)
