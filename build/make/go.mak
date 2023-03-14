@@ -13,21 +13,25 @@ get:
 get-all:
 	go get -u all
 
-# Setup go deps
+# Setup go deps.
 dep: download tidy vendor
 
-# Lint all the go code
+# Lint all the go code.
 lint:
 	golangci-lint run --timeout 5m
 
-# Fix the lint issues in the go code (if possible)
+# Fix the lint issues in the go code (if possible).
 fix-lint:
 	golangci-lint run --timeout 5m --fix
+
+# Run specs.
+specs:
+	go test -race -mod vendor -failfast -covermode=atomic -coverpkg=./... -coverprofile=test/profile.cov ./...
 
 remove-generated-coverage:
 	cat test/profile.cov | grep -v "test" > test/final.cov
 
-# Get the HTML coverage for go
+# Get the HTML coverage for go.
 html-coverage: remove-generated-coverage
 	go tool cover -html test/final.cov
 
@@ -35,8 +39,8 @@ html-coverage: remove-generated-coverage
 func-coverage: remove-generated-coverage
 	go tool cover -func test/final.cov
 
-# Update go dep
+# Update go dep.
 update-dep: get tidy vendor
 
-# Update all go dep
+# Update all go dep.
 update-all-deps: get-all tidy vendor
