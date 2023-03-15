@@ -9,9 +9,9 @@ readonly docker_path="$code_path/docker"
 # Make sure we have env.
 if [[ -d $docker_path ]]
 then
-    (cd $docker_path && git pull --rebase)
+  (cd $docker_path && git pull --rebase)
 else
-    (cd $code_path && git clone git@github.com:alexfalkowski/docker.git)
+  (cd $code_path && git clone git@github.com:alexfalkowski/docker.git)
 fi
 
 # Run the command.

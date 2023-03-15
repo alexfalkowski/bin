@@ -39,6 +39,10 @@ html-coverage: remove-generated-coverage
 func-coverage: remove-generated-coverage
 	go tool cover -func test/final.cov
 
+# Run security checks.
+sec:
+	bin/build/sec/go
+
 # Update go dep.
 update-dep: get tidy vendor
 
