@@ -56,6 +56,21 @@ proto-generate:
 # Fix the lint issues in the code (if possible).
 fix-lint: go-fix-lint ruby-fix-lint proto-format
 
+sanitize-coverage:
+	bin/quality/go/cov
+
+# Get the HTML coverage for go.
+html-coverage: sanitize-coverage
+	go tool cover -html test/reports/final.cov
+
+# Get the func coverage for go.
+func-coverage: sanitize-coverage
+	go tool cover -func test/reports/final.cov
+
+# Send coveralls data.
+goveralls: sanitize-coverage
+	goveralls -coverprofile=test/reports/final.cov -service=circle-ci -repotoken=${COVERALLS_REPO_TOKEN}
+
 # Run all the features.
 features: build-test
 	make -C test features
@@ -106,3 +121,11 @@ go-sec:
 
 # Run security checks.
 sec: go-sec
+
+# Start the environment.
+start:
+	bin/build/docker/env start
+
+# Stop the environment.
+stop:
+	bin/build/docker/env stop
