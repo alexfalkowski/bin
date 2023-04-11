@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.12.0](https://github.com/alexfalkowski/bin/releases/tag/v1.12.0) - 2023-04-11
+
+- [`aa5cf25`](https://github.com/alexfalkowski/bin/commit/aa5cf25263eb1a61a63eac1444a42109a434188c) feat: send coveralls data (#18)
+
 ## [v1.11.0](https://github.com/alexfalkowski/bin/releases/tag/v1.11.0) - 2023-03-15
 
 - [`c3fccb5`](https://github.com/alexfalkowski/bin/commit/c3fccb5355d494ee4d677f8d249a4700b4eaf69f) feat(build): add sec to make (#17)
