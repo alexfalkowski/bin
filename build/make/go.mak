@@ -39,6 +39,10 @@ html-coverage: remove-generated-coverage
 func-coverage: remove-generated-coverage
 	go tool cover -func test/final.cov
 
+# Send coveralls data.
+goveralls: remove-generated-coverage
+	goveralls -coverprofile=test/final.cov -service=circle-ci -repotoken=${COVERALLS_REPO_TOKEN}
+
 # Run security checks.
 sec:
 	bin/build/sec/go
@@ -48,3 +52,11 @@ update-dep: get tidy vendor
 
 # Update all go dep.
 update-all-deps: get-all tidy vendor
+
+# Start the environment.
+start:
+	bin/build/docker/env start
+
+# Stop the environment.
+stop:
+	bin/build/docker/env stop
