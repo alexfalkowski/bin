@@ -77,7 +77,7 @@ features: build-test
 
 # Run all the specs.
 specs:
-	go test -race -mod vendor -v -covermode=atomic -coverpkg=./... -coverprofile=test/reports/profile.cov ./...
+	go test -race -mod vendor -failfast -covermode=atomic -coverpkg=./... -coverprofile=test/reports/profile.cov ./...
 
 # Get go dep.
 go-get:
