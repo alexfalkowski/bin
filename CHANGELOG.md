@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.14.0](https://github.com/alexfalkowski/bin/releases/tag/v1.14.0) - 2023-04-16
+
+- [`5315f9f`](https://github.com/alexfalkowski/bin/commit/5315f9fe13d55b4a44f09177e0d5ac659fe5db4c) feat(build): add name to service (#20)
+
 ## [v1.13.0](https://github.com/alexfalkowski/bin/releases/tag/v1.13.0) - 2023-04-11
 
 - [`9f8f4ab`](https://github.com/alexfalkowski/bin/commit/9f8f4abb4d0ef597ff83240b3ee53bcdde9f643f) feat(build): fail fast for specs (#19)
