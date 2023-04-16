@@ -1,3 +1,7 @@
+.PHONY: vendor
+
+NAME=$(shell basename $(CURDIR))
+
 # Setup ruby.
 ruby-setup:
 	make -C test setup
@@ -121,6 +125,18 @@ go-sec:
 
 # Run security checks.
 sec: go-sec
+
+# Build release binary.
+build:
+	go build -race -ldflags="-X 'github.com/alexfalkowski/$(NAME)/cmd.Version=latest'" -mod vendor -o $(NAME) main.go
+
+# Build test binary.
+build-test:
+	go test -race -ldflags="-X 'github.com/alexfalkowski/$(NAME)/cmd.Version=latest'" -mod vendor -c -tags features -covermode=atomic -o $(NAME) -coverpkg=./... github.com/alexfalkowski/$(NAME)
+
+# Release to docker hub.
+docker:
+	bin/build/docker/push $(NAME)
 
 # Start the environment.
 start:
