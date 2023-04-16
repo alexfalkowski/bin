@@ -1,3 +1,5 @@
+NAME=$(shell basename $(shell dirname $(CURDIR)))
+
 # Lint buf.
 lint:
 	buf lint
@@ -13,3 +15,7 @@ update-all:
 # Generate buf.
 generate:
 	buf generate
+
+# Buf breaking changes.
+breaking:
+	buf breaking --against 'https://github.com/alexfalkowski/$(NAME).git#branch=master,subdir=api'

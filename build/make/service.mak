@@ -43,7 +43,7 @@ proto-lint:
 	make -C api lint
 
 # Lint all the code.
-lint: go-lint ruby-lint proto-lint proto-breaking
+lint: go-lint ruby-lint proto-lint
 
 # Format proto.
 proto-format:
