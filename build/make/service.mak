@@ -1,3 +1,5 @@
+.PHONY: vendor
+
 # Setup ruby.
 ruby-setup:
 	make -C test setup

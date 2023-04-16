@@ -1,3 +1,5 @@
+.PHONY: vendor features
+
 # Setup all needed.
 setup: setup-bundler
 

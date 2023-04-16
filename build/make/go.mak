@@ -1,3 +1,5 @@
+.PHONY: vendor
+
 download:
 	go mod download
 
