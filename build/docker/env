@@ -15,4 +15,4 @@ else
 fi
 
 # Run the command.
-(cd $docker_path && make "$command")
+(cd $docker_path && make kind=deps "$command")
