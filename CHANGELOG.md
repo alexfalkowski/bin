@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.16.1](https://github.com/alexfalkowski/bin/releases/tag/v1.16.1) - 2023-07-19
+
+- [`ad8a4c8`](https://github.com/alexfalkowski/bin/commit/ad8a4c89be74cf28246528b5d386d25981c5d89f) fix(cov): use exist (#23)
+
 ## [v1.16.0](https://github.com/alexfalkowski/bin/releases/tag/v1.16.0) - 2023-04-18
 
 - [`bdc580b`](https://github.com/alexfalkowski/bin/commit/bdc580bf299151a25f12c4e3425c071bc21b3491) feat(build): add kind to env (#22)
