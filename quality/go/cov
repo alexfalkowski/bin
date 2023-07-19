@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 file = '.go.cov'
-exclude = File.exists?(file) ? File.read(file).split.join('|') : '.pb|main.go'
+exclude = File.exist?(file) ? File.read(file).split.join('|') : '.pb|main.go'
 
 Dir['test/reports/*.cov'].each do |f|
   nf = "#{File.dirname(f)}/#{File.basename(f, File.extname(f))}-new#{File.extname(f)}"
