@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.17.0](https://github.com/alexfalkowski/bin/releases/tag/v1.17.0) - 2023-08-22
+
+- [`6a23a80`](https://github.com/alexfalkowski/bin/commit/6a23a8036d90eb66f25116f059536ed1b2fd04ff) feat(build): add ruby solargraph (#24)
+
 ## [v1.16.1](https://github.com/alexfalkowski/bin/releases/tag/v1.16.1) - 2023-07-19
 
 - [`ad8a4c8`](https://github.com/alexfalkowski/bin/commit/ad8a4c89be74cf28246528b5d386d25981c5d89f) fix(cov): use exist (#23)
