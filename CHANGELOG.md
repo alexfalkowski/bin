@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.18.0](https://github.com/alexfalkowski/bin/releases/tag/v1.18.0) - 2023-11-03
+
+- [`3edf67e`](https://github.com/alexfalkowski/bin/commit/3edf67e1fa8ed43b51a2c4dc5e6ffed679cfac20) feat(build): move artifacts to reports folder in make (#25)
+
 ## [v1.17.0](https://github.com/alexfalkowski/bin/releases/tag/v1.17.0) - 2023-08-22
 
 - [`6a23a80`](https://github.com/alexfalkowski/bin/commit/6a23a8036d90eb66f25116f059536ed1b2fd04ff) feat(build): add ruby solargraph (#24)
