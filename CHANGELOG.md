@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.18.1](https://github.com/alexfalkowski/bin/releases/tag/v1.18.1) - 2023-11-03
+
+- [`32282ed`](https://github.com/alexfalkowski/bin/commit/32282ed8cee5c1b376b7b26ec3fcd6520b779d6d) fix(build): path is incorrect (#26)
+
 ## [v1.18.0](https://github.com/alexfalkowski/bin/releases/tag/v1.18.0) - 2023-11-03
 
 - [`3edf67e`](https://github.com/alexfalkowski/bin/commit/3edf67e1fa8ed43b51a2c4dc5e6ffed679cfac20) feat(build): move artifacts to reports folder in make (#25)
