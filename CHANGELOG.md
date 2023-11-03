@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.18.2](https://github.com/alexfalkowski/bin/releases/tag/v1.18.2) - 2023-11-03
+
+- [`fe32174`](https://github.com/alexfalkowski/bin/commit/fe32174a37259a1a7cbe1bfea7514e7fd707cecd) fix: remove solargraph (#27)
+
 ## [v1.18.1](https://github.com/alexfalkowski/bin/releases/tag/v1.18.1) - 2023-11-03
 
 - [`32282ed`](https://github.com/alexfalkowski/bin/commit/32282ed8cee5c1b376b7b26ec3fcd6520b779d6d) fix(build): path is incorrect (#26)
