@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.19.0](https://github.com/alexfalkowski/bin/releases/tag/v1.19.0) - 2023-11-03
+
+- [`7a8dba6`](https://github.com/alexfalkowski/bin/commit/7a8dba6399aa9389d54ed526f50feff8244af875) feat(build): add buf push (#28)
+
 ## [v1.18.2](https://github.com/alexfalkowski/bin/releases/tag/v1.18.2) - 2023-11-03
 
 - [`fe32174`](https://github.com/alexfalkowski/bin/commit/fe32174a37259a1a7cbe1bfea7514e7fd707cecd) fix: remove solargraph (#27)
