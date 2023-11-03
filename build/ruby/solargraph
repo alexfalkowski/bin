@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-set -e
-
-path=$(find . -name Gemfile -not -path "*vendor*" | sed 's|/[^/]*$||')
-
-(cd "$path" && bundle exec solargraph socket)
