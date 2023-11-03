@@ -28,22 +28,22 @@ fix-lint:
 
 # Run specs.
 specs:
-	go test -race -mod vendor -failfast -covermode=atomic -coverpkg=./... -coverprofile=test/profile.cov ./...
+	go test -race -mod vendor -failfast -covermode=atomic -coverpkg=./... -coverprofile=test/resports/profile.cov ./...
 
 remove-generated-coverage:
-	cat test/profile.cov | grep -v "test" > test/final.cov
+	cat test/resports/profile.cov | grep -v "test" > test/resports/final.cov
 
 # Get the HTML coverage for go.
 html-coverage: remove-generated-coverage
-	go tool cover -html test/final.cov
+	go tool cover -html test/resports/final.cov
 
 # Get the func coverage for go
 func-coverage: remove-generated-coverage
-	go tool cover -func test/final.cov
+	go tool cover -func test/resports/final.cov
 
 # Send coveralls data.
 goveralls: remove-generated-coverage
-	goveralls -coverprofile=test/final.cov -service=circle-ci -repotoken=${COVERALLS_REPO_TOKEN}
+	goveralls -coverprofile=test/resports/final.cov -service=circle-ci -repotoken=${COVERALLS_REPO_TOKEN}
 
 # Run security checks.
 sec:
@@ -54,6 +54,10 @@ update-dep: get tidy vendor
 
 # Update all go dep.
 update-all-deps: get-all tidy vendor
+
+# Clean the reports.
+clean-reports:
+	rm -rf test/reports/*.*
 
 # Start the environment.
 start:
