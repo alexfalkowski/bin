@@ -16,6 +16,10 @@ update-all:
 generate:
 	buf generate
 
+# Push buf to repository.
+push:
+	buf push
+
 # Buf breaking changes.
 breaking:
 	buf breaking --against 'https://github.com/alexfalkowski/$(NAME).git#branch=master,subdir=api'
