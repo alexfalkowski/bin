@@ -28,22 +28,22 @@ fix-lint:
 
 # Run specs.
 specs:
-	go test -race -mod vendor -failfast -covermode=atomic -coverpkg=./... -coverprofile=test/resports/profile.cov ./...
+	go test -race -mod vendor -failfast -covermode=atomic -coverpkg=./... -coverprofile=test/reports/profile.cov ./...
 
 remove-generated-coverage:
-	cat test/resports/profile.cov | grep -v "test" > test/resports/final.cov
+	cat test/reports/profile.cov | grep -v "test" > test/reports/final.cov
 
 # Get the HTML coverage for go.
 html-coverage: remove-generated-coverage
-	go tool cover -html test/resports/final.cov
+	go tool cover -html test/reports/final.cov
 
 # Get the func coverage for go
 func-coverage: remove-generated-coverage
-	go tool cover -func test/resports/final.cov
+	go tool cover -func test/reports/final.cov
 
 # Send coveralls data.
 goveralls: remove-generated-coverage
-	goveralls -coverprofile=test/resports/final.cov -service=circle-ci -repotoken=${COVERALLS_REPO_TOKEN}
+	goveralls -coverprofile=test/reports/final.cov -service=circle-ci -repotoken=${COVERALLS_REPO_TOKEN}
 
 # Run security checks.
 sec:
