@@ -3,5 +3,5 @@
 set -e
 
 # Scan using trivy.
-trivy repo ./
-trivy image "alexfalkowski/$1:test"
+trivy repo --exit-code 1 --severity CRITICAL ./
+trivy image --exit-code 1 --severity CRITICAL "alexfalkowski/$1:test"
