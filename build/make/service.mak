@@ -142,6 +142,10 @@ build-docker:
 push-docker:
 	bin/build/docker/push $(NAME)
 
+# Verify using trivy.
+trivy:
+	build/sec/trivy $(NAME)
+
 # Start the environment.
 start:
 	bin/build/docker/env start

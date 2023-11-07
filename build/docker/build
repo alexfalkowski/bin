@@ -3,4 +3,4 @@
 set -e
 
 # Build docker.
-docker build --build-arg version="latest" -t alexfalkowski/"$1" .
+docker build --build-arg version="latest" -t alexfalkowski/"$1":test .
