@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Build docker.
+docker build --build-arg version="latest" -t alexfalkowski/"$1" .

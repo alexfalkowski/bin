@@ -134,8 +134,12 @@ build:
 build-test:
 	go test -race -ldflags="-X 'github.com/alexfalkowski/$(NAME)/cmd.Version=latest'" -mod vendor -c -tags features -covermode=atomic -o $(NAME) -coverpkg=./... github.com/alexfalkowski/$(NAME)
 
-# Release to docker hub.
-docker:
+# Build docker image.
+build-docker:
+	bin/build/docker/build $(NAME)
+
+# Push to docker hub.
+push-docker:
 	bin/build/docker/push $(NAME)
 
 # Start the environment.
