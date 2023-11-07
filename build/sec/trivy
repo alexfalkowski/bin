@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Scan using trivy.
+trivy repo ./
+trivy image "alexfalkowski/$1:test"
