@@ -144,7 +144,7 @@ push-docker:
 
 # Verify using trivy.
 trivy:
-	build/sec/trivy $(NAME)
+	bin/build/sec/trivy $(NAME)
 
 # Start the environment.
 start:
