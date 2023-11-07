@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.22.0](https://github.com/alexfalkowski/bin/releases/tag/v1.22.0) - 2023-11-07
+
+- [`e32144e`](https://github.com/alexfalkowski/bin/commit/e32144e6e9a3493fc4b463b766fd6de2efd4340a) feat(build): add exit code for trivy (#32)
+
 ## [v1.21.1](https://github.com/alexfalkowski/bin/releases/tag/v1.21.1) - 2023-11-07
 
 - [`dd7c28c`](https://github.com/alexfalkowski/bin/commit/dd7c28c77fb4524c5d01dd4dc227754d43f49efd) fix(build): need to use bin as prefix (#31)
