@@ -59,6 +59,10 @@ update-all-deps: get-all tidy vendor
 clean-reports:
 	rm -rf test/reports/*.*
 
+# Encode a config.
+encode-config:
+	cat test/$(kind).yml | base64
+
 # Start the environment.
 start:
 	bin/build/docker/env start
