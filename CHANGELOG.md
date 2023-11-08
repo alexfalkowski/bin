@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.23.0](https://github.com/alexfalkowski/bin/releases/tag/v1.23.0) - 2023-11-08
+
+- [`3a78f76`](https://github.com/alexfalkowski/bin/commit/3a78f766db4edce48ee94d0ee955df8f98ce5cfd) feat(build): allow go projects to encode a config (#33)
+
 ## [v1.22.0](https://github.com/alexfalkowski/bin/releases/tag/v1.22.0) - 2023-11-07
 
 - [`e32144e`](https://github.com/alexfalkowski/bin/commit/e32144e6e9a3493fc4b463b766fd6de2efd4340a) feat(build): add exit code for trivy (#32)
