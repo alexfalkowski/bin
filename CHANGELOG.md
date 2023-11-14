@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.24.0](https://github.com/alexfalkowski/bin/releases/tag/v1.24.0) - 2023-11-14
+
+- [`43b9e95`](https://github.com/alexfalkowski/bin/commit/43b9e95c1dccd7645ac95801808052606aabb823) feat(quality): add ability to run tags in cucumber (#34)
+
 ## [v1.23.0](https://github.com/alexfalkowski/bin/releases/tag/v1.23.0) - 2023-11-08
 
 - [`3a78f76`](https://github.com/alexfalkowski/bin/commit/3a78f766db4edce48ee94d0ee955df8f98ce5cfd) feat(build): allow go projects to encode a config (#33)
