@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.25.0](https://github.com/alexfalkowski/bin/releases/tag/v1.25.0) - 2023-11-14
+
+- [`a69e4b9`](https://github.com/alexfalkowski/bin/commit/a69e4b9b29eea7e26611c391be6e191b05209e26) feat(build): add leave-coverage to ruby make (#37)
+
 ## [v1.24.2](https://github.com/alexfalkowski/bin/releases/tag/v1.24.2) - 2023-11-14
 
 - [`a65064b`](https://github.com/alexfalkowski/bin/commit/a65064be50523446e1b55b1a0b4f07bcdbdbc7be) fix(quality): add PWD for features (#36)
