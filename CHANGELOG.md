@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.24.2](https://github.com/alexfalkowski/bin/releases/tag/v1.24.2) - 2023-11-14
+
+- [`a65064b`](https://github.com/alexfalkowski/bin/commit/a65064be50523446e1b55b1a0b4f07bcdbdbc7be) fix(quality): add PWD for features (#36)
+
 ## [v1.24.1](https://github.com/alexfalkowski/bin/releases/tag/v1.24.1) - 2023-11-14
 
 - [`a0497d6`](https://github.com/alexfalkowski/bin/commit/a0497d63aa33019b8d6e4145b0d648cfac72b112) fix(quality): do not quote feature (#35)
