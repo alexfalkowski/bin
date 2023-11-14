@@ -32,6 +32,10 @@ features:
 clean-reports:
 	rm -rf reports/*.*
 
+# Leave only coverage files.
+leave-coverage:
+	find reports ! -name '*.cov' -type f -exec rm -f {} +
+
 # Update a gem.
 update-dep:
 	bundle update $(gem)
