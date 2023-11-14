@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.24.1](https://github.com/alexfalkowski/bin/releases/tag/v1.24.1) - 2023-11-14
+
+- [`a0497d6`](https://github.com/alexfalkowski/bin/commit/a0497d63aa33019b8d6e4145b0d648cfac72b112) fix(quality): do not quote feature (#35)
+
 ## [v1.24.0](https://github.com/alexfalkowski/bin/releases/tag/v1.24.0) - 2023-11-14
 
 - [`43b9e95`](https://github.com/alexfalkowski/bin/commit/43b9e95c1dccd7645ac95801808052606aabb823) feat(quality): add ability to run tags in cucumber (#34)
