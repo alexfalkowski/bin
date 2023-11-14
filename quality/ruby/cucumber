@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -e
+
+readonly feature="$1"
+readonly tags="$2"
+
+if [ -n "$tags" ]; then
+  bundle exec cucumber --profile report --fail-fast "$feature" --tags "$tags"
+else
+  bundle exec cucumber --profile report --fail-fast "$feature"
+fi
