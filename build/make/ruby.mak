@@ -26,7 +26,7 @@ update-all:
 
 # Run all features.
 features:
-	bin/quality/ruby/cucumber $(feature) $(tags)
+	$(PWD)/bin/quality/ruby/cucumber $(feature) $(tags)
 
 # Clean the reports.
 clean-reports:
