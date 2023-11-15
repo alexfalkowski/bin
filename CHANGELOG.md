@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.26.0](https://github.com/alexfalkowski/bin/releases/tag/v1.26.0) - 2023-11-15
+
+- [`6b95937`](https://github.com/alexfalkowski/bin/commit/6b9593765a293dedf95e117dcf9c187b15877cbb) feat(build): add create-certs (#38)
+
 ## [v1.25.0](https://github.com/alexfalkowski/bin/releases/tag/v1.25.0) - 2023-11-14
 
 - [`a69e4b9`](https://github.com/alexfalkowski/bin/commit/a69e4b9b29eea7e26611c391be6e191b05209e26) feat(build): add leave-coverage to ruby make (#37)
