@@ -146,6 +146,11 @@ push-docker:
 trivy:
 	bin/build/sec/trivy $(NAME)
 
+# Create certificates.
+create-certs:
+	mkcert -key-file test/certs/key.pem -cert-file test/certs/cert.pem localhost
+	mkcert -client -key-file test/certs/client-key.pem -cert-file test/certs/client-cert.pem localhost
+
 # Start the environment.
 start:
 	bin/build/docker/env start
