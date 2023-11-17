@@ -146,6 +146,10 @@ push-docker:
 trivy:
 	bin/build/sec/trivy $(NAME)
 
+# Encode a config.
+encode-config:
+	cat test/$(kind).yml | base64
+
 # Create certificates.
 create-certs:
 	mkcert -key-file test/certs/key.pem -cert-file test/certs/cert.pem localhost
