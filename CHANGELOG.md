@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.27.1](https://github.com/alexfalkowski/bin/releases/tag/v1.27.1) - 2023-11-20
+
+- [`5ef52aa`](https://github.com/alexfalkowski/bin/commit/5ef52aaa2b59a9390c6c6c37048bef57d67d4571) fix(build): change ruby-setup to use test folder (#40)
+
 ## [v1.27.0](https://github.com/alexfalkowski/bin/releases/tag/v1.27.0) - 2023-11-17
 
 - [`50cfe8b`](https://github.com/alexfalkowski/bin/commit/50cfe8bbc968036fff70c7b009beaf97470eeab1) feat(build): add encode config (#39)
