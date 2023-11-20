@@ -5,7 +5,7 @@ setup: setup-bundler
 
 setup-bundler:
 	gem install bundler
-	bundle config set path 'vendor/bundle'
+	bundle config --local set path 'vendor/bundle'
 
 # Lint all the ruby code.
 lint:
