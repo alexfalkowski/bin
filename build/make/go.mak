@@ -1,5 +1,7 @@
 .PHONY: vendor
 
+COV=$(shell cat .go.cov)
+
 download:
 	go mod download
 
@@ -31,7 +33,7 @@ specs:
 	go test -race -mod vendor -failfast -covermode=atomic -coverpkg=./... -coverprofile=test/reports/profile.cov ./...
 
 remove-generated-coverage:
-	cat test/reports/profile.cov | grep -v "test" > test/reports/final.cov
+	cat test/reports/profile.cov | grep -Ev "${COV}" > test/reports/final.cov
 
 # Get the HTML coverage for go.
 html-coverage: remove-generated-coverage
