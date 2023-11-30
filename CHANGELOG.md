@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.28.1](https://github.com/alexfalkowski/bin/releases/tag/v1.28.1) - 2023-11-30
+
+- [`19bcdac`](https://github.com/alexfalkowski/bin/commit/19bcdac9801630f6da10ef5e9c797869d3f3d535) fix(quality): read the file without split (#42)
+
 ## [v1.28.0](https://github.com/alexfalkowski/bin/releases/tag/v1.28.0) - 2023-11-22
 
 - [`8f484e7`](https://github.com/alexfalkowski/bin/commit/8f484e7e3264508005a93ac0ee3d3de98b0b1b5a) feat(build): grep from the cov file (#41)
