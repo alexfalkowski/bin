@@ -57,6 +57,10 @@ update-dep: get tidy vendor
 # Update all go dep.
 update-all-deps: get-all tidy vendor
 
+# List outdated deps.
+outdated:
+	go list -mod=mod -u -f '{{if (and (not (or .Main .Indirect)) .Update)}}{{.Path}} {{.Update.Version}}{{end}}' -m all
+
 # Clean the reports.
 clean-reports:
 	rm -rf test/reports/*.*

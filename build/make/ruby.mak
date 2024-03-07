@@ -24,6 +24,10 @@ dep:
 update-all:
 	bundle update
 
+# List outdated deps.
+outdated:
+	bundle outdated --only-explicit --strict --parseable
+
 # Run all features.
 features:
 	$(PWD)/bin/quality/ruby/cucumber $(feature) $(tags)
