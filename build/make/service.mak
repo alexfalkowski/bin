@@ -46,6 +46,17 @@ proto-lint:
 # Lint all the code.
 lint: go-lint ruby-lint proto-lint
 
+# List outdated go deps.
+go-outdated:
+	go list -mod=mod -u -f '{{if (and (not (or .Main .Indirect)) .Update)}}{{.Path}} {{.Update.Version}}{{end}}' -m all
+
+# List outdated ruby deps.
+ruby-outdated:
+	make -C test outdated
+
+# List outdated deps.
+outdated: go-outdated ruby-outdated
+
 # Format proto.
 proto-format:
 	make -C api format
