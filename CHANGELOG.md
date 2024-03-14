@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.30.0](https://github.com/alexfalkowski/bin/releases/tag/v1.30.0) - 2024-03-14
+
+- [`95753ff`](https://github.com/alexfalkowski/bin/commit/95753ff7b1b86d0d8e8e2292939d5eb035b35060) feat(build): add govulncheck to sec go (#45)
+
 ## [v1.29.0](https://github.com/alexfalkowski/bin/releases/tag/v1.29.0) - 2024-03-07
 
 - [`d7857a5`](https://github.com/alexfalkowski/bin/commit/d7857a5f3baccf734449dd0e85f2a9cf524c64ef) feat(build): check outdated deps (#44)
