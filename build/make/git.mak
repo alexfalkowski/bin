@@ -23,6 +23,13 @@ sync:
 amend: add
 	git commit --amend --no-edit
 
+# Commit the latest changes.
+commit: add
+	git commit -am "$(msg)"
+
 # Push the latest changes.
 push:
 	git push -f origin $(name)
+
+# Commit and push
+commit-push: commit push
