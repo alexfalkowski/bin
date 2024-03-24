@@ -13,7 +13,7 @@ start: master pull
 
 # Finish a the feature, bug, etc.
 finish: master pull
-	git brand -D $(name)
+	git branch -D $(name)
 
 # Sync the current feature, bug, etc.
 sync:
