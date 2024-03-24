@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.31.0](https://github.com/alexfalkowski/bin/releases/tag/v1.31.0) - 2024-03-24
+
+- [`2da4a5b`](https://github.com/alexfalkowski/bin/commit/2da4a5bfb9d3231fe28c2eebf6e03030ec856d1f) feat(build): add git commands for makefiles (#46)
+
 ## [v1.30.0](https://github.com/alexfalkowski/bin/releases/tag/v1.30.0) - 2024-03-14
 
 - [`95753ff`](https://github.com/alexfalkowski/bin/commit/95753ff7b1b86d0d8e8e2292939d5eb035b35060) feat(build): add govulncheck to sec go (#45)
