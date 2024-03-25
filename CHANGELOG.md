@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.34.1](https://github.com/alexfalkowski/bin/releases/tag/v1.34.1) - 2024-03-25
+
+- [`7e5a25d`](https://github.com/alexfalkowski/bin/commit/7e5a25d182a67bcab9d68bc4fed2dfaec19cd119) fix(build): use simply expanded variable assignment (#51)
+
 ## [v1.34.0](https://github.com/alexfalkowski/bin/releases/tag/v1.34.0) - 2024-03-25
 
 - [`ccc8467`](https://github.com/alexfalkowski/bin/commit/ccc846750cb0786e6d0aba157642742b94d4b14e) feat(build): add ability to follow conventional commit standards (#50)
