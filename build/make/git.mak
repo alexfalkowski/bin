@@ -1,3 +1,5 @@
+BRANCH=$(shell git branch --show-current)
+
 master:
 	git checkout master
 
@@ -7,15 +9,23 @@ pull:
 add:
 	git add -A
 
-# Start a new feature, bug, etc.
-new: master pull
-	git checkout -b $(name)
+# Start a new feature.
+new-feature: master pull
+	git checkout -b "feat/$(name)"
 
-# Finish a the feature, bug, etc.
+# Start a new fix.
+new-fix: master pull
+	git checkout -b "fix/$(name)"
+
+# Start a new fix.
+new-build: master pull
+	git checkout -b "build/$(name)"
+
+# Finish the current chane.
 done: master pull
-	git branch -D $(name)
+	git branch -D $(BRANCH)
 
-# Sync the current feature, bug, etc.
+# Sync the current change.
 sync:
 	git fetch && git rebase origin/master
 
@@ -29,7 +39,10 @@ commit: add
 
 # Push the latest changes.
 push:
-	git push -f origin $(name)
+	git push -f origin $(BRANCH)
 
 # Commit and push
 commit-push: commit push
+
+# Sync and push
+sync-push: sync push
