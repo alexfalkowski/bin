@@ -1,6 +1,6 @@
 .PHONY: vendor
 
-COV=$(shell cat .go.cov)
+COV:=$(shell cat .go.cov)
 
 download:
 	go mod download

@@ -1,4 +1,4 @@
-NAME=$(shell basename $(shell dirname $(CURDIR)))
+NAME:=$(shell basename $(shell dirname $(CURDIR)))
 
 # Lint buf.
 lint:
