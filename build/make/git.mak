@@ -42,11 +42,14 @@ commit: add
 push:
 	git push -f origin $(BRANCH)
 
-# Commit and push
+# Commit and push.
 commit-push: commit push
 
-# Sync and push
+# Sync and push.
 sync-push: sync push
+
+# Amend and push.
+amend-push: amend push
 
 # Create a PR from the current change.
 review:
