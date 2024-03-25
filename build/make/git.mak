@@ -8,11 +8,11 @@ add:
 	git add -A
 
 # Start a new feature, bug, etc.
-start: master pull
+new: master pull
 	git checkout -b $(name)
 
 # Finish a the feature, bug, etc.
-finish: master pull
+done: master pull
 	git branch -D $(name)
 
 # Sync the current feature, bug, etc.
