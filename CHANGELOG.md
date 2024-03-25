@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.35.0](https://github.com/alexfalkowski/bin/releases/tag/v1.35.0) - 2024-03-25
+
+- [`d1adeb7`](https://github.com/alexfalkowski/bin/commit/d1adeb7920008181c5637c19fa31b409752237e7) feat(build): add prefix (#52)
+
 ## [v1.34.1](https://github.com/alexfalkowski/bin/releases/tag/v1.34.1) - 2024-03-25
 
 - [`7e5a25d`](https://github.com/alexfalkowski/bin/commit/7e5a25d182a67bcab9d68bc4fed2dfaec19cd119) fix(build): use simply expanded variable assignment (#51)
