@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.33.0](https://github.com/alexfalkowski/bin/releases/tag/v1.33.0) - 2024-03-25
+
+- [`0e046d0`](https://github.com/alexfalkowski/bin/commit/0e046d06d518ee5dcfb08cd9a11161a9010b4e1e) feat(build): rename to new and end to avoid clash (#49)
+
 ## [v1.32.0](https://github.com/alexfalkowski/bin/releases/tag/v1.32.0) - 2024-03-24
 
 - [`12b61cf`](https://github.com/alexfalkowski/bin/commit/12b61cf190f5a528e92a6ea199f9de03e658f64d) feat(build): add a way to commit and push (#48)
