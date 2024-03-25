@@ -47,3 +47,7 @@ commit-push: commit push
 
 # Sync and push
 sync-push: sync push
+
+# Create a PR from the current change.
+review:
+	gh pr create -a @me --fill-first
