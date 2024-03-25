@@ -1,4 +1,4 @@
-BRANCH=$(shell git branch --show-current)
+BRANCH:=$(shell git branch --show-current)
 
 master:
 	git checkout master

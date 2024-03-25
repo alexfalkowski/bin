@@ -1,6 +1,6 @@
 .PHONY: vendor
 
-NAME=$(shell basename $(CURDIR))
+NAME:=$(shell basename $(CURDIR))
 
 # Setup ruby.
 ruby-setup:
