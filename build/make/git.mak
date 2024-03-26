@@ -10,6 +10,10 @@ pull:
 add:
 	git add -A
 
+# Get the latest submodule changes.
+submodule:
+	git submodule sync && git submodule update --init
+
 # Start a new feature.
 new-feature: master pull
 	git checkout -b "feat/$(name)"
@@ -21,6 +25,10 @@ new-fix: master pull
 # Start a new fix.
 new-build: master pull
 	git checkout -b "build/$(name)"
+
+# Start a new test.
+new-test: master pull
+	git checkout -b "test/$(name)"
 
 # Finish the current chane.
 done: master pull
