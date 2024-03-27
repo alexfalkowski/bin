@@ -10,6 +10,14 @@ pull:
 add:
 	git add -A
 
+# Reset the recent changes.
+reset:
+	git reset HEAD --hard && git clean -fd
+
+# Undo the recent changes.
+undo:
+	git reset HEAD~1 --soft
+
 # Get the latest submodule changes.
 submodule:
 	git submodule sync && git submodule update --init
@@ -49,15 +57,6 @@ commit: add
 # Push the latest changes.
 push:
 	git push -f origin $(BRANCH)
-
-# Commit and push.
-commit-push: commit push
-
-# Sync and push.
-sync-push: sync push
-
-# Amend and push.
-amend-push: amend push
 
 # Create a PR from the current change.
 review:
