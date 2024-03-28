@@ -47,15 +47,15 @@ proto-lint:
 lint: go-lint ruby-lint proto-lint
 
 # List outdated go deps.
-go-outdated:
+go-outdated-dep:
 	go list -mod=mod -u -f '{{if (and (not (or .Main .Indirect)) .Update)}}{{.Path}} {{.Update.Version}}{{end}}' -m all
 
 # List outdated ruby deps.
-ruby-outdated:
+ruby-outdated-dep:
 	make -C test outdated
 
 # List outdated deps.
-outdated: go-outdated ruby-outdated
+outdated-dep: go-outdated-dep ruby-outdated-dep
 
 # Format proto.
 proto-format:
@@ -103,7 +103,7 @@ go-get:
 go-update-dep: go-get tidy vendor
 
 # Update all go deps.
-go-dep-update-all:
+go-update-all-dep:
 	go get -u all
 
 # Setup go deps.
@@ -118,18 +118,18 @@ ruby-dep:
 	make -C test dep
 
 # Update all ruby deps.
-ruby-dep-update-all:
+ruby-update-all-dep:
 	make -C test update-all
 
 # Update proto deps.
-proto-update-all:
+proto-update-all-dep:
 	make -C api update-all
 
 # Setup all deps.
 dep: go-dep ruby-dep
 
 # Update all deps.
-dep-update-all: go-dep-update-all go-dep ruby-dep-update-all ruby-dep proto-update-all
+update-all-dep: go-update-all-dep go-dep ruby-update-all-dep ruby-dep proto-update-all-dep
 
 # Run go security checks.
 go-sec:

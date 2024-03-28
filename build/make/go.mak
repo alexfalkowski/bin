@@ -55,10 +55,10 @@ sec:
 update-dep: get tidy vendor
 
 # Update all go dep.
-update-all-deps: get-all tidy vendor
+update-all-dep: get-all tidy vendor
 
 # List outdated deps.
-outdated:
+outdated-dep:
 	go list -mod=mod -u -f '{{if (and (not (or .Main .Indirect)) .Update)}}{{.Path}} {{.Update.Version}}{{end}}' -m all
 
 # Clean the reports.
