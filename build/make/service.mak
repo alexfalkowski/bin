@@ -119,11 +119,11 @@ ruby-dep:
 
 # Update all ruby deps.
 ruby-update-all-dep:
-	make -C test update-all
+	make -C test update-all-dep
 
 # Update proto deps.
 proto-update-all-dep:
-	make -C api update-all
+	make -C api update-all-dep
 
 # Setup all deps.
 dep: go-dep ruby-dep
