@@ -21,11 +21,11 @@ dep:
 	bundle clean --force
 
 # Update all ruby deps.
-update-all:
+update-all-dep:
 	bundle update
 
 # List outdated deps.
-outdated:
+outdated-dep:
 	bundle outdated --only-explicit --strict --parseable
 
 # Run all features.

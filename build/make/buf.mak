@@ -9,8 +9,8 @@ format:
 	buf format -w
 
 # Update all of buf deps.
-update-all:
-	buf mod update
+update-all-dep:
+	buf mod update && buf mod prune
 
 # Generate buf.
 generate:
