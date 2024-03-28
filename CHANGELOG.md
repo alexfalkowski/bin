@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.40.1](https://github.com/alexfalkowski/bin/releases/tag/v1.40.1) - 2024-03-28
+
+- [`e57af7e`](https://github.com/alexfalkowski/bin/commit/e57af7ef445f64295e9e791577965aeb0d11e0fd) fix(build): consistent naming of targets in make (#59)
+
 ## [v1.40.0](https://github.com/alexfalkowski/bin/releases/tag/v1.40.0) - 2024-03-28
 
 - [`a0a5c2a`](https://github.com/alexfalkowski/bin/commit/a0a5c2af89da9db17281b39b83bfd915b9a346cd) feat(build): use target-specific variable for git targets (#58)
