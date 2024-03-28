@@ -22,21 +22,24 @@ undo:
 submodule:
 	git submodule sync && git submodule update --init
 
+new-branch: master pull
+	git checkout -b $(branch)
+
 # Start a new feature.
-new-feature: master pull
-	git checkout -b "feat/$(name)"
+new-feature: branch="feat/$(name)"
+new-feature: new-branch
 
 # Start a new fix.
-new-fix: master pull
-	git checkout -b "fix/$(name)"
+new-fix: branch="fix/$(name)"
+new-fix: new-branch
 
-# Start a new fix.
-new-build: master pull
-	git checkout -b "build/$(name)"
+# Start a new build.
+new-build: branch="build/$(name)"
+new-build: new-branch
 
 # Start a new test.
-new-test: master pull
-	git checkout -b "test/$(name)"
+new-test: branch="test/$(name)"
+new-test: new-branch
 
 # Finish the current chane.
 done: master pull
