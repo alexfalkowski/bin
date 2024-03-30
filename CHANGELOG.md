@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.40.3](https://github.com/alexfalkowski/bin/releases/tag/v1.40.3) - 2024-03-30
+
+- [`1706e7b`](https://github.com/alexfalkowski/bin/commit/1706e7bf58191badfdeeeaf356daef40982173f0) fix(build): invalid target (#61)
+
 ## [v1.40.2](https://github.com/alexfalkowski/bin/releases/tag/v1.40.2) - 2024-03-28
 
 - [`839bbb6`](https://github.com/alexfalkowski/bin/commit/839bbb63a7ce2a9954e1f2e7f4d5506796f71b7a) fix(build): incorrect targest (#60)
