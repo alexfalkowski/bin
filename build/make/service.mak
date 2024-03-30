@@ -52,7 +52,7 @@ go-outdated-dep:
 
 # List outdated ruby deps.
 ruby-outdated-dep:
-	make -C test outdated
+	make -C test outdated-dep
 
 # List outdated deps.
 outdated-dep: go-outdated-dep ruby-outdated-dep
