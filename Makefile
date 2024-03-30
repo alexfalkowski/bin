@@ -1,4 +1,13 @@
 include build/make/git.mak
 
-# Lint all the files
 lint:
+	# Do nothing
+
+build-docker:
+	# Do nothing
+
+push-docker:
+	# Do nothing
+
+lint-docker:
+	# Do nothing
