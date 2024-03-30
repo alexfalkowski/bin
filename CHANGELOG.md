@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.41.1](https://github.com/alexfalkowski/bin/releases/tag/v1.41.1) - 2024-03-30
+
+- [`5529228`](https://github.com/alexfalkowski/bin/commit/5529228714bd156666e1be14145403fad9ade267) fix(make): remove docker makefile (#63)
+
 ## [v1.41.0](https://github.com/alexfalkowski/bin/releases/tag/v1.41.0) - 2024-03-30
 
 - [`0a42952`](https://github.com/alexfalkowski/bin/commit/0a429524482a0b664cf1031cffe82e4674b80b2d) feat(build): implement docker makefile (#62)
