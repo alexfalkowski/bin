@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.43.0](https://github.com/alexfalkowski/bin/releases/tag/v1.43.0) - 2024-03-31
+
+- [`28902c5`](https://github.com/alexfalkowski/bin/commit/28902c5ac907440feb078761afdb343f303e1c30) feat(build): do not clean deps from bundler (#65)
+
 ## [v1.42.0](https://github.com/alexfalkowski/bin/releases/tag/v1.42.0) - 2024-03-31
 
 - [`b4e8991`](https://github.com/alexfalkowski/bin/commit/b4e8991e2735ac585158973928b936be22937d05) feat(build): remove setup (#64)
