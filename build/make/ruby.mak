@@ -11,7 +11,6 @@ fix-lint:
 # Get ruby deps.
 dep:
 	bundle check || bundle install
-	bundle clean --force
 
 # Update all ruby deps.
 update-all-dep:
@@ -36,4 +35,3 @@ leave-coverage:
 # Update a gem.
 update-dep:
 	bundle update $(gem)
-	bundle clean --force
