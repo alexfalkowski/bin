@@ -2,14 +2,6 @@
 
 NAME:=$(shell basename $(CURDIR))
 
-# Setup ruby.
-ruby-setup:
-	gem install bundler
-	bundle config --local set path 'test/vendor/bundle'
-
-# Setup everything.
-setup: go-dep ruby-setup ruby-dep
-
 download:
 	go mod download
 
