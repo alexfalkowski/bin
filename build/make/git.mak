@@ -1,5 +1,5 @@
 BRANCH:=$(shell git branch --show-current)
-PREFIX:=$(shell ruby -e '_, t, n = ARGV[0].split("/"); print "#{t}(#{n}):" unless t.nil?' $(BRANCH))
+PREFIX:=$(shell ruby -e '_, t, n = (ARGV[0] || "").split("/"); print "#{t}(#{n}):" unless t.nil?' $(BRANCH))
 
 master:
 	git checkout master
