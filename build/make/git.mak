@@ -1,5 +1,5 @@
 BRANCH:=$(shell git branch --show-current)
-PREFIX:=$(shell ruby -e 't, n = ARGV[0].split("/"); print "#{t}(#{n}):" unless t.nil?' $(BRANCH))
+PREFIX:=$(shell ruby -e '_, t, n = ARGV[0].split("/"); print "#{t}(#{n}):" unless t.nil?' $(BRANCH))
 
 master:
 	git checkout master
@@ -23,7 +23,7 @@ submodule:
 	git submodule sync && git submodule update --init
 
 new-branch: master pull
-	git checkout -b $(branch)
+	git checkout -b "$(USER)/$(branch)
 
 # Start a new feature.
 new-feature: branch="feat/$(name)"
