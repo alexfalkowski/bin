@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.44.1](https://github.com/alexfalkowski/bin/releases/tag/v1.44.1) - 2024-04-02
+
+- [`e1a2e67`](https://github.com/alexfalkowski/bin/commit/e1a2e67cddb0160ba866ae3cc699013271b2af6b) fix(build): terminate string (#67)
+
 ## [v1.44.0](https://github.com/alexfalkowski/bin/releases/tag/v1.44.0) - 2024-04-02
 
 - [`5955662`](https://github.com/alexfalkowski/bin/commit/5955662f08ba2da27eaaec4590cabfc58c9812dd) feat(build): prefix user (#66)
