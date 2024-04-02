@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.44.0](https://github.com/alexfalkowski/bin/releases/tag/v1.44.0) - 2024-04-02
+
+- [`5955662`](https://github.com/alexfalkowski/bin/commit/5955662f08ba2da27eaaec4590cabfc58c9812dd) feat(build): prefix user (#66)
+
 ## [v1.43.0](https://github.com/alexfalkowski/bin/releases/tag/v1.43.0) - 2024-03-31
 
 - [`28902c5`](https://github.com/alexfalkowski/bin/commit/28902c5ac907440feb078761afdb343f303e1c30) feat(build): do not clean deps from bundler (#65)
