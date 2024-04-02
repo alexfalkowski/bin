@@ -23,7 +23,7 @@ submodule:
 	git submodule sync && git submodule update --init
 
 new-branch: master pull
-	git checkout -b "$(USER)/$(branch)
+	git checkout -b "$(USER)/$(branch)"
 
 # Start a new feature.
 new-feature: branch="feat/$(name)"
