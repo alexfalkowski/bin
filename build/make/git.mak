@@ -1,4 +1,5 @@
 BRANCH:=$(shell git branch --show-current)
+NEW_BRANCH:=$(subst $() ,-,$(name))
 PREFIX:=$(shell ruby -e '_, t, n = (ARGV[0] || "").split("/"); print "#{t}(#{n}):" unless t.nil?' $(BRANCH))
 
 master:
@@ -26,19 +27,19 @@ new-branch: master pull
 	git checkout -b "$(USER)/$(branch)"
 
 # Start a new feature.
-new-feature: branch="feat/$(name)"
+new-feature: branch=feat/$(NEW_BRANCH)
 new-feature: new-branch
 
 # Start a new fix.
-new-fix: branch="fix/$(name)"
+new-fix: branch=fix/$(NEW_BRANCH)
 new-fix: new-branch
 
 # Start a new build.
-new-build: branch="build/$(name)"
+new-build: branch=build/$(name)
 new-build: new-branch
 
 # Start a new test.
-new-test: branch="test/$(name)"
+new-test: branch=test/$(NEW_BRANCH)
 new-test: new-branch
 
 # Finish the current chane.
