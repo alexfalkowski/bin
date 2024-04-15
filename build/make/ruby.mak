@@ -8,12 +8,15 @@ lint:
 fix-lint:
 	bundle exec rubocop -A
 
+deployment:
+	bundle config set deployment true
+
 # Get ruby deps.
-dep:
+dep: deployment
 	bundle check || bundle install
 
 # Update all ruby deps.
-update-all-dep:
+update-all-dep: deployment
 	bundle update
 
 # List outdated deps.
