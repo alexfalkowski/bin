@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.47.0](https://github.com/alexfalkowski/bin/releases/tag/v1.47.0) - 2024-04-15
+
+- [`f9f7580`](https://github.com/alexfalkowski/bin/commit/f9f7580063beb87b143a40402520b4b6a740ca1b) feat(make): remove vet as we run linter (#72)
+
 ## [v1.46.0](https://github.com/alexfalkowski/bin/releases/tag/v1.46.0) - 2024-04-15
 
 - [`f1f2f51`](https://github.com/alexfalkowski/bin/commit/f1f2f51132301f861ebe795897cbde6faa22f9ff) feat(make): set deployment mode for ruby (#71)
