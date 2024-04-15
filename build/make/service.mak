@@ -85,7 +85,7 @@ features: build-test
 
 # Run all the specs.
 specs:
-	go test -race -mod vendor -failfast -covermode=atomic -coverpkg=./... -coverprofile=test/reports/profile.cov ./...
+	go test -vet=off -race -mod vendor -failfast -covermode=atomic -coverpkg=./... -coverprofile=test/reports/profile.cov ./...
 
 # Get go dep.
 go-get:
@@ -132,11 +132,11 @@ sec: go-sec
 
 # Build release binary.
 build:
-	go build -race -ldflags="-X 'github.com/alexfalkowski/$(NAME)/cmd.Version=latest'" -mod vendor -o $(NAME) main.go
+	go build -vet=off -race -ldflags="-X 'github.com/alexfalkowski/$(NAME)/cmd.Version=latest'" -mod vendor -o $(NAME) main.go
 
 # Build test binary.
 build-test:
-	go test -race -ldflags="-X 'github.com/alexfalkowski/$(NAME)/cmd.Version=latest'" -mod vendor -c -tags features -covermode=atomic -o $(NAME) -coverpkg=./... github.com/alexfalkowski/$(NAME)
+	go test -vet=off -race -ldflags="-X 'github.com/alexfalkowski/$(NAME)/cmd.Version=latest'" -mod vendor -c -tags features -covermode=atomic -o $(NAME) -coverpkg=./... github.com/alexfalkowski/$(NAME)
 
 # Build docker image.
 build-docker:

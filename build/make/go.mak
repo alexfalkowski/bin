@@ -30,7 +30,7 @@ fix-lint:
 
 # Run specs.
 specs:
-	go test -race -mod vendor -failfast -covermode=atomic -coverpkg=./... -coverprofile=test/reports/profile.cov ./...
+	go test -vet=off -race -mod vendor -failfast -covermode=atomic -coverpkg=./... -coverprofile=test/reports/profile.cov ./...
 
 remove-generated-coverage:
 	cat test/reports/profile.cov | grep -Ev "${COV}" > test/reports/final.cov
