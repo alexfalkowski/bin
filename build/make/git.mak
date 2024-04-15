@@ -65,3 +65,11 @@ push:
 # Create a PR from the current change.
 review:
 	gh pr create -a @me --fill-first
+
+# The current changes.
+current:
+	git diff
+
+# The last changes.
+last:
+	git log -p -1
