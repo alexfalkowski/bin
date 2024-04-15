@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.45.0](https://github.com/alexfalkowski/bin/releases/tag/v1.45.0) - 2024-04-15
+
+- [`d004cf7`](https://github.com/alexfalkowski/bin/commit/d004cf753a1b5fcac729853b7048107530b4b995) feat(make): add reviewing of local changes (#70)
+
 ## [v1.44.3](https://github.com/alexfalkowski/bin/releases/tag/v1.44.3) - 2024-04-12
 
 - [`051711b`](https://github.com/alexfalkowski/bin/commit/051711b142df0fb111d42859a8ba7ff12910351e) fix(build): handle new branch with spaces (#69)
