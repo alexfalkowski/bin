@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.46.0](https://github.com/alexfalkowski/bin/releases/tag/v1.46.0) - 2024-04-15
+
+- [`f1f2f51`](https://github.com/alexfalkowski/bin/commit/f1f2f51132301f861ebe795897cbde6faa22f9ff) feat(make): set deployment mode for ruby (#71)
+
 ## [v1.45.0](https://github.com/alexfalkowski/bin/releases/tag/v1.45.0) - 2024-04-15
 
 - [`d004cf7`](https://github.com/alexfalkowski/bin/commit/d004cf753a1b5fcac729853b7048107530b4b995) feat(make): add reviewing of local changes (#70)
