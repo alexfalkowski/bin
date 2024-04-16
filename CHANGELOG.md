@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.47.2](https://github.com/alexfalkowski/bin/releases/tag/v1.47.2) - 2024-04-16
+
+- [`ba34441`](https://github.com/alexfalkowski/bin/commit/ba344417d9062c5ff91ea8e7b98498be9939c2d6) fix(make): do not use deployment as it freezes the deps (#74)
+
 ## [v1.47.1](https://github.com/alexfalkowski/bin/releases/tag/v1.47.1) - 2024-04-16
 
 - [`b5bd93c`](https://github.com/alexfalkowski/bin/commit/b5bd93ce5eb50578461d215204a9b4a3402e7cf7) fix(make): remove vet off for build (#73)
