@@ -132,7 +132,7 @@ sec: go-sec
 
 # Build release binary.
 build:
-	go build -vet=off -race -ldflags="-X 'github.com/alexfalkowski/$(NAME)/cmd.Version=latest'" -mod vendor -o $(NAME) main.go
+	go build -race -ldflags="-X 'github.com/alexfalkowski/$(NAME)/cmd.Version=latest'" -mod vendor -o $(NAME) main.go
 
 # Build test binary.
 build-test:
