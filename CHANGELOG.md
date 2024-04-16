@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.47.1](https://github.com/alexfalkowski/bin/releases/tag/v1.47.1) - 2024-04-16
+
+- [`b5bd93c`](https://github.com/alexfalkowski/bin/commit/b5bd93ce5eb50578461d215204a9b4a3402e7cf7) fix(make): remove vet off for build (#73)
+
 ## [v1.47.0](https://github.com/alexfalkowski/bin/releases/tag/v1.47.0) - 2024-04-15
 
 - [`f9f7580`](https://github.com/alexfalkowski/bin/commit/f9f7580063beb87b143a40402520b4b6a740ca1b) feat(make): remove vet as we run linter (#72)
