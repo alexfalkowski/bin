@@ -4,6 +4,10 @@ NAME:=$(shell basename $(shell dirname $(CURDIR)))
 lint:
 	buf lint
 
+# Fix the lint issues in the proto code (if possible).
+fix-lint:
+	buf format -w
+
 # Format buf.
 format:
 	buf format -w

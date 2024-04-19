@@ -8,6 +8,10 @@ lint:
 fix-lint:
 	bundle exec rubocop -A
 
+# Format code.
+format:
+	bundle exec rubocop -A
+
 path:
 	bundle config set path vendor/bundle
 
