@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.49.0](https://github.com/alexfalkowski/bin/releases/tag/v1.49.0) - 2024-04-19
+
+- [`eb464f7`](https://github.com/alexfalkowski/bin/commit/eb464f760a96596ebf636e2ed3d36e98cd70898c) feat(make): add ability to format code (#76)
+
 ## [v1.48.0](https://github.com/alexfalkowski/bin/releases/tag/v1.48.0) - 2024-04-16
 
 - [`4b17d37`](https://github.com/alexfalkowski/bin/commit/4b17d3751d446af559d295ba3331ca5d49df4764) feat(make): use gotestsum for go tests (#75)
