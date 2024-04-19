@@ -28,6 +28,10 @@ lint:
 fix-lint:
 	golangci-lint run --timeout 5m --fix
 
+# Format code.
+format:
+	go fmt ./...
+
 # Run specs.
 specs:
 	gotestsum --junitfile test/reports/specs.xml -- -vet=off -race -mod vendor -failfast -covermode=atomic -coverpkg=./... -coverprofile=test/reports/profile.cov ./...

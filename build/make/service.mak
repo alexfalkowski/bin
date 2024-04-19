@@ -35,8 +35,30 @@ docker-lint:
 proto-lint:
 	make -C api lint
 
+# Fix the lint issues in the proto code (if possible).
+proto-fix-lint:
+	make -C api fix-lint
+
 # Lint all the code.
 lint: go-lint ruby-lint proto-lint
+
+# Fix the lint issues in the code (if possible).
+fix-lint: go-fix-lint ruby-fix-lint proto-fix-lint
+
+# Format go code.
+go-format:
+	go fmt ./...
+
+# Format ruby code.
+ruby-format:
+	make -C test format
+
+# Format proto.
+proto-format:
+	make -C api format
+
+# Format all code.
+format: go-format ruby-format proto-format
 
 # List outdated go deps.
 go-outdated-dep:
@@ -49,10 +71,6 @@ ruby-outdated-dep:
 # List outdated deps.
 outdated-dep: go-outdated-dep ruby-outdated-dep
 
-# Format proto.
-proto-format:
-	make -C api format
-
 # Detect breaking changes in api.
 proto-breaking:
 	make -C api breaking
@@ -60,9 +78,6 @@ proto-breaking:
 # Generate proto.
 proto-generate:
 	make -C api generate
-
-# Fix the lint issues in the code (if possible).
-fix-lint: go-fix-lint ruby-fix-lint proto-format
 
 sanitize-coverage:
 	bin/quality/go/cov
