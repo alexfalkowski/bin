@@ -73,3 +73,11 @@ current:
 # The last changes.
 last:
 	git log -p -1
+
+# Stash changes.
+stash:
+	git stash
+
+# Unstash changes.
+unstash:
+	git stash pop
