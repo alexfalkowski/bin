@@ -71,13 +71,17 @@ ruby-outdated-dep:
 # List outdated deps.
 outdated-dep: go-outdated-dep ruby-outdated-dep
 
-# Detect breaking changes in api.
+# Detect breaking changes in API.
 proto-breaking:
 	make -C api breaking
 
 # Generate proto.
 proto-generate:
 	make -C api generate
+
+# Push proto.
+proto-push:
+	make -C api push
 
 sanitize-coverage:
 	bin/quality/go/cov
