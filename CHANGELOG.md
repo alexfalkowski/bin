@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.50.0](https://github.com/alexfalkowski/bin/releases/tag/v1.50.0) - 2024-04-20
+
+- [`f02e9d0`](https://github.com/alexfalkowski/bin/commit/f02e9d0a01f18b55ab99100ff5cef34617d3cee7) feat(make): add stash/unstash (#77)
+
 ## [v1.49.0](https://github.com/alexfalkowski/bin/releases/tag/v1.49.0) - 2024-04-19
 
 - [`eb464f7`](https://github.com/alexfalkowski/bin/commit/eb464f760a96596ebf636e2ed3d36e98cd70898c) feat(make): add ability to format code (#76)
