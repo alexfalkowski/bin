@@ -42,6 +42,10 @@ new-build: new-branch
 new-test: branch=test/$(NEW_BRANCH)
 new-test: new-branch
 
+# Start with docs.
+new-docs: branch=docs/$(NEW_BRANCH)
+new-docs: new-branch
+
 # Finish the current chane.
 done: master pull
 	git branch -D $(BRANCH)
@@ -53,6 +57,10 @@ sync:
 # Amend the latest changes.
 amend: add
 	git commit --amend --no-edit
+
+# Amend the latest changes for edit.
+edit-amend: add
+	git commit --amend
 
 # Commit the latest changes.
 commit: add
