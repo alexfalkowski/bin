@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.52.0](https://github.com/alexfalkowski/bin/releases/tag/v1.52.0) - 2024-04-26
+
+- [`209bf1e`](https://github.com/alexfalkowski/bin/commit/209bf1e9ca2250e87d56e1638a2e00b8fe149295) feat(make): add ability to create docs for git (#79)
+
 ## [v1.51.0](https://github.com/alexfalkowski/bin/releases/tag/v1.51.0) - 2024-04-20
 
 - [`8f6c920`](https://github.com/alexfalkowski/bin/commit/8f6c92051928031a9c5eea8c4d238cf7c7580868) feat(make): added push proto to service (#78)
