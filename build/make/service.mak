@@ -104,7 +104,7 @@ features: build-test
 
 # Run all the specs.
 specs:
-	gotestsum --junitfile test/reports/specs.xml -- -vet=off -race -mod vendor -failfast -covermode=atomic -coverpkg=./... -coverprofile=test/reports/profile.cov ./...
+	gotestsum --rerun-fails --junitfile test/reports/specs.xml -- -vet=off -race -mod vendor -failfast -covermode=atomic -coverpkg=./... -coverprofile=test/reports/profile.cov ./...
 
 # Get go dep.
 go-get:

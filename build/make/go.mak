@@ -34,7 +34,7 @@ format:
 
 # Run specs.
 specs:
-	gotestsum --junitfile test/reports/specs.xml -- -vet=off -race -mod vendor -failfast -covermode=atomic -coverpkg=./... -coverprofile=test/reports/profile.cov ./...
+	gotestsum --rerun-fails --junitfile test/reports/specs.xml -- -vet=off -race -mod vendor -failfast -covermode=atomic -coverpkg=./... -coverprofile=test/reports/profile.cov ./...
 
 remove-generated-coverage:
 	cat test/reports/profile.cov | grep -Ev "${COV}" > test/reports/final.cov
