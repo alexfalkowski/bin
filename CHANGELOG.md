@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.53.1](https://github.com/alexfalkowski/bin/releases/tag/v1.53.1) - 2024-04-27
+
+- [`eb3e791`](https://github.com/alexfalkowski/bin/commit/eb3e7912862e88f749f82cf9c2404a9db61942a6) fix(make): add --packages flag required for retries (#81)
+
 ## [v1.53.0](https://github.com/alexfalkowski/bin/releases/tag/v1.53.0) - 2024-04-27
 
 - [`34fa589`](https://github.com/alexfalkowski/bin/commit/34fa5894c182616c11f049f722fd59b8fd95d3e4) feat(make): add --rerun-fails to gotestsum (#80)
