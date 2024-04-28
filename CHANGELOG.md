@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.55.0](https://github.com/alexfalkowski/bin/releases/tag/v1.55.0) - 2024-04-28
+
+- [`2d56693`](https://github.com/alexfalkowski/bin/commit/2d56693d7591cc54d08b746888ad026909c24117) feat(make): save cover to html (#84)
+
 ## [v1.54.0](https://github.com/alexfalkowski/bin/releases/tag/v1.54.0) - 2024-04-28
 
 - [`3267e81`](https://github.com/alexfalkowski/bin/commit/3267e81795e4167681e5d936f224251913eb61a3) feat(make): remove goveralls (#83)
