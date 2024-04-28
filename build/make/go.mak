@@ -41,11 +41,15 @@ remove-generated-coverage:
 
 # Get the HTML coverage for go.
 html-coverage: remove-generated-coverage
-	go tool cover -html test/reports/final.cov
+	go tool cover -html test/reports/final.cov -o test/reports/coverage.html
 
 # Get the func coverage for go
 func-coverage: remove-generated-coverage
 	go tool cover -func test/reports/final.cov
+
+# Clean the reports.
+clean-reports:
+	rm -rf test/reports/*.*
 
 # Run security checks.
 sec:
@@ -60,10 +64,6 @@ update-all-dep: get-all tidy vendor
 # List outdated deps.
 outdated-dep:
 	go list -mod=mod -u -f '{{if (and (not (or .Main .Indirect)) .Update)}}{{.Path}} {{.Update.Version}}{{end}}' -m all
-
-# Clean the reports.
-clean-reports:
-	rm -rf test/reports/*.*
 
 # Encode a config.
 encode-config:

@@ -88,11 +88,15 @@ sanitize-coverage:
 
 # Get the HTML coverage for go.
 html-coverage: sanitize-coverage
-	go tool cover -html test/reports/final.cov
+	go tool cover -html test/reports/final.cov -o test/reports/coverage.html
 
 # Get the func coverage for go.
 func-coverage: sanitize-coverage
 	go tool cover -func test/reports/final.cov
+
+# Clean the reports.
+clean-reports:
+	rm -rf test/reports/*.*
 
 # Run all the features.
 features: build-test
