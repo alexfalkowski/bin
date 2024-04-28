@@ -94,10 +94,6 @@ html-coverage: sanitize-coverage
 func-coverage: sanitize-coverage
 	go tool cover -func test/reports/final.cov
 
-# Send coveralls data.
-goveralls: sanitize-coverage
-	goveralls -coverprofile=test/reports/final.cov -service=circle-ci -repotoken=${COVERALLS_REPO_TOKEN}
-
 # Run all the features.
 features: build-test
 	make -C test features

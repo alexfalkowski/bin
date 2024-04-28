@@ -47,10 +47,6 @@ html-coverage: remove-generated-coverage
 func-coverage: remove-generated-coverage
 	go tool cover -func test/reports/final.cov
 
-# Send coveralls data.
-goveralls: remove-generated-coverage
-	goveralls -coverprofile=test/reports/final.cov -service=circle-ci -repotoken=${COVERALLS_REPO_TOKEN}
-
 # Run security checks.
 sec:
 	bin/build/sec/go
