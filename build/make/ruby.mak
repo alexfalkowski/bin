@@ -1,10 +1,10 @@
 .PHONY: vendor features
 
-# Lint all the ruby code.
+# Lint all the the code.
 lint:
 	bundle exec rubocop
 
-# Fix linting issues in the ruby code.
+# Fix linting issues in the the code.
 fix-lint:
 	bundle exec rubocop -A
 
@@ -15,11 +15,11 @@ format:
 path:
 	bundle config set path vendor/bundle
 
-# Get ruby deps.
+# Get the deps.
 dep: path
 	bundle check || bundle install
 
-# Update all ruby deps.
+# Update all the deps.
 update-all-dep: path
 	bundle update
 
