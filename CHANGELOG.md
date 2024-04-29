@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.56.0](https://github.com/alexfalkowski/bin/releases/tag/v1.56.0) - 2024-04-29
+
+- [`8e91df4`](https://github.com/alexfalkowski/bin/commit/8e91df4301839d2ada1c7ce4b6ae20677beb8b8a) feat(make): have a coverage step for go applications (#85)
+
 ## [v1.55.0](https://github.com/alexfalkowski/bin/releases/tag/v1.55.0) - 2024-04-28
 
 - [`2d56693`](https://github.com/alexfalkowski/bin/commit/2d56693d7591cc54d08b746888ad026909c24117) feat(make): save cover to html (#84)
