@@ -17,14 +17,14 @@ get:
 get-all:
 	go get -u all
 
-# Setup go deps.
+# Setup deps.
 dep: download tidy vendor
 
-# Lint all the go code.
+# Lint all the code.
 lint:
 	golangci-lint run --timeout 5m
 
-# Fix the lint issues in the go code (if possible).
+# Fix the lint issues in the code (if possible).
 fix-lint:
 	golangci-lint run --timeout 5m --fix
 
@@ -39,13 +39,16 @@ specs:
 remove-generated-coverage:
 	cat test/reports/profile.cov | grep -Ev "${COV}" > test/reports/final.cov
 
-# Get the HTML coverage for go.
+# Get the HTML coverage the code.
 html-coverage: remove-generated-coverage
 	go tool cover -html test/reports/final.cov -o test/reports/coverage.html
 
-# Get the func coverage for go
+# Get the func coverage the code.
 func-coverage: remove-generated-coverage
 	go tool cover -func test/reports/final.cov
+
+# Generate all coverage for the code.
+coverage: html-coverage func-coverage
 
 # Clean the reports.
 clean-reports:

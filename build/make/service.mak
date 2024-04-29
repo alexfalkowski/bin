@@ -94,6 +94,9 @@ html-coverage: sanitize-coverage
 func-coverage: sanitize-coverage
 	go tool cover -func test/reports/final.cov
 
+# Generate all coverage for the code.
+coverage: html-coverage func-coverage
+
 # Clean the reports.
 clean-reports:
 	rm -rf test/reports/*.*
