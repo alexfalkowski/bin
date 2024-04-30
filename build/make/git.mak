@@ -83,7 +83,7 @@ last:
 	git log -p -1
 
 # Stash changes.
-stash:
+stash: add
 	git stash
 
 # Unstash changes.
