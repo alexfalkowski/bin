@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.57.0](https://github.com/alexfalkowski/bin/releases/tag/v1.57.0) - 2024-04-30
+
+- [`6a461ac`](https://github.com/alexfalkowski/bin/commit/6a461acaacc0bd21aadb3ec358b85fd9ea3e9c50) feat(make): create prs in draft mode with git (#87)
+
 ## [v1.56.1](https://github.com/alexfalkowski/bin/releases/tag/v1.56.1) - 2024-04-30
 
 - [`d51f8a7`](https://github.com/alexfalkowski/bin/commit/d51f8a7a0fec206844f7cbf8b2ea3f861357f3a7) fix(make): add all the changes before we stash in git (#86)
