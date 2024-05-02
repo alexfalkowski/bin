@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.58.0](https://github.com/alexfalkowski/bin/releases/tag/v1.58.0) - 2024-05-02
+
+- [`44b5729`](https://github.com/alexfalkowski/bin/commit/44b5729f392e5cf7008d91b36a819dbb82e7fe00) feat(make): encode the certificate that is generated (#88)
+
 ## [v1.57.0](https://github.com/alexfalkowski/bin/releases/tag/v1.57.0) - 2024-04-30
 
 - [`6a461ac`](https://github.com/alexfalkowski/bin/commit/6a461acaacc0bd21aadb3ec358b85fd9ea3e9c50) feat(make): create prs in draft mode with git (#87)
