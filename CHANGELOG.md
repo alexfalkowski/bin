@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.59.0](https://github.com/alexfalkowski/bin/releases/tag/v1.59.0) - 2024-05-06
+
+- [`f3f2ec4`](https://github.com/alexfalkowski/bin/commit/f3f2ec477c32b7289111ba818aef663e1d69dce8) feat(make): remove retrying as we want to track flakyness (#89)
+
 ## [v1.58.0](https://github.com/alexfalkowski/bin/releases/tag/v1.58.0) - 2024-05-02
 
 - [`44b5729`](https://github.com/alexfalkowski/bin/commit/44b5729f392e5cf7008d91b36a819dbb82e7fe00) feat(make): encode the certificate that is generated (#88)
