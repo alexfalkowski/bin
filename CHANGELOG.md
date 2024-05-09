@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.59.1](https://github.com/alexfalkowski/bin/releases/tag/v1.59.1) - 2024-05-09
+
+- [`5a811c8`](https://github.com/alexfalkowski/bin/commit/5a811c8daf349f54ece1435897d90cf977594857) fix(make): pass parameters (#90)
+
 ## [v1.59.0](https://github.com/alexfalkowski/bin/releases/tag/v1.59.0) - 2024-05-06
 
 - [`f3f2ec4`](https://github.com/alexfalkowski/bin/commit/f3f2ec477c32b7289111ba818aef663e1d69dce8) feat(make): remove retrying as we want to track flakyness (#89)
