@@ -174,7 +174,7 @@ trivy:
 
 # Encode a config.
 encode-config:
-	cat test/$(kind).yml | base64
+	cat test/$(kind).yml | base64 -w 0
 
 # Create certificates.
 create-certs:
@@ -183,7 +183,7 @@ create-certs:
 
 # Encode the certificate.
 encode-cert:
-	cat test/certs/$(kind).pem | base64
+	cat test/certs/$(kind).pem | base64 -w 0
 
 # Start the environment.
 start:
