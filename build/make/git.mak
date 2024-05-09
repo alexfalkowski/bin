@@ -74,6 +74,9 @@ push:
 review:
 	gh pr create -d -a @me --fill-first
 
+# Ready to reviewed.
+ready: commit push review
+
 # The current changes.
 current:
 	git diff
