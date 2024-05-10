@@ -11,13 +11,23 @@ tidy:
 vendor:
 	go mod vendor
 
+field-alignment:
+	fieldalignment ./...
+
+fix-field-alignment:
+	fieldalignment -fix ./...
+
+golangci-lint:
+	golangci-lint run --build-tags features  --timeout 5m
+
+fix-golangci-lint:
+	golangci-lint run --build-tags features --timeout 5m --fix
+
 # Lint all the go code.
-go-lint:
-	golangci-lint run --build-tags features --timeout 5m
+go-lint: field-alignment golangci-lint
 
 # Fix the lint issues in the go code (if possible).
-go-fix-lint:
-	golangci-lint run --build-tags features --timeout 5m --fix
+go-fix-lint: fix-field-alignment fix-golangci-lint
 
 # Lint all the ruby code.
 ruby-lint:

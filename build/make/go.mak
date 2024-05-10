@@ -20,13 +20,23 @@ get-all:
 # Setup deps.
 dep: download tidy vendor
 
-# Lint all the code.
-lint:
+field-alignment:
+	fieldalignment ./...
+
+fix-field-alignment:
+	fieldalignment -fix ./...
+
+golangci-lint:
 	golangci-lint run --timeout 5m
 
-# Fix the lint issues in the code (if possible).
-fix-lint:
+fix-golangci-lint:
 	golangci-lint run --timeout 5m --fix
+
+# Lint all the code.
+lint: field-alignment golangci-lint
+
+# Fix the lint issues in the code (if possible).
+fix-lint: fix-field-alignment fix-golangci-lint
 
 # Format code.
 format:
