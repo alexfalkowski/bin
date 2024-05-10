@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.61.0](https://github.com/alexfalkowski/bin/releases/tag/v1.61.0) - 2024-05-10
+
+- [`b716437`](https://github.com/alexfalkowski/bin/commit/b71643792414bc54b7247d739c03ad9c80b05906) feat(make): add fieldalignment for go (#93)
+
 ## [v1.60.0](https://github.com/alexfalkowski/bin/releases/tag/v1.60.0) - 2024-05-09
 
 - [`f256e77`](https://github.com/alexfalkowski/bin/commit/f256e77053076ce6ecd454c2b26101f2b7711fb2) feat(make): add review when ready (#92)
