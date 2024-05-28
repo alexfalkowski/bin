@@ -1,5 +1,6 @@
 .PHONY: vendor
 
+NAME:=$(shell basename $(CURDIR))
 COV:=$(shell cat .go.cov)
 
 download:
