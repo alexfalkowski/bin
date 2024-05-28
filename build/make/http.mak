@@ -41,19 +41,11 @@ ruby-fix-lint:
 docker-lint:
 	hadolint Dockerfile
 
-# Lint proto
-proto-lint:
-	make -C api lint
-
-# Fix the lint issues in the proto code (if possible).
-proto-fix-lint:
-	make -C api fix-lint
-
 # Lint all the code.
-lint: go-lint ruby-lint proto-lint
+lint: go-lint ruby-lint
 
 # Fix the lint issues in the code (if possible).
-fix-lint: go-fix-lint ruby-fix-lint proto-fix-lint
+fix-lint: go-fix-lint ruby-fix-lint
 
 # Format go code.
 go-format:
@@ -63,12 +55,8 @@ go-format:
 ruby-format:
 	make -C test format
 
-# Format proto.
-proto-format:
-	make -C api format
-
 # Format all code.
-format: go-format ruby-format proto-format
+format: go-format ruby-format
 
 # List outdated go deps.
 go-outdated-dep:
@@ -80,18 +68,6 @@ ruby-outdated-dep:
 
 # List outdated deps.
 outdated-dep: go-outdated-dep ruby-outdated-dep
-
-# Detect breaking changes in API.
-proto-breaking:
-	make -C api breaking
-
-# Generate proto.
-proto-generate:
-	make -C api generate
-
-# Push proto.
-proto-push:
-	make -C api push
 
 sanitize-coverage:
 	bin/quality/go/cov
@@ -145,15 +121,11 @@ ruby-dep:
 ruby-update-all-dep:
 	make -C test update-all-dep
 
-# Update proto deps.
-proto-update-all-dep:
-	make -C api update-all-dep
-
 # Setup all deps.
 dep: go-dep ruby-dep
 
 # Update all deps.
-update-all-dep: go-update-all-dep go-dep ruby-update-all-dep ruby-dep proto-update-all-dep
+update-all-dep: go-update-all-dep go-dep ruby-update-all-dep ruby-dep
 
 # Run go security checks.
 go-sec:
@@ -190,10 +162,6 @@ encode-config:
 create-certs:
 	mkcert -key-file test/certs/key.pem -cert-file test/certs/cert.pem localhost
 	mkcert -client -key-file test/certs/client-key.pem -cert-file test/certs/client-cert.pem localhost
-
-# Encode the certificate.
-encode-cert:
-	cat test/certs/$(kind).pem | base64 -w 0
 
 # Start the environment.
 start:
