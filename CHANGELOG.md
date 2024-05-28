@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.64.1](https://github.com/alexfalkowski/bin/releases/tag/v1.64.1) - 2024-05-28
+
+- [`f1af400`](https://github.com/alexfalkowski/bin/commit/f1af400dc8a01d16ae41ae3959a6734f5c4eae32) fix(make): set name for go (#97)
+
 ## [v1.64.0](https://github.com/alexfalkowski/bin/releases/tag/v1.64.0) - 2024-05-28
 
 - [`4a6a4f4`](https://github.com/alexfalkowski/bin/commit/4a6a4f44f7a60c5bf9d61542b2179bcfa1872278) feat(make): add ability to create diagrams (#96)
