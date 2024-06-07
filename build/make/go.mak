@@ -92,6 +92,10 @@ create-certs:
 create-diagram:
 	goda graph github.com/alexfalkowski/$(NAME)/$(package)/... | dot -Tpng -o assets/$(package).png
 
+# Analyse binary size.
+analyse:
+	gsa $(NAME)
+
 # Start the environment.
 start:
 	bin/build/docker/env start
