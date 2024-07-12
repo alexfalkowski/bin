@@ -142,6 +142,10 @@ build:
 build-test:
 	go test -vet=off -race -ldflags="-X 'github.com/alexfalkowski/$(NAME)/cmd.Version=latest'" -mod vendor -c -tags features -covermode=atomic -o $(NAME) -coverpkg=./... github.com/alexfalkowski/$(NAME)
 
+# Run in dev mode.
+dev:
+	find . -name '*.go' -o -name '*.html' | entr -r go run main.go -i file:test/.config/server.yml server
+
 # Build docker image.
 build-docker:
 	bin/build/docker/build $(NAME)
