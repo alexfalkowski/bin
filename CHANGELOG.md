@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.70.0](https://github.com/alexfalkowski/bin/releases/tag/v1.70.0) - 2024-08-08
+
+- [`01ef698`](https://github.com/alexfalkowski/bin/commit/01ef6981be2c3479d60405400055562ebd61a5cd) feat(make): add pprof (#103)
+
 ## [v1.69.0](https://github.com/alexfalkowski/bin/releases/tag/v1.69.0) - 2024-08-08
 
 - [`edd9188`](https://github.com/alexfalkowski/bin/commit/edd9188f5fcb3c99d71b793b46fb061aafcc4ec8) feat(make): add alloc_space to pprof (#102)
