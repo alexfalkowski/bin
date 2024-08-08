@@ -53,7 +53,7 @@ benchmarks:
 
 # Run pprof for the benchmarks.
 benchmarks-pprof:
-	go tool pprof -alloc_space test/reports/mem.prof
+	go tool pprof test/reports/mem.prof
 
 remove-generated-coverage:
 	cat test/reports/profile.cov | grep -Ev "${COV}" > test/reports/final.cov
