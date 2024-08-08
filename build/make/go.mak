@@ -47,6 +47,10 @@ format:
 specs:
 	gotestsum --junitfile test/reports/specs.xml -- -vet=off -race -mod vendor -covermode=atomic -coverpkg=./... -coverprofile=test/reports/profile.cov ./...
 
+# Run all benchmarks.
+benchmarks:
+	go test -vet=off -race -mod vendor -bench=. -run=Benchmark -benchmem ./...
+
 remove-generated-coverage:
 	cat test/reports/profile.cov | grep -Ev "${COV}" > test/reports/final.cov
 
