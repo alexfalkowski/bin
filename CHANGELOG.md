@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.68.0](https://github.com/alexfalkowski/bin/releases/tag/v1.68.0) - 2024-08-08
+
+- [`7909836`](https://github.com/alexfalkowski/bin/commit/790983691f4f9419bf7b4c8cf67c23593d6a65aa) feat(make): pass package to benchmark (#101)
+
 ## [v1.67.0](https://github.com/alexfalkowski/bin/releases/tag/v1.67.0) - 2024-08-08
 
 - [`9298dac`](https://github.com/alexfalkowski/bin/commit/9298dacb06948b0f2ec878e3566bf550f7ba805c) feat(make): add benchmarks for go (#100)
