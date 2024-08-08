@@ -95,6 +95,10 @@ features: build-test
 specs:
 	gotestsum --junitfile test/reports/specs.xml -- -vet=off -race -mod vendor -covermode=atomic -coverpkg=./... -coverprofile=test/reports/profile.cov ./...
 
+# Run pprof tool.
+pprof:
+	go tool pprof test/reports/$(NAME)-server-$(id)-$(kind).prof
+
 # Get go dep.
 go-get:
 	go get $(module)

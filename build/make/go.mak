@@ -51,7 +51,7 @@ specs:
 benchmarks:
 	go test -vet=off -race -mod vendor -bench=. -run=Benchmark -benchmem -memprofile test/reports/mem.prof ./$(package)
 
-# RUn pprod for the benchmarks.
+# Run pprof for the benchmarks.
 benchmarks-pprof:
 	go tool pprof -alloc_space test/reports/mem.prof
 
