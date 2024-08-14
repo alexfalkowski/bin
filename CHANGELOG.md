@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.73.1](https://github.com/alexfalkowski/bin/releases/tag/v1.73.1) - 2024-08-14
+
+- [`6759a2f`](https://github.com/alexfalkowski/bin/commit/6759a2fce2823bd6d3f6e29dcf1495582b8a21aa) fix(make): removed leave coverage (#108)
+
 ## [v1.73.0](https://github.com/alexfalkowski/bin/releases/tag/v1.73.0) - 2024-08-14
 
 - [`e033006`](https://github.com/alexfalkowski/bin/commit/e0330062084976209402c95ed12ddd54d498c963) feat(make): use codecovcli (#107)
