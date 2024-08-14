@@ -19,6 +19,10 @@ path:
 dep: path
 	bundle check || bundle install
 
+# Update a gem.
+update-dep:
+	bundle update $(gem)
+
 # Update all the deps.
 update-all-dep: path
 	bundle update
@@ -33,12 +37,9 @@ features:
 
 # Clean the reports.
 clean-reports:
-	rm -rf reports/*.*
+	rm -rf test/reports/*.*
 
-# Leave only coverage files.
-leave-coverage:
-	find reports ! -name '*.cov' -type f -exec rm -f {} +
-
-# Update a gem.
-update-dep:
-	bundle update $(gem)
+# Upload codecov information.
+codecov-upload:
+	codecov create-commit
+	codecov do-upload -f test/reports/coverage.xml
