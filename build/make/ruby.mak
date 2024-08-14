@@ -41,5 +41,4 @@ clean-reports:
 
 # Upload codecov information.
 codecov-upload:
-	codecov create-commit
-	codecov do-upload -f test/reports/coverage.xml
+	codecovcli --verbose upload-process --fail-on-error -F service -f test/reports/coverage.xml

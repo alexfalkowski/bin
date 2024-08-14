@@ -109,8 +109,7 @@ coverage: html-coverage func-coverage
 
 # Upload codecov information.
 codecov-upload:
-	codecov create-commit
-	codecov do-upload -f test/reports/final.cov
+	codecovcli --verbose upload-process --fail-on-error -F service -f test/reports/final.cov
 
 # Clean the reports.
 clean-reports:
