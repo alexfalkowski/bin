@@ -39,10 +39,6 @@ features:
 clean-reports:
 	rm -rf test/reports/*.*
 
-# Leave only coverage files.
-leave-coverage:
-	find test/reports ! -name '*.cov' -type f -exec rm -f {} +
-
 # Upload codecov information.
 codecov-upload:
 	codecovcli --verbose upload-process --fail-on-error -F service -f test/reports/coverage.xml
