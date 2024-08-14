@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.73.0](https://github.com/alexfalkowski/bin/releases/tag/v1.73.0) - 2024-08-14
+
+- [`e033006`](https://github.com/alexfalkowski/bin/commit/e0330062084976209402c95ed12ddd54d498c963) feat(make): use codecovcli (#107)
+
 ## [v1.72.0](https://github.com/alexfalkowski/bin/releases/tag/v1.72.0) - 2024-08-14
 
 - [`58a5b90`](https://github.com/alexfalkowski/bin/commit/58a5b9060193291c5357a025ea9dbef82f025d3e) feat(make): add codecov for ruby (#106)
