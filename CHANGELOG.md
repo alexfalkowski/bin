@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.71.0](https://github.com/alexfalkowski/bin/releases/tag/v1.71.0) - 2024-08-14
+
+- [`cb3fda6`](https://github.com/alexfalkowski/bin/commit/cb3fda6d86f1cae79a44eac8ca22165b0a042e54) feat(make): add codecov (#105)
+
 ## [v1.70.1](https://github.com/alexfalkowski/bin/releases/tag/v1.70.1) - 2024-08-08
 
 - [`965f709`](https://github.com/alexfalkowski/bin/commit/965f709193abe2699be04b172b6962104a5abde0) fix(make): no need to specify alloc_space (#104)
