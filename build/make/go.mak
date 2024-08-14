@@ -69,6 +69,11 @@ func-coverage: remove-generated-coverage
 # Generate all coverage for the code.
 coverage: html-coverage func-coverage
 
+# Upload codecov information.
+codecov-upload:
+	codecov create-commit
+	codecov do-upload -f test/reports/final.cov
+
 # Clean the reports.
 clean-reports:
 	rm -rf test/reports/*.*
