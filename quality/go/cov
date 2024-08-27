@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-file = '.go.cov'
+file = '.gocov'
 exclude = File.exist?(file) ? File.read(file).strip : '.pb|main.go'
 
 Dir['test/reports/*.cov'].each do |f|
