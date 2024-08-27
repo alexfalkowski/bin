@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.74.0](https://github.com/alexfalkowski/bin/releases/tag/v1.74.0) - 2024-08-27
+
+- [`853b828`](https://github.com/alexfalkowski/bin/commit/853b8287fdc04ddee0d5567581eb3d1053522f40) feat(make): rename extension to gocov (#110)
+
 ## [v1.73.2](https://github.com/alexfalkowski/bin/releases/tag/v1.73.2) - 2024-08-14
 
 - [`9e1cf30`](https://github.com/alexfalkowski/bin/commit/9e1cf3042c5e1faee172f241fab903bcd35b2300) fix(make): move leave-coverage (#109)
