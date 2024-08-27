@@ -1,7 +1,7 @@
 .PHONY: vendor
 
 NAME:=$(shell basename $(CURDIR))
-COV:=$(shell cat .go.cov)
+COV:=$(shell cat .gocov)
 
 download:
 	go mod download
