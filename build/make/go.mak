@@ -1,4 +1,4 @@
-.PHONY: vendor
+.PHONY: vendor sync
 
 NAME:=$(shell basename $(CURDIR))
 COV:=$(shell cat .gocov)
