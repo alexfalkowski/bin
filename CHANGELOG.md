@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.74.2](https://github.com/alexfalkowski/bin/releases/tag/v1.74.2) - 2024-08-28
+
+- [`dc85b0c`](https://github.com/alexfalkowski/bin/commit/dc85b0ceee86628976cf1e93f2aed027f0ab6c16) fix(make): add sync to phony (#112)
+
 ## [v1.74.1](https://github.com/alexfalkowski/bin/releases/tag/v1.74.1) - 2024-08-27
 
 - [`04ccd8a`](https://github.com/alexfalkowski/bin/commit/04ccd8a3db5d24e0d92c2473db4a71d34a575f95) fix(make): cov file (#111)
