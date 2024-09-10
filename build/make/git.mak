@@ -64,7 +64,7 @@ edit-amend: add
 
 # Commit the latest changes.
 commit: add
-	git commit -am "$(PREFIX) $(msg)"
+	git commit -a -m "$(PREFIX) $(msg)" -m "$(desc)"
 
 # Push the latest changes.
 push:
