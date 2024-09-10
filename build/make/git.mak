@@ -2,6 +2,10 @@ BRANCH:=$(shell git branch --show-current)
 NEW_BRANCH:=$(subst $() ,-,$(name))
 PREFIX:=$(shell ruby -e '_, t, n = (ARGV[0] || "").split("/"); print "#{t}(#{n}):" unless t.nil?' $(BRANCH))
 
+define NEWLINE
+
+endef
+
 master:
 	git checkout master
 
@@ -64,7 +68,7 @@ edit-amend: add
 
 # Commit the latest changes.
 commit: add
-	git commit -am "$(PREFIX) $(msg)"
+	git commit -am "$(PREFIX) $(msg) $(NEWLINE) $(desc)"
 
 # Push the latest changes.
 push:
