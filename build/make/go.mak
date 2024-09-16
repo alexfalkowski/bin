@@ -47,12 +47,12 @@ format:
 specs:
 	gotestsum --junitfile test/reports/specs.xml -- -vet=off -race -mod vendor -covermode=atomic -coverpkg=./... -coverprofile=test/reports/profile.cov ./...
 
-# Run all benchmarks.
-benchmarks:
+# Run package benchmark.
+benchmark:
 	go test -vet=off -race -mod vendor -bench=. -run=Benchmark -benchmem -memprofile test/reports/mem.prof ./$(package)
 
-# Run pprof for the benchmarks.
-benchmarks-pprof:
+# Run pprof for memprofile.
+benchmark-pprof:
 	go tool pprof test/reports/mem.prof
 
 remove-generated-coverage:
