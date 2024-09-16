@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.76.0](https://github.com/alexfalkowski/bin/releases/tag/v1.76.0) - 2024-09-16
+
+- [`2860fb6`](https://github.com/alexfalkowski/bin/commit/2860fb6444f4ed77e59823400106f5d91931430b) feat(make): remove plural as it can only run a single package (#115)
+
 ## [v1.75.0](https://github.com/alexfalkowski/bin/releases/tag/v1.75.0) - 2024-09-10
 
 - [`376a295`](https://github.com/alexfalkowski/bin/commit/376a295b7311ffe780512a90a1adcd88f824e97a) feat(make): add decription (#114)
