@@ -3,5 +3,5 @@
 set -e
 
 # Scan using trivy.
-trivy repo --exit-code 1 --severity CRITICAL ./
-trivy image --exit-code 1 --severity CRITICAL "alexfalkowski/$1:test"
+trivy repo --db-repository public.ecr.aws/aquasecurity/trivy-db:2 --exit-code 1 --severity CRITICAL ./
+trivy image --db-repository public.ecr.aws/aquasecurity/trivy-db:2 --exit-code 1 --severity CRITICAL "alexfalkowski/$1:test"
