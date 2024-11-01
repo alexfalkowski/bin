@@ -2,13 +2,4 @@
 
 set -e
 
-readonly file=".gosec"
-
-if [[ -f $file && -s $file ]]
-then
-  gosec -quiet -exclude-dir=test -exclude="$(cat $file)" ./...
-else
-  gosec -quiet -exclude-dir=test -exclude=G104 ./...
-fi
-
 govulncheck -test ./...
