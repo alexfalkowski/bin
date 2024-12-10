@@ -156,7 +156,7 @@ build-test:
 
 # Run in dev mode.
 dev:
-	find . -name '*.go' -o -name '*.html' | entr -r go run main.go -i file:test/.config/server.yml server
+	air --build.cmd "make build" --build.bin "./$(NAME) server -i file:test/.config/server.yml" --build.exclude_dir "test/vendor,vendor,bin"
 
 # Build docker image.
 build-docker:
