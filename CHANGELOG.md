@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.79.0](https://github.com/alexfalkowski/bin/releases/tag/v1.79.0) - 2024-12-10
+
+- [`37efa59`](https://github.com/alexfalkowski/bin/commit/37efa5953bf1522959f788e980b7de475c743314) feat(make): use air for dev mode (#118)
+
 ## [v1.78.0](https://github.com/alexfalkowski/bin/releases/tag/v1.78.0) - 2024-11-01
 
 - [`83252f6`](https://github.com/alexfalkowski/bin/commit/83252f60b24b0b95b10dc2b0cde50e39957060b6) feat(make): remove gosec as it is covered elsewhere (#117)
