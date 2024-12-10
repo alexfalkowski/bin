@@ -182,6 +182,10 @@ build:
 build-test:
 	go test -vet=off -race -ldflags="-X 'github.com/alexfalkowski/$(NAME)/cmd.Version=latest'" -mod vendor -c -tags features -covermode=atomic -o $(NAME) -coverpkg=./... github.com/alexfalkowski/$(NAME)
 
+# Run in dev mode.
+dev:
+	air --build.cmd "make build" --build.bin "./$(NAME) server -i file:test/.config/server.yml" --build.exclude_dir "test/vendor,vendor,bin"
+
 # Build docker image.
 build-docker:
 	bin/build/docker/build $(NAME)
