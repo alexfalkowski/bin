@@ -46,7 +46,7 @@ new-test: new-branch
 new-docs: branch=docs/$(NEW_BRANCH)
 new-docs: new-branch
 
-# Finish the current chane.
+# Finish the current change.
 done: master pull
 	git branch -D $(BRANCH)
 
@@ -72,7 +72,7 @@ push:
 
 # Create a PR from the current change.
 review:
-	gh pr create -d -a @me --fill-first
+	gh pr create -d -a @me --fill-first --head $(BRANCH)
 
 # Ready to reviewed.
 ready: commit push review
