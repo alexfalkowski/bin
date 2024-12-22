@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.80.0](https://github.com/alexfalkowski/bin/releases/tag/v1.80.0) - 2024-12-22
+
+- [`a222c73`](https://github.com/alexfalkowski/bin/commit/a222c73c8857cbe54985ac80f343304f0b4ef2ee) feat(make): add head for gr command for git operations (#119)
+
 ## [v1.79.0](https://github.com/alexfalkowski/bin/releases/tag/v1.79.0) - 2024-12-10
 
 - [`37efa59`](https://github.com/alexfalkowski/bin/commit/37efa5953bf1522959f788e980b7de475c743314) feat(make): use air for dev mode (#118)
