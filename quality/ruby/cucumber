@@ -6,7 +6,7 @@ readonly feature="$1"
 readonly tags="$2"
 
 if [ -n "$tags" ]; then
-  bundle exec cucumber --profile report $feature --tags "$tags"
+  bundler exec cucumber --profile report $feature --tags "$tags"
 else
-  bundle exec cucumber --profile report $feature
+  bundler exec cucumber --profile report $feature
 fi

@@ -2,34 +2,34 @@
 
 # Lint all the the code.
 lint:
-	bundle exec rubocop
+	bundler exec rubocop
 
 # Fix linting issues in the the code.
 fix-lint:
-	bundle exec rubocop -A
+	bundler exec rubocop -A
 
 # Format code.
 format:
-	bundle exec rubocop -A
+	bundler exec rubocop -A
 
 path:
-	bundle config set path vendor/bundle
+	bundler config set path vendor/bundle
 
 # Get the deps.
 dep: path
-	bundle check || bundle install
+	bundler check || bundler install
 
 # Update a gem.
 update-dep:
-	bundle update $(gem)
+	bundler update $(gem)
 
 # Update all the deps.
 update-all-dep: path
-	bundle update
+	bundler update
 
 # List outdated deps.
 outdated-dep:
-	bundle outdated --only-explicit --strict --parseable
+	bundler outdated --only-explicit --strict --parseable
 
 # Run all features.
 features:
