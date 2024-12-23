@@ -31,6 +31,10 @@ update-all-dep: path
 outdated-dep:
 	bundler outdated --only-explicit --strict --parseable
 
+# Update bundler.
+update-bundler:
+	bundler update --bundler
+
 # Run all features.
 features:
 	$(PWD)/bin/quality/ruby/cucumber $(feature) $(tags)
