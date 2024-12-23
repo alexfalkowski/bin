@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.82.0](https://github.com/alexfalkowski/bin/releases/tag/v1.82.0) - 2024-12-23
+
+- [`a434a41`](https://github.com/alexfalkowski/bin/commit/a434a417b8f96ba767e7f87e3e7c36ea6f8a1b49) feat(make): add update-bundler for ruby (#121)
+
 ## [v1.81.0](https://github.com/alexfalkowski/bin/releases/tag/v1.81.0) - 2024-12-22
 
 - [`027cfd6`](https://github.com/alexfalkowski/bin/commit/027cfd68ad9b5d958955f0ad1a7fbb1d86c5f8b9) feat(make): use bundler (#120)
