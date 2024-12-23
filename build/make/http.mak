@@ -133,6 +133,10 @@ ruby-dep:
 ruby-update-all-dep:
 	make -C test update-all-dep
 
+# Update ruby bundler.
+ruby-update-bundler:
+	make -C test update-bundler
+
 # Setup all deps.
 dep: go-dep ruby-dep
 

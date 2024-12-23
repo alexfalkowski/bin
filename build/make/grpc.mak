@@ -157,6 +157,10 @@ ruby-dep:
 ruby-update-all-dep:
 	make -C test update-all-dep
 
+# Update ruby bundler.
+ruby-update-bundler:
+	make -C test update-bundler
+
 # Update proto deps.
 proto-update-all-dep:
 	make -C api update-all-dep
