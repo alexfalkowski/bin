@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.84.0](https://github.com/alexfalkowski/bin/releases/tag/v1.84.0) - 2025-01-04
+
+- [`a952407`](https://github.com/alexfalkowski/bin/commit/a95240714752af2cc0f5a7d51b46c27ab8377a13) feat(make): make sure we execute path before anything in ruby (#123)
+
 ## [v1.83.0](https://github.com/alexfalkowski/bin/releases/tag/v1.83.0) - 2025-01-04
 
 - [`69acee8`](https://github.com/alexfalkowski/bin/commit/69acee89d7d52ef8e28f5c9e6472d5131da92395) feat(make): add ability to clean deps (#122)
