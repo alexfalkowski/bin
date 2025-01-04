@@ -27,6 +27,10 @@ update-dep:
 update-all-dep: path
 	bundler update
 
+# Clean all deps.
+clean-dep:
+	bundler clean
+
 # List outdated deps.
 outdated-dep:
 	bundler outdated --only-explicit --strict --parseable
