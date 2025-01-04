@@ -21,6 +21,10 @@ get-all:
 # Setup deps.
 dep: download tidy vendor
 
+# Clean all deps.
+clean-dep:
+	go clean --cache -testcache -fuzzcache -modcache
+
 field-alignment:
 	fieldalignment ./...
 

@@ -171,6 +171,17 @@ dep: go-dep ruby-dep
 # Update all deps.
 update-all-dep: go-update-all-dep go-dep ruby-update-all-dep ruby-dep proto-update-all-dep
 
+# Clean all ruby deps.
+ruby-clean-dep:
+	make -C test clean-dep
+
+# Clean all go deps.
+go-clean-dep:
+	go clean --cache -testcache -fuzzcache -modcache
+
+# CLean all deps.
+clean-dep: ruby-clean-dep go-clean-dep
+
 # Run go security checks.
 go-sec:
 	bin/build/sec/go
