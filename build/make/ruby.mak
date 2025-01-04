@@ -20,7 +20,7 @@ dep: path
 	bundler check || bundler install
 
 # Update a gem.
-update-dep:
+update-dep: path
 	bundler update $(gem)
 
 # Update all the deps.
@@ -28,15 +28,15 @@ update-all-dep: path
 	bundler update
 
 # Clean all deps.
-clean-dep:
+clean-dep: path
 	bundler clean
 
 # List outdated deps.
-outdated-dep:
+outdated-dep: path
 	bundler outdated --only-explicit --strict --parseable
 
 # Update bundler.
-update-bundler:
+update-bundler: path
 	bundler update --bundler
 
 # Run all features.
