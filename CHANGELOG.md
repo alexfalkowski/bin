@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.83.0](https://github.com/alexfalkowski/bin/releases/tag/v1.83.0) - 2025-01-04
+
+- [`69acee8`](https://github.com/alexfalkowski/bin/commit/69acee89d7d52ef8e28f5c9e6472d5131da92395) feat(make): add ability to clean deps (#122)
+
 ## [v1.82.0](https://github.com/alexfalkowski/bin/releases/tag/v1.82.0) - 2024-12-23
 
 - [`a434a41`](https://github.com/alexfalkowski/bin/commit/a434a417b8f96ba767e7f87e3e7c36ea6f8a1b49) feat(make): add update-bundler for ruby (#121)
