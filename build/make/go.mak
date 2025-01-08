@@ -1,7 +1,6 @@
 .PHONY: vendor sync
 
 NAME:=$(shell basename $(CURDIR))
-COV:=$(shell cat .gocov)
 
 download:
 	go mod download
@@ -60,7 +59,7 @@ benchmark-pprof:
 	go tool pprof test/reports/mem.prof
 
 remove-generated-coverage:
-	cat test/reports/profile.cov | grep -Ev "${COV}" > test/reports/final.cov
+	bin/quality/go/covfilter
 
 # Get the HTML coverage the code.
 html-coverage: remove-generated-coverage

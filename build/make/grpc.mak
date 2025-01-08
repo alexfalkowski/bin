@@ -94,7 +94,7 @@ proto-push:
 	make -C api push
 
 sanitize-coverage:
-	bin/quality/go/cov
+	bin/quality/go/covmerge
 
 # Get the HTML coverage for go.
 html-coverage: sanitize-coverage
