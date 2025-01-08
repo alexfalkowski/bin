@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -e
+
+if [ -f .gocov ]; then
+  cov=$(cat .gocov)
+else
+  cov="test"
+fi
+
+grep -Ev "${cov}" test/reports/profile.cov > test/reports/final.cov

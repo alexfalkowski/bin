@@ -70,7 +70,7 @@ ruby-outdated-dep:
 outdated-dep: go-outdated-dep ruby-outdated-dep
 
 sanitize-coverage:
-	bin/quality/go/cov
+	bin/quality/go/covmerge
 
 # Get the HTML coverage for go.
 html-coverage: sanitize-coverage
