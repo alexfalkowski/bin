@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.86.0](https://github.com/alexfalkowski/bin/releases/tag/v1.86.0) - 2025-01-08
+
+- [`2d4e076`](https://github.com/alexfalkowski/bin/commit/2d4e07672054df46f04c58daa657fc447dd35367) feat(quality): add ability to filter go coverage (#126)
+- [`a00abbe`](https://github.com/alexfalkowski/bin/commit/a00abbe317adb1cbe2cd89267d7b6b9de90ae118) build(ci): use go:1.4 (#125)
+
 ## [v1.85.0](https://github.com/alexfalkowski/bin/releases/tag/v1.85.0) - 2025-01-08
 
 - [`11ba63d`](https://github.com/alexfalkowski/bin/commit/11ba63d21617d46f8ddde88dae71a0e5ceb5a5fc) feat(quality): add test gocov (#124)
