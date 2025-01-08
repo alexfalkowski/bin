@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.85.0](https://github.com/alexfalkowski/bin/releases/tag/v1.85.0) - 2025-01-08
+
+- [`11ba63d`](https://github.com/alexfalkowski/bin/commit/11ba63d21617d46f8ddde88dae71a0e5ceb5a5fc) feat(quality): add test gocov (#124)
+
 ## [v1.84.0](https://github.com/alexfalkowski/bin/releases/tag/v1.84.0) - 2025-01-04
 
 - [`a952407`](https://github.com/alexfalkowski/bin/commit/a95240714752af2cc0f5a7d51b46c27ab8377a13) feat(make): make sure we execute path before anything in ruby (#123)
