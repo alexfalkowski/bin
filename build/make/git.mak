@@ -81,6 +81,10 @@ ready: commit push review
 current:
 	git diff
 
+# The current status.
+status:
+	git status
+
 # The last changes.
 last:
 	git log -p -1
