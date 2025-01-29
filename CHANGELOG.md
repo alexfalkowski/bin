@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.87.0](https://github.com/alexfalkowski/bin/releases/tag/v1.87.0) - 2025-01-29
+
+- [`89e5e8f`](https://github.com/alexfalkowski/bin/commit/89e5e8f5fb20046d0ea85931546e4efd5c058988) feat(make): add status to git (#127)
+
 ## [v1.86.0](https://github.com/alexfalkowski/bin/releases/tag/v1.86.0) - 2025-01-08
 
 - [`2d4e076`](https://github.com/alexfalkowski/bin/commit/2d4e07672054df46f04c58daa657fc447dd35367) feat(quality): add ability to filter go coverage (#126)
