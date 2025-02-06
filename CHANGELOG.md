@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.0.1](https://github.com/alexfalkowski/bin/releases/tag/v2.0.1) - 2025-02-06
+
+- [`1f696bb`](https://github.com/alexfalkowski/bin/commit/1f696bb448b5ef2d2de477fd7e2b5fbbf462f241) fix(make): revert the rename to api (#129)
+
 ## [v2.0.0](https://github.com/alexfalkowski/bin/releases/tag/v2.0.0) - 2025-02-06
 
 - [`ceb423b`](https://github.com/alexfalkowski/bin/commit/ceb423b646b3a6e6c6264555cf31261ab5a211ac) feat(make): rename to api (#128)
