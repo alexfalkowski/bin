@@ -2,12 +2,15 @@ BRANCH:=$(shell git branch --show-current)
 NEW_BRANCH:=$(subst $() ,-,$(name))
 PREFIX:=$(shell ruby -e '_, t, n = (ARGV[0] || "").split("/"); print "#{t}(#{n}):" unless t.nil?' $(BRANCH))
 
+# Checkout master.
 master:
 	git checkout master
 
+# Pull changes.
 pull:
 	git pull --rebase
 
+# Add all files.
 add:
 	git add -A
 
@@ -46,6 +49,10 @@ new-test: new-branch
 new-docs: branch=docs/$(NEW_BRANCH)
 new-docs: new-branch
 
+# Start with a refactor.
+new-refactor: branch=refactor/$(NEW_BRANCH)
+new-refactor: new-branch
+
 # Finish the current change.
 done: master pull
 	git branch -D $(BRANCH)
@@ -76,6 +83,9 @@ review:
 
 # Ready to reviewed.
 ready: commit push review
+
+# Latest changes from master.
+latest: master pull submodule
 
 # The current changes.
 current:
