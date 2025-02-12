@@ -191,11 +191,11 @@ sec: go-sec
 
 # Build release binary.
 build:
-	go build -race -ldflags="-X 'github.com/alexfalkowski/$(NAME)/cmd.Version=latest'" -mod vendor -o $(NAME) main.go
+	go build -race -mod vendor -o $(NAME) main.go
 
 # Build test binary.
 build-test:
-	go test -vet=off -race -ldflags="-X 'github.com/alexfalkowski/$(NAME)/cmd.Version=latest'" -mod vendor -c -tags features -covermode=atomic -o $(NAME) -coverpkg=./... github.com/alexfalkowski/$(NAME)
+	go test -vet=off -race -mod vendor -c -tags features -covermode=atomic -o $(NAME) -coverpkg=./... github.com/alexfalkowski/$(NAME)
 
 # Run in dev mode.
 dev:
