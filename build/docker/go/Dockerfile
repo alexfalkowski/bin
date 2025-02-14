@@ -16,4 +16,4 @@ FROM gcr.io/distroless/static
 WORKDIR /
 
 COPY --from=build /app/service /service
-ENTRYPOINT ["service"]
+ENTRYPOINT ["/service"]
