@@ -2,7 +2,7 @@
 
 set -e
 
-readonly command=$1
+readonly command="$1"
 readonly code_path=".."
 readonly docker_path="$code_path/docker"
 
@@ -15,4 +15,4 @@ else
 fi
 
 # Run the command.
-(cd $docker_path && make kind=deps "$command")
+(cd $docker_path && make kind=deps $command)

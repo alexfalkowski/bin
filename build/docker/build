@@ -2,5 +2,8 @@
 
 set -e
 
+readonly name="$1"
+readonly dir="$(dirname "$(readlink -f "$0")")"
+
 # Build docker.
-docker build --build-arg version="latest" -t alexfalkowski/"$1":test .
+docker build --build-arg name=$name --build-arg version="latest" -t alexfalkowski/$name:test -f $dir/go/Dockerfile  .
