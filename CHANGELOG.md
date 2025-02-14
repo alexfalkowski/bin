@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.4.1](https://github.com/alexfalkowski/bin/releases/tag/v2.4.1) - 2025-02-14
+
+- [`e957790`](https://github.com/alexfalkowski/bin/commit/e957790bd9bb00cde59cbc9e37826256a87b2577) fix(build): make sure we set the root path (#135)
+- [`9529428`](https://github.com/alexfalkowski/bin/commit/9529428b2b9687463bf2041b22b4324ffa10cba5) build(ci): update to alexfalkowski/go:1.14 (#134)
+
 ## [v2.4.0](https://github.com/alexfalkowski/bin/releases/tag/v2.4.0) - 2025-02-14
 
 - [`538d40c`](https://github.com/alexfalkowski/bin/commit/538d40cea83e6061c978a5f8c5dc408d3fa81d7b) feat(build): add dockerfile for projects (#133)
