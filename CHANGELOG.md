@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.4.0](https://github.com/alexfalkowski/bin/releases/tag/v2.4.0) - 2025-02-14
+
+- [`538d40c`](https://github.com/alexfalkowski/bin/commit/538d40cea83e6061c978a5f8c5dc408d3fa81d7b) feat(build): add dockerfile for projects (#133)
+
 ## [v2.3.0](https://github.com/alexfalkowski/bin/releases/tag/v2.3.0) - 2025-02-14
 
 - [`92c20da`](https://github.com/alexfalkowski/bin/commit/92c20dad9b290df1e12a75f660f0c640e94f83df) feat(license): change to MIT (#132)
