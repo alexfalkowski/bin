@@ -1,4 +1,8 @@
 include build/make/git.mak
 
-lint:
-	# Do nothing
+# Lint all docker files.
+docker-lint:
+	hadolint build/docker/go/Dockerfile
+
+# Lint everything.
+lint: docker-lint
