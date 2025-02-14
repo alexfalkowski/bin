@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.3.0](https://github.com/alexfalkowski/bin/releases/tag/v2.3.0) - 2025-02-14
+
+- [`92c20da`](https://github.com/alexfalkowski/bin/commit/92c20dad9b290df1e12a75f660f0c640e94f83df) feat(license): change to MIT (#132)
+
 ## [v2.2.0](https://github.com/alexfalkowski/bin/releases/tag/v2.2.0) - 2025-02-12
 
 - [`b187089`](https://github.com/alexfalkowski/bin/commit/b1870895b8f9447c40509f8913cf142b8856e900) feat(make): remove ldflags (#131)
