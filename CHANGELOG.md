@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.5.0](https://github.com/alexfalkowski/bin/releases/tag/v2.5.0) - 2025-02-15
+
+- [`2341291`](https://github.com/alexfalkowski/bin/commit/23412910755a4e94bba4b1cf7d874141a2b1e13c) feat(make): use . for building go binary (#138)
+- [`6a2279d`](https://github.com/alexfalkowski/bin/commit/6a2279d5e0ea5cdeb7361502ca6f04ed431ef442) build(ci): lint scripts (#137)
+- [`372ec44`](https://github.com/alexfalkowski/bin/commit/372ec44ba057d4a908ae1b7dd3b8a34bbb367b90) build(ci): add docker linting (#136)
+
 ## [v2.4.1](https://github.com/alexfalkowski/bin/releases/tag/v2.4.1) - 2025-02-14
 
 - [`e957790`](https://github.com/alexfalkowski/bin/commit/e957790bd9bb00cde59cbc9e37826256a87b2577) fix(build): make sure we set the root path (#135)
