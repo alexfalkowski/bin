@@ -9,13 +9,16 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . ./
-RUN CGO_ENABLED=0 go build -ldflags="-s -w -extldflags '-static'" -buildvcs=false -tags netgo -a -o service .
+RUN CGO_ENABLED=0 go build -ldflags="-s -w -extldflags '-static'" -buildvcs=false -tags netgo -a -o $name .
 
 FROM gcr.io/distroless/static
+
+ARG name
+ARG version
 
 ENV SERVICE_VERSION=$version
 
 WORKDIR /
 
-COPY --from=build /app/service /service
-ENTRYPOINT ["/service"]
+COPY --from=build /app/$name /$name
+ENTRYPOINT ["/$name"]
