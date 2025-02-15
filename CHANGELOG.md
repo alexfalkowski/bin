@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.7.2](https://github.com/alexfalkowski/bin/releases/tag/v2.7.2) - 2025-02-15
+
+- [`2fdc799`](https://github.com/alexfalkowski/bin/commit/2fdc79993eed37e1d10dc84dcef0606a947b8ea0) fix(make): we can not use arg in entry point (#142)
+
 ## [v2.7.1](https://github.com/alexfalkowski/bin/releases/tag/v2.7.1) - 2025-02-15
 
 - [`e2d16c5`](https://github.com/alexfalkowski/bin/commit/e2d16c52e86d739678b39b7c7c4a8721bd195400) fix(make): pass args in multi-stage (#141)
