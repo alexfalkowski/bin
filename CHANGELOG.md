@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.7.0](https://github.com/alexfalkowski/bin/releases/tag/v2.7.0) - 2025-02-15
+
+- [`a1117dd`](https://github.com/alexfalkowski/bin/commit/a1117dd8c03db0a3d825fe864687787d9aba9d83) feat(make): pass version as build info is unreliable (#140)
+
 ## [v2.6.0](https://github.com/alexfalkowski/bin/releases/tag/v2.6.0) - 2025-02-15
 
 - [`d99a64f`](https://github.com/alexfalkowski/bin/commit/d99a64fc2c5ce389126edf64a727f81d16509b23) feat(make): remove setting version in go binary (#139)
