@@ -9,9 +9,11 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . ./
-RUN CGO_ENABLED=0 go build -ldflags="-s -w -extldflags '-static'" -tags netgo -a -o service .
+RUN CGO_ENABLED=0 go build -ldflags="-s -w -extldflags '-static'" -buildvcs=false -tags netgo -a -o service .
 
 FROM gcr.io/distroless/static
+
+ENV SERVICE_VERSION=$version
 
 WORKDIR /
 
