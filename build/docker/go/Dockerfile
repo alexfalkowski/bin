@@ -9,7 +9,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . ./
-RUN CGO_ENABLED=0 go build -ldflags="-s -w -X 'github.com/alexfalkowski/${name}/internal/cmd.Version=${version}' -extldflags '-static'" -tags netgo -a -o service main.go
+RUN CGO_ENABLED=0 go build -ldflags="-s -w -X 'github.com/alexfalkowski/${name}/internal/cmd.Version=${version}' -extldflags '-static'" -tags netgo -a -o service .
 
 FROM gcr.io/distroless/static
 
