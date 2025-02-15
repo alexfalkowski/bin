@@ -191,7 +191,7 @@ sec: go-sec
 
 # Build release binary.
 build:
-	go build -race -mod vendor -o $(NAME) .
+	go build -buildvcs=false -race -mod vendor -o $(NAME) .
 
 # Build test binary.
 build-test:
