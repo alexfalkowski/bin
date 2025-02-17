@@ -7,5 +7,5 @@ readonly latest_tag="$(git tag | sort -V | tail -1)"
 readonly dir="$(dirname "$(readlink -f "$0")")"
 
 # Build and push docker.
-docker build --build-arg version=$latest_tag -t alexfalkowski/$name -t alexfalkowski/$name:$latest_tag -f $dir/go/Dockerfile .
+docker build --build-arg name=$name --build-arg version=$latest_tag -t alexfalkowski/$name -t alexfalkowski/$name:$latest_tag -f $dir/go/Dockerfile .
 docker push alexfalkowski/$name --all-tags
