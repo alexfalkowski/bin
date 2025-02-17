@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.8.0](https://github.com/alexfalkowski/bin/releases/tag/v2.8.0) - 2025-02-17
+
+- [`c3ac106`](https://github.com/alexfalkowski/bin/commit/c3ac106f1db75ffad4b5a541b7211dacfcbbb780) feat(make): as we override the executable name, we need an env variable (#143)
+
 ## [v2.7.2](https://github.com/alexfalkowski/bin/releases/tag/v2.7.2) - 2025-02-15
 
 - [`2fdc799`](https://github.com/alexfalkowski/bin/commit/2fdc79993eed37e1d10dc84dcef0606a947b8ea0) fix(make): we can not use arg in entry point (#142)
