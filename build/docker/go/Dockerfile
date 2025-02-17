@@ -1,5 +1,6 @@
 FROM golang:1.24.0-bullseye AS build
 
+ARG name=service
 ARG version=latest
 
 WORKDIR /app
@@ -12,7 +13,10 @@ RUN CGO_ENABLED=0 go build -ldflags="-s -w -extldflags '-static'" -buildvcs=fals
 
 FROM gcr.io/distroless/static
 
+ARG name
 ARG version
+
+ENV SERVICE_NAME=$name
 ENV SERVICE_VERSION=$version
 
 WORKDIR /
