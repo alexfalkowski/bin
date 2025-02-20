@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.9.0](https://github.com/alexfalkowski/bin/releases/tag/v2.9.0) - 2025-02-20
+
+- [`e962874`](https://github.com/alexfalkowski/bin/commit/e9628746f4f02b0b45f7f523f6b9a1941b2a6a49) feat(sec): remove script for govulncheck (#144)
+
 ## [v2.8.0](https://github.com/alexfalkowski/bin/releases/tag/v2.8.0) - 2025-02-17
 
 - [`c3ac106`](https://github.com/alexfalkowski/bin/commit/c3ac106f1db75ffad4b5a541b7211dacfcbbb780) feat(make): as we override the executable name, we need an env variable (#143)
