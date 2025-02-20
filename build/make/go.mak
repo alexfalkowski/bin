@@ -82,7 +82,7 @@ clean-reports:
 
 # Run security checks.
 sec:
-	bin/build/sec/go
+	govulncheck -test ./...
 
 # Update go dep.
 update-dep: get tidy vendor

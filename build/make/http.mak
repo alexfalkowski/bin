@@ -156,7 +156,7 @@ clean-dep: ruby-clean-dep go-clean-dep
 
 # Run go security checks.
 go-sec:
-	bin/build/sec/go
+	govulncheck -test ./...
 
 # Run security checks.
 sec: go-sec
