@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.10.0](https://github.com/alexfalkowski/bin/releases/tag/v2.10.0) - 2025-02-28
+
+- [`8ed19c2`](https://github.com/alexfalkowski/bin/commit/8ed19c26ed19bd74694c3b537e9e368dcaa24daa) feat(make): use verbose for govulncheck (#145)
+
 ## [v2.9.0](https://github.com/alexfalkowski/bin/releases/tag/v2.9.0) - 2025-02-20
 
 - [`e962874`](https://github.com/alexfalkowski/bin/commit/e9628746f4f02b0b45f7f523f6b9a1941b2a6a49) feat(sec): remove script for govulncheck (#144)
