@@ -1,3 +1,4 @@
+include build/make/help.mak
 include build/make/git.mak
 
 # Lint all scripts.
