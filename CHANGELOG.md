@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.13.0](https://github.com/alexfalkowski/bin/releases/tag/v2.13.0) - 2025-03-25
+
+- [`c327adc`](https://github.com/alexfalkowski/bin/commit/c327adcc2ae2e8ac4432faf823151f83fd3fb50b) feat(make): decrease the indenting for help (#148)
+
 ## [v2.12.0](https://github.com/alexfalkowski/bin/releases/tag/v2.12.0) - 2025-03-24
 
 - [`1abd8c5`](https://github.com/alexfalkowski/bin/commit/1abd8c50f43c8dcb76a713ae78cd21528acf1e6c) feat(make): add help (#147)
