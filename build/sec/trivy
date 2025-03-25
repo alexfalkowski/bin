@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -euxo pipefail
 
 # Scan using trivy.
 trivy repo --db-repository public.ecr.aws/aquasecurity/trivy-db:2 --exit-code 1 --severity CRITICAL ./

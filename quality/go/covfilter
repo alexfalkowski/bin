@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -euxo pipefail
 
 if [ -f .gocov ]; then
   cov=$(cat .gocov)
