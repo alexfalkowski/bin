@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -euxo pipefail
 
 readonly name="$1"
 readonly latest_tag="$(git tag | sort -V | tail -1)"
