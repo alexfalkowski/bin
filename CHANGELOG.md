@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.14.1](https://github.com/alexfalkowski/bin/releases/tag/v2.14.1) - 2025-03-25
+
+- [`aff6686`](https://github.com/alexfalkowski/bin/commit/aff66866dd4a7d4282c75b7c55ba90377867e174) fix(error): set correct failure (#151)
+
 ## [v2.14.0](https://github.com/alexfalkowski/bin/releases/tag/v2.14.0) - 2025-03-25
 
 - [`aa173cd`](https://github.com/alexfalkowski/bin/commit/aa173cd8fbcc4722a8b16893c65b43c90eab3a98) feat(error): set failure (#150)
