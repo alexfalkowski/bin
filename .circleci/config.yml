@@ -3,14 +3,14 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: alexfalkowski/go:1.15
+      - image: alexfalkowski/go:2.1
     steps:
       - checkout
       - run: make lint
     resource_class: large
   release:
     docker:
-      - image: alexfalkowski/release:3.8
+      - image: alexfalkowski/release:3.11
     steps:
       - checkout
       - run: release
