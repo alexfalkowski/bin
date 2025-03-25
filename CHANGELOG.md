@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.14.0](https://github.com/alexfalkowski/bin/releases/tag/v2.14.0) - 2025-03-25
+
+- [`aa173cd`](https://github.com/alexfalkowski/bin/commit/aa173cd8fbcc4722a8b16893c65b43c90eab3a98) feat(error): set failure (#150)
+- [`63f13e1`](https://github.com/alexfalkowski/bin/commit/63f13e165c44cda6d19a7534adc99f3f784adb1e) build(ci): use alexfalkowski/go:2.1 (#149)
+
 ## [v2.13.0](https://github.com/alexfalkowski/bin/releases/tag/v2.13.0) - 2025-03-25
 
 - [`c327adc`](https://github.com/alexfalkowski/bin/commit/c327adcc2ae2e8ac4432faf823151f83fd3fb50b) feat(make): decrease the indenting for help (#148)
