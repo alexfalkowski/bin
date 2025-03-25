@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -euxo pipefail
+set -eo pipefail
 
 readonly feature="$1"
 readonly tags="$2"

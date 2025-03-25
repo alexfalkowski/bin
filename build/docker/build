@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -euxo pipefail
+set -eo pipefail
 
 readonly name="$1"
 readonly dir="$(dirname "$(readlink -f "$0")")"
