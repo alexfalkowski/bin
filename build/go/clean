@@ -5,5 +5,6 @@ set -eo pipefail
 readonly changed="$(git diff --quiet HEAD master -- go.sum || echo changed)"
 
 if [[ $changed == "changed" ]]; then
+  make dep
   make clean-dep
 fi
