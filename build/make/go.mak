@@ -24,15 +24,9 @@ dep: download tidy vendor
 clean-dep:
 	go clean -cache -testcache -fuzzcache -modcache
 
-# Reinitialize the deps.
-re-dep:
-	make dep
-	make clean-dep
-	make dep
-
-# Smartly get all the deps.
-deps:
-	bin/build/go/deps
+# Clean downloaded deps.
+clean:
+	bin/build/go/clean
 
 field-alignment:
 	fieldalignment ./...
