@@ -182,6 +182,9 @@ go-clean-dep:
 # CLean all deps.
 clean-dep: ruby-clean-dep go-clean-dep
 
+# Reinitialize the deps.
+re-dep: dep clean-dep dep
+
 # Run go security checks.
 go-sec:
 	govulncheck -show verbose -test ./...
