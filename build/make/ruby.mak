@@ -32,7 +32,10 @@ clean-dep: path
 	bundler clean
 
 # Reinitialize the deps.
-re-dep: dep clean-dep dep
+re-dep:
+	make dep
+	make clean-dep
+	make dep
 
 # List outdated deps.
 outdated-dep: path

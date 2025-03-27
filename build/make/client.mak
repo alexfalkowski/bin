@@ -149,13 +149,16 @@ ruby-clean-dep:
 
 # Clean all go deps.
 go-clean-dep:
-	go clean --cache -testcache -fuzzcache -modcache
+	go clean -cache -testcache -fuzzcache -modcache
 
 # CLean all deps.
 clean-dep: ruby-clean-dep go-clean-dep
 
 # Reinitialize the deps.
-re-dep: dep clean-dep dep
+re-dep:
+	make dep
+	make clean-dep
+	make dep
 
 # Run go security checks.
 go-sec:

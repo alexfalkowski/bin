@@ -22,10 +22,13 @@ dep: download tidy vendor
 
 # Clean all deps.
 clean-dep:
-	go clean --cache -testcache -fuzzcache -modcache
+	go clean -cache -testcache -fuzzcache -modcache
 
 # Reinitialize the deps.
-re-dep: dep clean-dep dep
+re-dep:
+	make dep
+	make clean-dep
+	make dep
 
 field-alignment:
 	fieldalignment ./...
