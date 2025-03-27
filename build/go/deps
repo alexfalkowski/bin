@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+readonly changed="$(git diff --quiet HEAD master -- go.sum || echo changed)"
+
+if [[ $changed == "changed" ]]; then
+  make re-dep
+else
+  make dep
+fi

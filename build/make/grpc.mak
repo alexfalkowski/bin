@@ -188,6 +188,10 @@ re-dep:
 	make clean-dep
 	make dep
 
+# Smartly get all the deps.
+deps:
+	bin/build/go/deps
+
 # Run go security checks.
 go-sec:
 	govulncheck -show verbose -test ./...
