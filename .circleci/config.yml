@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: alexfalkowski/go:2.2
+      - image: alexfalkowski/docker:1.12
     steps:
       - checkout
       - run: make lint
