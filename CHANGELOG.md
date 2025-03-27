@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.15.1](https://github.com/alexfalkowski/bin/releases/tag/v2.15.1) - 2025-03-27
+
+- [`47fc2c7`](https://github.com/alexfalkowski/bin/commit/47fc2c7d0f93d3b76d3ec0fa0755f5f60a0602c9) fix(make): duplicate target does not get called (#154)
+
 ## [v2.15.0](https://github.com/alexfalkowski/bin/releases/tag/v2.15.0) - 2025-03-27
 
 - [`967491c`](https://github.com/alexfalkowski/bin/commit/967491cd7bf35112da5e387bf02b15b63b4e1613) feat(make): add ability to reinitialize the deps (#153)
