@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.15.0](https://github.com/alexfalkowski/bin/releases/tag/v2.15.0) - 2025-03-27
+
+- [`967491c`](https://github.com/alexfalkowski/bin/commit/967491cd7bf35112da5e387bf02b15b63b4e1613) feat(make): add ability to reinitialize the deps (#153)
+- [`c661929`](https://github.com/alexfalkowski/bin/commit/c6619291b889124e540a7a3acf68455bc2f35f56) build(ci): use alexfalkowski/go:2.2 (#152)
+
 ## [v2.14.1](https://github.com/alexfalkowski/bin/releases/tag/v2.14.1) - 2025-03-25
 
 - [`aff6686`](https://github.com/alexfalkowski/bin/commit/aff66866dd4a7d4282c75b7c55ba90377867e174) fix(error): set correct failure (#151)
