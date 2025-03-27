@@ -154,15 +154,9 @@ go-clean-dep:
 # CLean all deps.
 clean-dep: ruby-clean-dep go-clean-dep
 
-# Reinitialize the deps.
-re-dep:
-	make dep
-	make clean-dep
-	make dep
-
-# Smartly get all the deps.
-deps:
-	bin/build/go/deps
+# Clean downloaded deps.
+clean:
+	bin/build/go/clean
 
 # Run go security checks.
 go-sec:
