@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.16.0](https://github.com/alexfalkowski/bin/releases/tag/v2.16.0) - 2025-03-27
+
+- [`381c15b`](https://github.com/alexfalkowski/bin/commit/381c15b7973155882ae653e80d3f244a8bfdefe3) feat(make): if deps change we re-dep them (#155)
+
 ## [v2.15.1](https://github.com/alexfalkowski/bin/releases/tag/v2.15.1) - 2025-03-27
 
 - [`47fc2c7`](https://github.com/alexfalkowski/bin/commit/47fc2c7d0f93d3b76d3ec0fa0755f5f60a0602c9) fix(make): duplicate target does not get called (#154)
