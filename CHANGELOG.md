@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.17.1](https://github.com/alexfalkowski/bin/releases/tag/v2.17.1) - 2025-03-27
+
+- [`c70a42d`](https://github.com/alexfalkowski/bin/commit/c70a42df17e5b47dfa4a3dc4a557454f7bf199c2) fix(make): make sure we get dep before we clean dep (#158)
+
 ## [v2.17.0](https://github.com/alexfalkowski/bin/releases/tag/v2.17.0) - 2025-03-27
 
 - [`b5782fa`](https://github.com/alexfalkowski/bin/commit/b5782fa8fcf30c2300062e57a3020e1403aead9f) feat(make): add clean (#156)
