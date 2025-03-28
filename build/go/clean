@@ -2,8 +2,8 @@
 
 set -eo pipefail
 
-readonly changed="$(git diff --quiet HEAD master -- go.sum || echo changed)"
+readonly changed="$(git diff --quiet HEAD master -- go.sum || echo yes)"
 
-if [[ $changed == "changed" ]]; then
+if [[ $changed == "yes" ]]; then
   make dep clean-dep
 fi
