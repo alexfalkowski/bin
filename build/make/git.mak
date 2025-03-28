@@ -4,30 +4,30 @@ PREFIX:=$(shell ruby -e '_, t, n = (ARGV[0] || "").split("/"); print "#{t}(#{n})
 
 # Checkout master.
 master:
-	git checkout master
+	@git checkout master
 
 # Pull changes.
 pull:
-	git pull --rebase
+	@git pull --rebase
 
 # Add all files.
 add:
-	git add -A
+	@git add -A
 
 # Reset the recent changes.
 reset:
-	git reset HEAD --hard && git clean -fd
+	@git reset HEAD --hard && git clean -fd
 
 # Undo the recent changes.
 undo:
-	git reset HEAD~1 --soft
+	@git reset HEAD~1 --soft
 
 # Get the latest submodule changes.
 submodule:
-	git submodule sync && git submodule update --init
+	@git submodule sync && git submodule update --init
 
 new-branch: master pull
-	git checkout -b "$(USER)/$(branch)"
+	@git checkout -b "$(USER)/$(branch)"
 
 # Start a new feature.
 new-feature: branch=feat/$(NEW_BRANCH)
@@ -55,31 +55,31 @@ new-refactor: new-branch
 
 # Finish the current change.
 done: master pull
-	git branch -D $(BRANCH)
+	@git branch -D $(BRANCH)
 
 # Sync the current change.
 sync:
-	git fetch && git rebase origin/master
+	@git fetch && git rebase origin/master
 
 # Amend the latest changes.
 amend: add
-	git commit --amend --no-edit
+	@git commit --amend --no-edit
 
 # Amend the latest changes for edit.
 edit-amend: add
-	git commit --amend
+	@git commit --amend
 
 # Commit the latest changes.
 commit: add
-	git commit -a -m "$(PREFIX) $(msg)" -m "$(desc)"
+	@git commit -a -m "$(PREFIX) $(msg)" -m "$(desc)"
 
 # Push the latest changes.
 push:
-	git push -f origin $(BRANCH)
+	@git push -f origin $(BRANCH)
 
 # Create a PR from the current change.
 review:
-	gh pr create -d -a @me --fill-first --head $(BRANCH)
+	@gh pr create -d -a @me --fill-first --head $(BRANCH)
 
 # Ready to reviewed.
 ready: commit push review
@@ -89,20 +89,20 @@ latest: master pull submodule
 
 # The current changes.
 current:
-	git diff
+	@git diff
 
 # The current status.
 status:
-	git status
+	@git status
 
 # The last changes.
 last:
-	git log -p -1
+	@git log -p -1
 
 # Stash changes.
 stash: add
-	git stash
+	@git stash
 
 # Unstash changes.
 unstash:
-	git stash pop
+	@git stash pop
