@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.19.0](https://github.com/alexfalkowski/bin/releases/tag/v2.19.0) - 2025-03-28
+
+- [`e7807e4`](https://github.com/alexfalkowski/bin/commit/e7807e47168b7f49b1f5f507039b4c1c3c1dba1c) feat(make): use @ to suppress printing of command (#161)
+
 ## [v2.18.0](https://github.com/alexfalkowski/bin/releases/tag/v2.18.0) - 2025-03-28
 
 - [`8830a66`](https://github.com/alexfalkowski/bin/commit/8830a66decc714cca1bec37e8a824f6bfbbf1e04) feat(make): echo yes for better readability (#160)
