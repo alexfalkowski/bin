@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.20.0](https://github.com/alexfalkowski/bin/releases/tag/v2.20.0) - 2025-04-02
+
+- [`ac0306c`](https://github.com/alexfalkowski/bin/commit/ac0306c6353a1d9647bdb41bcd6dfed7a2915a62) feat(go): use golang:1.24.2-bullseye (#163)
+- [`b327698`](https://github.com/alexfalkowski/bin/commit/b327698f0090a25976a498142f99b5fc8f4aed93) build(ci): use alexfalkowski/docker:1.13 (#162)
+
 ## [v2.19.0](https://github.com/alexfalkowski/bin/releases/tag/v2.19.0) - 2025-03-28
 
 - [`e7807e4`](https://github.com/alexfalkowski/bin/commit/e7807e47168b7f49b1f5f507039b4c1c3c1dba1c) feat(make): use @ to suppress printing of command (#161)
