@@ -1,0 +1,10 @@
+version: 2
+updates:
+  - package-ecosystem: "gomod"
+    directory: "build/docker/go"
+    schedule:
+      interval: "daily"
+    commit-message:
+      prefix: "feat"
+      prefix-development: "build"
+      include: "scope"

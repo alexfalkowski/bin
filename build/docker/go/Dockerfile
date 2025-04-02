@@ -1,4 +1,4 @@
-FROM golang:1.24.1-bullseye AS build
+FROM golang:1.24.2-bullseye AS build
 
 ARG name=service
 ARG version=latest
