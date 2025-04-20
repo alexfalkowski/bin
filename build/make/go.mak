@@ -29,10 +29,10 @@ clean:
 	@bin/build/go/clean
 
 field-alignment:
-	@fieldalignment ./...
+	@bin/build/go/fa
 
 fix-field-alignment:
-	@fieldalignment -fix ./...
+	@bin/build/go/fa -fix
 
 golangci-lint:
 	@golangci-lint run --timeout 5m
