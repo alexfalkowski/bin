@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+file = '.gofa'
+packages = File.exist?(file) ? File.read(file).strip.split(',').map { |p| "./#{p}/..." }.join(' ') : './...'
+args = ARGV.join(' ')
+
+`fieldalignment #{args} #{packages}`

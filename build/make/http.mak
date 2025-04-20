@@ -12,10 +12,10 @@ vendor:
 	@go mod vendor
 
 field-alignment:
-	@fieldalignment ./...
+	@bin/build/go/fa
 
 fix-field-alignment:
-	@fieldalignment -fix ./...
+	@bin/build/go/fa -fix
 
 golangci-lint:
 	@golangci-lint run --build-tags features  --timeout 5m
