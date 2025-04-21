@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2086
 
 set -eo pipefail
 
@@ -6,7 +7,7 @@ readonly feature="$1"
 readonly tags="$2"
 
 if [ -n "$tags" ]; then
-  bundler exec cucumber --profile report $feature --tags "$tags"
+  bundler exec cucumber --profile report $feature --tags $tags
 else
   bundler exec cucumber --profile report $feature
 fi
