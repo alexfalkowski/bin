@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.24.0](https://github.com/alexfalkowski/bin/releases/tag/v2.24.0) - 2025-04-21
+
+- [`d77c9c1`](https://github.com/alexfalkowski/bin/commit/d77c9c19fd6b85cb4cf46fe125324cfbf3d2f0b7) feat(bash): shellcheck disable (#167)
+
 ## [v2.23.0](https://github.com/alexfalkowski/bin/releases/tag/v2.23.0) - 2025-04-21
 
 - [`04e19b9`](https://github.com/alexfalkowski/bin/commit/04e19b9c9965b8433b1a51333a95c252dc193eb6) feat(bash): shellcheck disable (#166)
