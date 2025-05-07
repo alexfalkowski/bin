@@ -27,8 +27,16 @@ undo:
 submodule:
 	@git submodule sync && git submodule update --init
 
-new-branch: master pull
+# Populate the branch.
+branch:
+	@echo "bin: current branch '$(BRANCH)'"
+
+# Checkout branch.
+checkout:
 	@git checkout -b "$(USER)/$(branch)"
+
+new-branch: latest checkout
+	@echo "bin: new branch '$(USER)/$(branch)'"
 
 # Start a new feature.
 new-feature: branch=feat/$(NEW_BRANCH)
@@ -54,9 +62,13 @@ new-docs: new-branch
 new-refactor: branch=refactor/$(NEW_BRANCH)
 new-refactor: new-branch
 
-# Finish the current change.
-done: latest
+# Delete the current branch.
+delete:
 	@git branch -D $(BRANCH)
+
+# Finish the current change.
+done: branch latest delete
+	@echo "bin: done with branch '$(BRANCH)'"
 
 # Sync the current change.
 sync:
