@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.26.1](https://github.com/alexfalkowski/bin/releases/tag/v2.26.1) - 2025-05-07
+
+- [`4e7a05e`](https://github.com/alexfalkowski/bin/commit/4e7a05e9b5c0f1ec30afcfad6009c841887f8b9a) fix(make): BRANCH is populated too late (#171)
+
 ## [v2.26.0](https://github.com/alexfalkowski/bin/releases/tag/v2.26.0) - 2025-05-07
 
 - [`2896221`](https://github.com/alexfalkowski/bin/commit/28962218402940dd56bdf1ae4f49a9601d8df227) feat(make): done is dependant to latest (#170)
