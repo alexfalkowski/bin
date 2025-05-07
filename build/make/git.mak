@@ -55,7 +55,7 @@ new-refactor: branch=refactor/$(NEW_BRANCH)
 new-refactor: new-branch
 
 # Finish the current change.
-done: master pull
+done: latest
 	@git branch -D $(BRANCH)
 
 # Sync the current change.
