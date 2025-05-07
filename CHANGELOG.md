@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.25.0](https://github.com/alexfalkowski/bin/releases/tag/v2.25.0) - 2025-05-07
+
+- [`50e9df3`](https://github.com/alexfalkowski/bin/commit/50e9df3124e1ab69116cafac71110c89f1927f3d) feat(deps): bump golang from 1.24.2-bookworm to 1.24.3-bookworm in /build/docker/go (#169)
+- [`926a71b`](https://github.com/alexfalkowski/bin/commit/926a71bccd4a3803ffb9882a465b86f5110337b2) build(ci): use alexfalkowski/release:3.15 (#168)
+
 ## [v2.24.0](https://github.com/alexfalkowski/bin/releases/tag/v2.24.0) - 2025-04-21
 
 - [`d77c9c1`](https://github.com/alexfalkowski/bin/commit/d77c9c19fd6b85cb4cf46fe125324cfbf3d2f0b7) feat(bash): shellcheck disable (#167)
