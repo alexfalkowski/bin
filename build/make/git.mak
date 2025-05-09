@@ -47,7 +47,7 @@ new-fix: branch=fix/$(NEW_BRANCH)
 new-fix: new-branch
 
 # Start a new build.
-new-build: branch=build/$(name)
+new-build: branch=build/$(NEW_BRANCH)
 new-build: new-branch
 
 # Start a new test.
@@ -61,6 +61,33 @@ new-docs: new-branch
 # Start with a refactor.
 new-refactor: branch=refactor/$(NEW_BRANCH)
 new-refactor: new-branch
+
+delete-branch: branch latest
+	@git branch -D "$(USER)/$(branch)"
+
+# Delete a feature.
+delete-feature: branch=feat/$(NEW_BRANCH)
+delete-feature: delete-branch
+
+# Delete a fix.
+delete-fix: branch=fix/$(NEW_BRANCH)
+delete-fix: delete-branch
+
+# Delete a build.
+delete-build: branch=build/$(NEW_BRANCH)
+delete-build: delete-branch
+
+# Delete a test.
+delete-test: branch=test/$(NEW_BRANCH)
+delete-test: delete-branch
+
+# Delete docs.
+delete-docs: branch=docs/$(NEW_BRANCH)
+delete-docs: delete-branch
+
+# Delete a refactor.
+delete-refactor: branch=refactor/$(NEW_BRANCH)
+delete-refactor: delete-branch
 
 # Delete the current branch.
 delete:
