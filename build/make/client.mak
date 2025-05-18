@@ -99,6 +99,10 @@ clean-reports:
 features: build-test
 	@make -C test features
 
+# Run all the benchmarks.
+benchmarks: build
+	@make -C test benchmarks
+
 # Run all the specs.
 specs:
 	@gotestsum --junitfile test/reports/specs.xml -- -vet=off -race -mod vendor -covermode=atomic -coverpkg=./... -coverprofile=test/reports/profile.cov ./...
@@ -167,7 +171,7 @@ sec: go-sec
 
 # Build release binary.
 build:
-	@go build -race -mod vendor -o $(NAME) main.go
+	@go build -ldflags="-s -w" -buildvcs=false -tags netgo -a -o $(NAME) .
 
 # Build test binary.
 build-test:
