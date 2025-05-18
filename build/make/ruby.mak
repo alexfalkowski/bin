@@ -41,7 +41,11 @@ update-bundler: path
 
 # Run all features.
 features:
-	@$(PWD)/bin/quality/ruby/cucumber $(feature) $(tags)
+	@$(PWD)/bin/quality/ruby/feature $(feature) $(tags)
+
+# Run all benchmarks.
+benchmarks:
+	@$(PWD)/bin/quality/ruby/benchmark $(feature)
 
 # Clean the reports.
 clean-reports:

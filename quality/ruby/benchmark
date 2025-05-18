@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC2086
+
+set -eo pipefail
+
+readonly feature="$1"
+
+bundler exec cucumber --profile report $feature --tags @benchmark
