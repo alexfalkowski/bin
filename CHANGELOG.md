@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.28.0](https://github.com/alexfalkowski/bin/releases/tag/v2.28.0) - 2025-05-18
+
+- [`4076d90`](https://github.com/alexfalkowski/bin/commit/4076d90890d6f7ee42a1101cf886473d0e71e049) feat(make): add ability to run benchmarks (#173)
+
 ## [v2.27.0](https://github.com/alexfalkowski/bin/releases/tag/v2.27.0) - 2025-05-09
 
 - [`a6e73d9`](https://github.com/alexfalkowski/bin/commit/a6e73d9b29a27f3127059ca5f333821574bc9efb) feat(make): add ability to delete a branch that is leftover (#172)
