@@ -1,6 +1,7 @@
 .PHONY: vendor
 
 NAME:=$(shell basename $(CURDIR))
+MODULE:=$(shell head -n 1 go.mod | grep -oE '"[^ ]+$"')
 
 download:
 	@go mod download
@@ -175,7 +176,7 @@ build:
 
 # Build test binary.
 build-test:
-	@go test -vet=off -race -mod vendor -c -tags features -covermode=atomic -o $(NAME) -coverpkg=./... github.com/alexfalkowski/$(NAME)
+	@go test -vet=off -race -mod vendor -c -tags features -covermode=atomic -o $(NAME) -coverpkg=./... $(MODULE)
 
 # Run in dev mode.
 dev:
