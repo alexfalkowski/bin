@@ -1,6 +1,7 @@
 .PHONY: vendor sync
 
 NAME:=$(shell basename $(CURDIR))
+MODULE:=$(shell head -n 1 go.mod | sed 's/module //')
 
 download:
 	@go mod download
@@ -109,7 +110,7 @@ create-certs:
 
 # Create a diagram.
 create-diagram:
-	@goda graph github.com/alexfalkowski/$(NAME)/$(package)/... | dot -Tpng -o assets/$(package).png
+	@goda graph $(MODULE)/$(package)/... | dot -Tpng -o assets/$(package).png
 
 # Analyse binary size.
 analyse:

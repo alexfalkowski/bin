@@ -1,7 +1,7 @@
 .PHONY: vendor
 
 NAME:=$(shell basename $(CURDIR))
-MODULE:=$(shell head -n 1 go.mod | grep -oE '"[^ ]+$"')
+MODULE:=$(shell head -n 1 go.mod | sed 's/module //')
 
 download:
 	@go mod download
