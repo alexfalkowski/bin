@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.30.0](https://github.com/alexfalkowski/bin/releases/tag/v2.30.0) - 2025-05-21
+
+- [`699eb67`](https://github.com/alexfalkowski/bin/commit/699eb67b134e0ceba4d6bdf285bdd3ad40deb01c) feat(make): use module for go (#175)
+
 ## [v2.29.0](https://github.com/alexfalkowski/bin/releases/tag/v2.29.0) - 2025-05-21
 
 - [`cd47a84`](https://github.com/alexfalkowski/bin/commit/cd47a844af85e427b27164a37f8f671b14e66989) feat(make): get the go module name (#174)
