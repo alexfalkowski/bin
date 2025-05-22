@@ -1,4 +1,5 @@
 include build/make/help.mak
+include build/make/ruby.mak
 include build/make/git.mak
 
 # Lint all scripts.
@@ -8,6 +9,3 @@ scripts-lint:
 # Lint all docker files.
 docker-lint:
 	@hadolint build/docker/go/Dockerfile
-
-# Lint everything.
-lint: docker-lint scripts-lint
