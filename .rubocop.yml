@@ -1,0 +1,7 @@
+AllCops:
+  TargetRubyVersion: 3.4
+  DisplayCopNames: true
+  NewCops: enable
+  Exclude:
+    - "bin/**/*"
+    - "vendor/**/*"
