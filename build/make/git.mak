@@ -27,6 +27,10 @@ undo:
 submodule:
 	@git submodule sync && git submodule update --init
 
+# Update to the latest submodule changes.
+update-submodule:
+	@git submodule foreach git pull origin master
+
 # Populate the branch.
 branch:
 	@echo "bin: current branch '$(BRANCH)'"
