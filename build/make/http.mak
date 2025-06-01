@@ -180,7 +180,7 @@ build-test:
 
 # Run in dev mode.
 dev:
-	@air --build.cmd "make build" --build.bin "./$(NAME) server -i file:test/.config/server.yml" --build.exclude_dir "test/vendor,vendor,bin"
+	@air --build.cmd "make dep build" --build.bin "./$(NAME) server -i file:test/.config/server.yml"
 
 # Build docker image.
 build-docker:
