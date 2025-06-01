@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.33.0](https://github.com/alexfalkowski/bin/releases/tag/v2.33.0) - 2025-06-01
+
+- [`3cf7029`](https://github.com/alexfalkowski/bin/commit/3cf702920ebdb52c13572dec864a0fdc70559695) feat(make): do not exclude dir in dev (#180)
+- [`85504ca`](https://github.com/alexfalkowski/bin/commit/85504caa5672be89dde071a439ef8c0cbc80de36) build(ci): use alexfalkowski/ruby:1.31 (#179)
+- [`810b10e`](https://github.com/alexfalkowski/bin/commit/810b10e7d88b1625091fabf338b50ce7077f0cb8) build(ci): use alexfalkowski/release:3.21 (#178)
+
 ## [v2.32.0](https://github.com/alexfalkowski/bin/releases/tag/v2.32.0) - 2025-05-26
 
 - [`70394ed`](https://github.com/alexfalkowski/bin/commit/70394eddaea857b05a7361be445f6001ed029803) feat(make): add update-submodule for git (#177)
