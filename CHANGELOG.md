@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.34.0](https://github.com/alexfalkowski/bin/releases/tag/v2.34.0) - 2025-06-06
+
+- [`9b3b425`](https://github.com/alexfalkowski/bin/commit/9b3b4257d42bedfd79a87964efde7538cce12a07) feat(deps): bump golang from 1.24.3-bookworm to 1.24.4-bookworm in /build/docker/go (#181)
+- [`75c5ac7`](https://github.com/alexfalkowski/bin/commit/75c5ac7d5281894c5bded294e6708a313266dd6c) build(ci): update alexfalkowski/ruby:1.35 (#182)
+
 ## [v2.33.0](https://github.com/alexfalkowski/bin/releases/tag/v2.33.0) - 2025-06-01
 
 - [`3cf7029`](https://github.com/alexfalkowski/bin/commit/3cf702920ebdb52c13572dec864a0fdc70559695) feat(make): do not exclude dir in dev (#180)
