@@ -3,10 +3,14 @@
 
 set -eo pipefail
 
-readonly name="$1"
-readonly latest_tag="$(git tag | sort -V | tail -1)"
-readonly dir="$(dirname "$(readlink -f "$0")")"
+readonly message=$(git log --pretty=format:"%s" -n 1)
 
-# Build and push docker.
-docker build --build-arg name=$name --build-arg version=$latest_tag -t alexfalkowski/$name -t alexfalkowski/$name:$latest_tag -f $dir/go/Dockerfile .
-docker push alexfalkowski/$name --all-tags
+if [[ "$message" =~ ^chore* ]]; then
+  readonly name="$1"
+  readonly latest_tag="$(git tag | sort -V | tail -1)"
+  readonly dir="$(dirname "$(readlink -f "$0")")"
+
+  # Build and push docker.
+  docker build --build-arg name=$name --build-arg version=$latest_tag -t alexfalkowski/$name -t alexfalkowski/$name:$latest_tag -f $dir/go/Dockerfile .
+  docker push alexfalkowski/$name --all-tags
+fi
