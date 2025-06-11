@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.36.0](https://github.com/alexfalkowski/bin/releases/tag/v2.36.0) - 2025-06-11
+
+- [`b1582a8`](https://github.com/alexfalkowski/bin/commit/b1582a8e42df5c4b73df4c57d629f2884128ccc6) feat(build): get submodule for docker env (#184)
+
 ## [v2.35.0](https://github.com/alexfalkowski/bin/releases/tag/v2.35.0) - 2025-06-09
 
 - [`34da79d`](https://github.com/alexfalkowski/bin/commit/34da79d55f972a368d4d9fcf38572bc740c8dc06) feat(build): push to docker if we have released (#183)
