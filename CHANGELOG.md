@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.41.0](https://github.com/alexfalkowski/bin/releases/tag/v2.41.0) - 2025-06-12
+
+- [`de73372`](https://github.com/alexfalkowski/bin/commit/de733722fc49ab5e793bba4211e10465bafbb43d) feat(build): multi build is slow (#190)
+
 ## [v2.40.0](https://github.com/alexfalkowski/bin/releases/tag/v2.40.0) - 2025-06-12
 
 - [`96c8e94`](https://github.com/alexfalkowski/bin/commit/96c8e941a18cdb4c9086319c8521df6ce97d7ef5) feat(build): separate building platform for docker (#189)
