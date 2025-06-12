@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.37.1](https://github.com/alexfalkowski/bin/releases/tag/v2.37.1) - 2025-06-12
+
+- [`eaa6217`](https://github.com/alexfalkowski/bin/commit/eaa62174d69fd66d31cca96b4565a21230496a60) fix(build): use docker buildx (#186)
+
 ## [v2.37.0](https://github.com/alexfalkowski/bin/releases/tag/v2.37.0) - 2025-06-12
 
 - [`3f114c9`](https://github.com/alexfalkowski/bin/commit/3f114c93c1df0af93565468a3ac1749e368076bc) feat(build): specify platforms for docker build (#185)
