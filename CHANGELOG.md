@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.40.0](https://github.com/alexfalkowski/bin/releases/tag/v2.40.0) - 2025-06-12
+
+- [`96c8e94`](https://github.com/alexfalkowski/bin/commit/96c8e941a18cdb4c9086319c8521df6ce97d7ef5) feat(build): separate building platform for docker (#189)
+
 ## [v2.39.0](https://github.com/alexfalkowski/bin/releases/tag/v2.39.0) - 2025-06-12
 
 - [`ec0dd45`](https://github.com/alexfalkowski/bin/commit/ec0dd456182a01130a0267200057005888dc719f) feat(build): create a multi driver using docker-container for push (#188)
