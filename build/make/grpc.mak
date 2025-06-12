@@ -212,11 +212,11 @@ dev:
 
 # Build docker image.
 build-docker:
-	@bin/build/docker/build $(NAME)
+	@bin/build/docker/build $(NAME) "linux/amd64"
 
 # Push to docker hub.
 push-docker:
-	@bin/build/docker/push $(NAME)
+	@bin/build/docker/push $(NAME) "linux/amd64"
 
 # Verify using trivy.
 trivy:

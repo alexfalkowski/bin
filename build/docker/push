@@ -7,6 +7,7 @@ readonly message=$(git log --pretty=format:"%s" -n 1)
 
 if [[ "$message" =~ ^chore* ]]; then
   readonly name="$1"
+  readonly platform="$2"
   readonly latest_tag="$(git tag | sort -V | tail -1)"
   readonly dir="$(dirname "$(readlink -f "$0")")"
 
@@ -14,5 +15,5 @@ if [[ "$message" =~ ^chore* ]]; then
   docker buildx create --name go-multi-builder --driver docker-container
 
   # Build and push docker.
-  docker build --builder go-multi-builder --platform linux/amd64,linux/arm64 --build-arg name=$name --build-arg version=$latest_tag -t alexfalkowski/$name -t alexfalkowski/$name:$latest_tag -f $dir/go/Dockerfile --push .
+  docker build --builder go-multi-builder --platform $platform --build-arg name=$name --build-arg version=$latest_tag -t alexfalkowski/$name -t alexfalkowski/$name:$latest_tag -f $dir/go/Dockerfile --push .
 fi
