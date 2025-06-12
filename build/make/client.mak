@@ -180,11 +180,11 @@ build-test:
 
 # Build docker image.
 build-docker:
-	@bin/build/docker/build $(NAME) "linux/amd64"
+	@bin/build/docker/build $(NAME)
 
 # Push to docker hub.
 push-docker:
-	@bin/build/docker/push $(NAME) "linux/amd64"
+	@bin/build/docker/push $(NAME)
 
 # Verify using trivy.
 trivy:
