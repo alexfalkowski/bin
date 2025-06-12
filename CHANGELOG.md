@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.38.0](https://github.com/alexfalkowski/bin/releases/tag/v2.38.0) - 2025-06-12
+
+- [`1712214`](https://github.com/alexfalkowski/bin/commit/1712214deb5805047039bdce83c0d182ec142690) feat(build): create a multi driver using docker-container (#187)
+
 ## [v2.37.1](https://github.com/alexfalkowski/bin/releases/tag/v2.37.1) - 2025-06-12
 
 - [`eaa6217`](https://github.com/alexfalkowski/bin/commit/eaa62174d69fd66d31cca96b4565a21230496a60) fix(build): use docker buildx (#186)
