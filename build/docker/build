@@ -4,11 +4,7 @@
 set -eo pipefail
 
 readonly name="$1"
-readonly platform="$2"
 readonly dir="$(dirname "$(readlink -f "$0")")"
 
-# Create an multi arch builder.
-docker buildx create --name go-multi-builder --driver docker-container
-
 # Build docker.
-docker build --builder go-multi-builder --platform $platform --build-arg name=$name --build-arg version="latest" -t alexfalkowski/$name:test -f $dir/go/Dockerfile  .
+docker build --build-arg name=$name --build-arg version="latest" -t alexfalkowski/$name:test -f $dir/go/Dockerfile  .
