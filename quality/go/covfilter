@@ -8,4 +8,4 @@ else
   cov="test"
 fi
 
-grep -Ev "${cov}" test/reports/profile.cov > test/reports/final.cov
+grep -Ev "${cov}" test/reports/profile.cov >test/reports/final.cov
