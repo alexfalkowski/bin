@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.43.0](https://github.com/alexfalkowski/bin/releases/tag/v2.43.0) - 2025-06-13
+
+- [`337da8c`](https://github.com/alexfalkowski/bin/commit/337da8c061675b451e6c74b35bdba9e2a68a9d68) feat(make): seperate trivy for sec (#193)
+
 ## [v2.42.0](https://github.com/alexfalkowski/bin/releases/tag/v2.42.0) - 2025-06-13
 
 - [`3ad30bd`](https://github.com/alexfalkowski/bin/commit/3ad30bd79f4fb3a92cdd41ff56cbe243b2cd6e91) feat(docker): add ability to create multi machine build (#192)
