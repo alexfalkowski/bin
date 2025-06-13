@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC2086,SC2155
+
+set -eo pipefail
+
+readonly message=$(git log --pretty=format:"%s" -n 1)
+
+if [[ "$message" =~ ^chore* ]]; then
+  readonly name="$1"
+  readonly latest_tag="$(git tag | sort -V | tail -1)"
+
+  docker manifest create alexfalkowski/$name:$latest_tag --amend alexfalkowski/$name:$latest_tag.amd64 --amend alexfalkowski/$name:$latest_tag.arm64
+  docker manifest push alexfalkowski/$name:$latest_tag
+
+  docker manifest create alexfalkowski/$name --amend alexfalkowski/$name:$latest_tag.amd64 --amend alexfalkowski/$name:$latest_tag.arm64
+  docker manifest push alexfalkowski/$name
+fi
