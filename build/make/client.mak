@@ -180,12 +180,15 @@ build-test:
 
 # Build docker image.
 build-docker:
-	@bin/build/docker/build $(NAME)
+	@bin/build/docker/build $(NAME) $(platform)
 
 # Push to docker hub.
 push-docker:
-	@bin/build/docker/push $(NAME)
+	@bin/build/docker/push $(NAME) $(platform)
 
+# Creat a manifest for docker images.
+manifest-docker:
+	@bin/build/docker/manifest $(NAME)
 # Verify using trivy.
 trivy:
 	@bin/build/sec/trivy $(NAME)

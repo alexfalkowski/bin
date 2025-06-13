@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC2086 disable=SC2155
+# shellcheck disable=SC2086,SC2155
 
 set -eo pipefail
 
@@ -7,9 +7,10 @@ readonly message=$(git log --pretty=format:"%s" -n 1)
 
 if [[ "$message" =~ ^chore* ]]; then
   readonly name="$1"
+  readonly platform="$2"
   readonly latest_tag="$(git tag | sort -V | tail -1)"
   readonly dir="$(dirname "$(readlink -f "$0")")"
 
   # Build and push docker.
-  docker build --build-arg name=$name --build-arg version=$latest_tag -t alexfalkowski/$name -t alexfalkowski/$name:$latest_tag -f $dir/go/Dockerfile --push .
+  docker build --build-arg name=$name --build-arg version=$latest_tag -t alexfalkowski/$name:$latest_tag.$platform -f $dir/go/Dockerfile --push .
 fi
