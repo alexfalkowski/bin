@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+readonly name="$1"
+readonly platform="$2"
+
+# Scan using trivy.
+trivy image --db-repository public.ecr.aws/aquasecurity/trivy-db:2 --exit-code 1 --severity CRITICAL "alexfalkowski/$name:test.$platform"
