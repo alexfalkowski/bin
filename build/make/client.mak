@@ -189,9 +189,14 @@ push-docker:
 # Creat a manifest for docker images.
 manifest-docker:
 	@bin/build/docker/manifest $(NAME)
-# Verify using trivy.
-trivy:
-	@bin/build/sec/trivy $(NAME)
+
+# Verify image with trivy.
+trivy-image:
+	@bin/build/sec/trivy-image $(NAME) $(platform)
+
+# Verify repo using trivy.
+trivy-repo:
+	@bin/build/sec/trivy-repo
 
 # Encode a config.
 encode-config:
