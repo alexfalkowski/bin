@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+require 'fileutils'
+
 file = '.gocov'
 exclude = File.exist?(file) ? File.read(file).strip : 'test|.pb|main.go'
 path = 'test/reports/filter'
