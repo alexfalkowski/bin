@@ -3,17 +3,23 @@
 
 file = '.gocov'
 exclude = File.exist?(file) ? File.read(file).strip : 'test|.pb|main.go'
+path = 'test/reports/filter'
+
+FileUtils.mkdir_p path
 
 Dir['test/reports/*.cov'].each do |f|
-  nf = "#{File.dirname(f)}/#{File.basename(f, File.extname(f))}-new#{File.extname(f)}"
+  filter_file = File.join(path, File.basename(f))
 
-  File.open(nf, 'w') do |out_file|
+  File.open(filter_file, 'w') do |out_file|
     File.foreach(f) do |line|
       out_file.puts line unless line =~ /(#{exclude})/
     end
   end
 end
 
-files = Dir['test/reports/*-new.cov'].join(' ')
+# https://github.com/alexfalkowski/gocovmerge
+cmd = "gocovmerge -d #{path} -o test/reports/final.cov"
+pid = spawn({}, cmd, %i[out err] => [File.join(path, 'gocovmerge.log'), 'a'])
 
-`gocovmerge #{files} > test/reports/final.cov && rm -f #{files}`
+Process.waitpid2 pid
+FileUtils.rmdir path
