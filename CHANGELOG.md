@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.44.0](https://github.com/alexfalkowski/bin/releases/tag/v2.44.0) - 2025-07-05
+
+- [`6bf4cba`](https://github.com/alexfalkowski/bin/commit/6bf4cba133b106fba890e3b4ce7f85917af3a75d) feat(quality): use the new gocovmerge (#194)
+
 ## [v2.43.0](https://github.com/alexfalkowski/bin/releases/tag/v2.43.0) - 2025-06-13
 
 - [`337da8c`](https://github.com/alexfalkowski/bin/commit/337da8c061675b451e6c74b35bdba9e2a68a9d68) feat(make): seperate trivy for sec (#193)
