@@ -24,4 +24,3 @@ cmd = "gocovmerge -d #{path} -o test/reports/final.cov"
 pid = spawn({}, cmd, %i[out err] => [File.join(path, 'gocovmerge.log'), 'a'])
 
 Process.waitpid2 pid
-FileUtils.remove_dir path
