@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.44.2](https://github.com/alexfalkowski/bin/releases/tag/v2.44.2) - 2025-07-05
+
+- [`c9d7c39`](https://github.com/alexfalkowski/bin/commit/c9d7c396db16bbd487258b5191552c5b51bb8704) fix(quality): use FileUtils.remove_dir (#197)
+- [`e472800`](https://github.com/alexfalkowski/bin/commit/e4728007ad71dace96c656bddb26959f495c94a8) build(ci): use alexfalkowski/ruby:1.40 (#196)
+
 ## [v2.44.1](https://github.com/alexfalkowski/bin/releases/tag/v2.44.1) - 2025-07-05
 
 - [`b54ee2e`](https://github.com/alexfalkowski/bin/commit/b54ee2efe935dd087d0348d3b6f5f54cb55dce31) fix(quality): require 'fileutils' (#195)
