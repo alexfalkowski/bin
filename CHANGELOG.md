@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.44.1](https://github.com/alexfalkowski/bin/releases/tag/v2.44.1) - 2025-07-05
+
+- [`b54ee2e`](https://github.com/alexfalkowski/bin/commit/b54ee2efe935dd087d0348d3b6f5f54cb55dce31) fix(quality): require 'fileutils' (#195)
+
 ## [v2.44.0](https://github.com/alexfalkowski/bin/releases/tag/v2.44.0) - 2025-07-05
 
 - [`6bf4cba`](https://github.com/alexfalkowski/bin/commit/6bf4cba133b106fba890e3b4ce7f85917af3a75d) feat(quality): use the new gocovmerge (#194)
