@@ -21,9 +21,13 @@ get-all:
 # Setup deps.
 dep: download tidy vendor
 
-# Clean all deps.
+# Clean go caches.
 clean-dep:
 	@go clean -cache -testcache -fuzzcache -modcache
+
+# Clean lint cache.
+clean-lint:
+	@golangci-lint cache clean
 
 # Clean downloaded deps.
 clean:
