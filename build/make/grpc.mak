@@ -180,14 +180,18 @@ update-all-dep: go-update-all-dep go-dep ruby-update-all-dep ruby-dep proto-upda
 ruby-clean-dep:
 	@make -C test clean-dep
 
-# Clean all go deps.
+# Clean all go caches.
 go-clean-dep:
 	@go clean -cache -testcache -fuzzcache -modcache
 
 # CLean all deps.
 clean-dep: ruby-clean-dep go-clean-dep
 
-# Clean downloaded deps.
+# Clean lint cache.
+clean-lint:
+	@golangci-lint cache clean
+
+# Clean all caches.
 clean:
 	@bin/build/go/clean
 
@@ -218,7 +222,7 @@ build-docker:
 push-docker:
 	@bin/build/docker/push $(NAME) $(platform)
 
-# Creat a manifest for docker images.
+# Create a manifest for docker images.
 manifest-docker:
 	@bin/build/docker/manifest $(NAME)
 
