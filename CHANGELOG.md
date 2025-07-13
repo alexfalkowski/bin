@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.48.0](https://github.com/alexfalkowski/bin/releases/tag/v2.48.0) - 2025-07-13
+
+- [`650e139`](https://github.com/alexfalkowski/bin/commit/650e13969b221fc43cfbf7eb9e89f99fc38b3b2e) feat(make): add source-key to git (#201)
+
 ## [v2.47.0](https://github.com/alexfalkowski/bin/releases/tag/v2.47.0) - 2025-07-09
 
 - [`58bf64f`](https://github.com/alexfalkowski/bin/commit/58bf64f7f927ad814439cdd8358a1411b5c8225f) feat(make): add ability to clean lint cache (#200)
