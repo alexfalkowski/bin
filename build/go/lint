@@ -2,8 +2,6 @@
 
 set -eo pipefail
 
-if [ -x golangci-lint ]; then
-  exit 0
+if command -v golangci-lint >&2; then
+  golangci-lint "$@"
 fi
-
-golangci-lint "$@"
