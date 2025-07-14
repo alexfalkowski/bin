@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+if [ -x golangci-lint ]; then
+  exit 0
+fi
+
+golangci-lint "$@"

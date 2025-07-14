@@ -27,7 +27,7 @@ clean-dep:
 
 # Clean lint cache.
 clean-lint:
-	@golangci-lint cache clean
+	@bin/build/go/lint cache clean
 
 # Clean downloaded deps.
 clean:
@@ -40,10 +40,10 @@ fix-field-alignment:
 	@bin/build/go/fa -fix
 
 golangci-lint:
-	@golangci-lint run --timeout 5m
+	@bin/build/go/lint run --timeout 5m
 
 fix-golangci-lint:
-	@golangci-lint run --timeout 5m --fix
+	@bin/build/go/lint run --timeout 5m --fix
 
 # Lint all the code.
 lint: field-alignment golangci-lint

@@ -19,10 +19,10 @@ fix-field-alignment:
 	@bin/build/go/fa -fix
 
 golangci-lint:
-	@golangci-lint run --build-tags features  --timeout 5m
+	@bin/build/go/lint run --build-tags features  --timeout 5m
 
 fix-golangci-lint:
-	@golangci-lint run --build-tags features --timeout 5m --fix
+	@bin/build/go/lint run --build-tags features --timeout 5m --fix
 
 # Lint all the go code.
 go-lint: field-alignment golangci-lint
@@ -189,7 +189,7 @@ clean-dep: ruby-clean-dep go-clean-dep
 
 # Clean lint cache.
 clean-lint:
-	@golangci-lint cache clean
+	@bin/build/go/lint cache clean
 
 # Clean all caches.
 clean:

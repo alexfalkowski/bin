@@ -4,7 +4,7 @@ include build/make/git.mak
 
 # Lint all scripts.
 scripts-lint:
-	@shellcheck build/docker/build build/docker/env build/docker/push build/docker/manifest build/sec/* build/go/clean quality/go/covfilter quality/ruby/feature quality/ruby/benchmark
+	@shellcheck build/docker/build build/docker/env build/docker/push build/docker/manifest build/sec/* build/go/clean build/go/lint quality/go/covfilter quality/ruby/feature quality/ruby/benchmark
 
 # Lint all docker files.
 docker-lint:
