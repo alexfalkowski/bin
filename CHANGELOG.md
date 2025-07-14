@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.49.0](https://github.com/alexfalkowski/bin/releases/tag/v2.49.0) - 2025-07-14
+
+- [`0e7ee78`](https://github.com/alexfalkowski/bin/commit/0e7ee78db3e88b869469f498429e6b49eeef5a09) feat(go): ignore golangci-lint if it's not in the path (#202)
+
 ## [v2.48.0](https://github.com/alexfalkowski/bin/releases/tag/v2.48.0) - 2025-07-13
 
 - [`650e139`](https://github.com/alexfalkowski/bin/commit/650e13969b221fc43cfbf7eb9e89f99fc38b3b2e) feat(make): add source-key to git (#201)
