@@ -14,7 +14,7 @@ format:
 
 # Update all of buf deps.
 update-all-dep:
-	@buf mod update && buf mod prune
+	@buf dep update && buf dep prune
 
 # Generate buf.
 generate:
