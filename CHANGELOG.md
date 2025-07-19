@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.52.0](https://github.com/alexfalkowski/bin/releases/tag/v2.52.0) - 2025-07-19
+
+- [`9ab0444`](https://github.com/alexfalkowski/bin/commit/9ab04440eaef86368986f5a08e316fb87943c61e) feat(make): use buf dep as the other is deprecated (#205)
+
 ## [v2.51.0](https://github.com/alexfalkowski/bin/releases/tag/v2.51.0) - 2025-07-14
 
 - [`39f1371`](https://github.com/alexfalkowski/bin/commit/39f13717eb0cadc0f406c2c218b27fbbf9f9c2d7) feat(make): ignore output for lint (#204)
