@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.53.0](https://github.com/alexfalkowski/bin/releases/tag/v2.53.0) - 2025-07-21
+
+- [`0679409`](https://github.com/alexfalkowski/bin/commit/0679409fc7e469dd327a95fa31ef63d5fab891ce) feat(make): use whoami for user in git (#206)
+
 ## [v2.52.0](https://github.com/alexfalkowski/bin/releases/tag/v2.52.0) - 2025-07-19
 
 - [`9ab0444`](https://github.com/alexfalkowski/bin/commit/9ab04440eaef86368986f5a08e316fb87943c61e) feat(make): use buf dep as the other is deprecated (#205)
