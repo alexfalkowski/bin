@@ -1,4 +1,6 @@
 .PHONY: status
+
+USER:=$(shell whoami)
 BRANCH:=$(shell git branch --show-current)
 NEW_BRANCH:=$(subst $() ,-,$(name))
 PREFIX:=$(shell ruby -e '_, t, n = (ARGV[0] || "").split("/"); print "#{t}(#{n}):" unless t.nil?' $(BRANCH))
