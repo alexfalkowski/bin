@@ -156,3 +156,7 @@ unstash:
 # Generates a sha256 sum of all files in git.
 source-key:
 	@git ls-files | grep -v bin | xargs sha256sum | cut -d" " -f1 | sha256sum | cut -d" " -f1 > .source-key
+
+# Purge all branches.
+purge:
+	@git branch | grep -v "master" | xargs git branch -D
