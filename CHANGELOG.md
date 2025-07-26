@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.54.0](https://github.com/alexfalkowski/bin/releases/tag/v2.54.0) - 2025-07-26
+
+- [`0dc04cc`](https://github.com/alexfalkowski/bin/commit/0dc04cc4c553d8e51d9762df2ae91805c7f796dd) feat(make): add purge for git (#208)
+- [`b4da06c`](https://github.com/alexfalkowski/bin/commit/b4da06cdae9e9ca06b8fb6957c5b7d3b28d750b5) build(ci): use latest published images (#207)
+
 ## [v2.53.0](https://github.com/alexfalkowski/bin/releases/tag/v2.53.0) - 2025-07-21
 
 - [`0679409`](https://github.com/alexfalkowski/bin/commit/0679409fc7e469dd327a95fa31ef63d5fab891ce) feat(make): use whoami for user in git (#206)
