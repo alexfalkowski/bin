@@ -6,6 +6,8 @@ jobs:
       - image: alexfalkowski/ruby:1.43
     steps:
       - checkout
+      - run: git submodule sync
+      - run: git submodule update --init
       - restore_cache:
           name: restore deps
           keys:
@@ -22,19 +24,21 @@ jobs:
       - run: make docker-lint
       - run: make lint
     resource_class: large
-  release:
+  version:
     docker:
-      - image: alexfalkowski/release:4.4
+      - image: alexfalkowski/release:5.2
     steps:
       - checkout
-      - run: release
+      - run: git submodule sync
+      - run: git submodule update --init
+      - run: version
     resource_class: large
 
 workflows:
   bin:
     jobs:
       - build
-      - release:
+      - version:
           context: gh
           requires:
             - build
