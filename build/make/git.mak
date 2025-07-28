@@ -123,12 +123,23 @@ commit: add
 push:
 	@git push -f origin $(BRANCH)
 
-# Create a PR from the current change.
-review:
+# Create a draft PR from the current change.
+draft:
 	@gh pr create -d -a @me --fill-first --head $(BRANCH)
 
-# Ready to reviewed.
-ready: commit push review
+# Create a PR from the current change.
+pr:
+	@gh pr create -a @me --fill-first --head $(BRANCH)
+
+# Create an auto merge.
+merge:
+	@gh pr merge --auto --squash
+
+# Review the PR.
+review: commit push draft
+
+# The PR is ready to be merged.
+ready: commit push pr merge
 
 # Latest changes from master.
 latest: master pull submodule
