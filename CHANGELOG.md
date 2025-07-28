@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.56.0](https://github.com/alexfalkowski/bin/releases/tag/v2.56.0) - 2025-07-28
+
+- [`f54355f`](https://github.com/alexfalkowski/bin/commit/f54355fa821bd284d14c796a12b3650d44a29214) feat(readme): add missing docs (#212)
+
 ## [v2.55.0](https://github.com/alexfalkowski/bin/releases/tag/v2.55.0) - 2025-07-28
 
 - [`f658b4b`](https://github.com/alexfalkowski/bin/commit/f658b4bb9223c071e9d4216603956fdbc053f7fb) feat(make): (#211)
