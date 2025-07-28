@@ -127,6 +127,11 @@ push:
 review:
 	@gh pr create -d -a @me --fill-first --head $(BRANCH)
 
+# Create a PR that will be automatically merged.
+auto: commit push
+	@gh pr create -a @me --fill-first --head $(BRANCH)
+	@gh pr merge --auto
+
 # Ready to reviewed.
 ready: commit push review
 
