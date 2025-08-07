@@ -68,6 +68,10 @@ new-docs: new-branch
 new-refactor: branch=refactor/$(NEW_BRANCH)
 new-refactor: new-branch
 
+# Start a new release.
+new-release: branch=release/$(NEW_BRANCH)
+new-release: new-branch
+
 delete-branch: branch latest
 	@git branch -D "$(USER)/$(branch)"
 
@@ -94,6 +98,10 @@ delete-docs: delete-branch
 # Delete a refactor.
 delete-refactor: branch=refactor/$(NEW_BRANCH)
 delete-refactor: delete-branch
+
+# Delete a release.
+delete-release: branch=release/$(NEW_BRANCH)
+delete-release: delete-branch
 
 # Delete the current branch.
 delete:
