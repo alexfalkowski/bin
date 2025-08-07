@@ -1,4 +1,4 @@
-FROM golang:1.24.5-bookworm AS build
+FROM golang:1.24.6-bookworm AS build
 
 ARG name=service
 ARG version=latest
