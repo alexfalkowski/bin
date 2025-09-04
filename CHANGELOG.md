@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.62.0](https://github.com/alexfalkowski/bin/releases/tag/v2.62.0) - 2025-09-04
+
+- [`46052c9`](https://github.com/alexfalkowski/bin/commit/46052c938cab3da6b97581f3605303cc55f8d6b7) feat(build): use golang:1.25.1-trixie (#225)
+
 ## [v2.61.0](https://github.com/alexfalkowski/bin/releases/tag/v2.61.0) - 2025-09-03
 
 - [`753896c`](https://github.com/alexfalkowski/bin/commit/753896cd87a71297e2ff9debb66d3a7dca69502b) feat(deps): bump rubocop from 1.79.2 to 1.80.1 (#223)
