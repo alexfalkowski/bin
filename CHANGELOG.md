@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.63.0](https://github.com/alexfalkowski/bin/releases/tag/v2.63.0) - 2025-09-24
+
+- [`6026fb4`](https://github.com/alexfalkowski/bin/commit/6026fb4fc0067d021732ba985a76f62679772d12) feat(build): add GOEXPERIMENT (#227)
+
 ## [v2.62.0](https://github.com/alexfalkowski/bin/releases/tag/v2.62.0) - 2025-09-04
 
 - [`46052c9`](https://github.com/alexfalkowski/bin/commit/46052c938cab3da6b97581f3605303cc55f8d6b7) feat(build): use golang:1.25.1-trixie (#225)
