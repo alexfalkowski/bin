@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.64.0](https://github.com/alexfalkowski/bin/releases/tag/v2.64.0) - 2025-10-02
+
+- [`a52ce59`](https://github.com/alexfalkowski/bin/commit/a52ce59aeca244739d1079cf72206af39b7c2cff) feat(deps): bump rubocop from 1.80.2 to 1.81.1 (#229)
+- [`a0976a5`](https://github.com/alexfalkowski/bin/commit/a0976a575d926dfacbf8b400ab336f9d23a64775) build(ci): use latest published images (#230)
+
 ## [v2.63.0](https://github.com/alexfalkowski/bin/releases/tag/v2.63.0) - 2025-09-24
 
 - [`6026fb4`](https://github.com/alexfalkowski/bin/commit/6026fb4fc0067d021732ba985a76f62679772d12) feat(build): add GOEXPERIMENT (#227)
