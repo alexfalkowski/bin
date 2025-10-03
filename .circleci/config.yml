@@ -5,7 +5,8 @@ jobs:
     docker:
       - image: alexfalkowski/ruby:1.59
     steps:
-      - checkout
+      - checkout:
+          method: blobless
       - run: git submodule sync
       - run: git submodule update --init
       - restore_cache:
@@ -28,7 +29,8 @@ jobs:
     docker:
       - image: alexfalkowski/release:5.16
     steps:
-      - checkout
+      - checkout:
+          method: blobless
       - run: git submodule sync
       - run: git submodule update --init
       - run: version
