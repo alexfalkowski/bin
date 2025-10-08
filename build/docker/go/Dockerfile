@@ -1,4 +1,4 @@
-FROM golang:1.25.1-trixie AS build
+FROM golang:1.25.2-trixie AS build
 
 ARG name=service
 ARG version=latest
