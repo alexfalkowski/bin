@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.65.0](https://github.com/alexfalkowski/bin/releases/tag/v2.65.0) - 2025-10-08
+
+- [`1f0f2c0`](https://github.com/alexfalkowski/bin/commit/1f0f2c0b25e158680e453dadcdff663eaaa32d4c) feat(deps): bump golang from 1.25.1-trixie to 1.25.2-trixie in /build/docker/go (#232)
+- [`6aa86c4`](https://github.com/alexfalkowski/bin/commit/6aa86c407a61a3e441b84760dd464f2bd09cd029) build(ci): use blobless (#231)
+
 ## [v2.64.0](https://github.com/alexfalkowski/bin/releases/tag/v2.64.0) - 2025-10-02
 
 - [`a52ce59`](https://github.com/alexfalkowski/bin/commit/a52ce59aeca244739d1079cf72206af39b7c2cff) feat(deps): bump rubocop from 1.80.2 to 1.81.1 (#229)
