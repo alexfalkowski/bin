@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.67.0](https://github.com/alexfalkowski/bin/releases/tag/v2.67.0) - 2025-11-06
+
+- [`4bc5b52`](https://github.com/alexfalkowski/bin/commit/4bc5b52acfcb8d88cb1f16db891b4ace8706ff71) feat(deps): bump golang from 1.25.3-trixie to 1.25.4-trixie in /build/docker/go (#238)
+- [`8091aa3`](https://github.com/alexfalkowski/bin/commit/8091aa3f732289072f9b45a4e440eca70b1ef81e) build(ci): use latest published images (#239)
+
 ## [v2.66.0](https://github.com/alexfalkowski/bin/releases/tag/v2.66.0) - 2025-10-15
 
 - [`6775118`](https://github.com/alexfalkowski/bin/commit/6775118d07b077a7ef3f7d9dd1e96023d9b82fe4) feat(deps): bump golang from 1.25.2-trixie to 1.25.3-trixie in /build/docker/go (#233)
