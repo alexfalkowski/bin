@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.68.0](https://github.com/alexfalkowski/bin/releases/tag/v2.68.0) - 2025-12-02
+
+- [`69c616d`](https://github.com/alexfalkowski/bin/commit/69c616db6ccb2d3a38e9f0409d32e25b2ec2434a) feat(go): remove -race from benchmark (#242)
+
 ## [v2.67.0](https://github.com/alexfalkowski/bin/releases/tag/v2.67.0) - 2025-11-06
 
 - [`4bc5b52`](https://github.com/alexfalkowski/bin/commit/4bc5b52acfcb8d88cb1f16db891b4ace8706ff71) feat(deps): bump golang from 1.25.3-trixie to 1.25.4-trixie in /build/docker/go (#238)
