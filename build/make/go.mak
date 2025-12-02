@@ -61,7 +61,7 @@ specs:
 
 # Run package benchmark.
 benchmark:
-	@go test -vet=off -race -mod vendor -bench=. -run=Benchmark -benchmem -memprofile test/reports/mem.prof ./$(package)
+	@go test -vet=off -mod vendor -bench=. -run=Benchmark -benchmem -memprofile test/reports/mem.prof ./$(package)
 
 # Run pprof for memprofile.
 benchmark-pprof:
