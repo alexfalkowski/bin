@@ -25,7 +25,7 @@ update-dep: path
 
 # Update all the deps.
 update-all-dep: path
-	@bundler update
+	@bundler update --all
 
 # Clean all deps.
 clean-dep: path
