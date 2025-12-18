@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.70.0](https://github.com/alexfalkowski/bin/releases/tag/v2.70.0) - 2025-12-18
+
+- [`1fc9a48`](https://github.com/alexfalkowski/bin/commit/1fc9a48cc7558cecc08ba2e9b0699c8ef546f968) feat(build): [DEPRECATED] Pass --all to bundle update to update everything (#246)
+- [`9eaff9f`](https://github.com/alexfalkowski/bin/commit/9eaff9f5ba8762aa39ba074ac8cd219a76a7743f) build(ci): use latest published images (#247)
+
 ## [v2.69.0](https://github.com/alexfalkowski/bin/releases/tag/v2.69.0) - 2025-12-03
 
 - [`2fff476`](https://github.com/alexfalkowski/bin/commit/2fff4764292ae2a735e29eb570dd67813b039de2) feat(go): update to golang:1.25.5-trixie (#244)
