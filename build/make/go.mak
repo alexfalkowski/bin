@@ -27,23 +27,23 @@ clean-dep:
 
 # Clean lint cache.
 clean-lint:
-	@bin/build/go/lint cache clean
+	@$(PWD)/bin/build/go/lint cache clean
 
 # Clean downloaded deps.
 clean:
-	@bin/build/go/clean
+	@$(PWD)/bin/build/go/clean
 
 field-alignment:
-	@bin/build/go/fa
+	@$(PWD)/bin/build/go/fa
 
 fix-field-alignment:
-	@bin/build/go/fa -fix
+	@$(PWD)/bin/build/go/fa -fix
 
 golangci-lint:
-	@bin/build/go/lint run --timeout 5m
+	@$(PWD)/bin/build/go/lint run --timeout 5m
 
 fix-golangci-lint:
-	@bin/build/go/lint run --timeout 5m --fix
+	@$(PWD)/bin/build/go/lint run --timeout 5m --fix
 
 # Lint all the code.
 lint: field-alignment golangci-lint
@@ -68,7 +68,7 @@ benchmark-pprof:
 	@go tool pprof test/reports/mem.prof
 
 remove-generated-coverage:
-	@bin/quality/go/covfilter
+	@$(PWD)/bin/quality/go/covfilter
 
 # Get the HTML coverage the code.
 html-coverage: remove-generated-coverage
@@ -126,8 +126,8 @@ money:
 
 # Start the environment.
 start:
-	@bin/build/docker/env start
+	@$(PWD)/bin/build/docker/env start
 
 # Stop the environment.
 stop:
-	@bin/build/docker/env stop
+	@$(PWD)/bin/build/docker/env stop
