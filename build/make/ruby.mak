@@ -54,3 +54,15 @@ clean-reports:
 # Upload codecov information.
 codecov-upload:
 	@codecovcli --verbose upload-process --fail-on-error -F service -f test/reports/coverage.xml
+
+# Calculate how much this project is worth.
+money:
+	@scc --no-duplicates --no-min-gen
+
+# Start the environment.
+start:
+	@$(PWD)/bin/build/docker/env start
+
+# Stop the environment.
+stop:
+	@$(PWD)/bin/build/docker/env stop

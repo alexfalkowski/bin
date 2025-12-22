@@ -13,16 +13,16 @@ vendor:
 	@go mod vendor
 
 field-alignment:
-	@bin/build/go/fa
+	@$(PWD)/bin/build/go/fa
 
 fix-field-alignment:
-	@bin/build/go/fa -fix
+	@$(PWD)/bin/build/go/fa -fix
 
 golangci-lint:
-	@bin/build/go/lint run --build-tags features  --timeout 5m
+	@$(PWD)/bin/build/go/lint run --build-tags features  --timeout 5m
 
 fix-golangci-lint:
-	@bin/build/go/lint run --build-tags features --timeout 5m --fix
+	@$(PWD)/bin/build/go/lint run --build-tags features --timeout 5m --fix
 
 # Lint all the go code.
 go-lint: field-alignment golangci-lint
@@ -71,7 +71,7 @@ ruby-outdated-dep:
 outdated-dep: go-outdated-dep ruby-outdated-dep
 
 sanitize-coverage:
-	@bin/quality/go/covmerge
+	@$(PWD)/bin/quality/go/covmerge
 
 # Get the HTML coverage for go.
 html-coverage: sanitize-coverage
@@ -161,11 +161,11 @@ clean-dep: ruby-clean-dep go-clean-dep
 
 # Clean lint cache.
 clean-lint:
-	@bin/build/go/lint cache clean
+	@$(PWD)/bin/build/go/lint cache clean
 
 # Clean all caches.
 clean:
-	@bin/build/go/clean
+	@$(PWD)/bin/build/go/clean
 
 # Run go security checks.
 go-sec:
@@ -188,23 +188,23 @@ dev:
 
 # Build docker image.
 build-docker:
-	@bin/build/docker/build $(NAME) $(platform)
+	@$(PWD)/bin/build/docker/build $(NAME) $(platform)
 
 # Push to docker hub.
 push-docker:
-	@bin/build/docker/push $(NAME) $(platform)
+	@$(PWD)/bin/build/docker/push $(NAME) $(platform)
 
 # Create a manifest for docker images.
 manifest-docker:
-	@bin/build/docker/manifest $(NAME)
+	@$(PWD)/bin/build/docker/manifest $(NAME)
 
 # Verify image with trivy.
 trivy-image:
-	@bin/build/sec/trivy-image $(NAME) $(platform)
+	@$(PWD)/bin/build/sec/trivy-image $(NAME) $(platform)
 
 # Verify repo using trivy.
 trivy-repo:
-	@bin/build/sec/trivy-repo
+	@$(PWD)/bin/build/sec/trivy-repo
 
 # Encode a config.
 encode-config:
@@ -229,8 +229,8 @@ money:
 
 # Start the environment.
 start:
-	@bin/build/docker/env start
+	@$(PWD)/bin/build/docker/env start
 
 # Stop the environment.
 stop:
-	@bin/build/docker/env stop
+	@$(PWD)/bin/build/docker/env stop
