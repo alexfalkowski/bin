@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.71.0](https://github.com/alexfalkowski/bin/releases/tag/v2.71.0) - 2025-12-22
+
+- [`2390168`](https://github.com/alexfalkowski/bin/commit/23901688f22ac550034bd1bd610490e198768c74) feat(money): add usage of scc (#248)
+
 ## [v2.70.0](https://github.com/alexfalkowski/bin/releases/tag/v2.70.0) - 2025-12-18
 
 - [`1fc9a48`](https://github.com/alexfalkowski/bin/commit/1fc9a48cc7558cecc08ba2e9b0699c8ef546f968) feat(build): [DEPRECATED] Pass --all to bundle update to update everything (#246)
