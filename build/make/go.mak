@@ -120,6 +120,10 @@ create-diagram:
 analyse:
 	@gsa $(NAME)
 
+# Calculate how much this project is worth.
+money:
+	@scc --no-duplicates --no-min-gen
+
 # Start the environment.
 start:
 	@bin/build/docker/env start
