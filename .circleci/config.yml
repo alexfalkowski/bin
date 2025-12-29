@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: alexfalkowski/ruby:1.76
+      - image: alexfalkowski/ruby:1.78
     steps:
       - checkout:
           method: blobless
@@ -27,7 +27,7 @@ jobs:
     resource_class: large
   version:
     docker:
-      - image: alexfalkowski/release:5.32
+      - image: alexfalkowski/release:5.34
     steps:
       - checkout:
           method: blobless
