@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.73.0](https://github.com/alexfalkowski/bin/releases/tag/v2.73.0) - 2025-12-29
+
+- [`8a64970`](https://github.com/alexfalkowski/bin/commit/8a649704bb5b66ad040663881f3bcda960336f67) feat(build): add random to user for git (#251)
+
 ## [v2.72.0](https://github.com/alexfalkowski/bin/releases/tag/v2.72.0) - 2025-12-22
 
 - [`850a164`](https://github.com/alexfalkowski/bin/commit/850a1643fb16ace20a65c1b76cde1f00e017ca71) feat(build): use PWD (#249)
