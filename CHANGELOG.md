@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.74.0](https://github.com/alexfalkowski/bin/releases/tag/v2.74.0) - 2025-12-29
+
+- [`a252674`](https://github.com/alexfalkowski/bin/commit/a2526745f3fe57b05350d7b49bf8a19feffddfaf) feat(build): use ruby to get USER (#253)
+- [`1248b9e`](https://github.com/alexfalkowski/bin/commit/1248b9e724c4139cb8a28f972de1eea7ff1fc147) build(ci): use latest published images (#252)
+
 ## [v2.73.0](https://github.com/alexfalkowski/bin/releases/tag/v2.73.0) - 2025-12-29
 
 - [`8a64970`](https://github.com/alexfalkowski/bin/commit/8a649704bb5b66ad040663881f3bcda960336f67) feat(build): add random to user for git (#251)
