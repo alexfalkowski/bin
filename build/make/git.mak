@@ -1,6 +1,6 @@
 .PHONY: status
 
-USER:=$(shell ruby -e 'require "etc"; print "#{Etc.getlogin}-#{Random.rand(0...100_000)}"')
+USER:=$(shell ruby -e 'require "etc"; print "#{Etc.getpwuid(Process.uid).name}-#{Random.rand(0...100_000)}"')
 BRANCH:=$(shell git branch --show-current)
 NEW_BRANCH:=$(subst $() ,-,$(name))
 PREFIX:=$(shell ruby -e '_, t, n = (ARGV[0] || "").split("/"); print "#{t}(#{n}):" unless t.nil?' $(BRANCH))
