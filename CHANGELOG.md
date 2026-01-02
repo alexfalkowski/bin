@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.75.0](https://github.com/alexfalkowski/bin/releases/tag/v2.75.0) - 2026-01-02
+
+- [`fe0ca8c`](https://github.com/alexfalkowski/bin/commit/fe0ca8cc174598fd9ee71d7b2b5c38e404c68b46) feat(build): use getpwuid for user in git (#254)
+
 ## [v2.74.0](https://github.com/alexfalkowski/bin/releases/tag/v2.74.0) - 2025-12-29
 
 - [`a252674`](https://github.com/alexfalkowski/bin/commit/a2526745f3fe57b05350d7b49bf8a19feffddfaf) feat(build): use ruby to get USER (#253)
