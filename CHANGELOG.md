@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.76.0](https://github.com/alexfalkowski/bin/releases/tag/v2.76.0) - 2026-01-08
+
+- [`1a304a9`](https://github.com/alexfalkowski/bin/commit/1a304a9493cd50aeddb8808c1b40f3902dbe190a) feat(build): pass packages to coverpkg for go (#255)
+
 ## [v2.75.0](https://github.com/alexfalkowski/bin/releases/tag/v2.75.0) - 2026-01-02
 
 - [`fe0ca8c`](https://github.com/alexfalkowski/bin/commit/fe0ca8cc174598fd9ee71d7b2b5c38e404c68b46) feat(build): use getpwuid for user in git (#254)
