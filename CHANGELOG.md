@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.76.2](https://github.com/alexfalkowski/bin/releases/tag/v2.76.2) - 2026-01-08
+
+- [`cc41313`](https://github.com/alexfalkowski/bin/commit/cc413133c76a2f0fc45d9ef25ccfdd5a2a435912) fix(build): use COVER_PACKAGES for coverpkg (#258)
+
 ## [v2.76.1](https://github.com/alexfalkowski/bin/releases/tag/v2.76.1) - 2026-01-08
 
 - [`4a87b68`](https://github.com/alexfalkowski/bin/commit/4a87b682b083e0c4fe7fd87e01c082fc7df5d30a) fix(build): pass PACKAGES (#257)
