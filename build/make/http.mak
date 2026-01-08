@@ -4,6 +4,7 @@ NAME:=$(shell basename $(CURDIR))
 MODULE:=$(shell head -n 1 go.mod | sed 's/module //')
 SOURCE:=$(shell find . -name '*.go' -not -path './bin*/*' -not -path './test*/*' -not -path './vendor/*' -type f | sort)
 PACKAGES:=$(shell go list $(sort $(dir $(SOURCE))))
+COVER_PACKAGES:=$(shell echo $(PACKAGES) | tr ' ' ',')
 
 download:
 	@go mod download
@@ -108,7 +109,7 @@ benchmarks: build
 
 # Run all the specs.
 specs:
-	@gotestsum --junitfile test/reports/specs.xml -- -vet=off -race -mod vendor -covermode=atomic -coverprofile=test/reports/profile.cov $(PACKAGES)
+	@gotestsum --junitfile test/reports/specs.xml -- -vet=off -race -mod vendor -covermode=atomic -coverpkg=$(COVER_PACKAGES) -coverprofile=test/reports/profile.cov $(PACKAGES)
 
 # Run pprof tool.
 pprof:
@@ -182,7 +183,7 @@ build:
 
 # Build test binary.
 build-test:
-	@go test -vet=off -race -mod vendor -c -tags features -covermode=atomic -o $(NAME) $(MODULE)
+	@go test -vet=off -race -mod vendor -c -tags features -covermode=atomic -coverpkg=$(COVER_PACKAGES) -o $(NAME) $(MODULE)
 
 # Run in dev mode.
 dev:
