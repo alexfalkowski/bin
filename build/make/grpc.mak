@@ -132,7 +132,7 @@ benchmarks: build
 
 # Run all the specs.
 specs:
-	@gotestsum --junitfile test/reports/specs.xml -- -vet=off -race -mod vendor -covermode=atomic -coverpkg=$(PACKAGES) -coverprofile=test/reports/profile.cov ./...
+	@gotestsum --junitfile test/reports/specs.xml -- -vet=off -race -mod vendor -covermode=atomic -coverprofile=test/reports/profile.cov $(PACKAGES)
 
 # Run pprof tool.
 pprof:
@@ -210,7 +210,7 @@ build:
 
 # Build test binary.
 build-test:
-	@go test -vet=off -race -mod vendor -c -tags features -covermode=atomic -o $(NAME) -coverpkg=$(PACKAGES) $(MODULE)
+	@go test -vet=off -race -mod vendor -c -tags features -covermode=atomic -o $(NAME) $(MODULE)
 
 # Run in dev mode.
 dev:
