@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.76.1](https://github.com/alexfalkowski/bin/releases/tag/v2.76.1) - 2026-01-08
+
+- [`4a87b68`](https://github.com/alexfalkowski/bin/commit/4a87b682b083e0c4fe7fd87e01c082fc7df5d30a) fix(build): pass PACKAGES (#257)
+
 ## [v2.76.0](https://github.com/alexfalkowski/bin/releases/tag/v2.76.0) - 2026-01-08
 
 - [`1a304a9`](https://github.com/alexfalkowski/bin/commit/1a304a9493cd50aeddb8808c1b40f3902dbe190a) feat(build): pass packages to coverpkg for go (#255)
