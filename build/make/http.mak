@@ -3,8 +3,8 @@
 NAME:=$(shell basename $(CURDIR))
 MODULE:=$(shell head -n 1 go.mod | sed 's/module //')
 SOURCE:=$(shell find . -name '*.go' -not -path './bin*/*' -not -path './test*/*' -not -path './vendor/*' -type f | sort)
-PACKAGES:=$(shell go list $(sort $(dir $(SOURCE))))
-COVER_PACKAGES:=$(shell echo $(PACKAGES) | tr ' ' ',')
+PACKAGES=$(shell go list $(sort $(dir $(SOURCE))))
+COVER_PACKAGES=$(shell echo $(PACKAGES) | tr ' ' ',')
 
 download:
 	@go mod download
