@@ -179,3 +179,7 @@ source-key:
 # Purge all branches.
 purge:
 	@git branch | grep -v "master" | xargs git branch -D
+
+# Delete a specific version.
+delete-version:
+	@git push --delete origin $(version) && git tag -d $(version)
