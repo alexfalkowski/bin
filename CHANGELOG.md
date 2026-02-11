@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.82.0](https://github.com/alexfalkowski/bin/releases/tag/v2.82.0) - 2026-02-11
+
+- [`6a3029d`](https://github.com/alexfalkowski/bin/commit/6a3029dbf66d19df8ea158995db9f7e83d8a6c2c) feat(make): ignore errors for gsa (#271)
+
 ## [v2.81.0](https://github.com/alexfalkowski/bin/releases/tag/v2.81.0) - 2026-02-11
 
 - [`2f4b474`](https://github.com/alexfalkowski/bin/commit/2f4b4743d767c101ad4a2c9d59533ac09073d0f6) feat(docker): use golang:1.26.0-trixie (#270)
