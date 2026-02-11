@@ -1,10 +1,9 @@
-FROM golang:1.25.7-trixie AS build
+FROM golang:1.26.0-trixie AS build
 
 ARG name=service
 ARG version=latest
 
 ENV CGO_ENABLED=0
-ENV GOEXPERIMENT=greenteagc,jsonv2
 
 WORKDIR /app
 
