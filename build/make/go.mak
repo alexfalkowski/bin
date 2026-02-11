@@ -121,7 +121,7 @@ create-diagram:
 
 # Analyse binary size.
 analyse:
-	@gsa $(NAME)
+	@gsa $(NAME) || true
 
 # Calculate how much this project is worth.
 money:
