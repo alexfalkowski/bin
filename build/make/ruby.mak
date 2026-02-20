@@ -1,68 +1,68 @@
 .PHONY: vendor features
 
-# Lint all the the code.
+# Lint Ruby code with RuboCop.
 lint:
 	@bundler exec rubocop
 
-# Fix linting issues in the the code.
+# Auto-correct RuboCop offenses (safe + unsafe, RuboCop -A).
 fix-lint:
 	@bundler exec rubocop -A
 
-# Format code.
+# Format Ruby by applying RuboCop auto-corrections (RuboCop -A).
 format:
 	@bundler exec rubocop -A
 
 path:
 	@bundler config set path vendor/bundle
 
-# Get the deps.
+# Install gem dependencies into vendor/bundle (bundler install).
 dep: path
 	@bundler check || bundler install
 
-# Update a gem.
+# Update a single gem (set gem=<name>).
 update-dep: path
 	@bundler update $(gem)
 
-# Update all the deps.
+# Update all gems (bundler update --all).
 update-all-dep: path
 	@bundler update --all
 
-# Clean all deps.
+# Remove unused gems from vendor/bundle (bundler clean).
 clean-dep: path
 	@bundler clean
 
-# List outdated deps.
+# List outdated explicit gems (bundler outdated --parseable).
 outdated-dep: path
 	@bundler outdated --only-explicit --strict --parseable
 
-# Update bundler.
+# Update the bundler gem.
 update-bundler: path
 	@bundler update --bundler
 
-# Run all features.
+# Run cucumber features (feature=<path> optional; excludes @benchmark; tags=<expr> optional).
 features:
 	@$(PWD)/bin/quality/ruby/feature $(feature) $(tags)
 
-# Run all benchmarks.
+# Run cucumber benchmarks (features tagged @benchmark; feature=<path> optional).
 benchmarks:
 	@$(PWD)/bin/quality/ruby/benchmark $(feature)
 
-# Clean the reports.
+# Remove generated report artifacts under test/reports/.
 clean-reports:
 	@rm -rf test/reports/*.*
 
-# Upload codecov information.
+# Upload test/reports/coverage.xml to Codecov (codecovcli upload-process).
 codecov-upload:
 	@codecovcli --verbose upload-process --fail-on-error -F service -f test/reports/coverage.xml
 
-# Calculate how much this project is worth.
+# Report code statistics with scc.
 money:
 	@scc --no-duplicates --no-min-gen
 
-# Start the environment.
+# Start shared docker environment via the sibling ../docker repo.
 start:
 	@$(PWD)/bin/build/docker/env start
 
-# Stop the environment.
+# Stop shared docker environment via the sibling ../docker repo.
 stop:
 	@$(PWD)/bin/build/docker/env stop
