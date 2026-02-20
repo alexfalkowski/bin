@@ -27,213 +27,213 @@ golangci-lint:
 fix-golangci-lint:
 	@$(PWD)/bin/build/go/lint run --build-tags features --timeout 5m --fix
 
-# Lint all the go code.
+# Run fieldalignment and golangci-lint (build-tags=features).
 go-lint: field-alignment golangci-lint
 
-# Fix the lint issues in the go code (if possible).
+# Auto-fix fieldalignment and golangci-lint issues (best effort).
 go-fix-lint: fix-field-alignment fix-golangci-lint
 
-# Lint all the ruby code.
+# Lint Ruby code in test/ with RuboCop.
 ruby-lint:
 	@make -C test lint
 
-# Fix the lint issues in the ruby code (if possible).
+# Auto-correct RuboCop offenses in test/ (best effort).
 ruby-fix-lint:
 	@make -C test fix-lint
 
-# Lint Dockerfile.
+# Lint Dockerfile with hadolint.
 docker-lint:
 	@hadolint Dockerfile
 
-# Lint all the code.
+# Lint Go and Ruby test harness.
 lint: go-lint ruby-lint
 
-# Fix the lint issues in the code (if possible).
+# Auto-fix lint issues in Go and Ruby test harness (best effort).
 fix-lint: go-fix-lint ruby-fix-lint
 
-# Format go code.
+# Format Go packages (go fmt ./...).
 go-format:
 	@go fmt ./...
 
-# Format ruby code.
+# Format Ruby in test/ (delegates to test/ Makefile).
 ruby-format:
 	@make -C test format
 
-# Format all code.
+# Format Go and Ruby.
 format: go-format ruby-format
 
-# List outdated go deps.
+# List available updates for direct (non-indirect) Go modules.
 go-outdated-dep:
 	@go list -mod=mod -u -f '{{if (and (not (or .Main .Indirect)) .Update)}}{{.Path}} {{.Update.Version}}{{end}}' -m all
 
-# List outdated ruby deps.
+# List outdated explicit gems in test/.
 ruby-outdated-dep:
 	@make -C test outdated-dep
 
-# List outdated deps.
+# List outdated Go modules and Ruby gems.
 outdated-dep: go-outdated-dep ruby-outdated-dep
 
 sanitize-coverage:
 	@$(PWD)/bin/quality/go/covmerge
 
-# Get the HTML coverage for go.
+# Generate HTML coverage report from test/reports/final.cov.
 html-coverage: sanitize-coverage
 	@go tool cover -html test/reports/final.cov -o test/reports/coverage.html
 
-# Get the func coverage for go.
+# Print function coverage summary from test/reports/final.cov.
 func-coverage: sanitize-coverage
 	@go tool cover -func test/reports/final.cov
 
-# Generate all coverage for the code.
+# Generate both HTML and function coverage reports.
 coverage: html-coverage func-coverage
 
-# Leave only coverage files.
+# Remove non-coverage artifacts under test/reports/.
 leave-coverage:
 	@find test/reports ! -name '*.cov' -type f -exec rm -f {} +
 
-# Upload codecov information.
+# Upload test/reports/final.cov to Codecov (codecovcli upload-process).
 codecov-upload:
 	@codecovcli --verbose upload-process --fail-on-error -F service -f test/reports/final.cov
 
-# Clean the reports.
+# Remove generated report artifacts under test/reports/.
 clean-reports:
 	@rm -rf test/reports/*.*
 
-# Run all the features.
+# Run cucumber features in test/ (builds the test binary first).
 features: build-test
 	@make -C test features
 
-# Run all the benchmarks.
+# Run cucumber benchmarks in test/ (builds the release binary first).
 benchmarks: build
 	@make -C test benchmarks
 
-# Run all the specs.
+# Run Go tests with gotestsum (race + coverage) and write reports under test/reports/.
 specs:
 	@gotestsum --junitfile test/reports/specs.xml -- -vet=off -race -mod vendor -covermode=atomic -coverpkg=$(COVER_PACKAGES) -coverprofile=test/reports/profile.cov $(PACKAGES)
 
-# Run pprof tool.
+# Open pprof for a captured profile under test/reports/ (set id/kind).
 pprof:
 	@go tool pprof test/reports/$(NAME)-server-$(id)-$(kind).prof
 
-# Get go dep.
+# Fetch a Go module (set module=<path>).
 go-get:
 	@go get $(module)
 
-# Update go dep
+# Update one Go module (module=<path>) and re-vendor.
 go-update-dep: go-get tidy vendor
 
-# Update all go deps.
+# Update all Go modules (go get -u all).
 go-update-all-dep:
 	@go get -u all
 
-# Setup go deps.
+# Download, tidy, and vendor Go module dependencies.
 go-dep: download tidy vendor
 
-# Update ruby dep.
+# Update a single gem in test/ (set gem=<name>).
 ruby-update-dep:
 	@make -C test gem=$(gem) update-dep
 
-# Setup ruby deps.
+# Install gem dependencies in test/.
 ruby-dep:
 	@make -C test dep
 
-# Update all ruby deps.
+# Update all gems in test/.
 ruby-update-all-dep:
 	@make -C test update-all-dep
 
-# Update ruby bundler.
+# Update bundler in test/.
 ruby-update-bundler:
 	@make -C test update-bundler
 
-# Setup all deps.
+# Install Go deps and test/ Ruby deps.
 dep: go-dep ruby-dep
 
-# Update all deps.
+# Update all Go modules and test/ gems.
 update-all-dep: go-update-all-dep go-dep ruby-update-all-dep ruby-dep
 
-# Clean all ruby deps.
+# Remove unused gems from test/ (bundler clean).
 ruby-clean-dep:
 	@make -C test clean-dep
 
-# Clean all go caches.
+# Clear Go build/test/fuzz/module caches.
 go-clean-dep:
 	@go clean -cache -testcache -fuzzcache -modcache
 
-# CLean all deps.
+# Clean Go caches and test/ Ruby deps.
 clean-dep: ruby-clean-dep go-clean-dep
 
-# Clean lint cache.
+# Clear golangci-lint cache (no-op if golangci-lint is not installed).
 clean-lint:
 	@$(PWD)/bin/build/go/lint cache clean
 
-# Clean all caches.
+# Refresh deps and caches when go.sum differs from master.
 clean:
 	@$(PWD)/bin/build/go/clean
 
-# Run go security checks.
+# Run govulncheck on the module (including tests).
 go-sec:
 	@govulncheck -show verbose -test ./...
 
 # Run security checks.
 sec: go-sec
 
-# Build release binary.
+# Build a static-ish release binary named $(NAME).
 build:
 	@go build -ldflags="-s -w" -buildvcs=false -tags netgo -a -o $(NAME) .
 
-# Build test binary.
+# Build a test binary with -tags features and coverage instrumentation.
 build-test:
 	@go test -vet=off -race -mod vendor -c -tags features -covermode=atomic -coverpkg=$(COVER_PACKAGES) -o $(NAME) $(MODULE)
 
-# Run in dev mode.
+# Run in dev mode with air; builds and runs "$(NAME) server" using test config.
 dev:
 	@air --build.cmd "make dep build" --build.bin "./$(NAME) server -i file:test/.config/server.yml"
 
-# Build docker image.
+# Build a test docker image tagged alexfalkowski/$(NAME):test.$(platform).
 build-docker:
 	@$(PWD)/bin/build/docker/build $(NAME) $(platform)
 
-# Push to docker hub.
+# Push the image to docker hub (only if the last commit subject starts with chore).
 push-docker:
 	@$(PWD)/bin/build/docker/push $(NAME) $(platform)
 
-# Create a manifest for docker images.
+# Create and push multi-arch manifests (only if the last commit subject starts with chore).
 manifest-docker:
 	@$(PWD)/bin/build/docker/manifest $(NAME)
 
-# Verify image with trivy.
+# Scan the test image with Trivy (CRITICAL severity).
 trivy-image:
 	@$(PWD)/bin/build/sec/trivy-image $(NAME) $(platform)
 
-# Verify repo using trivy.
+# Scan the repository with Trivy (CRITICAL severity).
 trivy-repo:
 	@$(PWD)/bin/build/sec/trivy-repo
 
-# Encode a config.
+# Base64-encode test/$(kind).yml as a single line.
 encode-config:
 	@cat test/$(kind).yml | base64 -w 0
 
-# Create certificates.
+# Create server and client TLS certs under test/certs/ using mkcert.
 create-certs:
 	@mkcert -key-file test/certs/key.pem -cert-file test/certs/cert.pem localhost
 	@mkcert -client -key-file test/certs/client-key.pem -cert-file test/certs/client-cert.pem localhost
 
-# Create a diagram.
+# Generate a dependency graph PNG for package=$(package) into assets/.
 create-diagram:
 	@goda graph github.com/alexfalkowski/$(NAME)/$(package)/... | dot -Tpng -o assets/$(package).png
 
-# Analyse binary size.
+# Analyse binary size with gsa (non-fatal if gsa is missing/fails).
 analyse:
 	@gsa $(NAME) || true
 
-# Calculate how much this project is worth.
+# Report code statistics with scc.
 money:
 	@scc --no-duplicates --no-min-gen
 
-# Start the environment.
+# Start shared docker environment via the sibling ../docker repo.
 start:
 	@$(PWD)/bin/build/docker/env start
 
-# Stop the environment.
+# Stop shared docker environment via the sibling ../docker repo.
 stop:
 	@$(PWD)/bin/build/docker/env stop

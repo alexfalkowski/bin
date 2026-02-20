@@ -1,29 +1,29 @@
 NAME:=$(shell basename $(shell dirname $(CURDIR)))
 
-# Lint buf.
+# Lint protobuf definitions with buf.
 lint:
 	@buf lint
 
-# Fix the lint issues in the proto code (if possible).
+# Fix protobuf formatting by rewriting files in place (buf format -w).
 fix-lint:
 	@buf format -w
 
-# Format buf.
+# Format protobuf files in place (buf format -w).
 format:
 	@buf format -w
 
-# Update all of buf deps.
+# Update buf module deps (buf dep update + buf dep prune).
 update-all-dep:
 	@buf dep update && buf dep prune
 
-# Generate buf.
+# Generate code from protobufs (buf generate).
 generate:
 	@buf generate
 
-# Push buf to repository.
+# Push module to the Buf Schema Registry (buf push).
 push:
 	@buf push
 
-# Buf breaking changes.
+# Check for breaking API changes against master (subdir=api).
 breaking:
 	@buf breaking --against 'https://github.com/alexfalkowski/$(NAME).git#branch=master,subdir=api'

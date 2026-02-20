@@ -5,39 +5,39 @@ BRANCH:=$(shell git branch --show-current)
 NEW_BRANCH:=$(subst $() ,-,$(name))
 PREFIX:=$(shell ruby -e '_, t, n = (ARGV[0] || "").split("/"); print "#{t}(#{n}):" unless t.nil?' $(BRANCH))
 
-# Checkout master.
+# Checkout the master branch.
 master:
 	@git checkout master
 
-# Pull changes.
+# Pull latest changes with rebase.
 pull:
 	@git pull --rebase
 
-# Add all files.
+# Stage all changes (tracked + untracked).
 add:
 	@git add -A
 
-# Reset the recent changes.
+# Discard local changes (hard reset + remove untracked files).
 reset:
 	@git reset HEAD --hard && git clean -fd
 
-# Undo the recent changes.
+# Undo the last commit while keeping changes staged.
 undo:
 	@git reset HEAD~1 --soft
 
-# Get the latest submodule changes.
+# Sync and initialize/update submodules.
 submodule:
 	@git submodule sync && git submodule update --init
 
-# Update to the latest submodule changes.
+# Pull latest master in each submodule.
 update-submodule:
 	@git submodule foreach git pull origin master
 
-# Populate the branch.
+# Print the current git branch.
 branch:
 	@echo "bin: current branch '$(BRANCH)'"
 
-# Checkout branch.
+# Create and checkout a new branch named $(USER)/$(branch).
 checkout:
 	@git checkout -b "$(USER)/$(branch)"
 
@@ -60,7 +60,7 @@ new-build: new-branch
 new-test: branch=test/$(NEW_BRANCH)
 new-test: new-branch
 
-# Start with docs.
+# Start a new docs branch.
 new-docs: branch=docs/$(NEW_BRANCH)
 new-docs: new-branch
 
@@ -91,7 +91,7 @@ delete-build: delete-branch
 delete-test: branch=test/$(NEW_BRANCH)
 delete-test: delete-branch
 
-# Delete docs.
+# Delete a docs branch.
 delete-docs: branch=docs/$(NEW_BRANCH)
 delete-docs: delete-branch
 
@@ -107,84 +107,84 @@ delete-release: delete-branch
 delete:
 	@git branch -D $(BRANCH)
 
-# Finish the current change.
+# Update from master and delete the current branch.
 done: branch latest delete
 	@echo "bin: done with branch '$(BRANCH)'"
 
-# Sync the current change.
+# Rebase the current branch onto origin/master.
 sync:
 	@git fetch && git rebase origin/master
 
-# Amend the latest changes.
+# Amend the last commit with staged changes (no message edit).
 amend: add
 	@git commit --amend --no-edit
 
-# Amend the latest changes for edit.
+# Amend the last commit with staged changes (edit message).
 edit-amend: add
 	@git commit --amend
 
-# Commit the latest changes.
+# Commit all changes with a prefix derived from the branch (set msg/desc).
 commit: add
 	@git commit -a -m "$(PREFIX) $(msg)" -m "$(desc)"
 
-# Push the latest changes.
+# Force-push the current branch to origin.
 push:
 	@git push -f origin $(BRANCH)
 
-# Create a draft PR from the current change.
+# Create a draft PR for the current branch (gh pr create --draft).
 draft:
 	@gh pr create -d -a @me --fill-first --head $(BRANCH)
 
-# Create a PR from the current change.
+# Create a PR for the current branch (gh pr create).
 pr:
 	@gh pr create -a @me --fill-first --head $(BRANCH)
 
-# Create an auto merge.
+# Enable auto squash-merge for the current PR.
 merge:
 	@gh pr merge --auto --squash
 
-# Review the PR.
+# Commit, force-push, and open a draft PR.
 review: commit push draft
 
-# The PR is ready to be merged.
+# Commit, force-push, open PR, and enable auto-merge.
 ready: commit push pr merge
 
-# Latest changes from master.
+# Checkout master, pull, and update submodules.
 latest: master pull submodule
 
-# The current changes.
+# Show the working tree diff.
 current:
 	@git diff
 
-# The current status.
+# Show repository status.
 status:
 	@git status
 
-# The last changes.
+# Show the last commit (patch).
 last:
 	@git log -p -1
 
-# Stash changes.
+# Stash current changes (staging first).
 stash: add
 	@git stash
 
-# Unstash changes.
+# Apply and drop the latest stash.
 unstash:
 	@git stash pop
 
-# Generates a sha256 sum of all files in git.
+# Generate a repo source key (sha256 of tracked files excluding bin/) into .source-key.
 source-key:
 	@git ls-files | grep -v bin | xargs sha256sum | cut -d" " -f1 | sha256sum | cut -d" " -f1 > .source-key
 
-# Purge all branches.
+# Delete all local branches except master.
 purge:
 	@git branch | grep -v "master" | xargs git branch -D
 
-# Delete a specific version.
+# Delete remote ref and local tag for version=<tag>.
 delete-version:
 	@git push --delete origin $(version) && git tag -d $(version)
 
-# Optimise git settings.
+# Enable performance-related git settings and run git gc.
 optimise:
 	@git config feature.manyFiles true
 	@git update-index --index-version 4
