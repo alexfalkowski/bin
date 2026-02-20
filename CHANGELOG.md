@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.85.0](https://github.com/alexfalkowski/bin/releases/tag/v2.85.0) - 2026-02-20
+
+- [`0bca085`](https://github.com/alexfalkowski/bin/commit/0bca08553fdbf81fa7634f218d26d3c4638d99d2) feat(ai): add AGENTS.md and improve docs (#277)
+- [`e4545e0`](https://github.com/alexfalkowski/bin/commit/e4545e034e635f654233d69912208fa74f46ace8) build(ci): use latest published images (#276)
+
 ## [v2.84.0](https://github.com/alexfalkowski/bin/releases/tag/v2.84.0) - 2026-02-20
 
 - [`d3bab21`](https://github.com/alexfalkowski/bin/commit/d3bab2129e241db940162381dc4ce88584f95f75) feat(git): add optimise (#275)
