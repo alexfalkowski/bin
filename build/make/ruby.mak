@@ -55,8 +55,8 @@ clean-reports:
 codecov-upload:
 	@codecovcli --verbose upload-process --fail-on-error -F service -f test/reports/coverage.xml
 
-# Report code statistics with scc.
-money:
+# Report cost statistics with scc.
+cost:
 	@scc --no-duplicates --no-min-gen
 
 # Start shared docker environment via the sibling ../docker repo.
