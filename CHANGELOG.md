@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.87.0](https://github.com/alexfalkowski/bin/releases/tag/v2.87.0) - 2026-03-05
+
+- [`43c7762`](https://github.com/alexfalkowski/bin/commit/43c7762f882d95f33ae828947101a6a2a7f03fdb) feat(deps): make update-all-dep (#280)
+
 ## [v2.86.0](https://github.com/alexfalkowski/bin/releases/tag/v2.86.0) - 2026-03-05
 
 - [`7e0420e`](https://github.com/alexfalkowski/bin/commit/7e0420e34896fa006943ee6bf6111ab436f242f8) feat(make): rename to cost (#279)
