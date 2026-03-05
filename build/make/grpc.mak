@@ -254,8 +254,8 @@ create-diagram:
 analyse:
 	@gsa $(NAME) || true
 
-# Report code statistics with scc.
-money:
+# Report cost statistics with scc.
+cost:
 	@scc --no-duplicates --no-min-gen
 
 # Start shared docker environment via the sibling ../docker repo.
