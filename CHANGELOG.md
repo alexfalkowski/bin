@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.86.0](https://github.com/alexfalkowski/bin/releases/tag/v2.86.0) - 2026-03-05
+
+- [`7e0420e`](https://github.com/alexfalkowski/bin/commit/7e0420e34896fa006943ee6bf6111ab436f242f8) feat(make): rename to cost (#279)
+
 ## [v2.85.0](https://github.com/alexfalkowski/bin/releases/tag/v2.85.0) - 2026-02-20
 
 - [`0bca085`](https://github.com/alexfalkowski/bin/commit/0bca08553fdbf81fa7634f218d26d3c4638d99d2) feat(ai): add AGENTS.md and improve docs (#277)
