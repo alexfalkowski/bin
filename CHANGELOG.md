@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.89.0](https://github.com/alexfalkowski/bin/releases/tag/v2.89.0) - 2026-03-12
+
+- [`b8c5362`](https://github.com/alexfalkowski/bin/commit/b8c536206e35a00737034295192747532a455b99) feat(deps): bump ruby-lsp from 0.26.7 to 0.26.8 (#287)
+- [`5c22bcf`](https://github.com/alexfalkowski/bin/commit/5c22bcfde10bf7b2f9e199cc0c7908ef562131d7) build(ci): use alexfalkowski/release:5.58 (#288)
+- [`616640e`](https://github.com/alexfalkowski/bin/commit/616640e0813f40dce7980b2c5a6f795ea79ae8de) build(ci): use latest published images (#286)
+- [`83a939e`](https://github.com/alexfalkowski/bin/commit/83a939e66b46fff4c5d2be6ca9501221749f9b55) build(ci): use resource_class: arm.large (#284)
+- [`3cc465d`](https://github.com/alexfalkowski/bin/commit/3cc465d348ced60b0d8493453ce2604559bdbde1) build(ci): add wait-all (#283)
+
 ## [v2.88.0](https://github.com/alexfalkowski/bin/releases/tag/v2.88.0) - 2026-03-06
 
 - [`b85baf0`](https://github.com/alexfalkowski/bin/commit/b85baf08924a7420521f24c5b619c3c5a3d60f4b) feat(go): update to v1.26.1 (#282)
