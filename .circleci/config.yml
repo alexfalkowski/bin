@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: alexfalkowski/ruby:1.91
+      - image: alexfalkowski/ruby:1.97
     steps:
       - checkout:
           method: blobless
@@ -27,7 +27,7 @@ jobs:
     resource_class: large
   sync:
     docker:
-      - image: alexfalkowski/ruby:1.91
+      - image: alexfalkowski/ruby:1.97
     working_directory: ~/infraops
     steps:
       - checkout:
@@ -35,9 +35,10 @@ jobs:
       - run: git submodule sync
       - run: git submodule update --init
       - run: make sync push
+    resource_class: arm.large
   version:
     docker:
-      - image: alexfalkowski/release:5.48
+      - image: alexfalkowski/release:5.57
     steps:
       - checkout:
           method: blobless
@@ -47,7 +48,7 @@ jobs:
     resource_class: large
   wait-all:
     docker:
-      - image: alexfalkowski/ruby:1.91
+      - image: alexfalkowski/ruby:1.97
     steps:
       - run: echo "all applicable jobs finished"
     resource_class: arm.large
