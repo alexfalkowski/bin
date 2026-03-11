@@ -24,7 +24,7 @@ jobs:
       - run: make scripts-lint
       - run: make docker-lint
       - run: make lint
-    resource_class: large
+    resource_class: arm.large
   sync:
     docker:
       - image: alexfalkowski/ruby:1.97
@@ -45,7 +45,7 @@ jobs:
       - run: git submodule sync
       - run: git submodule update --init
       - run: version
-    resource_class: large
+    resource_class: arm.large
   wait-all:
     docker:
       - image: alexfalkowski/ruby:1.97
