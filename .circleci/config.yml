@@ -25,6 +25,16 @@ jobs:
       - run: make docker-lint
       - run: make lint
     resource_class: large
+  sync:
+    docker:
+      - image: alexfalkowski/ruby:1.91
+    working_directory: ~/infraops
+    steps:
+      - checkout:
+          method: blobless
+      - run: git submodule sync
+      - run: git submodule update --init
+      - run: make sync push
   version:
     docker:
       - image: alexfalkowski/release:5.48
@@ -35,11 +45,23 @@ jobs:
       - run: git submodule update --init
       - run: version
     resource_class: large
+  wait-all:
+    docker:
+      - image: alexfalkowski/ruby:1.91
+    steps:
+      - run: echo "all applicable jobs finished"
+    resource_class: arm.large
 
 workflows:
   bin:
     jobs:
       - build
+      - sync:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore: master
       - version:
           context: gh
           requires:
@@ -47,3 +69,8 @@ workflows:
           filters:
             branches:
               only: master
+      - wait-all:
+          requires:
+            - build
+            - sync
+            - version
