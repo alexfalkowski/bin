@@ -113,7 +113,7 @@ done: branch latest delete
 
 # Rebase the current branch onto origin/master.
 sync:
-	@git fetch && git rebase origin/master
+	@git fetch && git rebase -X theirs origin/master
 
 # Amend the last commit with staged changes (no message edit).
 amend: add
