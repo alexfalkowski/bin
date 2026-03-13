@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.90.0](https://github.com/alexfalkowski/bin/releases/tag/v2.90.0) - 2026-03-13
+
+- [`36a9233`](https://github.com/alexfalkowski/bin/commit/36a92336df138223130ef95161dd69f6765ae16d) feat(make): use theirs for rebase (#289)
+
 ## [v2.89.0](https://github.com/alexfalkowski/bin/releases/tag/v2.89.0) - 2026-03-12
 
 - [`b8c5362`](https://github.com/alexfalkowski/bin/commit/b8c536206e35a00737034295192747532a455b99) feat(deps): bump ruby-lsp from 0.26.7 to 0.26.8 (#287)
