@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.91.0](https://github.com/alexfalkowski/bin/releases/tag/v2.91.0) - 2026-03-19
+
+- [`d4afa46`](https://github.com/alexfalkowski/bin/commit/d4afa46914446170992419ab8b997f175b8804c1) feat(deps): bump json from 2.19.1 to 2.19.2 (#290)
+
 ## [v2.90.0](https://github.com/alexfalkowski/bin/releases/tag/v2.90.0) - 2026-03-13
 
 - [`36a9233`](https://github.com/alexfalkowski/bin/commit/36a92336df138223130ef95161dd69f6765ae16d) feat(make): use theirs for rebase (#289)
