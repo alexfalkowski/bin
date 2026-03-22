@@ -189,11 +189,11 @@ build-test:
 build-docker:
 	@$(PWD)/bin/build/docker/build $(NAME) $(platform)
 
-# Push the image to docker hub (only if the last commit subject starts with chore).
+# Push the image to docker hub (only if the version file exists).
 push-docker:
 	@$(PWD)/bin/build/docker/push $(NAME) $(platform)
 
-# Create and push multi-arch manifests (only if the last commit subject starts with chore).
+# Create and push multi-arch manifests (only if the version file exists).
 manifest-docker:
 	@$(PWD)/bin/build/docker/manifest $(NAME)
 

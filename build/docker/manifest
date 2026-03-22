@@ -3,11 +3,11 @@
 
 set -eo pipefail
 
-readonly message=$(git log --pretty=format:"%s" -n 1)
+readonly version_file="${APP_VERSION_FILE:-/tmp/workspace/release-version.txt}"
 
-if [[ "$message" =~ ^chore* ]]; then
+if [[ -f "$version_file" ]]; then
   readonly name="$1"
-  readonly latest_tag="$(git tag | sort -V | tail -1)"
+  readonly latest_tag="$(cat "$version_file")"
 
   docker manifest create alexfalkowski/$name:$latest_tag --amend alexfalkowski/$name:$latest_tag.amd64 --amend alexfalkowski/$name:$latest_tag.arm64
   docker manifest push alexfalkowski/$name:$latest_tag
