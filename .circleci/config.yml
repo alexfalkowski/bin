@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: alexfalkowski/ruby:1.98
+      - image: alexfalkowski/ruby:1.101
     steps:
       - checkout:
           method: blobless
@@ -27,7 +27,7 @@ jobs:
     resource_class: arm.large
   sync:
     docker:
-      - image: alexfalkowski/release:5.58
+      - image: alexfalkowski/release:6.3
     steps:
       - checkout:
           method: blobless
@@ -37,17 +37,18 @@ jobs:
     resource_class: arm.large
   version:
     docker:
-      - image: alexfalkowski/release:5.57
+      - image: alexfalkowski/release:6.3
     steps:
       - checkout:
           method: blobless
       - run: git submodule sync
       - run: git submodule update --init
       - run: version
+      - run: package
     resource_class: arm.large
   wait-all:
     docker:
-      - image: alexfalkowski/ruby:1.98
+      - image: alexfalkowski/ruby:1.101
     steps:
       - run: echo "all applicable jobs finished"
     resource_class: arm.large
@@ -64,6 +65,7 @@ workflows:
               ignore: master
       - version:
           context: gh
+          serial-group: << pipeline.project.slug >>/version
           requires:
             - build
           filters:
