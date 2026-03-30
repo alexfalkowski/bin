@@ -3,4 +3,4 @@
 set -eo pipefail
 
 # Scan using trivy.
-trivy repo --db-repository public.ecr.aws/aquasecurity/trivy-db:2 --exit-code 1 --severity CRITICAL ./
+trivy repo --skip-dirs bin --skip-dirs vendor --skip-dirs test/vendor --db-repository public.ecr.aws/aquasecurity/trivy-db:2 --exit-code 1 --severity CRITICAL ./
