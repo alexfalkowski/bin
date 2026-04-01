@@ -55,6 +55,13 @@ clean-reports:
 codecov-upload:
 	@codecovcli --verbose upload-process --fail-on-error -F service -f test/reports/coverage.xml
 
+# Scan the repository with Trivy (CRITICAL severity).
+trivy-repo:
+	@$(PWD)/bin/build/sec/trivy-repo
+
+# Run security checks.
+sec: trivy-repo
+
 # Report cost statistics with scc.
 cost:
 	@scc --no-duplicates --no-min-gen

@@ -202,8 +202,16 @@ clean:
 go-sec:
 	@govulncheck -show verbose -test ./...
 
+# Scan the test image with Trivy (CRITICAL severity).
+trivy-image:
+	@$(PWD)/bin/build/sec/trivy-image $(NAME) $(platform)
+
+# Scan the repository with Trivy (CRITICAL severity).
+trivy-repo:
+	@$(PWD)/bin/build/sec/trivy-repo
+
 # Run security checks.
-sec: go-sec
+sec: go-sec trivy-repo
 
 # Build a static-ish release binary named $(NAME).
 build:
@@ -228,14 +236,6 @@ push-docker:
 # Create and push multi-arch manifests (only if the version file exists).
 manifest-docker:
 	@$(PWD)/bin/build/docker/manifest $(NAME)
-
-# Scan the test image with Trivy (CRITICAL severity).
-trivy-image:
-	@$(PWD)/bin/build/sec/trivy-image $(NAME) $(platform)
-
-# Scan the repository with Trivy (CRITICAL severity).
-trivy-repo:
-	@$(PWD)/bin/build/sec/trivy-repo
 
 # Base64-encode test/$(kind).yml as a single line.
 encode-config:
