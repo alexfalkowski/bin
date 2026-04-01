@@ -28,6 +28,16 @@ dep: download tidy vendor
 clean-dep:
 	@go clean -cache -testcache -fuzzcache -modcache
 
+# Update one module (set module=<path>) and re-vendor.
+update-dep: get tidy vendor
+
+# Update all modules (go get -u all) and re-vendor.
+update-all-dep: get-all tidy vendor
+
+# List available updates for direct (non-indirect) modules.
+outdated-dep:
+	@go list -mod=mod -u -f '{{if (and (not (or .Main .Indirect)) .Update)}}{{.Path}} {{.Update.Version}}{{end}}' -m all
+
 # Clear golangci-lint cache (no-op if golangci-lint is not installed).
 clean-lint:
 	@$(PWD)/bin/build/go/lint cache clean
@@ -93,18 +103,15 @@ clean-reports:
 	@rm -rf test/reports/*.*
 
 # Run govulncheck on the module (including tests).
-sec:
+govulncheck:
 	@govulncheck -show verbose -test ./...
 
-# Update one module (set module=<path>) and re-vendor.
-update-dep: get tidy vendor
+# Scan the repository with Trivy (CRITICAL severity).
+trivy-repo:
+	@$(PWD)/bin/build/sec/trivy-repo
 
-# Update all modules (go get -u all) and re-vendor.
-update-all-dep: get-all tidy vendor
-
-# List available updates for direct (non-indirect) modules.
-outdated-dep:
-	@go list -mod=mod -u -f '{{if (and (not (or .Main .Indirect)) .Update)}}{{.Path}} {{.Update.Version}}{{end}}' -m all
+# Run security checks.
+sec: govulncheck trivy-repo
 
 # Base64-encode test/$(kind).yml as a single line.
 encode-config:
