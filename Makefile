@@ -9,3 +9,7 @@ scripts-lint:
 # Lint all docker files.
 docker-lint:
 	@hadolint build/docker/go/Dockerfile
+
+# Scan for security issues.
+sec-lint:
+	@build/sec/trivy-repo
