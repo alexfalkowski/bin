@@ -5,4 +5,4 @@ set -eo pipefail
 
 readonly feature="$1"
 
-bundler exec cucumber --profile report $feature --tags @benchmark
+COVERAGE_NAME=benchmarks bundler exec cucumber --profile report $feature --tags @benchmark
