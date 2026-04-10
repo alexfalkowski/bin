@@ -7,7 +7,7 @@ readonly feature="$1"
 readonly tags="$2"
 
 if [ -n "$tags" ]; then
-  bundler exec cucumber --profile report $feature --tags "not @benchmark" --tags $tags
+  COVERAGE_NAME=features bundler exec cucumber --profile report $feature --tags "not @benchmark" --tags $tags
 else
-  bundler exec cucumber --profile report $feature --tags "not @benchmark"
+  COVERAGE_NAME=features bundler exec cucumber --profile report $feature --tags "not @benchmark"
 fi
