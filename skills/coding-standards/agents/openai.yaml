@@ -1,0 +1,2 @@
+interface:
+  default_prompt: "Use $coding-standards to work in this repository."

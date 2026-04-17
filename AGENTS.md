@@ -6,6 +6,12 @@ This repository is a collection of shared **executables** and **Makefile include
 
 Most of the code here is small Bash/Ruby utilities plus reusable make fragments under `build/make/`.
 
+## Shared skill
+
+Use the shared `coding-standards` skill from `skills/coding-standards` for
+cross-repository coding, review, testing, documentation, and PR conventions.
+Treat this `AGENTS.md` as the repo-specific companion to that skill.
+
 ## Quick commands (this repo)
 
 From this repository root:
