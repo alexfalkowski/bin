@@ -41,5 +41,7 @@ Use this reference when a repository includes `bin/build/make/*.mak` and you nee
 
 - If the root `Makefile` includes `ruby.mak`, expect Ruby lint and cucumber-style feature flows.
 - If it includes `go.mak`, expect Go lint, test, coverage, and security flows.
+- If it exposes only one of `features` or `specs`, treat that as the repo's intended test entry point for new or updated tests in that area.
+- If it includes both, treat that as an intentional mixed workflow. A repo can validly expose `features`, `specs`, or both.
 - If it includes both, prefer the target that best matches the files you changed and widen validation only when the change crosses boundaries.
 - If the repo overrides a target after including a fragment, trust the root `Makefile` behavior over the fragment default.

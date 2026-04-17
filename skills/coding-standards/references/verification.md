@@ -30,6 +30,8 @@ Use this reference when choosing which checks to run and how to describe verific
 - For Ruby changes, prefer the repo's lint and feature/benchmark entry points when they exist.
 - For CI or build changes, validate the closest local command that mirrors the affected pipeline step.
 - If the repository exposes `lint`, use it after relevant edits unless a narrower lint target is clearly better.
+- If a repository exposes only `features` or only `specs`, use that existing test entry point for test changes and validation instead of assuming the missing one should exist.
+- If a repository exposes both `features` and `specs`, choose validation based on the affected behavior instead of assuming only one belongs in that repo.
 - If a public interface changes, include a compatibility check in your validation thinking, even if that check is partly manual.
 - If a change affects hot paths or throughput-sensitive code, include benchmark or performance reasoning when the repo supports it.
 - If a change adds runtime behavior that may need diagnosis in production, check whether logging, metrics, tracing, or error context should also be updated.
