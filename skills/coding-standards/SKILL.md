@@ -35,6 +35,8 @@ Follow repository-local instructions first, then use this skill to keep behavior
 - Do not assume tools exist. Confirm commands from the repository's Makefiles, scripts, CI, or documentation.
 - Infer likely commands from included `bin/build/make/*.mak` fragments, then verify which targets are exposed by the repo's root `Makefile`.
 - If the repository includes `./bin`, inspect which shared make fragments and targets are actually used by the consuming repo before relying on them.
+- Do not force a repository into a single workflow type. A project may intentionally expose `features`, `specs`, or both, and that combination is by design.
+- When adding or updating tests, use the repo's actual test workflow. If a project exposes only `specs`, write and run `specs`; if it exposes only `features`, write and run `features`; if it exposes both, choose the one that matches the behavior under change.
 - Prefer `make` targets such as `help`, `dep`, `lint`, `specs`, `features`, `benchmarks`, `coverage`, or `sec` when the repo exposes them.
 - When the user asks for a PR, always prepare:
   - a single-line commit message written entirely in lowercase plain text

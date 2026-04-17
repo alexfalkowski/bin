@@ -17,6 +17,8 @@ Use this reference when you need to establish context quickly and consistently i
 - Confirm that a target or script is actually wired into the repo before relying on it.
 - When `help.mak` is included, use `make` or `make help` as the quickest way to discover the command surface.
 - When a repo includes `ruby.mak` or `go.mak`, use those fragments to infer likely workflows, but still trust the root `Makefile` as the final interface.
+- Do not assume `features` and `specs` identify mutually exclusive project types. A repository may intentionally expose either one or both.
+- When planning tests, follow the workflow the repository actually exposes. If only one of `features` or `specs` exists, use that one and do not invent the other.
 
 ## When The Repo Uses `./bin`
 
