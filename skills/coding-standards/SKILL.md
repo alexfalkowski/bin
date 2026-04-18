@@ -12,6 +12,7 @@ Follow repository-local instructions first, then use this skill to keep behavior
 ## Core Workflow
 
 - Read repository-local guidance before editing: `AGENTS.md`, `README.md`, root `Makefile`, and CI configuration.
+- Before doing deeper investigation or analysis, run `make dep` when the repository exposes it so the local dependency state is current. If `make dep` cannot be run, say so plainly and continue with that constraint in mind.
 - Treat repository-local instructions as higher priority than this skill. Use this skill to fill gaps and standardize behavior across repos.
 - Treat CI configuration as the best source of truth for what must pass in the current repository.
 - Inspect the relevant codepaths and entrypoints before proposing or making changes.
@@ -24,6 +25,7 @@ Follow repository-local instructions first, then use this skill to keep behavior
 - If behavior changes, add or update tests unless the repository truly cannot support it. When tests are not added, state the reason explicitly.
 - Prefer the standard library and existing project dependencies before adding a new dependency. If a new dependency is required, keep it narrowly scoped and explain why it is necessary.
 - In Go code, do not alias imports unless there is a real collision or required disambiguation. If the project defines a package whose name overlaps with a standard-library package, prefer the project package as the natural unaliased import and alias only the standard-library import or referenced stdlib identifiers needed to make the code work cleanly and keep imports minimal.
+- In Go code, keep package-level GoDoc in `doc.go` files instead of attaching package documentation comments to other `.go` files.
 - Treat documentation for public code as required work, not optional polish. When public packages, modules, types, functions, methods, classes, or commands change, add or update accurate documentation in the repository's native style, such as GoDoc comments or RDoc, and include examples when the public API is non-trivial and the repository's doc style supports them.
 - Prefer updating existing documentation over creating new documentation files unless the repository clearly expects a new document.
 - Do not silently break public APIs, flags, env vars, config, file formats, or Make targets that downstream users may depend on. Preserve backward compatibility when feasible, and call out intentional breaking changes explicitly.

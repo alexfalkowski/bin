@@ -6,15 +6,17 @@ Use this reference when you need to establish context quickly and consistently i
 
 1. Read `AGENTS.md` if present.
 2. Read `README.md` and the root `Makefile`.
-3. Inspect which `bin/build/make/*.mak` fragments are included by the root `Makefile`.
-4. Inspect CI configuration to learn what must pass.
-5. Inspect only the files and scripts relevant to the requested change.
+3. Run `make dep` if the repository exposes it so local dependencies and tool wrappers are up to date before deeper investigation.
+4. Inspect which `bin/build/make/*.mak` fragments are included by the root `Makefile`.
+5. Inspect CI configuration to learn what must pass.
+6. Inspect only the files and scripts relevant to the requested change.
 
 ## Prefer Repository Entry Points
 
 - Prefer repository entry points such as `make` targets over calling tools directly.
 - Use direct tool invocations only when the repository does not provide a stable entry point or when a narrower check is clearly better for the task.
 - Confirm that a target or script is actually wired into the repo before relying on it.
+- If the repo exposes `make dep`, run it before deeper investigation or analysis unless the user asked you not to or the environment prevents it.
 - When `help.mak` is included, use `make` or `make help` as the quickest way to discover the command surface.
 - When a repo includes `ruby.mak` or `go.mak`, use those fragments to infer likely workflows, but still trust the root `Makefile` as the final interface.
 - Do not assume `features` and `specs` identify mutually exclusive project types. A repository may intentionally expose either one or both.
