@@ -188,7 +188,6 @@ delete-version:
 optimise:
 	@git config feature.manyFiles true
 	@git update-index --index-version 4
-	@git config core.fsmonitor true
 	@git config core.untrackedcache true
 	@git config core.commitgraph true
 	@git config fetch.writeCommitGraph true
