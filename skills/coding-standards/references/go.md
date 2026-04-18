@@ -2,6 +2,12 @@
 
 Use this reference when working in Go repositories.
 
+## Package Documentation
+
+- Keep package-level GoDoc in `doc.go` files.
+- Do not leave package documentation comments on unrelated source files such as `main.go`, `client.go`, or `types.go`.
+- When package documentation needs to change, update `doc.go` rather than scattering package comments across implementation files.
+
 ## Package Name Collisions
 
 - Do not alias a Go import unless there is a real collision or required disambiguation.

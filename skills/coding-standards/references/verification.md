@@ -35,7 +35,7 @@ Use this reference when choosing which checks to run and how to describe verific
 - If a public interface changes, include a compatibility check in your validation thinking, even if that check is partly manual.
 - If a change affects hot paths or throughput-sensitive code, include benchmark or performance reasoning when the repo supports it.
 - If a change adds runtime behavior that may need diagnosis in production, check whether logging, metrics, tracing, or error context should also be updated.
-- For exported or public Go code, verify package docs and doc comments remain accurate and complete.
+- For exported or public Go code, verify package docs and doc comments remain accurate and complete, and confirm package-level GoDoc lives in `doc.go`.
 - For public Ruby APIs, classes, modules, and methods, verify the corresponding RDoc remains accurate and complete.
 - If a repo exposes `dep`, `lint`, `specs`, `features`, `benchmarks`, `coverage`, or `sec`, prefer those names over ad hoc tool invocations.
 - For this shared `bin` repo itself, CI currently treats `make scripts-lint`, `make docker-lint`, `make lint`, and `make sec-lint` as the authoritative checks.
