@@ -1,12 +1,12 @@
 # Make Fragments Reference
 
-Use this reference when a repository includes `bin/build/make/*.mak` and you need to infer likely commands or workflow expectations from the selected fragments.
+Use this reference after you have already identified which shared `bin/build/make/*.mak` fragments a repository includes and you need quick help interpreting their likely targets or gotchas.
 
-## Read The Root Makefile First
+## Scope
 
-- Treat the root `Makefile` as the actual interface.
-- Use included fragments to infer what targets probably exist, then confirm the repo exposes them.
-- Prefer `make` or `make help` when the repo includes `help.mak`.
+- Treat the root `Makefile` as the actual interface and the included fragments as supporting context.
+- Use this reference to interpret fragment behavior, not to replace checking which targets the repository really exposes.
+- Use `references/workflow.md` first when you still need to discover the command surface.
 
 ## Common Fragment Map
 
@@ -17,14 +17,12 @@ Use this reference when a repository includes `bin/build/make/*.mak` and you nee
 
 ### `ruby.mak`
 
-- Common targets cover deps, lint/format, features/benchmarks, reports, security, cost, and local environment helpers.
 - Especially relevant targets: `dep`, `lint`, `format`, `features`, `benchmarks`, `sec`, `start`, `stop`.
 - `features` and `benchmarks` call wrappers under `$(PWD)/bin/quality/ruby/...`, so they should be run from the consuming repo root.
 - `start` and `stop` delegate to `bin/build/docker/env`, which may require access to a sibling `../docker` checkout and SSH-based cloning if that repo is missing.
 
 ### `go.mak`
 
-- Common targets cover deps, cleanup, lint/format, tests, benchmarks, coverage, security, cost, and local environment helpers.
 - Especially relevant targets: `dep`, `lint`, `format`, `specs`, `benchmark`, `coverage`, `sec`, `start`, `stop`.
 - `specs` expects a downstream `test/reports/` layout.
 - `coverage` depends on coverage files under `test/reports/`.
@@ -33,7 +31,7 @@ Use this reference when a repository includes `bin/build/make/*.mak` and you nee
 
 ### `git.mak`
 
-- Common helpers cover branch creation, sync, commit/PR flows, reset/purge, and submodule commands.
+- Common helpers cover branch creation, sync, commit/PR flows, destructive cleanup, and submodule commands.
 - Treat these as convenience wrappers, not default actions.
 - Do not use targets that rewrite history, delete branches, discard changes, or push remotely unless the user explicitly asks.
 
@@ -41,7 +39,5 @@ Use this reference when a repository includes `bin/build/make/*.mak` and you nee
 
 - If the root `Makefile` includes `ruby.mak`, expect Ruby lint and cucumber-style feature flows.
 - If it includes `go.mak`, expect Go lint, test, coverage, and security flows.
-- If it exposes only one of `features` or `specs`, treat that as the repo's intended test entry point for new or updated tests in that area.
-- If it includes both, treat that as an intentional mixed workflow. A repo can validly expose `features`, `specs`, or both.
-- If it includes both, prefer the target that best matches the files you changed and widen validation only when the change crosses boundaries.
+- If the repo exposes both `features` and `specs`, choose the target that best matches the area under change.
 - If the repo overrides a target after including a fragment, trust the root `Makefile` behavior over the fragment default.
