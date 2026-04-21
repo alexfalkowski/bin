@@ -5,14 +5,18 @@ Use this reference when the user asks for a PR or wants a shareable change summa
 ## Scope
 
 - Treat PR output as task output, not optional polish.
-- Check whether repository-local instructions define a house style before applying a shared default.
 - Include both relevant committed work and current working-tree changes when both are part of the requested result.
+- Use this reference as the house style for commit messages and PR summaries.
 
-## Shared Default
+## Required Format
 
 - Provide the commit message first, on its own line, when the user asks for one.
-- Keep the commit message plain text and easy to reuse.
-- When repository-local guidance does not say otherwise, organize the PR summary around `What`, `Why`, and `Testing`.
+- Keep the commit message as plain text only.
+- Keep the commit message entirely lowercase.
+- Do not add markdown, labels, bullets, quotes, or surrounding commentary to the commit message.
+- Write the PR summary in Markdown.
+- Use exactly these section titles for the PR summary: `What`, `Why`, and `Testing`.
+- Do not add extra sections or alternate titles.
 - Keep the testing section honest about what ran, what passed, and what did not run.
 
 ## Validation Notes
