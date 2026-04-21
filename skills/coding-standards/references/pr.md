@@ -6,7 +6,7 @@ Use this reference when the user asks for a PR or wants a shareable change summa
 
 - Treat PR output as task output, not optional polish.
 - Include both relevant committed work and current working-tree changes when both are part of the requested result.
-- Use this reference as the house style for commit messages and PR summaries.
+- Use this reference as the default style for commit messages and PR summaries only when repository-local guidance does not define a different house style.
 
 ## Required Format
 
