@@ -4,13 +4,13 @@ Use this reference when working in Ruby repositories.
 
 ## User-Facing APIs
 
-- Keep user-facing or documented modules, classes, and methods consistent with the repository's existing Ruby style and API shape.
+- Keep user-facing or documented Ruby modules, classes, and methods consistent with the repository's existing Ruby style and API shape.
 - Prefer straightforward Ruby over clever metaprogramming unless the repository already uses that pattern or the task clearly requires it.
 - Avoid monkey patches unless the repository explicitly relies on them.
 
 ## Documentation
 
-- User-facing or documented Ruby APIs need accurate RDoc for modules, classes, methods, and other supported entrypoints.
+- User-facing or documented Ruby APIs need clear, accurate, and detailed RDoc for modules, classes, methods, and other supported entrypoints.
 - When a user-facing or documented API is non-trivial, include examples if the repository's documentation style supports them.
 - Keep examples aligned with the real public interface and expected calling style.
 
