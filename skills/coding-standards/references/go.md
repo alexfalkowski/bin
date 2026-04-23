@@ -15,6 +15,11 @@ Use this reference when working in Go repositories.
 - Keep examples aligned with the real public interface and expected calling style when the repository's documentation style supports them.
 - When package documentation needs to change, update `doc.go` rather than scattering package comments across implementation files.
 
+## Testing
+
+- Write Go tests using `github.com/stretchr/testify/require`.
+- Keep Go tests in external test packages named `<package>_test` so they exercise the public interface rather than package internals.
+
 ## Imports And Naming
 
 - Do not alias a Go import unless there is a real collision or required disambiguation.
