@@ -4,13 +4,15 @@ Use this reference when working in Go repositories.
 
 ## User-Facing APIs
 
-- Keep exported or documented Go APIs aligned with the repository's existing package shape and naming style.
+- Keep user-facing or documented Go packages, types, functions, and methods consistent with the repository's existing Go style and API shape.
 - Prefer straightforward package and type names over clever aliases or indirection.
 
 ## Documentation
 
+- User-facing or documented Go APIs need clear, accurate, and detailed GoDoc for packages, exported types, functions, methods, and other supported entrypoints.
 - Keep package-level GoDoc in `doc.go` files.
 - Do not leave package documentation comments on unrelated source files such as `main.go`, `client.go`, or `types.go`.
+- Keep examples aligned with the real public interface and expected calling style when the repository's documentation style supports them.
 - When package documentation needs to change, update `doc.go` rather than scattering package comments across implementation files.
 
 ## Imports And Naming
