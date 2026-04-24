@@ -97,7 +97,7 @@ These are used by `build/make/ruby.mak` targets `features` and `benchmarks`.
 
 - `build/docker/go/Dockerfile` is a multi-stage Dockerfile to build a Go binary and copy it into a distroless image.
 - `build/docker/build` builds a **test** image tagged `alexfalkowski/<name>:test.<platform>`.
-- `build/docker/push` and `build/docker/manifest` are gated: they only run if the last commit subject starts with `chore`.
+- `build/docker/push` and `build/docker/manifest` are gated: they only run if `APP_VERSION_FILE` exists (default: `/tmp/workspace/release-version.txt`).
 
 ### Local environment helper
 
@@ -124,6 +124,7 @@ make clean-dep
 make scripts-lint
 make docker-lint
 make lint
+make sec-lint
 ```
 
 ## CircleCI note
