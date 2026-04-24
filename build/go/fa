@@ -2,7 +2,12 @@
 # frozen_string_literal: true
 
 file = '.gofa'
-packages = File.exist?(file) ? File.read(file).strip.split(',').map { |p| "./#{p}/..." }.join(' ') : './...'
-args = ARGV.join(' ')
+packages = if File.exist?(file)
+             configured = File.read(file).strip.split(',').reject(&:empty?).map { |package| "./#{package}/..." }
+             configured.empty? ? ['./...'] : configured
+           else
+             ['./...']
+           end
 
-`fieldalignment #{args} #{packages}`
+system('fieldalignment', *ARGV, *packages)
+exit(Process.last_status&.exitstatus || 1)
