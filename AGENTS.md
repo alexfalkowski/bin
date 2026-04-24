@@ -35,7 +35,7 @@ CI runs (CircleCI): `make dep`, `make clean-dep`, `make scripts-lint`, `make doc
 
 Ruby tooling (declared in `Gemfile`):
 
-- Ruby (Rubocop targets Ruby **3.4**, see `.rubocop.yml`)
+- Ruby (Rubocop targets Ruby **4.0**, see `.rubocop.yml`)
 - Bundler (`bundler` gem)
 - RuboCop (`rubocop` gem)
 
@@ -102,7 +102,7 @@ Only rely on a command if you can find it being invoked in the relevant `.mak`/s
 
 ### RuboCop
 
-- `.rubocop.yml` sets `TargetRubyVersion: 3.4`.
+- `.rubocop.yml` sets `TargetRubyVersion: 4.0`.
 - Excludes `vendor/**/*` and also `bin/**/*` (important in downstream repos that vendor this as `./bin`).
 
 ## Gotchas
@@ -119,7 +119,19 @@ Only rely on a command if you can find it being invoked in the relevant `.mak`/s
 
 - **`build/go/lint` is a no-op if `golangci-lint` isn’t installed** (`build/go/lint:5-7`). Don’t assume lint ran unless the binary exists.
 
-- **`build/go/clean` assumes a `master` branch exists** when diffing `go.sum` (`build/go/clean:6-10`).
+## Intentional design choices
+
+- **`master` is the canonical branch in this repo and its shared fragments**.
+  - Hardcoded `master` references in `build/go/clean`, `build/make/git.mak`, `build/make/buf.mak`, and `.circleci/config.yml` are intentional.
+  - Do not flag them as bugs unless the task is specifically about making the shared tooling branch-name configurable.
+
+- **`build/make/git.mak` intentionally adds a random suffix to `USER` for branch creation**.
+  - This is deliberate to reduce local branch-name collisions.
+  - Do not flag it as a bug unless the task is specifically about changing branch naming semantics.
+
+- **Ruby/tooling version skew is intentional here**.
+  - `.circleci/config.yml` uses `alexfalkowski/ruby:2.7` for this repo's CI job, while `.rubocop.yml` targets Ruby 4.0.
+  - Treat that mismatch as deliberate unless the task is specifically about modernizing CI or Ruby tooling.
 
 ## CI signals
 
