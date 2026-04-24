@@ -143,7 +143,7 @@ unstash:
 
 # Generate a repo source key (sha256 of tracked files excluding bin/) into .source-key.
 source-key:
-	@git ls-files | grep -v bin | xargs sha256sum | cut -d" " -f1 | sha256sum | cut -d" " -f1 > .source-key
+	@git ls-files | grep -v '^bin/' | xargs sha256sum | cut -d" " -f1 | sha256sum | cut -d" " -f1 > .source-key
 
 # Delete all local branches except master.
 purge:
