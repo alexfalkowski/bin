@@ -72,37 +72,6 @@ new-refactor: new-branch
 new-release: branch=release/$(NEW_BRANCH)
 new-release: new-branch
 
-delete-branch: branch latest
-	@git branch -D "$(USER)/$(branch)"
-
-# Delete a feature.
-delete-feature: branch=feat/$(NEW_BRANCH)
-delete-feature: delete-branch
-
-# Delete a fix.
-delete-fix: branch=fix/$(NEW_BRANCH)
-delete-fix: delete-branch
-
-# Delete a build.
-delete-build: branch=build/$(NEW_BRANCH)
-delete-build: delete-branch
-
-# Delete a test.
-delete-test: branch=test/$(NEW_BRANCH)
-delete-test: delete-branch
-
-# Delete a docs branch.
-delete-docs: branch=docs/$(NEW_BRANCH)
-delete-docs: delete-branch
-
-# Delete a refactor.
-delete-refactor: branch=refactor/$(NEW_BRANCH)
-delete-refactor: delete-branch
-
-# Delete a release.
-delete-release: branch=release/$(NEW_BRANCH)
-delete-release: delete-branch
-
 # Delete the current branch.
 delete:
 	@git branch -D $(BRANCH)
