@@ -146,8 +146,8 @@ source-key:
 	@git ls-files | grep -v '^bin/' | xargs sha256sum | cut -d" " -f1 | sha256sum | cut -d" " -f1 > .source-key
 
 # Delete all local branches except master.
-purge:
-	@git branch | grep -v "master" | xargs git branch -D
+purge: master
+	@git branch | sed 's/^[* ]*//' | grep -vx 'master' | xargs git branch -D
 
 # Delete remote ref and local tag for version=<tag>.
 delete-version:
