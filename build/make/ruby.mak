@@ -41,7 +41,7 @@ update-bundler: path
 
 # Run cucumber features (feature=<path> optional; excludes @benchmark; tags=<expr> optional).
 features:
-	@$(PWD)/bin/quality/ruby/feature $(feature) $(tags)
+	@$(PWD)/bin/quality/ruby/feature "$(feature)" "$(tags)"
 
 # Run cucumber benchmarks (features tagged @benchmark; feature=<path> optional).
 benchmarks:
