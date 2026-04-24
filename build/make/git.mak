@@ -147,7 +147,7 @@ source-key:
 
 # Delete all local branches except master.
 purge:
-	@git branch | grep -v "master" | xargs git branch -D
+	@git branch | sed 's/^[* ]*//' | grep -vx 'master' | xargs git branch -D
 
 # Delete remote ref and local tag for version=<tag>.
 delete-version:
