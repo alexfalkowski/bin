@@ -1,13 +1,20 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC2086
 
 set -eo pipefail
 
 readonly feature="$1"
 readonly tags="$2"
 
-if [ -n "$tags" ]; then
-  COVERAGE_NAME=features bundler exec cucumber --profile report $feature --tags "not @benchmark" --tags $tags
-else
-  COVERAGE_NAME=features bundler exec cucumber --profile report $feature --tags "not @benchmark"
+args=(--profile report)
+
+if [ -n "$feature" ]; then
+  args+=("$feature")
 fi
+
+args+=(--tags "not @benchmark")
+
+if [ -n "$tags" ]; then
+  args+=(--tags "$tags")
+fi
+
+COVERAGE_NAME=features bundler exec cucumber "${args[@]}"
