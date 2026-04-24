@@ -20,7 +20,7 @@ Dir['test/reports/*.cov'].each do |f|
 end
 
 # https://github.com/alexfalkowski/gocovmerge
-cmd = "gocovmerge -d #{path} -o test/reports/final.cov"
-pid = spawn({}, cmd, %i[out err] => [File.join(path, 'gocovmerge.log'), 'a'])
+log_file = File.join(path, 'gocovmerge.log')
 
-Process.waitpid2 pid
+system('gocovmerge', '-d', path, '-o', 'test/reports/final.cov', out: [log_file, 'a'], err: [log_file, 'a'])
+exit(Process.last_status&.exitstatus || 1)
