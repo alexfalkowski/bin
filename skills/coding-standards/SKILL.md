@@ -1,6 +1,6 @@
 ---
 name: coding-standards
-description: Apply shared cross-repository engineering expectations for repo inspection, safe changes, validation, and review output.
+description: Apply shared cross-repository engineering expectations for code changes, bug fixes, refactors, reviews, tests/testing, lint/linting, documentation/docs, PR summaries/descriptions, commits, Makefile/make fragments, CI validation, safe changes, repo inspection, and verification.
 ---
 
 # Coding Standards
