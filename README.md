@@ -39,6 +39,18 @@ git submodule add git@github.com:alexfalkowski/bin.git bin
 git submodule update --init
 ```
 
+### Agent skill setup
+
+This repo also ships shared agent guidance in `skills/coding-standards`. In downstream repositories, add a short note to the root `AGENTS.md` so agents discover the shared skill from the project root instead of only from the `./bin` submodule:
+
+```markdown
+## Shared skill
+
+Use the shared `coding-standards` skill from `bin/skills/coding-standards` for code changes, bug fixes, refactors, reviews, tests, linting, documentation, PR summaries, commits, Makefile changes, CI validation, and verification.
+```
+
+Keeping those common phrases in the root `AGENTS.md` helps agents map everyday requests like "review this", "fix lint", "update docs", or "write the PR summary" to the shared skill.
+
 ## Makefile includes (examples)
 
 ### Ruby-only project
