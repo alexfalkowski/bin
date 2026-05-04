@@ -5,6 +5,7 @@ MODULE:=$(shell head -n 1 go.mod | sed 's/module //')
 SOURCE:=$(shell find . -name '*.go' -not -path './bin*/*' -not -path './test*/*' -not -path './vendor/*' -type f | sort)
 PACKAGES=$(shell go list $(sort $(dir $(SOURCE))))
 COVER_PACKAGES=$(shell echo $(PACKAGES) | tr ' ' ',')
+BENCHMARK_PROFILE=test/reports/$(package).prof
 
 download:
 	@go mod download
@@ -72,13 +73,15 @@ format:
 specs:
 	@gotestsum --junitfile test/reports/specs.xml -- -vet=off -race -mod vendor -covermode=atomic -coverpkg=$(COVER_PACKAGES) -coverprofile=test/reports/profile.cov $(PACKAGES)
 
-# Run benchmarks for package=$(package) and write test/reports/mem.prof.
+# Run benchmarks for package=$(package) and write $(BENCHMARK_PROFILE).
+# Set benchtime=<duration-or-count> to pass -benchtime to go test.
 benchmark:
-	@go test -vet=off -mod vendor -bench=. -run=Benchmark -benchmem -memprofile test/reports/mem.prof ./$(package)
+	@mkdir -p $(dir $(BENCHMARK_PROFILE))
+	@go test -vet=off -mod vendor -bench=. -run=Benchmark -benchmem $(if $(benchtime),-benchtime=$(benchtime),) -memprofile $(BENCHMARK_PROFILE) ./$(package)
 
-# Inspect benchmark memprofile via pprof (test/reports/mem.prof).
+# Inspect benchmark memprofile via pprof ($(BENCHMARK_PROFILE)).
 benchmark-pprof:
-	@go tool pprof test/reports/mem.prof
+	@go tool pprof $(BENCHMARK_PROFILE)
 
 remove-generated-coverage:
 	@$(PWD)/bin/quality/go/covfilter
