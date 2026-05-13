@@ -1,0 +1,4 @@
+interface:
+  display_name: "Make Fragments"
+  short_description: "Work with shared Make fragments"
+  default_prompt: "Use $make-fragments to update or debug shared Makefile fragments."

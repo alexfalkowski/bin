@@ -1,4 +1,4 @@
-# PR Reference
+# Summary Format
 
 Use this reference when the user asks for a PR or wants a shareable change summary.
 

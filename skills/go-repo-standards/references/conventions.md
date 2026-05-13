@@ -1,4 +1,4 @@
-# Go Reference
+# Go Conventions
 
 Use this reference when working in Go repositories.
 

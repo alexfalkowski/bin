@@ -1,4 +1,4 @@
-# Change Safety Reference
+# Safety Checks
 
 Use this reference when deciding how to handle compatibility, documentation, security, and other safety-sensitive edges of a change.
 

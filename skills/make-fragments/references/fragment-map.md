@@ -1,4 +1,4 @@
-# Make Fragments Reference
+# Fragment Map
 
 Use this reference after you have already identified which shared `bin/build/make/*.mak` fragments a repository includes and you need quick help interpreting their likely targets or gotchas.
 
@@ -6,7 +6,7 @@ Use this reference after you have already identified which shared `bin/build/mak
 
 - Treat the root `Makefile` as the actual interface and the included fragments as supporting context.
 - Use this reference to interpret fragment behavior, not to replace checking which targets the repository really exposes.
-- Use `references/workflow.md` first when you still need to discover the command surface.
+- Use `repo-workflow` first when you still need to discover the command surface.
 
 ## Common Fragment Map
 

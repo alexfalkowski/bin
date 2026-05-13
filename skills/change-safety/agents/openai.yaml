@@ -1,0 +1,4 @@
+interface:
+  display_name: "Change Safety"
+  short_description: "Protect interfaces and compatibility"
+  default_prompt: "Use $change-safety before making compatibility-sensitive changes."
