@@ -1,4 +1,4 @@
-# Workflow Reference
+# Bin Submodule Workflow
 
 Use this reference when you need to establish context quickly and discover how a repository is wired.
 

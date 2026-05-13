@@ -1,4 +1,4 @@
-# Ruby Reference
+# Ruby Conventions
 
 Use this reference when working in Ruby repositories.
 

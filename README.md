@@ -41,15 +41,18 @@ git submodule update --init
 
 ### Agent skill setup
 
-This repo also ships shared agent guidance in `skills/coding-standards`. In downstream repositories, add a short note to the root `AGENTS.md` so agents discover the shared skill from the project root instead of only from the `./bin` submodule:
+This repo also ships shared agent guidance in focused skills under `skills/`. In downstream repositories, add a short pointer to the root `AGENTS.md` so agents discover the canonical shared guidance from the project root without copying the whole skill list:
 
 ```markdown
-## Shared skill
+## Shared skills
 
-Use the shared `coding-standards` skill from `bin/skills/coding-standards` for code changes, bug fixes, refactors, reviews, tests, linting, documentation, PR summaries, commits, Makefile changes, CI validation, and verification.
+This repository uses the shared skills from `bin/skills/`. Read
+`bin/AGENTS.md` for the canonical shared skill list and use the smallest
+matching skill for the task.
 ```
 
-Keeping those common phrases in the root `AGENTS.md` helps agents map everyday requests like "review this", "fix lint", "update docs", or "write the PR summary" to the shared skill.
+Keeping only this pointer in downstream repos avoids repeating the shared skill
+list. Update `bin/AGENTS.md` when the shared skill set changes.
 
 ## Makefile includes (examples)
 

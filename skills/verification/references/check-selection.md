@@ -1,4 +1,4 @@
-# Verification Reference
+# Check Selection
 
 Use this reference when choosing which checks to run.
 

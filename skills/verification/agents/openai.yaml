@@ -1,0 +1,4 @@
+interface:
+  display_name: "Verification"
+  short_description: "Choose tests, lint, and CI checks"
+  default_prompt: "Use $verification to choose and report validation for this change."
