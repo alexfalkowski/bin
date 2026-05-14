@@ -11,18 +11,20 @@ Most of the code here is small Bash/Ruby utilities plus reusable make fragments 
 This repository ships focused skills under `skills/`. Use the smallest matching
 skill instead of one broad default:
 
-- `repo-workflow`: repository discovery, command surfaces, CI, and `./bin`
+- `project-workflow`: project discovery, command surfaces, CI, and `./bin`
   submodule wiring.
 - `change-safety`: compatibility, documented interfaces, migrations, generated
   files, and security-sensitive edits.
-- `verification`: test, lint, CI, security, benchmark, and validation selection.
+- `change-validation`: test, lint, CI, security, benchmark, and validation selection.
 - `code-review`: review findings, risk assessment, and missing coverage.
 - `pr-summary`: commit messages, PR descriptions, and shareable change summaries.
-- `make-fragments`: reusable `build/make/*.mak` behavior and downstream path
+- `makefile-includes`: reusable `build/make/*.mak` behavior and downstream path
   semantics.
-- `go-repo-standards`: Go API, documentation, import, naming, and testing
+- `shell-standards`: Bash scripting, ShellCheck, text processing, directory
+  scope, and function documentation conventions.
+- `go-standards`: Go API, documentation, import, naming, and testing
   conventions for repos using this tooling.
-- `ruby-repo-standards`: Ruby API, documentation, style, and validation
+- `ruby-standards`: Ruby API, documentation, style, and validation
   conventions for repos using this tooling.
 
 Treat this `AGENTS.md` as the repo-specific companion to those skills.

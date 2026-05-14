@@ -6,7 +6,7 @@ Use this reference after you have already identified which shared `bin/build/mak
 
 - Treat the root `Makefile` as the actual interface and the included fragments as supporting context.
 - Use this reference to interpret fragment behavior, not to replace checking which targets the repository really exposes.
-- Use `repo-workflow` first when you still need to discover the command surface.
+- Use `project-workflow` first when you still need to discover the command surface.
 
 ## Common Fragment Map
 

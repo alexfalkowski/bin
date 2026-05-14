@@ -1,9 +1,9 @@
 ---
-name: make-fragments
-description: Works with shared bin/build/make/*.mak fragments and downstream Makefile integration. Use when editing, reviewing, or debugging reusable Make targets, included make fragments, ./bin path semantics, or downstream projects that include this repository's make files.
+name: makefile-includes
+description: Works with shared bin/build/make/*.mak includes and downstream Makefile integration. Use when editing, reviewing, or debugging reusable Make targets, included make files, ./bin path semantics, or downstream projects that include this repository's make files.
 ---
 
-# Make Fragments
+# Makefile Includes
 
 ## Steps
 
@@ -15,4 +15,4 @@ description: Works with shared bin/build/make/*.mak fragments and downstream Mak
 
 ## References
 
-- Read `references/fragment-map.md` after discovering which shared make fragments are included.
+- Read `references/fragment-map.md` after discovering which shared Makefile includes are used.
