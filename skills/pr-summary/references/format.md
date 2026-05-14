@@ -28,7 +28,10 @@ Use this reference when the user asks for a PR or wants a shareable change summa
 - In repositories using this shared `bin` workflow, `build/make/git.mak` derives `type(scope):` from branches shaped like `user/type/scope` and prepends it in `make commit`, `make review`, and related targets.
 - When the workflow will prepend that branch-derived prefix, output only the unprefixed subject intended for `msg`.
 - Do not include a conventional prefix such as `feat(scope):` in that subject.
-- Avoid repeating branch-derived type, scope, or name words in the subject unless they are essential to the meaning.
+- Treat the current branch as routing metadata, not summary source material.
+- Build a short exclusion list from every meaningful branch-path segment, including type, scope/name segments, and the hyphen- or slash-separated words inside those segments.
+- Do not repeat any branch-derived word in the subject unless omitting it would make the subject misleading or ambiguous.
+- Before returning the subject, compare it with the exclusion list and rewrite it if a branch-derived word can be replaced by a more concrete behavior from the diff.
 - Prefer the concrete behavioral change over branch wording. For example, on `user/feat/skills`, use `avoid duplicate commit subject wording`, not `feat(skills): update skills pr summary`.
 
 ## Validation Notes

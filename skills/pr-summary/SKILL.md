@@ -11,9 +11,10 @@ description: Drafts commit messages and pull request summaries from repository c
 2. If the working tree is clean, inspect the latest commit instead.
 3. Inspect the current branch and commit workflow before drafting a commit message.
 4. Read `references/format.md` before drafting the output.
-5. Keep the commit message plain text and lowercase when the user asks for one.
-6. Include what changed, why it changed, and honest testing details in the PR summary.
-7. Do not claim unrun checks passed.
+5. When the workflow adds a branch-derived prefix, draft `msg` from the diff or latest commit only; do not use branch words as source material.
+6. Keep the commit message plain text and lowercase when the user asks for one.
+7. Include what changed, why it changed, and honest testing details in the PR summary.
+8. Do not claim unrun checks passed.
 
 ## References
 

@@ -10,22 +10,25 @@ description: Commits the current change, force-pushes the branch, and opens a dr
 1. Use `$pr-summary` first to draft a lowercase commit message and Markdown PR summary from the current working tree.
 2. Keep the commit message plain text and lowercase.
 3. Pass only the unprefixed subject as `msg`; `make review` adds the branch-derived `type(scope):` prefix.
-4. Avoid repeating branch-derived type, scope, or name words in `msg` unless they are essential to the meaning.
-5. Keep the summary in the `$pr-summary` format, including honest testing details.
-6. When attribution is appropriate or requested, append this footer to the summary instead of a `Co-authored-by:` trailer:
+4. Treat the current branch as routing metadata, not `msg` source material.
+5. Build a short exclusion list from every meaningful branch-path segment, including type, scope/name segments, and the hyphen- or slash-separated words inside those segments.
+6. Do not repeat any branch-derived word in `msg` unless omitting it would make the subject misleading or ambiguous.
+7. Before running `make review`, compare `msg` with the exclusion list and rewrite it if a branch-derived word can be replaced by a more concrete behavior from the diff.
+8. Keep the summary in the `$pr-summary` format, including honest testing details.
+9. When attribution is appropriate or requested, append this footer to the summary instead of a `Co-authored-by:` trailer:
 
 ```text
 AI-assisted-by: [Codex](https://openai.com/codex/)
 ```
 
-7. Run the review target with the drafted values:
+10. Run the review target with the drafted values:
 
 ```bash
 make msg="unprefixed subject" desc="summary" review
 ```
 
-8. Pass `desc` as the multiline Markdown summary from `$pr-summary`; do not flatten the summary into a single line.
-9. Report the commit message, whether the review target succeeded, and any command failure that needs user action.
+11. Pass `desc` as the multiline Markdown summary from `$pr-summary`; do not flatten the summary into a single line.
+12. Report the commit message, whether the review target succeeded, and any command failure that needs user action.
 
 ## Notes
 
