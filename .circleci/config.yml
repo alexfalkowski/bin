@@ -9,16 +9,17 @@ jobs:
           method: blobless
       - run: git submodule sync
       - run: git submodule update --init
+      - run: make source-key
       - restore_cache:
           name: restore deps
           keys:
-            - bin-ruby-cache-{{ checksum "Gemfile.lock" }}
+            - bin-ruby-cache-{{ checksum "Gemfile.lock" }}-{{ checksum "~/.ruby-version" }}-{{ checksum ".source-key" }}
             - bin-ruby-cache-
       - run: make dep
       - run: make clean-dep
       - save_cache:
           name: save deps
-          key: bin-ruby-cache-{{ checksum "Gemfile.lock" }}
+          key: bin-ruby-cache-{{ checksum "Gemfile.lock" }}-{{ checksum "~/.ruby-version" }}-{{ checksum ".source-key" }}
           paths:
             - vendor
       - run: make scripts-lint
