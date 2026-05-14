@@ -2,7 +2,7 @@
 
 Use this reference when choosing which checks to run.
 
-## Verification Principles
+## Validation Principles
 
 - Before wrapping up code changes, run the applicable lint checks.
 - Run the narrowest check that gives credible confidence for the change.

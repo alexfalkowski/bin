@@ -1,4 +1,0 @@
-interface:
-  display_name: "Ruby Repo Standards"
-  short_description: "Apply Ruby conventions for these repos"
-  default_prompt: "Use $ruby-repo-standards when changing Ruby code in this repository."

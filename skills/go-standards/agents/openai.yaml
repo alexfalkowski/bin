@@ -1,0 +1,4 @@
+interface:
+  display_name: "Go Standards"
+  short_description: "Apply Go conventions for these repos"
+  default_prompt: "Use $go-standards when changing Go code in this repository."

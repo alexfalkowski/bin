@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project Workflow"
+  short_description: "Discover project commands and CI flow"
+  default_prompt: "Use $project-workflow to discover this project workflow."

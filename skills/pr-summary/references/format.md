@@ -5,7 +5,9 @@ Use this reference when the user asks for a PR or wants a shareable change summa
 ## Scope
 
 - Treat PR output as task output, not optional polish.
-- Include both relevant committed work and current working-tree changes when both are part of the requested result.
+- Use current working-tree changes as the default summary source.
+- If the working tree is clean, summarize the latest commit.
+- Include committed work only when the user explicitly asks for a range or when those commits are relevant to the requested result.
 - Use this reference as the default style for commit messages and PR summaries only when repository-local guidance does not define a different house style.
 
 ## Required Format
@@ -15,7 +17,8 @@ Use this reference when the user asks for a PR or wants a shareable change summa
 - Keep the commit message entirely lowercase.
 - Do not add markdown, labels, bullets, quotes, or surrounding commentary to the commit message.
 - Write the PR summary in Markdown.
-- Use exactly these section titles for the PR summary: `What`, `Why`, and `Testing`.
+- Use Markdown headings for the PR summary sections: `## What`, `## Why`, and `## Testing`.
+- Do not use bold text as section labels, such as `**What**`.
 - Do not add extra sections or alternate titles.
 - Keep the testing section honest about what ran, what passed, and what did not run.
 
