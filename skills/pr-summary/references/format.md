@@ -22,6 +22,15 @@ Use this reference when the user asks for a PR or wants a shareable change summa
 - Do not add extra sections or alternate titles.
 - Keep the testing section honest about what ran, what passed, and what did not run.
 
+## Commit Message Subject
+
+- Check whether the local commit workflow adds a conventional-commit prefix from the current branch.
+- In repositories using this shared `bin` workflow, `build/make/git.mak` derives `type(scope):` from branches shaped like `user/type/scope` and prepends it in `make commit`, `make review`, and related targets.
+- When the workflow will prepend that branch-derived prefix, output only the unprefixed subject intended for `msg`.
+- Do not include a conventional prefix such as `feat(scope):` in that subject.
+- Avoid repeating branch-derived type, scope, or name words in the subject unless they are essential to the meaning.
+- Prefer the concrete behavioral change over branch wording. For example, on `user/feat/skills`, use `avoid duplicate commit subject wording`, not `feat(skills): update skills pr summary`.
+
 ## Validation Notes
 
 - Include the actual commands run when they materially help the reader understand the verification.
