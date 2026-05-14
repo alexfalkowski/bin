@@ -5,6 +5,9 @@ BRANCH:=$(shell git branch --show-current)
 NEW_BRANCH:=$(subst $() ,-,$(name))
 PREFIX:=$(shell ruby -e '_, t, n = (ARGV[0] || "").split("/"); print "#{t}(#{n}):" unless t.nil?' $(BRANCH))
 
+override export msg := $(value msg)
+override export desc := $(value desc)
+
 # Checkout the master branch.
 master:
 	@git checkout master
@@ -94,7 +97,7 @@ edit-amend: add
 
 # Commit all changes with a prefix derived from the branch (set msg/desc).
 commit: add
-	@git commit -a -m "$(PREFIX) $(msg)" -m "$(desc)"
+	@printf '%s\n\n%s\n' "$(PREFIX) $${msg}" "$${desc}" | git commit -a -F -
 
 # Force-push the current branch to origin.
 push:
