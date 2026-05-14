@@ -103,6 +103,9 @@ commit: add
 push:
 	@git push -f origin $(BRANCH)
 
+# Amend the last commit and force-push.
+force: amend push
+
 # Create a draft PR for the current branch (gh pr create --draft).
 draft:
 	@gh pr create -d -a @me --fill-first --head $(BRANCH)
