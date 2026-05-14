@@ -12,6 +12,7 @@ Use this reference when the user asks for a review.
 
 ## Output Format
 
+- Use Markdown headings for review sections, not bolded labels.
 - Present findings first.
 - Order findings by severity.
 - Include file and line references for each finding when possible.
