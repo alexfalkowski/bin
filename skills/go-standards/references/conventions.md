@@ -17,8 +17,15 @@ Use this reference when working in Go repositories.
 
 ## Testing
 
+- Before adding new test structure, look for existing tests in the package or adjacent packages and reuse their helpers, fixtures, table shapes, assertions, and naming patterns when they fit.
+- When new coverage is needed, base it on the testing style already present in the repository rather than introducing a new pattern.
 - Write Go tests using `github.com/stretchr/testify/require`.
 - Keep Go tests in external test packages named `<package>_test` so they exercise the public interface rather than package internals.
+- Keep test cases and test functions first in the file. Place fakes, stubs, spies, mock implementations, and helper types after the tests at the bottom of the file.
+
+## Method Layout
+
+- For types with both exported and unexported methods, keep exported methods near the top of the type's method group and unexported methods below them.
 
 ## Imports And Naming
 
