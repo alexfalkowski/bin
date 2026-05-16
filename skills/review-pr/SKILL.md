@@ -1,6 +1,6 @@
 ---
 name: review-pr
-description: Commits the current change, force-pushes the branch, and opens a draft pull request by using pr-summary output with the repository review make target. Use when the user asks to prepare a PR for review, open a draft PR, run the review flow, or create a review PR from local changes.
+description: Commits the current change, force-pushes the branch, and opens a draft pull request by reviewing the change before using pr-summary output with the repository review make target. Use when the user asks to prepare a PR for review, open a draft PR, run the review flow, or create a review PR from local changes.
 ---
 
 # Review PR
@@ -12,28 +12,30 @@ description: Commits the current change, force-pushes the branch, and opens a dr
 3. If the changed paths include Go code, Go tests, Go modules, Go docs, or Go tooling behavior, also use `$go-standards`.
 4. If the changed paths include Ruby code, Ruby tests/features, Gemfiles, RuboCop config, Ruby docs, or Ruby tooling behavior, also use `$ruby-standards`.
 5. If the changed paths include shell scripts, Bash helpers, ShellCheck config/directives, shell docs, or script behavior, also use `$shell-standards`.
-6. Use `$pr-summary` to draft a lowercase commit message and Markdown PR summary from the current working tree.
-7. Keep the commit message plain text and lowercase.
-8. Pass only the unprefixed subject as `msg`; `make review` adds the branch-derived `type(scope):` prefix.
-9. Treat the current branch as routing metadata, not `msg` source material.
-10. Build a short exclusion list from every meaningful branch-path segment, including type, scope/name segments, and the hyphen- or slash-separated words inside those segments.
-11. Do not repeat any branch-derived word in `msg` unless omitting it would make the subject misleading or ambiguous.
-12. Before running `make review`, compare `msg` with the exclusion list and rewrite it if a branch-derived word can be replaced by a more concrete behavior from the diff.
-13. Keep the summary in the `$pr-summary` format, including honest testing details.
-14. When attribution is appropriate or requested, append this footer to the summary instead of a `Co-authored-by:` trailer:
+6. Use `$code-review` to inspect the current change before drafting PR text.
+7. Resolve any blocking review findings before continuing; if findings remain intentionally unresolved, call them out in the PR summary.
+8. Use `$pr-summary` to draft a lowercase commit message and Markdown PR summary from the current working tree.
+9. Keep the commit message plain text and lowercase.
+10. Pass only the unprefixed subject as `msg`; `make review` adds the branch-derived `type(scope):` prefix.
+11. Treat the current branch as routing metadata, not `msg` source material.
+12. Build a short exclusion list from every meaningful branch-path segment, including type, scope/name segments, and the hyphen- or slash-separated words inside those segments.
+13. Do not repeat any branch-derived word in `msg` unless omitting it would make the subject misleading or ambiguous.
+14. Before running `make review`, compare `msg` with the exclusion list and rewrite it if a branch-derived word can be replaced by a more concrete behavior from the diff.
+15. Keep the summary in the `$pr-summary` format, including honest testing details.
+16. When attribution is appropriate or requested, append this footer to the summary instead of a `Co-authored-by:` trailer:
 
 ```text
 AI-assisted-by: [Codex](https://openai.com/codex/)
 ```
 
-15. Run the review target with the drafted values:
+17. Run the review target with the drafted values:
 
 ```bash
 make msg="unprefixed subject" desc="summary" review
 ```
 
-16. Pass `desc` as the multiline Markdown summary from `$pr-summary`; do not flatten the summary into a single line.
-17. Report the commit message, validation results, whether the review target succeeded, and any command failure that needs user action.
+18. Pass `desc` as the multiline Markdown summary from `$pr-summary`; do not flatten the summary into a single line.
+19. Report the commit message, validation results, code-review result, whether the review target succeeded, and any command failure that needs user action.
 
 ## Notes
 
