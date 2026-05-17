@@ -25,8 +25,10 @@ Use this reference when working with shell scripts.
 
 ## Functions
 
-- Add comments for public functions.
-- Functions starting with `_` are private and do not require comments.
+- In included or sourced shell library files, typically files ending in `.sh`, add comments for public functions.
+- In included or sourced shell library files, functions starting with `_` are private and do not require comments.
+- In standalone executable scripts, functions do not need a leading `_` just to avoid public API treatment.
+- Add comments for non-underscore functions in both standalone executable scripts and included shell library files.
 - Keep function names and call patterns aligned with the surrounding script.
 
 ## ShellCheck

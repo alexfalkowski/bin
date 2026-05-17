@@ -1,0 +1,23 @@
+---
+name: security-audit
+description: Reviews code, scripts, Makefile glue, Docker helpers, dependencies, and configuration for security risks. Use when the user asks for a security audit, security review, vulnerability check, secret check, unsafe shell/filesystem/network/auth review, or language-specific security inspection for Go, Ruby, or shell code.
+---
+
+# Security Audit
+
+## Steps
+
+1. Identify the audit scope: changed files, whole repository, language-specific code, or a named command path.
+2. Read the smallest matching reference before auditing:
+   - `references/go.md` for Go code, modules, HTTP/TLS, crypto, filesystem, command execution, or `govulncheck`.
+   - `references/ruby.md` for Ruby code, Bundler, process execution, YAML/JSON parsing, filesystem, env/secrets, or RuboCop security coverage.
+   - `references/shell.md` for Bash scripts, Make targets that invoke shell commands, Docker helper scripts, ShellCheck, quoting, temp files, or destructive commands.
+   - `references/shared.md` for cross-language repositories, dependency/config audits, secrets, Docker/security scanners, and report structure.
+3. Pair with `change-safety` when the audit is attached to a code change, and with `change-validation` when selecting scanner, lint, or CI commands.
+4. Inspect concrete data/control flow before reporting a risk. Prefer file and line references over general advice.
+5. Report exploitable findings first. Use the exact structure in `references/shared.md`; do not add, remove, rename, or reorder sections.
+
+## References
+
+- Read `references/shared.md` for common audit workflow, validation choices, severity guidance, and output expectations.
+- Read language references only when the scoped files or user request calls for them.

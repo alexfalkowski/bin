@@ -17,6 +17,7 @@ skill instead of one broad default:
   files, and security-sensitive edits.
 - `change-validation`: test, lint, CI, security, benchmark, and validation selection.
 - `code-review`: review findings, risk assessment, and missing coverage.
+- `security-audit`: security reviews, vulnerability checks, unsafe shell/filesystem/network/auth inspection, and Go/Ruby/shell audit guidance.
 - `pr-summary`: commit messages, PR descriptions, and shareable change summaries.
 - `review-pr`: create a commit, force-push, and open a draft PR using `pr-summary`.
 - `makefile-includes`: reusable `build/make/*.mak` behavior and downstream path

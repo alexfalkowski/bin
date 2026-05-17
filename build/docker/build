@@ -1,11 +1,26 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC2086,SC2155
+# shellcheck disable=SC2155
 
 set -eo pipefail
 
 readonly name="$1"
 readonly platform="$2"
 readonly dir="$(dirname "$(readlink -f "$0")")"
+readonly dockerfile="$dir/go/Dockerfile"
+readonly image="alexfalkowski/$name:test.$platform"
+
+# Print an error and stop the script.
+die() {
+  printf 'error: %s\n' "$1" >&2
+  exit 1
+}
+
+# Validate Docker image reference components before invoking Docker.
+validate() {
+  [[ "$name" =~ ^[a-z0-9]+([._-][a-z0-9]+)*$ ]] || die "invalid image name: $name"
+  [[ "$platform" =~ ^(amd64|arm64)$ ]] || die "invalid platform: $platform"
+}
 
 # Build docker.
-docker build --build-arg name=$name --build-arg version="latest" -t alexfalkowski/$name:test.$platform -f $dir/go/Dockerfile .
+validate
+docker build --build-arg "name=$name" --build-arg version="latest" -t "$image" -f "$dockerfile" .
