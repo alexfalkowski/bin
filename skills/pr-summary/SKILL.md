@@ -13,9 +13,11 @@ description: Drafts commit messages and pull request summaries from repository c
 4. Read `references/format.md` before drafting the output.
 5. When the workflow adds a branch-derived prefix, draft `msg` from the diff or latest commit only; do not use branch words as source material.
 6. Keep the commit message plain text and lowercase when the user asks for one.
-7. Include what changed, why it changed, and honest testing details in the PR summary.
-8. Use the exact structure in `references/format.md`; do not add, remove, rename, or reorder sections.
-9. Do not claim unrun checks passed.
+7. Include what changed, why it changed, documentation/example updates or why none were needed, and honest testing details in the PR summary.
+8. Include unresolved review or security findings from caller workflows in `## Why` or `## Testing`; do not add extra sections.
+9. When the summary is the final response, use the exact structure in `references/format.md`; do not add, remove, rename, or reorder sections.
+10. When another skill embeds this summary, provide the subject and Markdown body content in the caller's output format.
+11. Do not claim unrun checks passed.
 
 ## References
 

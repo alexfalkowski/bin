@@ -31,6 +31,19 @@ skill instead of one broad default:
 
 Treat this `AGENTS.md` as the repo-specific companion to those skills.
 
+When changing a skill's trigger, scope, workflow, or user-facing behavior,
+check the matching `skills/<name>/agents/openai.yaml` and update it if the
+display name, short description, or default prompt became stale.
+
+Common composition:
+
+- `review-pr` orchestrates PR preparation with `change-validation`, relevant
+  language standards, `code-review`, and `pr-summary`.
+- `code-review` conditionally consults `security-audit` for security-sensitive
+  review scope while keeping the review findings format.
+- `security-audit` pairs with `change-safety` for code changes and
+  `change-validation` for scanner, lint, or CI command selection.
+
 ## Quick commands (this repo)
 
 From this repository root:
@@ -47,14 +60,16 @@ From this repository root:
 - Script / Dockerfile linting:
   - `make scripts-lint` (runs `shellcheck` over various scripts)
   - `make docker-lint` (runs `hadolint` on `build/docker/go/Dockerfile`)
+- Security scanning:
+  - `make sec-lint` (runs Trivy over the repository)
 
-CI runs (CircleCI): `make dep`, `make clean-dep`, `make scripts-lint`, `make docker-lint`, `make lint` (see `.circleci/config.yml`).
+CI runs (CircleCI): `make dep`, `make clean-dep`, `make scripts-lint`, `make docker-lint`, `make lint`, `make sec-lint` (see `.circleci/config.yml`).
 
 ## Tooling dependencies (observed)
 
 Ruby tooling (declared in `Gemfile`):
 
-- Ruby (Rubocop targets Ruby **4.0**, see `.rubocop.yml`)
+- Ruby
 - Bundler (`bundler` gem)
 - RuboCop (`rubocop` gem)
 
@@ -121,7 +136,7 @@ Only rely on a command if you can find it being invoked in the relevant `.mak`/s
 
 ### RuboCop
 
-- `.rubocop.yml` sets `TargetRubyVersion: 4.0`.
+- `.rubocop.yml` defines the Ruby parser/target settings.
 - Excludes `vendor/**/*` and also `bin/**/*` (important in downstream repos that vendor this as `./bin`).
 
 ## Gotchas
@@ -148,9 +163,8 @@ Only rely on a command if you can find it being invoked in the relevant `.mak`/s
   - This is deliberate to reduce local branch-name collisions.
   - Do not flag it as a bug unless the task is specifically about changing branch naming semantics.
 
-- **Ruby/tooling version skew is intentional here**.
-  - `.circleci/config.yml` uses `alexfalkowski/ruby:2.7` for this repo's CI job, while `.rubocop.yml` targets Ruby 4.0.
-  - Treat that mismatch as deliberate unless the task is specifically about modernizing CI or Ruby tooling.
+- **Ruby/tooling version skew may be intentional here**.
+  - Treat differences between the CI image, local Ruby configuration, and RuboCop target settings as deliberate unless the task is specifically about modernizing CI or Ruby tooling.
 
 ## CI signals
 
@@ -161,6 +175,7 @@ Only rely on a command if you can find it being invoked in the relevant `.mak`/s
   - `make scripts-lint`
   - `make docker-lint`
   - `make lint`
+  - `make sec-lint`
 
 ## When changing this repo
 
@@ -168,5 +183,6 @@ Only rely on a command if you can find it being invoked in the relevant `.mak`/s
 - After edits, re-run at least:
   - `make dep`
   - `make lint`
+  - `make sec-lint`
   - `make scripts-lint` (if `shellcheck` is available)
   - `make docker-lint` (if `hadolint` is available)

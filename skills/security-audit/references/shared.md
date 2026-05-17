@@ -19,6 +19,7 @@ Use this reference for any security audit, then load language-specific reference
 ## Validation
 
 - Prefer repository-defined targets before ad hoc scanners.
+- Ask for permission before running scanners or dependency checks that need network, SSH, GitHub auth, registry auth, or remote writes.
 - In this repository, relevant checks include:
   - `make sec-lint` for Trivy repository scanning.
   - `make scripts-lint` for ShellCheck coverage of shared scripts.
@@ -27,6 +28,7 @@ Use this reference for any security audit, then load language-specific reference
 - In downstream Go repositories that include `build/make/go.mak`, `make sec` runs `govulncheck` and Trivy repo scanning.
 - In downstream Ruby repositories that include `build/make/ruby.mak`, `make sec` runs Trivy repo scanning.
 - Report wrappers as partial or no-op when tools such as `trivy`, `govulncheck`, `shellcheck`, `hadolint`, or `golangci-lint` are missing.
+- Report network or credential failures as validation gaps unless the audited code caused the failure.
 
 ## Freshness
 
@@ -59,7 +61,7 @@ Use this reference for any security audit, then load language-specific reference
 
 ## Reporting
 
-- Use exactly this Markdown structure and do not add, remove, rename, or reorder sections:
+- When security-audit is the final response, use exactly this Markdown structure and do not add, remove, rename, or reorder sections:
 
 ```markdown
 ## Findings
@@ -92,3 +94,4 @@ Use this reference for any security audit, then load language-specific reference
 - Each finding should state: risk, trigger condition, impact, and remediation.
 - Do not report generic checklist items as findings unless they apply to the audited code.
 - If no findings are found, say that clearly and list meaningful gaps, such as scanners not installed or dynamic behavior not exercised.
+- When another skill embeds the audit, keep the same factual content and severity meaning but use the caller's required output sections.

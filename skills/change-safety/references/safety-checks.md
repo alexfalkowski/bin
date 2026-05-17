@@ -10,7 +10,7 @@ Use this reference when deciding how to handle compatibility, documentation, sec
 
 ## Output Format
 
-Use exactly this Markdown structure and do not add, remove, rename, or reorder sections:
+When safety notes are the final response, use exactly this Markdown structure and do not add, remove, rename, or reorder sections:
 
 ```markdown
 ## Compatibility
@@ -35,6 +35,7 @@ Use exactly this Markdown structure and do not add, remove, rename, or reorder s
 - Use `Migration` for required consumer action, deprecation, or replacement guidance.
 - Use `Security` for security-sensitive tradeoffs, unsafe defaults, secrets, shell execution, filesystem writes, auth, or untrusted input.
 - Use `Generated Or External Files` for generated files, vendored files, lockfiles, or dependency constraints.
+- When another skill embeds safety notes, keep the same compatibility, migration, security, and generated/external-file facts but use the caller's required output sections.
 
 ## Migration And Deprecation
 
@@ -61,4 +62,5 @@ Use exactly this Markdown structure and do not add, remove, rename, or reorder s
 - Prefer updating existing documentation files over creating new ones unless the repository clearly expects a new document.
 - Place examples where the repository already expects them, such as inline docs, example tests, or README snippets.
 - If user-facing behavior changes, update README snippets, examples, changelog entries, or operator docs when the repository uses them.
+- If docs or examples are not updated for a user-facing change, state why they are not needed.
 - Keep documentation aligned with the shipped behavior, not the intended behavior.

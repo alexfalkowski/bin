@@ -39,6 +39,7 @@ commit message subject
 - When another skill requires a footer, append it after `## Testing`; footers are allowed and are not sections.
 - If a PR summary section has no entries, write exactly `- None.`
 - Keep the testing section honest about what ran, what passed, and what did not run.
+- Include unresolved review findings, security findings, or validation gaps from caller workflows under `## Why` or `## Testing`; do not add a separate risk section.
 
 ## Commit Message Subject
 

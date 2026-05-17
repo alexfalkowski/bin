@@ -11,7 +11,8 @@ description: Applies this repository ecosystem's Bash scripting, ShellCheck, tex
 2. Read `references/conventions.md` before editing script structure, ShellCheck directives, text processing, directory handling, or functions.
 3. Preserve the repository's existing shell style, argument handling, and command wrappers.
 4. Use Bash for scripts with `#!/usr/bin/env bash` and catch failures early with `set -eo pipefail`.
-5. Pair this skill with `change-validation` when selecting ShellCheck or script lint commands.
+5. Pair this skill with `$security-audit` for `eval`, shell-command construction, broad file deletion/writes, downloads, temp files, env/secrets, or other trust-boundary changes.
+6. Pair this skill with `change-validation` when selecting ShellCheck or script lint commands.
 
 ## References
 

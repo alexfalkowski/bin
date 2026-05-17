@@ -14,8 +14,11 @@ description: Reviews code, scripts, Makefile glue, Docker helpers, dependencies,
    - `references/shell.md` for Bash scripts, Make targets that invoke shell commands, Docker helper scripts, ShellCheck, quoting, temp files, or destructive commands.
    - `references/shared.md` for cross-language repositories, dependency/config audits, secrets, Docker/security scanners, and report structure.
 3. Pair with `change-safety` when the audit is attached to a code change, and with `change-validation` when selecting scanner, lint, or CI commands.
-4. Inspect concrete data/control flow before reporting a risk. Prefer file and line references over general advice.
-5. Report exploitable findings first. Use the exact structure in `references/shared.md`; do not add, remove, rename, or reorder sections.
+4. Ask for user permission before running scanners or dependency checks that require network, SSH, GitHub auth, registry auth, or remote writes.
+5. Inspect concrete data/control flow before reporting a risk. Prefer file and line references over general advice.
+6. Report exploitable findings first.
+7. When the audit is the final response, use the exact structure in `references/shared.md`; do not add, remove, rename, or reorder sections.
+8. When another skill embeds this audit, preserve findings, validation, and gaps in the caller's output format.
 
 ## References
 
