@@ -10,9 +10,18 @@ Use this reference when the user asks for a review.
 - Prefer concrete findings over broad summaries.
 - Ground each finding in the inspected code and describe the consequence, not just the preference.
 
+## Severity
+
+- `critical`: Near-certain production breakage, data loss or corruption, remote code execution, credential exposure, auth bypass, or a change that makes the project unusable for its primary path.
+- `high`: Likely user-visible regression, compatibility break, security issue, CI or release blocker, or broken primary workflow with a clear trigger.
+- `medium`: Real bug, missing validation, edge-case regression, or maintainability risk that can affect users but is scoped, recoverable, or not on the primary path.
+- `low`: Minor correctness issue, hardening gap, confusing behavior, missing docs or tests for a low-risk path, or maintainability concern with limited impact.
+- Do not inflate severity for style preferences, speculative risks, or missing tests without a concrete failure mode.
+- If severity depends on assumptions about downstream use, state the triggering scenario in `Impact` or `Evidence`.
+
 ## Output Format
 
-- Use exactly this Markdown structure and do not add, remove, rename, or reorder sections:
+- When code review is the final response, use exactly this Markdown structure and do not add, remove, rename, or reorder sections:
 
 ```markdown
 ## Findings
@@ -42,6 +51,7 @@ Brief one- or two-sentence summary.
 - Keep the summary brief and secondary to the findings.
 - When useful, state the condition or scenario that triggers the problem so the risk is easy to verify.
 - If a section has no entries, write exactly `- None.`
+- When another skill embeds the review, keep the same finding severity, evidence, impact, recommendation, open-question, and testing-gap facts but use the caller's required output sections.
 
 ## If No Findings
 

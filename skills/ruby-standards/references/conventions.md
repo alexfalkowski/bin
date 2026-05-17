@@ -14,6 +14,16 @@ Use this reference when working in Ruby repositories.
 - When a user-facing or documented API is non-trivial, include examples if the repository's documentation style supports them.
 - Keep examples aligned with the real public interface and expected calling style.
 
+## Testing
+
+- Reuse the repository's existing test, feature, fixture, helper, assertion, and naming patterns before adding new structure.
+- Infer the project type from existing tests and CI: Ruby libraries commonly use unit and integration tests such as RSpec, while services in this ecosystem commonly use Cucumber feature flows.
+- Prefer testing through the repository's established public or documented Ruby APIs, commands, tasks, or feature flows so coverage reflects real consumer behavior.
+- Do not introduce a new Ruby test framework, fixture layout, or test layer unless the task explicitly changes testing infrastructure.
+- Keep tests deterministic and cover relevant failure paths for changed behavior.
+- Use internal seams only when the repository already tests that way, the behavior cannot be exercised credibly through the established public surface, or the change has no stable public surface.
+- When internal tests are necessary, keep them focused and still run public-path validation when practical.
+
 ## External Style References
 
 - When this repository does not state a more specific convention, use the RuboCop Ruby Style Guide and the Shopify Ruby Style Guide as advisory references.

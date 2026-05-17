@@ -10,8 +10,10 @@ description: Protects documented interfaces, compatibility, security, generated 
 1. Identify whether the requested change touches a user-facing or documented interface.
 2. Read `references/safety-checks.md` before editing compatibility-sensitive, security-sensitive, generated, vendored, or documented behavior.
 3. Preserve existing behavior unless the user explicitly requests a breaking change or the fix requires one.
-4. Update documentation in the repository's existing style when behavior, usage, or migration expectations change.
-5. Report safety-relevant notes using the exact structure in `references/safety-checks.md`; do not add, remove, rename, or reorder sections.
+4. Update documentation and examples in the repository's existing style when behavior, usage, or migration expectations change; if no docs update is needed for a user-facing change, state why.
+5. For security-specific risk analysis, pair with `$security-audit` instead of expanding this skill into a full audit.
+6. When safety notes are the final response, use the exact structure in `references/safety-checks.md`; do not add, remove, rename, or reorder sections.
+7. When another skill embeds safety notes, preserve compatibility, migration, security, and generated/external-file facts in the caller's output format.
 
 ## References
 

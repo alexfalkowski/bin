@@ -23,12 +23,21 @@ Use this reference when working with shell scripts.
 - When a command needs to run from another directory, use a subshell such as `(cd path && command)`.
 - Avoid changing the caller's working directory as a side effect.
 
+## Testing
+
+- Prefer validating shell changes through public or documented commands, scripts, Make targets, and argument flows.
+- Reuse the repository's existing script tests, feature flows, lint targets, and validation entrypoints before adding ad hoc checks.
+- Cover relevant failure paths such as invalid arguments, missing files/tools, non-zero commands, path errors, permissions, and argument pass-through.
+- Keep checks deterministic and avoid relying on the caller's real home directory, global config, network, wall-clock time, or shared mutable state.
+- Use internal helper seams only when the repository already tests that way, the behavior cannot be exercised credibly through the established command path, or the change has no stable public surface.
+- When internal checks are necessary, keep them focused and still run public-path validation when practical.
+
 ## Functions
 
 - In included or sourced shell library files, typically files ending in `.sh`, add comments for public functions.
 - In included or sourced shell library files, functions starting with `_` are private and do not require comments.
 - In standalone executable scripts, functions do not need a leading `_` just to avoid public API treatment.
-- Add comments for non-underscore functions in both standalone executable scripts and included shell library files.
+- In standalone executable scripts, add comments for helper functions only when their purpose, inputs, outputs, or side effects are not obvious from the local code.
 - Keep function names and call patterns aligned with the surrounding script.
 
 ## ShellCheck

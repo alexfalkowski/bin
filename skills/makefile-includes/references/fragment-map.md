@@ -20,6 +20,7 @@ Use this reference after you have already identified which shared `bin/build/mak
 - Especially relevant targets: `dep`, `lint`, `format`, `features`, `benchmarks`, `sec`, `start`, `stop`.
 - `features` and `benchmarks` call wrappers under `$(PWD)/bin/quality/ruby/...`, so they should be run from the consuming repo root.
 - `start` and `stop` delegate to `bin/build/docker/env`, which may require access to a sibling `../docker` checkout and SSH-based cloning if that repo is missing.
+- `dep`, `update-dep`, `update-all-dep`, `sec`, `start`, and `stop` may require network access or external credentials depending on the consuming repo.
 
 ### `go.mak`
 
@@ -28,16 +29,36 @@ Use this reference after you have already identified which shared `bin/build/mak
 - `coverage` depends on coverage files under `test/reports/`.
 - `lint` runs field alignment checks and `golangci-lint`; the wrapper may no-op if `golangci-lint` is not installed.
 - `clean` may assume a `master` branch exists when refreshing dependencies.
+- `dep`, `get`, `get-all`, `update-dep`, `update-all-dep`, `sec`, `start`, and `stop` may require network access or external credentials depending on the consuming repo.
+
+### `buf.mak`
+
+- Especially relevant targets: `lint`, `fix-lint`, `format`, `generate`, `breaking`, `push`, `update-all-dep`.
+- `breaking` compares against `https://github.com/alexfalkowski/$(NAME).git#branch=master`, so branch and remote assumptions matter.
+- `generate` and `push` depend on the consuming repository's Buf configuration.
+- `push` updates remote state and requires explicit user permission.
+
+### `http.mak`, `grpc.mak`, and `client.mak`
+
+- These are project-template fragments that combine Go, Ruby test harness, Docker, security, coverage, and helper targets.
+- `grpc.mak` also includes proto lint, format, generate, breaking, and push targets.
+- `features` and `benchmarks` depend on downstream test/build layout and wrappers under `$(PWD)/bin/quality/ruby/...`.
+- `specs`, coverage, and report cleanup assume downstream `test/reports/` paths.
+- Docker and certificate helper targets depend on external CLIs such as Docker, `mkcert`, `dot`, and `air` depending on the target.
+- Docker push, manifest, release, and registry-publishing targets update remote state and require explicit user permission.
 
 ### `git.mak`
 
 - Common helpers cover branch creation, sync, commit/PR flows, destructive cleanup, and submodule commands.
 - Treat these as convenience wrappers, not default actions.
 - Do not use targets that rewrite history, delete branches, discard changes, or push remotely unless the user explicitly asks.
+- `push`, `force`, `draft`, `pr`, `merge`, `review`, and `ready` update remote GitHub state and require explicit current-request permission.
 
 ## Practical Inference Rules
 
 - If the root `Makefile` includes `ruby.mak`, expect Ruby lint and cucumber-style feature flows.
 - If it includes `go.mak`, expect Go lint, test, coverage, and security flows.
+- If it includes `buf.mak`, expect Buf lint, format, generate, push, and breaking-change flows.
+- If it includes `http.mak`, `grpc.mak`, or `client.mak`, expect combined Go/Ruby validation and downstream test harness assumptions.
 - If the repo exposes both `features` and `specs`, choose the target that best matches the area under change.
 - If the repo overrides a target after including a fragment, trust the root `Makefile` behavior over the fragment default.

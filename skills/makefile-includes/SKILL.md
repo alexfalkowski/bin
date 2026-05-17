@@ -11,7 +11,8 @@ description: Works with shared bin/build/make/*.mak includes and downstream Make
 2. Read `references/fragment-map.md` after identifying the included fragments.
 3. Treat the root `Makefile` as the interface and shared fragments as implementation context.
 4. Preserve downstream `./bin` path expectations unless the user explicitly asks to change them.
-5. Validate path-sensitive behavior from the consuming repository root when the target depends on `$(PWD)/bin/...`.
+5. Identify Make targets that clone, fetch, push, publish, open PRs, update remote state, or require SSH/GitHub/registry auth before running them.
+6. Validate path-sensitive behavior from the consuming repository root when the target depends on `$(PWD)/bin/...`.
 
 ## References
 

@@ -15,12 +15,13 @@ Use this reference when you need to establish context quickly and discover how a
 - Prefer repository entry points such as `make` targets over calling tools directly.
 - Use direct tool invocations only when the repository does not provide a stable entry point or when a narrower check is clearly better for the task.
 - Confirm that a target or script is actually wired into the repo before relying on it.
+- Identify whether a command fetches, clones, pushes, publishes, opens PRs, updates remote state, or requires SSH/GitHub/registry credentials before running it.
 - When `help.mak` is included, use `make` or `make help` as the quickest way to discover the command surface.
 - When planning work, note whether the repository exposes setup targets such as `dep` so you can use them later when the task moves from discovery to edits or validation.
 
 ## Output Format
 
-Use exactly this Markdown structure when reporting workflow discovery, and do not add, remove, rename, or reorder sections:
+When workflow discovery is the final response, use exactly this Markdown structure and do not add, remove, rename, or reorder sections:
 
 ```markdown
 ## Command Surface
@@ -44,7 +45,8 @@ Use exactly this Markdown structure when reporting workflow discovery, and do no
 - Use `Command Surface` for local commands, Make targets, scripts, or package-manager entrypoints.
 - Use `CI Expectations` for checks required by CI configuration.
 - Use `Bin Wiring` for included `bin/build/make/*.mak` fragments or `$(PWD)/bin/...` path behavior.
-- Use `Constraints` for missing tools, downstream-only paths, CI-only behavior, SSH/network requirements, or other workflow limits.
+- Use `Constraints` for missing tools, downstream-only paths, CI-only behavior, SSH/network/auth requirements, remote-write targets, or other workflow limits.
+- When another skill embeds workflow discovery, keep the same command, CI, bin-wiring, and constraint facts but use the caller's required output sections.
 
 ## When The Repo Uses `./bin`
 
