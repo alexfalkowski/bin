@@ -14,6 +14,11 @@ Use this reference when working in Ruby repositories.
 - When a user-facing or documented API is non-trivial, include examples if the repository's documentation style supports them.
 - Keep examples aligned with the real public interface and expected calling style.
 
+## External Style References
+
+- When this repository does not state a more specific convention, use the RuboCop Ruby Style Guide and the Shopify Ruby Style Guide as advisory references.
+- Repository-local conventions take precedence over external style guides.
+
 ## Conventions
 
 - Keep method signatures, return shapes, exceptions, and side effects aligned with the repository's existing Ruby conventions.

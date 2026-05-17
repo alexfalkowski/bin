@@ -27,6 +27,11 @@ Use this reference when working in Go repositories.
 
 - For types with both exported and unexported methods, keep exported methods near the top of the type's method group and unexported methods below them.
 
+## External Style References
+
+- When this repository does not state a more specific convention, use Effective Go, the Google Go Style Guide, and the Uber Go Style Guide as advisory references.
+- Repository-local conventions take precedence over external style guides.
+
 ## Imports And Naming
 
 - Do not alias a Go import unless there is a real collision or required disambiguation.

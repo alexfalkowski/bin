@@ -8,7 +8,7 @@ description: Commits the current change, force-pushes the branch, and opens a dr
 ## Steps
 
 1. Inspect the changed paths from the working tree first; if the working tree is clean, inspect the latest commit.
-2. Use `$change-validation` to select and run credible validation before `make review`.
+2. Use `$change-validation` to select and run credible validation for the full change before `make review`; language-specific standards may refine that validation.
 3. If the changed paths include Go code, Go tests, Go modules, Go docs, or Go tooling behavior, also use `$go-standards`.
 4. If the changed paths include Ruby code, Ruby tests/features, Gemfiles, RuboCop config, Ruby docs, or Ruby tooling behavior, also use `$ruby-standards`.
 5. If the changed paths include shell scripts, Bash helpers, ShellCheck config/directives, shell docs, or script behavior, also use `$shell-standards`.
@@ -35,7 +35,46 @@ make msg="unprefixed subject" desc="summary" review
 ```
 
 18. Pass `desc` as the multiline Markdown summary from `$pr-summary`; do not flatten the summary into a single line.
-19. Report the commit message, validation results, code-review result, whether the review target succeeded, and any command failure that needs user action.
+19. Report the result using the exact structure in `Output Format`; do not add, remove, rename, or reorder sections.
+
+## Output Format
+
+Use exactly this Markdown structure and do not add, remove, rename, or reorder sections:
+
+```markdown
+## Commit Message
+
+unprefixed subject
+
+## PR Summary
+
+<multiline Markdown summary passed as desc>
+
+## Validation
+
+- command: `make lint`
+  result: passed
+
+## Code Review
+
+- result: no blocking findings
+
+## Review Target
+
+- command: `make msg="..." desc="..." review`
+  result: passed
+  pr: https://github.com/org/repo/pull/123
+
+## Notes
+
+- None.
+```
+
+- If a command was not run, write `not run` and explain why.
+- If `make review` fails before opening the PR, set `pr: unavailable`.
+- If `make review` succeeds but the PR URL is not visible in the command output, set `pr: unavailable`.
+- If there are no notes, write exactly `- None.`
+- Do not claim a PR exists unless the review target output confirms it.
 
 ## Notes
 

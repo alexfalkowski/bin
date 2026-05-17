@@ -8,6 +8,11 @@ Use this reference when working with shell scripts.
 - Catch failures early with `set -eo pipefail`.
 - Preserve existing argument handling, command wrappers, and pass-through semantics.
 
+## External Style References
+
+- When this repository does not state a more specific convention, use the Google Shell Style Guide and Wooledge BashGuide Practices as advisory references.
+- Repository-local conventions take precedence over external style guides.
+
 ## Text Processing
 
 - Prefer `sed` or `awk` for text manipulation when shell tooling is the right fit.
