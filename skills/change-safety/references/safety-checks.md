@@ -8,6 +8,34 @@ Use this reference when deciding how to handle compatibility, documentation, sec
 - Preserve existing behavior for downstream consumers when feasible.
 - If a breaking change is necessary, call it out explicitly and document the migration impact.
 
+## Output Format
+
+Use exactly this Markdown structure and do not add, remove, rename, or reorder sections:
+
+```markdown
+## Compatibility
+
+- None.
+
+## Migration
+
+- None.
+
+## Security
+
+- None.
+
+## Generated Or External Files
+
+- None.
+```
+
+- If there are no entries for a section, write exactly `- None.`
+- Use `Compatibility` for intentional breakage or preserved documented interfaces.
+- Use `Migration` for required consumer action, deprecation, or replacement guidance.
+- Use `Security` for security-sensitive tradeoffs, unsafe defaults, secrets, shell execution, filesystem writes, auth, or untrusted input.
+- Use `Generated Or External Files` for generated files, vendored files, lockfiles, or dependency constraints.
+
 ## Migration And Deprecation
 
 - If a change needs consumer action, document the migration path as part of the work.

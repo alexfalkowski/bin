@@ -12,7 +12,26 @@ Use this reference when the user asks for a PR or wants a shareable change summa
 
 ## Required Format
 
-- Provide the commit message first, on its own line, when the user asks for one.
+- When the user asks for a commit message and PR summary, use exactly this structure and do not add, remove, rename, or reorder sections:
+
+```markdown
+commit message subject
+
+## What
+
+- Describe the concrete change.
+
+## Why
+
+- Describe why the change was made.
+
+## Testing
+
+- `command` - passed
+```
+
+- When the user asks only for a commit message, output only the commit message subject.
+- When the user asks only for a PR summary, output only the `## What`, `## Why`, and `## Testing` sections from the template.
 - Keep the commit message as plain text only.
 - Keep the commit message entirely lowercase.
 - Do not add markdown, labels, bullets, quotes, or surrounding commentary to the commit message.
@@ -20,6 +39,8 @@ Use this reference when the user asks for a PR or wants a shareable change summa
 - Use Markdown headings for the PR summary sections: `## What`, `## Why`, and `## Testing`.
 - Do not use bold text as section labels, such as `**What**`.
 - Do not add extra sections or alternate titles.
+- When another skill requires a footer, append it after `## Testing`; footers are allowed and are not sections.
+- If a PR summary section has no entries, write exactly `- None.`
 - Keep the testing section honest about what ran, what passed, and what did not run.
 
 ## Commit Message Subject

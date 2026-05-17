@@ -19,6 +19,29 @@ Use this reference when choosing which checks to run.
 3. Run any additional repo-defined checks that are clearly relevant to the risk of the change.
 4. Run broader lint or test suites only when the change touches shared infrastructure, multiple packages, or release-sensitive behavior.
 
+## Output Format
+
+Use exactly this Markdown structure and do not add, remove, rename, or reorder sections:
+
+```markdown
+## Validation
+
+- command: `make lint`
+  result: passed
+  coverage: Ruby linting for changed files.
+
+## Gaps
+
+- None.
+```
+
+- Use only these results: `passed`, `failed`, `not run`, `no-op`.
+- Use `no-op` when a wrapper ran but skipped meaningful validation because an optional tool was missing.
+- Use `not run` when a relevant command was intentionally skipped or could not be run.
+- If no commands ran, write one `Validation` entry with `command: none` and `result: not run`.
+- In `coverage`, state what the command actually validated or why it did not validate anything.
+- If there are no validation gaps, write exactly `- None.`
+
 ## Helpful Heuristics
 
 - For shell scripts, Dockerfiles, and Makefile glue, prefer the repo's lint targets when available.

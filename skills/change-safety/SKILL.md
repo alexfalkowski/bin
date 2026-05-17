@@ -11,7 +11,7 @@ description: Protects documented interfaces, compatibility, security, generated 
 2. Read `references/safety-checks.md` before editing compatibility-sensitive, security-sensitive, generated, vendored, or documented behavior.
 3. Preserve existing behavior unless the user explicitly requests a breaking change or the fix requires one.
 4. Update documentation in the repository's existing style when behavior, usage, or migration expectations change.
-5. Report any intentional breakage, migration requirement, security tradeoff, or generated-file constraint in the final response.
+5. Report safety-relevant notes using the exact structure in `references/safety-checks.md`; do not add, remove, rename, or reorder sections.
 
 ## References
 

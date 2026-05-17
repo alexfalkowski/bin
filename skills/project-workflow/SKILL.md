@@ -11,7 +11,7 @@ description: Discovers project-local workflow, command surfaces, Makefile includ
 2. Identify the project's real command surface before choosing tools. Prefer exposed entrypoints over guessed direct invocations.
 3. If the repository uses this shared project as `./bin`, read `references/bin-submodule.md` before reasoning about path-sensitive behavior.
 4. Inspect only the files, scripts, and make fragments relevant to the user's task.
-5. Report any workflow constraint that affects the work, such as missing tools, downstream-only paths, or CI-only behavior.
+5. When reporting workflow discovery, use the exact structure in `references/bin-submodule.md`; do not add, remove, rename, or reorder sections.
 
 ## References
 

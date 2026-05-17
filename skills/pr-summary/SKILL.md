@@ -14,7 +14,8 @@ description: Drafts commit messages and pull request summaries from repository c
 5. When the workflow adds a branch-derived prefix, draft `msg` from the diff or latest commit only; do not use branch words as source material.
 6. Keep the commit message plain text and lowercase when the user asks for one.
 7. Include what changed, why it changed, and honest testing details in the PR summary.
-8. Do not claim unrun checks passed.
+8. Use the exact structure in `references/format.md`; do not add, remove, rename, or reorder sections.
+9. Do not claim unrun checks passed.
 
 ## References
 

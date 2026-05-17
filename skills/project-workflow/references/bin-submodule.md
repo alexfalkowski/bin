@@ -18,6 +18,34 @@ Use this reference when you need to establish context quickly and discover how a
 - When `help.mak` is included, use `make` or `make help` as the quickest way to discover the command surface.
 - When planning work, note whether the repository exposes setup targets such as `dep` so you can use them later when the task moves from discovery to edits or validation.
 
+## Output Format
+
+Use exactly this Markdown structure when reporting workflow discovery, and do not add, remove, rename, or reorder sections:
+
+```markdown
+## Command Surface
+
+- `make lint` - defined by root `Makefile`.
+
+## CI Expectations
+
+- `make lint` - required by CI.
+
+## Bin Wiring
+
+- Uses `./bin` shared make fragments.
+
+## Constraints
+
+- None.
+```
+
+- If a section has no entries, write exactly `- None.`
+- Use `Command Surface` for local commands, Make targets, scripts, or package-manager entrypoints.
+- Use `CI Expectations` for checks required by CI configuration.
+- Use `Bin Wiring` for included `bin/build/make/*.mak` fragments or `$(PWD)/bin/...` path behavior.
+- Use `Constraints` for missing tools, downstream-only paths, CI-only behavior, SSH/network requirements, or other workflow limits.
+
 ## When The Repo Uses `./bin`
 
 - Treat the consuming repository as the primary execution context.
