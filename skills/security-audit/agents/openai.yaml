@@ -1,0 +1,4 @@
+interface:
+  display_name: "Security Audit"
+  short_description: "Audit code and scripts for security risk"
+  default_prompt: "Use $security-audit to review this change for security risks."
