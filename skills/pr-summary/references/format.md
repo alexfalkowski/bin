@@ -35,10 +35,7 @@ commit message subject
 - Keep the commit message as plain text only.
 - Keep the commit message entirely lowercase.
 - Do not add markdown, labels, bullets, quotes, or surrounding commentary to the commit message.
-- Write the PR summary in Markdown.
-- Use Markdown headings for the PR summary sections: `## What`, `## Why`, and `## Testing`.
-- Do not use bold text as section labels, such as `**What**`.
-- Do not add extra sections or alternate titles.
+- Do not add extra PR summary sections or alternate titles.
 - When another skill requires a footer, append it after `## Testing`; footers are allowed and are not sections.
 - If a PR summary section has no entries, write exactly `- None.`
 - Keep the testing section honest about what ran, what passed, and what did not run.
@@ -47,12 +44,9 @@ commit message subject
 
 - Check whether the local commit workflow adds a conventional-commit prefix from the current branch.
 - In repositories using this shared `bin` workflow, `build/make/git.mak` derives `type(scope):` from branches shaped like `user/type/scope` and prepends it in `make commit`, `make review`, and related targets.
-- When the workflow will prepend that branch-derived prefix, output only the unprefixed subject intended for `msg`.
-- Do not include a conventional prefix such as `feat(scope):` in that subject.
-- Treat the current branch as routing metadata, not summary source material.
-- Build a short exclusion list from every meaningful branch-path segment, including type, scope/name segments, and the hyphen- or slash-separated words inside those segments.
-- Do not repeat any branch-derived word in the subject unless omitting it would make the subject misleading or ambiguous.
-- Before returning the subject, compare it with the exclusion list and rewrite it if a branch-derived word can be replaced by a more concrete behavior from the diff.
+- When the workflow prepends a branch-derived prefix, output only the unprefixed subject intended for `msg`; do not include a conventional prefix such as `feat(scope):`.
+- Treat the current branch as routing metadata, not summary source material, and avoid branch-derived words unless omitting them would make the subject misleading.
+- Before returning the subject, compare it with the branch type, scope/name segments, and hyphen- or slash-separated words inside those segments; rewrite it if a branch word can be replaced by a more concrete behavior from the diff.
 - Prefer the concrete behavioral change over branch wording. For example, on `user/feat/skills`, use `avoid duplicate commit subject wording`, not `feat(skills): update skills pr summary`.
 
 ## Validation Notes
