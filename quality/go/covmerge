@@ -4,9 +4,10 @@
 require 'fileutils'
 
 file = '.gocov'
-exclude = File.exist?(file) ? File.read(file).strip : 'test|.pb|main.go'
+exclude = File.exist?(file) ? File.read(file).strip : 'test|\.pb|main\.go'
 path = 'test/reports/filter'
 
+FileUtils.rm_rf path
 FileUtils.mkdir_p path
 
 Dir['test/reports/*.cov'].each do |f|
