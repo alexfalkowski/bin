@@ -35,10 +35,6 @@ Use this reference when working in Go repositories.
 ## Imports And Naming
 
 - Do not alias a Go import unless there is a real collision or required disambiguation.
-- If a project package has the same name as a Go standard-library package, prefer the project package as the natural import in local code.
-- Keep the project package unaliased when possible so the code reads in the repository's domain language.
-- Alias only the standard-library import instead of forcing an awkward alias onto the project package.
-- If the collision is at identifier level rather than import level, alias or rename only the referenced stdlib type, function, or variable needed to keep the code correct and readable.
+- If a project package has the same name as a standard-library package, keep the project package unaliased and alias only the standard-library import.
+- If the collision is at identifier level rather than import level, alias or rename only the referenced standard-library type, function, or variable.
 - Keep aliases short, obvious, and specific to the standard-library package they disambiguate.
-- If there is no collision, import the package without an alias.
-- When there is a collision, alias only what is needed on the stdlib side so the project's own package remains the default name in local code and the import block stays minimal.

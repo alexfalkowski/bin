@@ -14,28 +14,23 @@ description: Commits the current change, force-pushes the branch, and opens a dr
 5. If the changed paths include shell scripts, Bash helpers, ShellCheck config/directives, shell docs, or script behavior, also use `$shell-standards`.
 6. Use `$code-review` to inspect the current change before drafting PR text.
 7. Resolve any blocking review findings before continuing; if findings remain intentionally unresolved, call them out in the PR summary.
-8. Use `$pr-summary` to draft a lowercase commit message and Markdown PR summary from the current working tree.
-9. Keep the commit message plain text and lowercase.
-10. Pass only the unprefixed subject as `msg`; `make review` adds the branch-derived `type(scope):` prefix.
-11. Treat the current branch as routing metadata, not `msg` source material.
-12. Build a short exclusion list from every meaningful branch-path segment, including type, scope/name segments, and the hyphen- or slash-separated words inside those segments.
-13. Do not repeat any branch-derived word in `msg` unless omitting it would make the subject misleading or ambiguous.
-14. Before running `make review`, compare `msg` with the exclusion list and rewrite it if a branch-derived word can be replaced by a more concrete behavior from the diff.
-15. Keep the summary in the `$pr-summary` format, including honest testing details.
-16. When attribution is appropriate or requested, append this footer to the summary instead of a `Co-authored-by:` trailer:
+8. Use `$pr-summary` to draft a lowercase, unprefixed `msg` and Markdown PR summary from the current working tree.
+9. Follow `$pr-summary` commit-subject rules: `make review` adds the branch-derived `type(scope):` prefix, so treat branch words as routing metadata rather than message source material.
+10. Keep the summary in the `$pr-summary` format, including honest testing details.
+11. When attribution is appropriate or requested, append this footer to the summary instead of a `Co-authored-by:` trailer:
 
 ```text
 AI-assisted-by: [Codex](https://openai.com/codex/)
 ```
 
-17. Run the review target with the drafted values:
+12. Run the review target with the drafted values:
 
 ```bash
 make msg="unprefixed subject" desc="summary" review
 ```
 
-18. Pass `desc` as the multiline Markdown summary from `$pr-summary`; do not flatten the summary into a single line.
-19. Report the result using the exact structure in `Output Format`; do not add, remove, rename, or reorder sections.
+13. Pass `desc` as the multiline Markdown summary from `$pr-summary`; do not flatten the summary into a single line.
+14. Report the result using the exact structure in `Output Format`; do not add, remove, rename, or reorder sections.
 
 ## Output Format
 
@@ -54,6 +49,9 @@ unprefixed subject
 
 - command: `make lint`
   result: passed
+  coverage: Ruby linting for changed files.
+
+- gaps: None.
 
 ## Code Review
 
@@ -70,14 +68,15 @@ unprefixed subject
 - None.
 ```
 
-- If a command was not run, write `not run` and explain why.
+- In `Validation`, include one item per command plus a final `gaps` item.
+- In `Code Review`, state whether there were no findings, blocking findings were resolved, or unresolved findings were documented in the PR summary.
+- If a command was not run, write `not run` as the result and explain why in `coverage`.
 - If `make review` fails before opening the PR, set `pr: unavailable`.
 - If `make review` succeeds but the PR URL is not visible in the command output, set `pr: unavailable`.
 - If there are no notes, write exactly `- None.`
-- Do not claim a PR exists unless the review target output confirms it.
 
 ## Notes
 
 - The `review` target commits, force-pushes the current branch, and opens a draft PR.
-- Do not claim the PR exists if `make review` fails before the draft step.
+- Do not claim a PR exists unless the review target output confirms it.
 - Do not claim unrun checks passed.

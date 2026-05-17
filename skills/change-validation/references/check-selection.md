@@ -21,7 +21,7 @@ Use this reference when choosing which checks to run.
 
 ## Output Format
 
-Use exactly this Markdown structure and do not add, remove, rename, or reorder sections:
+For standalone validation reports, use exactly this Markdown structure and do not add, remove, rename, or reorder sections:
 
 ```markdown
 ## Validation
@@ -41,6 +41,7 @@ Use exactly this Markdown structure and do not add, remove, rename, or reorder s
 - If no commands ran, write one `Validation` entry with `command: none` and `result: not run`.
 - In `coverage`, state what the command actually validated or why it did not validate anything.
 - If there are no validation gaps, write exactly `- None.`
+- When embedding validation in another skill's output format, preserve command, result, coverage, and gap details without adding standalone sections.
 
 ## Helpful Heuristics
 

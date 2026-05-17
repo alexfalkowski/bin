@@ -47,4 +47,3 @@ Brief one- or two-sentence summary.
 
 - In `Findings`, write exactly `- None.`
 - Use `Testing Gaps` to mention residual risk, blind spots, or testing gaps if they remain.
-- If there are no testing gaps, write exactly `- None.`
