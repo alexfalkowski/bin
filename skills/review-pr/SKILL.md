@@ -19,7 +19,7 @@ description: Commits the current change, force-pushes the branch, and opens a dr
 10. Resolve any blocking review findings before continuing; if findings remain intentionally unresolved, call them out in the PR summary.
 11. If `$code-review` reports security findings or security validation gaps, resolve them or document them in the PR summary before `make review`.
 12. Use `$pr-summary` to draft a lowercase, unprefixed `msg` and Markdown PR summary from the current working tree.
-13. Follow `$pr-summary` commit-subject rules: `make review` adds the branch-derived `type(scope):` prefix, so treat branch words as routing metadata rather than message source material.
+13. Follow `$pr-summary` commit-subject rules: `make review` adds the branch-derived `type(scope):` prefix, so treat branch words as routing metadata rather than message source material and do not repeat the type or scope in `msg`.
 14. Keep the summary in the `$pr-summary` format, including honest testing details.
 15. When attribution is appropriate or requested, append this footer to the summary instead of a `Co-authored-by:` trailer:
 

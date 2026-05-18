@@ -46,9 +46,11 @@ commit message subject
 - Check whether the local commit workflow adds a conventional-commit prefix from the current branch.
 - In repositories using this shared `bin` workflow, `build/make/git.mak` derives `type(scope):` from branches shaped like `user/type/scope` and prepends it in `make commit`, `make review`, and related targets.
 - When the workflow prepends a branch-derived prefix, output only the unprefixed subject intended for `msg`; do not include a conventional prefix such as `feat(scope):`.
-- Treat the current branch as routing metadata, not summary source material, and avoid branch-derived words unless omitting them would make the subject misleading.
-- Before returning the subject, compare it with the branch type, scope/name segments, and hyphen- or slash-separated words inside those segments; rewrite it if a branch word can be replaced by a more concrete behavior from the diff.
+- Treat the current branch as routing metadata, not summary source material.
+- Do not repeat the branch-derived conventional-commit type or scope in `msg`; the final commit subject will already include them in `type(scope):`.
+- Before returning the subject, compare it with the branch type, scope/name segments, and hyphen- or slash-separated words inside those segments; rewrite it if a branch word appears in `msg`.
 - Prefer the concrete behavioral change over branch wording. For example, on `user/feat/skills`, use `avoid duplicate commit subject wording`, not `feat(skills): update skills pr summary`.
+- If the scope word is the obvious domain noun, still avoid restating it when a more specific object is available from the diff. For example, on `user/docs/location`, use `clarify metadata diagnostics`, not `clarify location metadata diagnostics`.
 
 ## Validation Notes
 
