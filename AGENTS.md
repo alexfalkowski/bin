@@ -31,6 +31,19 @@ skill instead of one broad default:
 
 Treat this `AGENTS.md` as the repo-specific companion to those skills.
 
+When this repository is read from a downstream repo as `./bin`, treat `bin/`
+as vendored shared tooling:
+
+- Read `bin/AGENTS.md` and the relevant `bin/skills/**` files when shared
+  guidance is needed.
+- Do not search, read, edit, or review other files under `bin/**` unless the
+  task is explicitly about shared `bin` tooling, Makefile includes, skills, or
+  submodule wiring.
+- Prefer searches from the consuming repo that exclude unrelated submodule
+  contents, for example `rg --glob '!bin/**' ...`.
+- If a Make target invokes `$(PWD)/bin/...`, reason about that path from the
+  consuming repository root without exploring unrelated files inside `bin/`.
+
 When changing a skill's trigger, scope, workflow, or user-facing behavior,
 check the matching `skills/<name>/agents/openai.yaml` and update it if the
 display name, short description, or default prompt became stale.
