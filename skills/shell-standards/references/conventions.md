@@ -6,6 +6,7 @@ Use this reference when working with shell scripts.
 
 - Use Bash for scripts with `#!/usr/bin/env bash`.
 - Catch failures early with `set -eo pipefail`.
+- In standalone executable scripts, include a descriptive and accurate comment near the top that explains the script's purpose.
 - Preserve existing argument handling, command wrappers, and pass-through semantics.
 
 ## External Style References
@@ -37,7 +38,7 @@ Use this reference when working with shell scripts.
 - In included or sourced shell library files, typically files ending in `.sh`, add comments for public functions.
 - In included or sourced shell library files, functions starting with `_` are private and do not require comments.
 - In standalone executable scripts, functions do not need a leading `_` just to avoid public API treatment.
-- In standalone executable scripts, add comments for helper functions only when their purpose, inputs, outputs, or side effects are not obvious from the local code.
+- In standalone executable scripts, add descriptive and accurate comments for helper functions.
 - Keep function names and call patterns aligned with the surrounding script.
 
 ## ShellCheck
