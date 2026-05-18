@@ -1,4 +1,4 @@
 interface:
   display_name: "Shell Standards"
-  short_description: "Apply Bash and ShellCheck conventions"
+  short_description: "Apply Bash, ShellCheck, and script documentation conventions"
   default_prompt: "Use $shell-standards when changing shell scripts in this repository."
