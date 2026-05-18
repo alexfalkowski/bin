@@ -10,6 +10,10 @@ scripts-lint:
 docker-lint:
 	@hadolint build/docker/go/Dockerfile
 
+# Lint skill metadata, references, and eval cases.
+skills-lint:
+	@skills/check
+
 # Scan for security issues.
 sec-lint:
 	@build/sec/trivy-repo

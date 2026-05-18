@@ -57,7 +57,7 @@ For standalone validation reports, use exactly this Markdown structure and do no
 - If the repository exposes named test entry points, use the one that matches the affected behavior instead of inventing a different test vocabulary.
 - If the repository exposes benchmark or coverage targets that are relevant to the change, prefer those entry points over ad hoc commands.
 - If a repo exposes `dep`, `lint`, `specs`, `features`, `benchmarks`, `coverage`, or `sec`, prefer those names over ad hoc tool invocations.
-- For this shared `bin` repo itself, CI currently runs `make dep`, `make clean-dep`, `make scripts-lint`, `make docker-lint`, `make lint`, and `make sec-lint`.
+- For this shared `bin` repo itself, CI currently runs `make dep`, `make clean-dep`, `make scripts-lint`, `make docker-lint`, `make lint`, `make skills-lint`, and `make sec-lint`.
 - Dependency setup, scanners, Docker commands, Buf commands, and Go module commands may require network access; identify that before relying on them.
 - Push, publish, release, Docker manifest push, Buf push, and PR open/update flows require explicit user permission.
 

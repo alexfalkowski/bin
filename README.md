@@ -9,6 +9,7 @@ This repo contains:
 
 - reusable `build/make/*.mak` fragments (Go/Ruby/proto helpers)
 - small Bash/Ruby scripts under `build/` and `quality/`
+- shared agent skills, eval cases, and skill metadata checks under `skills/`
 - a Dockerfile template for building Go services (`build/docker/go/Dockerfile`)
 
 ## Rationale
@@ -24,6 +25,7 @@ After repeating the same build/lint/test/CI glue across projects, it’s useful 
 | `build/docker/` | Docker helpers and `build/docker/go/Dockerfile`.                                   |
 | `build/sec/`    | Security scanning helpers (Trivy).                                                 |
 | `quality/`      | Quality/test helpers (Go coverage processing, cucumber wrappers).                  |
+| `skills/`       | Shared agent skills, eval cases, references, and metadata checks.                  |
 
 ## Using this repo (recommended: Git submodule)
 
@@ -139,6 +141,7 @@ make clean-dep
 make scripts-lint
 make docker-lint
 make lint
+make skills-lint
 make sec-lint
 ```
 

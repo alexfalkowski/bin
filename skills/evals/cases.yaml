@@ -1,0 +1,122 @@
+---
+- id: discover_downstream_bin_workflow
+  prompt: "I am in a consuming repo that includes bin/build/make/go.mak. What commands should I trust before making changes?"
+  expected_skills:
+    - project-workflow
+    - makefile-includes
+  forbidden_skills:
+    - review-pr
+  success_criteria:
+    - identifies project-local entrypoints before direct tool invocations
+    - explains ./bin path semantics from the consuming repository root
+    - flags network or remote-write targets before recommending them
+
+- id: review_shell_security_change
+  prompt: "Review this diff that changes a bash script using user-provided paths and rm."
+  expected_skills:
+    - code-review
+    - security-audit
+    - shell-standards
+  forbidden_skills:
+    - go-standards
+  success_criteria:
+    - reports exploitable shell or filesystem risks before style preferences
+    - cites concrete files and lines when available
+    - reports missing ShellCheck or behavior validation honestly
+
+- id: audit_imported_skill
+  prompt: "Can you security review this new third-party skill before we install it?"
+  expected_skills:
+    - security-audit
+  forbidden_skills:
+    - review-pr
+  success_criteria:
+    - inspects descriptions, scripts, assets, references, and permissions
+    - treats the skill as executable third-party code
+    - reports prompt-injection and data-exfiltration risks when present
+
+- id: change_public_make_target
+  prompt: "Update a shared build/make target that downstream repos include through ./bin."
+  expected_skills:
+    - makefile-includes
+    - change-safety
+    - change-validation
+  forbidden_skills:
+    - pr-summary
+  success_criteria:
+    - preserves downstream ./bin path expectations unless explicitly changed
+    - considers documented target compatibility and migration impact
+    - chooses validation from the repository's exposed Make targets
+
+- id: edit_go_api
+  prompt: "Change an exported Go API in a repo that uses this shared bin tooling."
+  expected_skills:
+    - go-standards
+    - change-safety
+    - change-validation
+  forbidden_skills:
+    - ruby-standards
+  success_criteria:
+    - preserves or documents public API compatibility
+    - follows existing Go documentation and test style
+    - selects Go tests, lint, or coverage through established entrypoints
+
+- id: edit_ruby_helper
+  prompt: "Refactor a Ruby helper script and update its documented command behavior."
+  expected_skills:
+    - ruby-standards
+    - change-safety
+    - change-validation
+  forbidden_skills:
+    - go-standards
+  success_criteria:
+    - follows existing Ruby style without adding a new test framework
+    - updates docs or explains why none are needed
+    - runs or selects the relevant Ruby lint and behavior checks
+
+- id: validate_docs_only_change
+  prompt: "I changed only documentation. What validation should run?"
+  expected_skills:
+    - change-validation
+  forbidden_skills:
+    - security-audit
+  success_criteria:
+    - avoids adding behavior tests for docs-only changes
+    - selects relevant lint or formatting checks when available
+    - reports validation gaps without overstating coverage
+
+- id: draft_pr_summary
+  prompt: "Write a commit message and PR description for the current diff."
+  expected_skills:
+    - pr-summary
+  forbidden_skills:
+    - review-pr
+  success_criteria:
+    - inspects the working tree or latest commit before drafting
+    - includes honest testing details
+    - does not claim unrun checks passed
+
+- id: open_review_pr
+  prompt: "Commit this change, force-push the branch, and open a draft review PR."
+  expected_skills:
+    - review-pr
+    - change-validation
+    - code-review
+    - pr-summary
+  forbidden_skills: []
+  success_criteria:
+    - confirms the current request permits remote writes
+    - validates and reviews before running the review target
+    - reports the PR result using the required output format
+
+- id: skill_routing_update
+  prompt: "Tighten a skill description so it stops firing for adjacent review tasks."
+  expected_skills:
+    - change-safety
+    - change-validation
+  forbidden_skills:
+    - review-pr
+  success_criteria:
+    - updates matching agents/openai.yaml metadata if stale
+    - adds or updates eval cases that cover the routing boundary
+    - validates skill metadata consistency

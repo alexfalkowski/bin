@@ -73,10 +73,12 @@ From this repository root:
 - Script / Dockerfile linting:
   - `make scripts-lint` (runs `shellcheck` over various scripts)
   - `make docker-lint` (runs `hadolint` on `build/docker/go/Dockerfile`)
+- Skill linting:
+  - `make skills-lint` (checks skill metadata, references, and eval cases)
 - Security scanning:
   - `make sec-lint` (runs Trivy over the repository)
 
-CI runs (CircleCI): `make dep`, `make clean-dep`, `make scripts-lint`, `make docker-lint`, `make lint`, `make sec-lint` (see `.circleci/config.yml`).
+CI runs (CircleCI): `make dep`, `make clean-dep`, `make scripts-lint`, `make docker-lint`, `make lint`, `make skills-lint`, `make sec-lint` (see `.circleci/config.yml`).
 
 ## Tooling dependencies (observed)
 
@@ -188,6 +190,7 @@ Only rely on a command if you can find it being invoked in the relevant `.mak`/s
   - `make scripts-lint`
   - `make docker-lint`
   - `make lint`
+  - `make skills-lint`
   - `make sec-lint`
 
 ## When changing this repo
@@ -196,6 +199,7 @@ Only rely on a command if you can find it being invoked in the relevant `.mak`/s
 - After edits, re-run at least:
   - `make dep`
   - `make lint`
+  - `make skills-lint`
   - `make sec-lint`
   - `make scripts-lint` (if `shellcheck` is available)
   - `make docker-lint` (if `hadolint` is available)

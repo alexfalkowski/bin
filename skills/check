@@ -1,0 +1,158 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'yaml'
+
+# Keep this checker dependency-light because it runs as a repository lint check.
+SKILLS_DIR = Pathname.new(__dir__).expand_path
+MAX_DESCRIPTION_WORDS = 45
+REQUIRED_AGENT_FIELDS = %w[display_name short_description default_prompt].freeze
+
+def load_yaml(path, errors)
+  YAML.safe_load(path.read, permitted_classes: [], aliases: false)
+rescue Psych::SyntaxError => e
+  errors << "#{path}: invalid YAML: #{e.message}"
+  nil
+end
+
+def frontmatter(path, errors)
+  content = path.read
+  match = content.match(/\A---\n(?<yaml>.*?)\n---\n/m)
+
+  unless match
+    errors << "#{path}: missing YAML frontmatter"
+    return [{}, content]
+  end
+
+  [YAML.safe_load(match[:yaml], permitted_classes: [], aliases: false) || {}, content]
+rescue Psych::SyntaxError => e
+  errors << "#{path}: invalid YAML frontmatter: #{e.message}"
+  [{}, content]
+end
+
+def validate_skill(skill_dir, skill_names, errors)
+  skill_path = skill_dir.join('SKILL.md')
+  metadata, content = frontmatter(skill_path, errors)
+  name = metadata['name']
+
+  validate_skill_name(skill_path, skill_dir, name, errors)
+  validate_description(skill_path, metadata['description'].to_s, errors)
+  validate_agent_metadata(skill_dir, errors)
+  validate_references(skill_dir, content, errors)
+  skill_names << name if name
+end
+
+def validate_skill_name(skill_path, skill_dir, name, errors)
+  return if name == skill_dir.basename.to_s
+
+  errors << "#{skill_path}: name must match directory #{skill_dir.basename}"
+end
+
+def validate_description(skill_path, description, errors)
+  errors << "#{skill_path}: missing description" if description.empty?
+
+  word_count = description.split.size
+  return unless word_count > MAX_DESCRIPTION_WORDS
+
+  errors << "#{skill_path}: description has #{word_count} words; keep it at or below #{MAX_DESCRIPTION_WORDS}"
+end
+
+def validate_agent_metadata(skill_dir, errors)
+  path = skill_dir.join('agents/openai.yaml')
+
+  unless path.file?
+    errors << "#{skill_dir}: missing agents/openai.yaml"
+    return
+  end
+
+  metadata = load_yaml(path, errors) || {}
+  interface = metadata['interface'] || {}
+  missing = REQUIRED_AGENT_FIELDS.select { |field| interface[field].to_s == '' }
+
+  return if missing.empty?
+
+  errors << "#{path}: missing interface fields: #{missing.join(', ')}"
+end
+
+def validate_references(skill_dir, content, errors)
+  # References are intentionally limited to direct links from SKILL.md.
+  references = content.scan(%r{`(references/[^`]+)`}).flatten
+  references += content.scan(%r{\]\((references/[^)]+)\)}).flatten
+
+  references.uniq.each do |reference|
+    path = skill_dir.join(reference)
+    errors << "#{skill_dir.join('SKILL.md')}: missing #{reference}" unless path.file?
+  end
+end
+
+def validate_evals(skill_names, errors)
+  # CI validates eval definitions; Codex routing still needs a manual or external run.
+  path = SKILLS_DIR.join('evals/cases.yaml')
+
+  unless path.file?
+    errors << "#{path}: missing skill eval cases"
+    return
+  end
+
+  cases = load_yaml(path, errors)
+  return validate_eval_case_list(path, cases, errors) unless cases.is_a?(Array) && !cases.empty?
+
+  cases.each_with_index do |test_case, index|
+    validate_eval_case(path, index, test_case, skill_names, errors)
+  end
+end
+
+def validate_eval_case_list(path, cases, errors)
+  errors << "#{path}: expected a non-empty list of eval cases" unless cases.is_a?(Array) && !cases.empty?
+end
+
+def validate_eval_case(path, index, test_case, skill_names, errors)
+  prefix = "#{path}: case #{index + 1}"
+  unless test_case.is_a?(Hash)
+    errors << "#{prefix}: expected a mapping"
+    return
+  end
+
+  validate_eval_required_fields(prefix, test_case, errors)
+  validate_eval_skills(prefix, test_case, skill_names, errors)
+  validate_eval_criteria(prefix, test_case, errors)
+end
+
+def validate_eval_required_fields(prefix, test_case, errors)
+  %w[id prompt expected_skills success_criteria].each do |field|
+    errors << "#{prefix}: missing #{field}" if test_case[field].nil? || test_case[field] == ''
+  end
+end
+
+def validate_eval_skills(prefix, test_case, skill_names, errors)
+  expected = Array(test_case['expected_skills'])
+  forbidden = Array(test_case['forbidden_skills'])
+  unknown = (expected + forbidden).uniq - skill_names
+
+  errors << "#{prefix}: unknown skills: #{unknown.join(', ')}" unless unknown.empty?
+end
+
+def validate_eval_criteria(prefix, test_case, errors)
+  criteria = test_case['success_criteria']
+  return if criteria.is_a?(Array) && criteria.any?
+
+  errors << "#{prefix}: success_criteria must be a non-empty list"
+end
+
+errors = []
+skill_names = []
+
+SKILLS_DIR.children
+          .select { |path| path.directory? && path.join('SKILL.md').file? }
+          .sort
+          .each { |skill_dir| validate_skill(skill_dir, skill_names, errors) }
+
+validate_evals(skill_names, errors)
+
+if errors.empty?
+  puts 'skills metadata OK'
+  exit 0
+end
+
+warn errors.join("\n")
+exit 1

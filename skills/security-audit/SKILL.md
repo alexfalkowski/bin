@@ -1,6 +1,6 @@
 ---
 name: security-audit
-description: Reviews code, scripts, Makefile glue, Docker helpers, dependencies, and configuration for security risks. Use when the user asks for a security audit, security review, vulnerability check, secret check, unsafe shell/filesystem/network/auth review, or language-specific security inspection for Go, Ruby, or shell code.
+description: Reviews security-sensitive code, scripts, Makefile glue, Docker helpers, skills, dependencies, and configuration. Use when the user asks for a security audit, vulnerability or secret check, unsafe shell/filesystem/network/auth review, or language-specific security inspection.
 ---
 
 # Security Audit
@@ -12,6 +12,7 @@ description: Reviews code, scripts, Makefile glue, Docker helpers, dependencies,
    - `references/go.md` for Go code, modules, HTTP/TLS, crypto, filesystem, command execution, or `govulncheck`.
    - `references/ruby.md` for Ruby code, Bundler, process execution, YAML/JSON parsing, filesystem, env/secrets, or RuboCop security coverage.
    - `references/shell.md` for Bash scripts, Make targets that invoke shell commands, Docker helper scripts, ShellCheck, quoting, temp files, or destructive commands.
+   - `references/skills.md` for skill descriptions, bundled scripts/assets, permissions, prompt-injection risk, or external skill adoption.
    - `references/shared.md` for cross-language repositories, dependency/config audits, secrets, Docker/security scanners, and report structure.
 3. Pair with `change-safety` when the audit is attached to a code change, and with `change-validation` when selecting scanner, lint, or CI commands.
 4. Ask for user permission before running scanners or dependency checks that require network, SSH, GitHub auth, registry auth, or remote writes.

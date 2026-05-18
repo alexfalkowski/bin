@@ -25,6 +25,7 @@ jobs:
       - run: make scripts-lint
       - run: make docker-lint
       - run: make lint
+      - run: make skills-lint
       - run: make sec-lint
     resource_class: arm.large
   sync:

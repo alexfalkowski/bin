@@ -1,6 +1,6 @@
 ---
 name: project-workflow
-description: Discovers project-local workflow, command surfaces, Makefile includes, CI expectations, and shared ./bin submodule wiring. Use when starting work in a project, inspecting how to run tasks, or deciding which project entrypoints to trust before edits or validation.
+description: Discovers project-local workflow, command surfaces, CI expectations, and shared ./bin submodule wiring before work begins. Use when starting in a project, inspecting how to run tasks, or deciding trusted entrypoints; use makefile-includes when editing or debugging reusable make fragments.
 ---
 
 # Project Workflow
