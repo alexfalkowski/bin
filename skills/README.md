@@ -81,3 +81,22 @@ the established surface, or the change has no stable public surface.
   description, or default prompt if they became stale.
 - Keep `agents/openai.yaml` concise; it should describe when to use the skill,
   not repeat the full `SKILL.md` workflow.
+
+## Skill Lifecycle
+
+- Treat skills as maintained artifacts: review them when project workflow,
+  tooling, model behavior, or team conventions change.
+- Skills generated or drafted by a model need human review before adoption.
+- Periodically compare representative tasks with and without a skill; retire a
+  skill when it no longer improves outcomes or consistently overrides better
+  native behavior.
+
+## Skill Security
+
+- Treat external skills like third-party dependencies and review the full folder
+  before use.
+- Check descriptions for prompt injection or overbroad routing, and check bundled
+  scripts/assets for data exfiltration, broad filesystem access, remote code
+  execution, and unnecessary permissions.
+- Use `security-audit` with `references/skills.md` for skill-specific security
+  review.
