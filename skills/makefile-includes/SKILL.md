@@ -1,6 +1,6 @@
 ---
 name: makefile-includes
-description: Works with shared bin/build/make/*.mak includes and downstream Makefile integration. Use when editing, reviewing, or debugging reusable Make targets, included make files, ./bin path semantics, or downstream projects that include this repository's make files.
+description: Edits, reviews, or debugs shared bin/build/make/*.mak fragments and downstream Makefile integration. Use for reusable Make targets, included make files, ./bin path semantics, or consuming projects after project-workflow identifies the command surface.
 ---
 
 # Makefile Includes

@@ -1,4 +1,4 @@
 interface:
   display_name: "Makefile Includes"
   short_description: "Work with shared Makefile includes"
-  default_prompt: "Use $makefile-includes to update or debug shared Makefile includes."
+  default_prompt: "Use $makefile-includes to update, review, or debug shared Makefile fragments and downstream ./bin path behavior."
