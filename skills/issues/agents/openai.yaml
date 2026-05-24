@@ -1,0 +1,4 @@
+interface:
+  display_name: "Issues"
+  short_description: "Find and resolve confirmed code issues"
+  default_prompt: "Use $issues to find concrete issues for a package or folder, or to implement agreed fixes from ISSUES.md."
