@@ -8,6 +8,9 @@ checks, and findings.
 
 - `review-pr` orchestrates PR preparation with `change-validation`, relevant
   language standards, `code-review`, and `pr-summary`.
+- `issues` orchestrates a two-phase issue workflow: first aggregate confirmed
+  `code-review` and `security-audit` findings into `ISSUES.md`, then implement
+  agreed fixes issue by issue.
 - `code-review` performs the review pass and conditionally consults
   `security-audit` for security-sensitive scope.
 - `security-audit` pairs with `change-safety` for code changes and
