@@ -1,4 +1,4 @@
 interface:
   display_name: "Issues"
-  short_description: "Find scoped issues and implement agreed fixes one at a time"
-  default_prompt: "Use $issues to find concrete issues in a package or folder, storing them in that scope's ISSUES.md, or to propose and implement explicitly agreed fixes from a scoped ISSUES.md one issue at a time."
+  short_description: "Find scoped issues with delegated review and implement fixes"
+  default_prompt: "Use $issues to delegate issue-finding in a package or folder, store confirmed findings in that scope's ISSUES.md, or propose and implement explicitly agreed fixes from a scoped ISSUES.md one issue at a time."
