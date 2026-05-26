@@ -16,6 +16,7 @@ description: Applies language-agnostic test design, coverage, fixtures, determin
 7. Preserve the repository's existing test framework, fixture layout, helper style, assertion idioms, and naming patterns unless the task explicitly changes testing infrastructure.
 8. Pair with the relevant language standard skill for language-specific idioms, and with `change-validation` for selecting or reporting commands.
 9. If another testing-focused skill applies, use this skill for cross-language test policy and the other skill only for specialized language, framework, or library details; this skill's cross-language rules take precedence unless the human or repository instructions explicitly say otherwise.
+10. Before finishing test changes or reviews, scan changed tests for repeated boolean or numeric assertions whose default failure output would not identify the behavior under test; add named subtests or assertion messages where needed.
 
 ## Principles
 
