@@ -16,6 +16,8 @@ skill instead of one broad default:
 - `change-safety`: compatibility, documented interfaces, migrations, generated
   files, and security-sensitive edits.
 - `change-validation`: test, lint, CI, security, benchmark, and validation selection.
+- `testing-standards`: language-agnostic test design, coverage, fixtures,
+  determinism, and test-layer guidance.
 - `code-review`: review findings, risk assessment, and missing coverage.
 - `security-audit`: security reviews, vulnerability checks, unsafe shell/filesystem/network/auth inspection, and Go/Ruby/shell audit guidance.
 - `issues`: find confirmed issues into `ISSUES.md`, then implement agreed fixes issue by issue.
@@ -60,6 +62,8 @@ Common composition:
   review scope while keeping the review findings format.
 - `security-audit` pairs with `change-safety` for code changes and
   `change-validation` for scanner, lint, or CI command selection.
+- `testing-standards` pairs with language standards for test idioms and
+  `change-validation` for command selection.
 
 ## Quick commands (this repo)
 

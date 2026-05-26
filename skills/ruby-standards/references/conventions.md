@@ -16,13 +16,9 @@ Use this reference when working in Ruby repositories.
 
 ## Testing
 
-- Reuse the repository's existing test, feature, fixture, helper, assertion, and naming patterns before adding new structure.
+- Follow `$testing-standards` for cross-language test design, coverage, fixtures, determinism, and test-layer decisions.
 - Infer the project type from existing tests and CI: Ruby libraries commonly use unit and integration tests such as RSpec, while services in this ecosystem commonly use Cucumber feature flows.
-- Prefer testing through the repository's established public or documented Ruby APIs, commands, tasks, or feature flows so coverage reflects real consumer behavior.
-- Do not introduce a new Ruby test framework, fixture layout, or test layer unless the task explicitly changes testing infrastructure.
-- Keep tests deterministic and cover relevant failure paths for changed behavior.
-- Use internal seams only when the repository already tests that way, the behavior cannot be exercised credibly through the established public surface, or the change has no stable public surface.
-- When internal tests are necessary, keep them focused and still run public-path validation when practical.
+- Match the repository's established Ruby test, feature, helper, assertion, and naming idioms.
 
 ## External Style References
 

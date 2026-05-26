@@ -26,12 +26,9 @@ Use this reference when working with shell scripts.
 
 ## Testing
 
+- Follow `$testing-standards` for cross-language test design, coverage, fixtures, determinism, and test-layer decisions.
 - Prefer validating shell changes through public or documented commands, scripts, Make targets, and argument flows.
-- Reuse the repository's existing script tests, feature flows, lint targets, and validation entrypoints before adding ad hoc checks.
 - Cover relevant failure paths such as invalid arguments, missing files/tools, non-zero commands, path errors, permissions, and argument pass-through.
-- Keep checks deterministic and avoid relying on the caller's real home directory, global config, network, wall-clock time, or shared mutable state.
-- Use internal helper seams only when the repository already tests that way, the behavior cannot be exercised credibly through the established command path, or the change has no stable public surface.
-- When internal checks are necessary, keep them focused and still run public-path validation when practical.
 
 ## Functions
 

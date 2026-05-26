@@ -15,6 +15,9 @@ checks, and findings.
   `security-audit` for security-sensitive scope.
 - `security-audit` pairs with `change-safety` for code changes and
   `change-validation` for scanner, lint, or CI command selection.
+- `testing-standards` covers language-agnostic test design and coverage
+  decisions; pair it with language standards for idioms and
+  `change-validation` for command selection.
 - `makefile-includes` should follow `project-workflow` when the command surface
   or downstream `./bin` wiring is not yet known.
 - Language standards pair with `change-validation` for check selection and
@@ -28,30 +31,15 @@ and use the caller's output format.
 
 ## Testing Principle
 
-Before adding tests, inspect the repository's existing test suites, fixtures,
-helpers, entrypoints, and CI targets, then follow that standard. Prefer tests
-and validation through the existing public or documented entry points for the
-project type: libraries often use unit/integration tests, while services in
-this ecosystem often use Cucumber features. Use internal seams only when the
-repo already tests that way, the behavior cannot be exercised credibly through
-the established surface, or the change has no stable public surface.
-
-- Do not introduce a new test framework, fixture layout, or test layer unless
-  the task explicitly changes testing infrastructure.
-- Choose the narrowest established test layer that credibly covers the changed
-  behavior; use broader suites for shared infrastructure or release-sensitive
-  changes.
-- Assert changed behavior and contracts, not incidental implementation details.
-- Keep tests deterministic: avoid uncontrolled network, wall-clock time, random
-  data, ordering assumptions, real home directories, and shared mutable state.
-- Cover relevant failure paths, especially invalid input, missing files/tools,
-  non-zero commands, path errors, permissions, and argument pass-through.
-- Do not add behavioral tests for docs-only or formatting-only changes; run the
-  relevant lint, docs, or formatting validation when available.
-- For shared `./bin` scripts and make fragments, validate from the consuming
-  repository root when behavior depends on downstream `$(PWD)/bin/...` wiring.
-- Report validation gaps honestly, including lint-only coverage, missing tools,
-  skipped checks, and wrappers that no-op.
+Use `testing-standards` when adding, reviewing, refactoring, or planning tests.
+In brief: inspect the repository's existing tests, fixtures, helpers,
+entrypoints, CI targets, and dominant test harness before adding new structure.
+Prefer the narrowest established test layer that credibly covers changed
+behavior through a public or documented surface; private-surface tests need
+explicit human approval. Preserve meaningful coverage where practical, check
+whether new or risky behavior needs better coverage, and explain unavoidable
+gaps. Keep tests readable, edge-aware, deterministic, and descriptive when they
+fail.
 
 ## Network And Remote Commands
 

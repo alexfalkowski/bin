@@ -17,16 +17,10 @@ Use this reference when working in Go repositories.
 
 ## Testing
 
-- Before adding new test structure, look for existing tests in the package or adjacent packages and reuse their helpers, fixtures, table shapes, assertions, and naming patterns when they fit.
-- When new coverage is needed, base it on the testing style already present in the repository rather than introducing a new pattern.
+- Follow `$testing-standards` for cross-language test design, coverage, fixtures, determinism, and test-layer decisions.
 - Infer the project type from existing tests and CI: Go libraries commonly use unit and integration tests, while services in this ecosystem may rely on Cucumber feature flows around the service.
-- Prefer testing through the repository's established public or documented Go APIs, commands, or service entrypoints so coverage reflects real consumer behavior.
-- Do not introduce a new Go test framework, fixture layout, or test layer unless the task explicitly changes testing infrastructure.
-- Keep tests deterministic and cover relevant failure paths for changed behavior.
 - In this repository ecosystem, prefer `github.com/stretchr/testify/require` when adding assertion-based tests unless the package already uses a different local pattern.
 - Prefer external test packages named `<package>_test` when the behavior can be exercised through the public interface.
-- Use internal package tests only when the repository already tests that way, the behavior cannot be exercised credibly through the established public surface, or the change has no stable public surface.
-- When internal tests are necessary, keep them focused and still run public-path validation when practical.
 - Keep test cases and test functions first in the file. Place fakes, stubs, spies, mock implementations, and helper types after the tests at the bottom of the file.
 
 ## Method Layout

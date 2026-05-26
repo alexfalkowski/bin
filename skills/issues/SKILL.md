@@ -26,7 +26,7 @@ Do not combine the two modes in one pass.
 10. Launch at least one sub-agent covering the requested root package/folder. Split agent assignments across:
    - files directly under the requested root package/folder.
    - each first-level subpackage/subfolder under the requested root.
-11. Each subpackage/subfolder agent owns recursive review of the rest of that subtree. Each agent must perform a thorough and accurate `$code-review` and `$security-audit` for its assigned scope.
+11. Each subpackage/subfolder agent owns recursive review of the rest of that subtree. Each agent must perform a thorough and accurate `$code-review` and `$security-audit` for its assigned scope, using `$testing-standards` for concrete missing-coverage or weak-test analysis.
 12. Require each agent to return findings in the same shape as the `ISSUES.md` format, without final IDs unless useful locally.
 13. Wait for all agents to finish before aggregating results.
 14. Deduplicate overlapping findings and resolve conflicting agent conclusions by re-checking the code directly.
@@ -77,16 +77,18 @@ Keep optional follow-up notes separate from findings:
 5. Stop after proposing the solution. Do not edit code, update `ISSUES.md`, or start validation until the human explicitly agrees to that issue's solution.
 6. Ask questions when behavior, compatibility, security, validation, or user intent is ambiguous. Treat silence or a broad "implement issues" request as permission to start the proposal workflow, not as permission to code.
 7. Once the solution for the current issue is agreed, implement only that issue with the smallest safe change.
-8. Validate the fix using checks appropriate to the changed code.
-9. Report the result for that issue and ask the human to verify and explicitly say `ISSUE-<number> is done`.
-10. Do not move to the next issue until the human says `ISSUE-<number> is done`.
-11. After the human confirms an issue is done, remove that issue from scoped `ISSUES.md`. If an issue is deemed invalid or not actually an issue, remove it only after explaining why and getting human agreement.
-12. Then propose the solution for the next remaining issue and repeat the same agreement gate.
-13. Once all findings are resolved and confirmed done by the human, delete the scoped `ISSUES.md`.
-14. Summarize what changed, which issues were resolved or dismissed, and which validation steps were run or still need to be carried out by the human.
+8. Use `$testing-standards` when deciding whether to add or update regression tests for the fix.
+9. Validate the fix using checks appropriate to the changed code.
+10. Report the result for that issue and ask the human to verify and explicitly say `ISSUE-<number> is done`.
+11. Do not move to the next issue until the human says `ISSUE-<number> is done`.
+12. After the human confirms an issue is done, remove that issue from scoped `ISSUES.md`. If an issue is deemed invalid or not actually an issue, remove it only after explaining why and getting human agreement.
+13. Then propose the solution for the next remaining issue and repeat the same agreement gate.
+14. Once all findings are resolved and confirmed done by the human, delete the scoped `ISSUES.md`.
+15. Summarize what changed, which issues were resolved or dismissed, and which validation steps were run or still need to be carried out by the human.
 
 ## References
 
 - Use `$code-review` for review rigor and finding quality.
 - Use `$security-audit` for security-sensitive review scope.
+- Use `$testing-standards` when deciding or reviewing regression coverage.
 - Use `$change-validation` when selecting validation commands for implemented fixes.

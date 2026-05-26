@@ -13,7 +13,8 @@ description: Chooses and reports credible validation commands for tests, linting
 4. Ask for user permission before running validation commands that require SSH credentials, GitHub auth, registry auth, cloning, pushing, publishing, opening PRs, or updating remote state.
 5. Run the narrowest check that credibly exercises the changed behavior, then expand only when risk justifies it.
 6. Notice wrappers that no-op because optional tools are missing, and do not report them as full validation.
-7. When reporting standalone validation, use the exact structure in `references/check-selection.md`; when another skill embeds validation, preserve the command, result, coverage, and gap details.
+7. Use `$testing-standards` when the task needs decisions about what tests to add or whether coverage is credible; keep this skill focused on selecting and reporting commands.
+8. When reporting standalone validation, use the exact structure in `references/check-selection.md`; when another skill embeds validation, preserve the command, result, coverage, and gap details.
 
 ## References
 
