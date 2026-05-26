@@ -12,7 +12,8 @@ description: Applies this repository ecosystem's Ruby coding, API, documentation
 3. Preserve the repository's existing Ruby style, naming, error handling, and test idioms.
 4. Avoid clever metaprogramming or monkey patches unless the repository already relies on them or the task requires them.
 5. Pair this skill with `change-safety` when Ruby changes affect documented commands, public methods, task interfaces, or migration expectations.
-6. Pair this skill with `change-validation` when selecting Ruby lint, feature, benchmark, or security commands.
+6. Pair this skill with `$testing-standards` when designing, reviewing, or refactoring Ruby test or feature coverage.
+7. Pair this skill with `change-validation` when selecting Ruby lint, feature, benchmark, or security commands.
 
 ## References
 

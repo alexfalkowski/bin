@@ -15,26 +15,27 @@ description: Reviews, validates, commits, force-pushes, and opens a draft pull r
 6. If the changed paths include Go code, Go tests, Go modules, Go docs, or Go tooling behavior, also use `$go-standards`.
 7. If the changed paths include Ruby code, Ruby tests/features, Gemfiles, RuboCop config, Ruby docs, or Ruby tooling behavior, also use `$ruby-standards`.
 8. If the changed paths include shell scripts, Bash helpers, ShellCheck config/directives, shell docs, or script behavior, also use `$shell-standards`.
-9. Use `$code-review` to inspect the current change before drafting PR text.
-10. Resolve any blocking review findings before continuing; if findings remain intentionally unresolved, call them out in the PR summary.
-11. If `$code-review` reports security findings or security validation gaps, resolve them or document them in the PR summary before `make review`.
-12. Use `$pr-summary` to draft a lowercase, unprefixed `msg` and Markdown PR summary from the current working tree.
-13. Follow `$pr-summary` commit-subject rules: `make review` adds the branch-derived `type(scope):` prefix, so treat branch words as routing metadata rather than message source material and do not repeat the type or scope in `msg`.
-14. Keep the summary in the `$pr-summary` format, including honest testing details.
-15. When attribution is appropriate or requested, append this footer to the summary instead of a `Co-authored-by:` trailer:
+9. If the changed paths include tests, test helpers, fixtures, or changes that raise test coverage or test-design questions, also use `$testing-standards`.
+10. Use `$code-review` to inspect the current change before drafting PR text.
+11. Resolve any blocking review findings before continuing; if findings remain intentionally unresolved, call them out in the PR summary.
+12. If `$code-review` reports security findings or security validation gaps, resolve them or document them in the PR summary before `make review`.
+13. Use `$pr-summary` to draft a lowercase, unprefixed `msg` and Markdown PR summary from the current working tree.
+14. Follow `$pr-summary` commit-subject rules: `make review` adds the branch-derived `type(scope):` prefix, so treat branch words as routing metadata rather than message source material and do not repeat the type or scope in `msg`.
+15. Keep the summary in the `$pr-summary` format, including honest testing details.
+16. When attribution is appropriate or requested, append this footer to the summary instead of a `Co-authored-by:` trailer:
 
 ```text
 AI-assisted-by: [Codex](https://openai.com/codex/)
 ```
 
-16. Run the review target with the drafted values:
+17. Run the review target with the drafted values:
 
 ```bash
 make msg="unprefixed subject" desc="summary" review
 ```
 
-17. Pass `desc` as the multiline Markdown summary from `$pr-summary`; do not flatten the summary into a single line.
-18. Read `references/output-format.md`, then report the result using that exact structure; do not add, remove, rename, or reorder sections.
+18. Pass `desc` as the multiline Markdown summary from `$pr-summary`; do not flatten the summary into a single line.
+19. Read `references/output-format.md`, then report the result using that exact structure; do not add, remove, rename, or reorder sections.
 
 ## References
 
