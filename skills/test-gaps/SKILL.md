@@ -17,27 +17,28 @@ Do not combine the two modes in one pass.
 1. Identify the requested package or folder scope. If no scope is provided, stop and ask for the package or folder.
 2. Use `ISSUES.md` in the requested package or folder as the review ledger, for example `<package/folder>/ISSUES.md`.
 3. If `ISSUES.md` already exists in the requested package or folder, stop. Tell the user the existing scoped ledger must be resolved first, or the human must delete that scoped `ISSUES.md` before a new find pass there.
-4. Treat `Find $test-gaps in <package/folder>` or `Find test gaps in <package/folder>` as the user's explicit request to delegate test-gap review for that scope. Do not require the user to separately say "use sub-agents", "spawn agents", or "delegate".
-5. Use sub-agents for Find mode whenever the active runtime provides them and the runtime permits delegation for the request. Do not treat sub-agents as optional based on scope size, and do not perform the test-gap review locally first.
-6. Do not claim that extra delegation wording is needed before launching review agents. The Find mode invocation is the explicit delegation request.
-7. If the runtime still requires an approval step before launching sub-agents, ask once with the concrete read-only agent plan. If delegation is denied, stop instead of falling back to a local review. If sub-agents are unavailable, say so briefly and perform the review locally for the requested scope.
-8. Ask for human permission before agents run commands that require approval, such as network, SSH, GitHub auth, registry auth, remote writes, or other non-read-only validation. Without that permission, agents should inspect code and tests only and suggest validation.
-9. Exclude generated files and folders, vendored dependencies, caches, build output, and generated lockfile churn unless the requested scope is explicitly about them.
-10. Launch at least one sub-agent covering the requested root package/folder. Split agent assignments across:
+4. Use `$project-workflow` to discover repository entrypoints, CI expectations, and `./bin` wiring before planning review agents or validation.
+5. Treat `Find $test-gaps in <package/folder>` or `Find test gaps in <package/folder>` as the user's explicit request to delegate test-gap review for that scope. Do not require the user to separately say "use sub-agents", "spawn agents", or "delegate".
+6. Use sub-agents for Find mode whenever the active runtime provides them and the runtime permits delegation for the request. Do not treat sub-agents as optional based on scope size, and do not perform the test-gap review locally first.
+7. Do not claim that extra delegation wording is needed before launching review agents. The Find mode invocation is the explicit delegation request.
+8. If the runtime still requires an approval step before launching sub-agents, ask once with the concrete read-only agent plan. If delegation is denied, stop instead of falling back to a local review. If sub-agents are unavailable, say so briefly and perform the review locally for the requested scope.
+9. Ask for human permission before agents run commands that require approval, such as network, SSH, GitHub auth, registry auth, remote writes, or other non-read-only validation. Without that permission, agents should inspect code and tests only and suggest validation.
+10. Exclude generated files and folders, vendored dependencies, caches, build output, and generated lockfile churn unless the requested scope is explicitly about them.
+11. Launch at least one sub-agent covering the requested root package/folder. Split agent assignments across:
    - files directly under the requested root package/folder.
    - each first-level subpackage/subfolder under the requested root.
-11. Each subpackage/subfolder agent owns recursive review of the rest of that subtree. Each agent must perform a thorough and accurate `$testing-standards` review for its assigned scope, pairing with relevant language standards and `$change-validation` for likely validation commands.
-12. Require each agent to return findings in the same shape as the `ISSUES.md` format, without final IDs unless useful locally.
-13. Wait for all agents to finish before aggregating results.
-14. Deduplicate overlapping findings and resolve conflicting agent conclusions by re-checking the code and tests directly.
-15. Confirm each candidate gap against the code and existing tests before recording it. Gaps must be concrete missing, weak, misleading, flaky, or wrong-layer coverage with credible risk to changed behavior, public contracts, compatibility, release-sensitive workflows, or documented command/API behavior.
-16. Do not record confirmed production bugs, security issues, compatibility breaks, or violated public contracts as test gaps. If such broken behavior is discovered during review, report it as out of scope for the test-gap ledger and recommend `$code-issues`; use this skill when the unprotected or poorly protected behavior is the finding.
-17. Do not report optional nice-to-have tests, private implementation coverage, arbitrary coverage percentage improvements, style preferences, or docs-only validation as findings by themselves. List them only as optional follow-up notes when relevant.
-18. If no confirmed test gaps are found, report that no test gaps were found and do not create `ISSUES.md`.
-19. If confirmed test gaps are found, write all findings to the scoped `ISSUES.md` before making any fixes.
-20. Assign every finding a unique ID for the session in the form `TEST-<number>`.
-21. Present the scoped `ISSUES.md` and a proposed test-fix plan to the user.
-22. Stop after presenting the ledger and plan. Do not fix findings in the same pass.
+12. Each subpackage/subfolder agent owns recursive review of the rest of that subtree. Each agent must perform a thorough and accurate `$testing-standards` review for its assigned scope, pairing with relevant language standards and `$change-validation` for likely validation commands.
+13. Require each agent to return findings in the same shape as the `ISSUES.md` format, without final IDs unless useful locally.
+14. Wait for all agents to finish before aggregating results.
+15. Deduplicate overlapping findings and resolve conflicting agent conclusions by re-checking the code and tests directly.
+16. Confirm each candidate gap against the code and existing tests before recording it. Gaps must be concrete missing, weak, misleading, flaky, or wrong-layer coverage with credible risk to changed behavior, public contracts, compatibility, release-sensitive workflows, or documented command/API behavior.
+17. Do not record confirmed production bugs, security issues, compatibility breaks, or violated public contracts as test gaps. If such broken behavior is discovered during review, report it as out of scope for the test-gap ledger and recommend `$code-issues`; use this skill when the unprotected or poorly protected behavior is the finding.
+18. Do not report optional nice-to-have tests, private implementation coverage, arbitrary coverage percentage improvements, style preferences, or docs-only validation as findings by themselves. List them only as optional follow-up notes when relevant.
+19. If no confirmed test gaps are found, report that no test gaps were found and do not create `ISSUES.md`.
+20. If confirmed test gaps are found, write all findings to the scoped `ISSUES.md` before making any fixes.
+21. Assign every finding a unique ID for the session in the form `TEST-<number>`.
+22. Present the scoped `ISSUES.md` and a proposed test-fix plan to the user.
+23. Stop after presenting the ledger and plan. Do not fix findings in the same pass.
 
 ## `ISSUES.md` Format
 
@@ -70,26 +71,28 @@ Keep optional follow-up notes separate from findings:
 1. Identify the requested package or folder scope. If no scope is provided, stop and ask for the package or folder.
 2. Read `ISSUES.md` in the requested package or folder first and treat it as the working test-gap ledger.
    If scoped `ISSUES.md` does not exist, stop and ask whether to run Find mode first for that scope.
-3. Work through findings sequentially by ID unless the human explicitly names a different finding.
-4. For each finding, first present:
+3. Use `$project-workflow` before proposing or running validation so repository entrypoints, CI expectations, and `./bin` wiring are current.
+4. Work through findings sequentially by ID unless the human explicitly names a different finding.
+5. For each finding, first present:
    - the issue ID and current evidence.
    - the proposed test solution.
    - test-layer, fixture, determinism, compatibility, or maintenance tradeoffs.
    - the intended validation.
-5. Stop after proposing the solution. Do not edit code, update `ISSUES.md`, or start validation until the human explicitly agrees to that finding's solution.
-6. Ask questions when behavior, compatibility, test layer, fixture strategy, validation, or user intent is ambiguous. Treat silence or a broad "implement test gaps" request as permission to start the proposal workflow, not as permission to code.
-7. Once the solution for the current finding is agreed, implement only that finding with the smallest clear test change.
-8. Use `$testing-standards` for test design and pair with the relevant language standard for local idioms.
-9. Validate the test change using checks appropriate to the changed tests.
-10. Report the result for that finding and ask the human to verify and explicitly say `TEST-<number> is done`.
-11. Do not move to the next finding until the human says `TEST-<number> is done`.
-12. After the human confirms a finding is done, remove that finding from scoped `ISSUES.md`. If a finding is deemed invalid or not actually a test gap, remove it only after explaining why and getting human agreement.
-13. Then propose the solution for the next remaining finding and repeat the same agreement gate.
-14. Once all findings are resolved and confirmed done by the human, delete the scoped `ISSUES.md`.
-15. Summarize what changed, which test gaps were resolved or dismissed, and which validation steps were run or still need to be carried out by the human.
+6. Stop after proposing the solution. Do not edit code, update `ISSUES.md`, or start validation until the human explicitly agrees to that finding's solution.
+7. Ask questions when behavior, compatibility, test layer, fixture strategy, validation, or user intent is ambiguous. Treat silence or a broad "implement test gaps" request as permission to start the proposal workflow, not as permission to code.
+8. Once the solution for the current finding is agreed, implement only that finding with the smallest clear test change.
+9. Use `$testing-standards` for test design and pair with the relevant language standard for local idioms.
+10. Validate the test change using checks appropriate to the changed tests.
+11. Report the result for that finding and ask the human to verify and explicitly say `TEST-<number> is done`.
+12. Do not move to the next finding until the human says `TEST-<number> is done`.
+13. After the human confirms a finding is done, remove that finding from scoped `ISSUES.md`. If a finding is deemed invalid or not actually a test gap, remove it only after explaining why and getting human agreement.
+14. Then propose the solution for the next remaining finding and repeat the same agreement gate.
+15. Once all findings are resolved and confirmed done by the human, delete the scoped `ISSUES.md`.
+16. Summarize what changed, which test gaps were resolved or dismissed, and which validation steps were run or still need to be carried out by the human.
 
 ## References
 
 - Use `$testing-standards` for cross-language test quality, coverage, fixtures, determinism, and test-layer decisions.
 - Use relevant language standards for local test idioms.
+- Use `$project-workflow` for repository command discovery, CI expectations, and `./bin` wiring before review planning or validation.
 - Use `$change-validation` when selecting validation commands for implemented test fixes.

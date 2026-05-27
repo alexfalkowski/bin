@@ -13,7 +13,18 @@ Use this reference when choosing which checks to run.
 - Ask for permission before running checks that require SSH credentials, GitHub auth, registry auth, cloning, pushing, publishing, opening PRs, or updating remote state.
 - Expand from targeted checks to broader checks only when the task or risk justifies it.
 - Never imply a check ran if the wrapper no-op'd because a dependency was missing.
-- Report network or credential failures as environment or validation gaps rather than code failures.
+- Report network, credential, shell environment, `PATH`, or tool-version failures as environment or validation gaps rather than code failures.
+- Keep the repository-defined command as the intended validation command when the agent environment differs from the user's normal shell.
+
+## Command Execution Environment
+
+- Treat the repository Makefile and CI configuration as the source of truth for setup, lint, test, security, benchmark, and review commands.
+- Prefer `make` targets and documented repository entry points over direct tool invocations, even when a direct command appears equivalent.
+- Run commands from the repository root unless the Makefile, script, or task explicitly requires another working directory.
+- Use the user's configured shell environment for command execution. If a command fails because a tool is missing, an old version is found, or `PATH` differs from the user's normal terminal, treat that as an environment mismatch or validation gap, not as evidence that the repository command is wrong.
+- Do not replace a Makefile target with guessed direct commands just because the agent environment cannot find the same tools as the user's shell.
+- When diagnosing command-environment mismatches, check the command surface first, then inspect `command -v <tool>`, `<tool> --version`, `SHELL`, and `PATH` as diagnostics only.
+- In this shared `bin` repo and downstream repos that vendor it as `./bin`, `make` targets are the preferred validation interface. If `make` reports an unexpected tool or version problem in the agent environment but works in the user's shell, report the mismatch and keep the Makefile target as the intended command.
 
 ## Typical Validation Order
 

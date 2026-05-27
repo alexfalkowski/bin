@@ -20,6 +20,15 @@ Use this reference when you need to establish context quickly and discover how a
 - When `help.mak` is included, use `make` or `make help` as the quickest way to discover the command surface.
 - When planning work, note whether the repository exposes setup targets such as `dep` so you can use them later when the task moves from discovery to edits or validation.
 
+## Command Execution Environment
+
+- Treat the repository Makefile and CI configuration as the source of truth for setup, lint, test, security, benchmark, and review commands.
+- Prefer `make` targets and documented repository entry points over direct tool invocations, even when a direct command appears equivalent.
+- Run commands from the repository root unless the Makefile, script, or task explicitly requires another working directory.
+- Use the user's configured shell environment for command execution. If a command fails because a tool is missing, an old version is found, or `PATH` differs from the user's normal terminal, treat that as an environment mismatch or validation gap, not as evidence that the repository command is wrong.
+- Do not replace a Makefile target with guessed direct commands just because the agent environment cannot find the same tools as the user's shell.
+- When diagnosing command-environment mismatches, check the command surface first, then inspect `command -v <tool>`, `<tool> --version`, `SHELL`, and `PATH` as diagnostics only.
+
 ## Output Format
 
 When workflow discovery is the final response, use exactly this Markdown structure and do not add, remove, rename, or reorder sections:
@@ -56,4 +65,5 @@ When workflow discovery is the final response, use exactly this Markdown structu
 - Use `make-fragments.md` to interpret included shared fragments after checking the root `Makefile`; do not let the fragment map replace the repository's actual command surface.
 - Validate path-sensitive behavior from the consuming repository root, not from inside the `bin` submodule.
 - Be careful with targets that resolve helper paths through `$(PWD)/bin/...`; they may work in a downstream repo and fail inside the `bin` repo itself.
+- If a Make target reports an unexpected tool or version problem in the agent environment but works in the user's shell, report the mismatch and keep the Makefile target as the intended command.
 - Be careful with `start` and `stop` helpers because they may depend on a sibling `../docker` checkout or SSH access.
