@@ -1,0 +1,4 @@
+interface:
+  display_name: "Code Issues"
+  short_description: "Find scoped code defects and risks"
+  default_prompt: "Use $code-issues to delegate code issue finding in a package or folder, store confirmed findings in that scope's ISSUES.md, or propose and implement explicitly agreed fixes from a scoped ISSUES.md one code issue at a time."

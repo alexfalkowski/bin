@@ -20,11 +20,9 @@ skill instead of one broad default:
   determinism, and test-layer guidance.
 - `code-review`: review findings, risk assessment, and missing coverage.
 - `security-audit`: security reviews, vulnerability checks, unsafe shell/filesystem/network/auth inspection, and Go/Ruby/shell audit guidance.
-- `issues`: find confirmed issues into `ISSUES.md`, then implement agreed fixes issue by issue.
-- `pr-summary`: commit messages, PR descriptions, and shareable change summaries.
-- `review-pr`: create a commit, force-push, and open a draft PR using `pr-summary`.
-- `makefile-includes`: reusable `build/make/*.mak` behavior and downstream path
-  semantics.
+- `code-issues`: find confirmed code issues into `ISSUES.md`, then implement agreed fixes one code issue at a time.
+- `test-gaps`: find confirmed missing or weak tests into `ISSUES.md`, then implement agreed test fixes gap by gap.
+- `review-pr`: create a commit, force-push, and open a draft PR with a generated summary.
 - `shell-standards`: Bash scripting, ShellCheck, text processing, directory
   scope, and function documentation conventions.
 - `go-standards`: Go API, documentation, import, naming, and testing
@@ -54,16 +52,21 @@ display name, short description, or default prompt became stale.
 Common composition:
 
 - `review-pr` orchestrates PR preparation with `change-validation`, relevant
-  language standards, `code-review`, and `pr-summary`.
-- `issues` orchestrates a two-phase issue workflow: aggregate confirmed
+  language standards, `code-review`, summary drafting, and the review target.
+- `code-issues` orchestrates a two-phase code-issue workflow: aggregate confirmed
   `code-review` and `security-audit` findings into `ISSUES.md`, then implement
-  agreed fixes issue by issue.
+  agreed fixes one code issue at a time.
+- `test-gaps` orchestrates a two-phase test-gap workflow: aggregate confirmed
+  missing or weak test coverage into `ISSUES.md`, then implement agreed test
+  fixes gap by gap.
 - `code-review` conditionally consults `security-audit` for security-sensitive
   review scope while keeping the review findings format.
 - `security-audit` pairs with `change-safety` for code changes and
   `change-validation` for scanner, lint, or CI command selection.
 - `testing-standards` pairs with language standards for test idioms and
   `change-validation` for command selection.
+- `project-workflow` covers command discovery, CI expectations, downstream
+  `./bin` wiring, and shared Makefile fragment behavior.
 
 ## Quick commands (this repo)
 

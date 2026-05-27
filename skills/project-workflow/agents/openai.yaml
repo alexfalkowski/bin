@@ -1,4 +1,4 @@
 interface:
   display_name: "Project Workflow"
-  short_description: "Discover project commands and CI flow"
-  default_prompt: "Use $project-workflow to discover project entrypoints, CI expectations, and ./bin wiring before work begins."
+  short_description: "Discover commands, CI, and bin wiring"
+  default_prompt: "Use $project-workflow to discover project entrypoints, CI expectations, ./bin wiring, and shared Makefile fragment behavior before work begins."
