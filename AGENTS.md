@@ -51,14 +51,15 @@ display name, short description, or default prompt became stale.
 
 Common composition:
 
-- `review-pr` orchestrates PR preparation with `change-validation`, relevant
-  language standards, `code-review`, summary drafting, and the review target.
+- `review-pr` orchestrates PR preparation with `project-workflow`,
+  `change-validation`, relevant language standards, `code-review`, summary
+  drafting, and the review target.
 - `code-issues` orchestrates a two-phase code-issue workflow: aggregate confirmed
-  `code-review` and `security-audit` findings into `ISSUES.md`, then implement
-  agreed fixes one code issue at a time.
+  `project-workflow`, `code-review`, and `security-audit` findings into
+  `ISSUES.md`, then implement agreed fixes one code issue at a time.
 - `test-gaps` orchestrates a two-phase test-gap workflow: aggregate confirmed
-  missing or weak test coverage into `ISSUES.md`, then implement agreed test
-  fixes gap by gap.
+  `project-workflow` context and missing or weak test coverage into
+  `ISSUES.md`, then implement agreed test fixes gap by gap.
 - `code-review` conditionally consults `security-audit` for security-sensitive
   review scope while keeping the review findings format.
 - `security-audit` pairs with `change-safety` for code changes and
@@ -67,6 +68,8 @@ Common composition:
   `change-validation` for command selection.
 - `project-workflow` covers command discovery, CI expectations, downstream
   `./bin` wiring, and shared Makefile fragment behavior.
+- `change-validation` should use `project-workflow` context before selecting
+  validation commands for orchestrated workflows.
 
 ## Quick commands (this repo)
 
@@ -88,6 +91,31 @@ From this repository root:
   - `make sec-lint` (runs Trivy over the repository)
 
 CI runs (CircleCI): `make dep`, `make clean-dep`, `make scripts-lint`, `make docker-lint`, `make lint`, `make sec-lint` (see `.circleci/config.yml`).
+
+## Command execution policy
+
+- Treat this repository's Makefile, reusable make fragments, and CI
+  configuration as the source of truth for setup, lint, test, security,
+  benchmark, and review commands.
+- Prefer `make` targets and documented repository entry points over direct tool
+  invocations, even when a direct command appears equivalent.
+- Run commands from the repository root unless the Makefile, script, or task
+  explicitly requires another working directory.
+- Use the user's configured shell environment for command execution. If a
+  command fails because a tool is missing, an old version is found, or `PATH`
+  differs from the user's normal terminal, treat that as an environment
+  mismatch or validation gap, not as evidence that the repository command is
+  wrong.
+- Do not replace a Makefile target with guessed direct commands just because the
+  agent environment cannot find the same tools as the user's shell.
+- When diagnosing command-environment mismatches, check the command surface
+  first, then inspect `command -v <tool>`, `<tool> --version`, `SHELL`, and
+  `PATH` as diagnostics only.
+- In this repository and downstream repos that vendor it as `./bin`, `make`
+  targets are the preferred validation interface. If `make` reports an
+  unexpected tool or version problem in the agent environment but works in the
+  user's shell, report the mismatch and keep the Makefile target as the intended
+  command.
 
 ## Tooling dependencies (observed)
 

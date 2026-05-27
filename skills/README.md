@@ -6,14 +6,15 @@ checks, and findings.
 
 ## Common Composition
 
-- `review-pr` orchestrates PR preparation with `change-validation`, relevant
-  language standards, `code-review`, summary drafting, and the review target.
+- `review-pr` orchestrates PR preparation with `project-workflow`,
+  `change-validation`, relevant language standards, `code-review`, summary
+  drafting, and the review target.
 - `code-issues` orchestrates a two-phase code-issue workflow: first aggregate confirmed
-  `code-review` and `security-audit` findings into `ISSUES.md`, then implement
-  agreed fixes one code issue at a time.
+  `project-workflow`, `code-review`, and `security-audit` findings into
+  `ISSUES.md`, then implement agreed fixes one code issue at a time.
 - `test-gaps` orchestrates a two-phase test-gap workflow: first aggregate
-  confirmed missing or weak test coverage into `ISSUES.md`, then implement
-  agreed test fixes one gap at a time.
+  `project-workflow` context and confirmed missing or weak test coverage into
+  `ISSUES.md`, then implement agreed test fixes one gap at a time.
 - `code-review` performs the review pass and conditionally consults
   `security-audit` for security-sensitive scope.
 - `security-audit` pairs with `change-safety` for code changes and
@@ -23,6 +24,8 @@ checks, and findings.
   `change-validation` for command selection.
 - `project-workflow` covers command discovery, CI expectations, downstream
   `./bin` wiring, and shared Makefile fragment behavior.
+- `change-validation` should use `project-workflow` context before selecting
+  validation commands for orchestrated workflows.
 - Language standards pair with `change-validation` for check selection and
   `change-safety` when public APIs, commands, or documented behavior change.
 

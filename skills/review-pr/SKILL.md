@@ -10,37 +10,39 @@ description: Reviews, validates, commits, force-pushes, and opens a draft pull r
 1. Inspect the changed paths from the working tree first; if the working tree is clean, inspect the latest commit.
 2. Confirm the user explicitly asked in the current request to commit, push, update, or open a review PR. If not, do not run `make review`, `make push`, or any equivalent push/PR update command.
 3. If new changes would make an existing PR description, review comment, or previously drafted summary obsolete, flag that and ask whether the user wants the PR updated before pushing anything.
-4. Make the remote-write behavior of `make review` explicit before running it: the target commits, force-pushes, and opens a draft PR.
-5. Use `$change-validation` to select and run credible validation for the full change before `make review`; language-specific standards may refine that validation.
-6. If the changed paths include Go code, Go tests, Go modules, Go docs, or Go tooling behavior, also use `$go-standards`.
-7. If the changed paths include Ruby code, Ruby tests/features, Gemfiles, RuboCop config, Ruby docs, or Ruby tooling behavior, also use `$ruby-standards`.
-8. If the changed paths include shell scripts, Bash helpers, ShellCheck config/directives, shell docs, or script behavior, also use `$shell-standards`.
-9. If the changed paths include tests, test helpers, fixtures, or changes that raise test coverage or test-design questions, also use `$testing-standards`.
-10. Use `$code-review` to inspect the current change before drafting PR text.
-11. Resolve any blocking review findings before continuing; if findings remain intentionally unresolved, call them out in the PR summary.
-12. If `$code-review` reports security findings or security validation gaps, resolve them or document them in the PR summary before `make review`.
-13. Read `references/summary-format.md`, then draft a lowercase, unprefixed `msg` and multiline Markdown `desc` from the current working tree.
-14. Follow the commit-subject rules: `make review` adds the branch-derived `type(scope):` prefix, so treat branch words as routing metadata rather than message source material and do not repeat the type or scope in `msg`.
-15. Keep `desc` in the summary format, including honest testing details.
-16. When attribution is appropriate or requested, append this footer to the summary instead of a `Co-authored-by:` trailer:
+4. Use `$project-workflow` before validation or `make review` so repository entrypoints, CI expectations, and `./bin` wiring are discovered first.
+5. Make the remote-write behavior of `make review` explicit before running it: the target commits, force-pushes, and opens a draft PR.
+6. Use `$change-validation` to select and run credible validation for the full change before `make review`; language-specific standards may refine that validation.
+7. If the changed paths include Go code, Go tests, Go modules, Go docs, or Go tooling behavior, also use `$go-standards`.
+8. If the changed paths include Ruby code, Ruby tests/features, Gemfiles, RuboCop config, Ruby docs, or Ruby tooling behavior, also use `$ruby-standards`.
+9. If the changed paths include shell scripts, Bash helpers, ShellCheck config/directives, shell docs, or script behavior, also use `$shell-standards`.
+10. If the changed paths include tests, test helpers, fixtures, or changes that raise test coverage or test-design questions, also use `$testing-standards`.
+11. Use `$code-review` to inspect the current change before drafting PR text.
+12. Resolve any blocking review findings before continuing; if findings remain intentionally unresolved, call them out in the PR summary.
+13. If `$code-review` reports security findings or security validation gaps, resolve them or document them in the PR summary before `make review`.
+14. Read `references/summary-format.md`, then draft a lowercase, unprefixed `msg` and multiline Markdown `desc` from the current working tree.
+15. Follow the commit-subject rules: `make review` adds the branch-derived `type(scope):` prefix, so treat branch words as routing metadata rather than message source material and do not repeat the type or scope in `msg`.
+16. Keep `desc` in the summary format, including honest testing details.
+17. When attribution is appropriate or requested, append this footer to the summary instead of a `Co-authored-by:` trailer:
 
 ```text
 AI-assisted-by: [Codex](https://openai.com/codex/)
 ```
 
-17. Run the review target with the drafted values:
+18. Run the review target with the drafted values:
 
 ```bash
 make msg="unprefixed subject" desc="summary" review
 ```
 
-18. Pass `desc` as the multiline Markdown summary; do not flatten the summary into a single line.
-19. Read `references/output-format.md`, then report the result using that exact structure; do not add, remove, rename, or reorder sections.
+19. Pass `desc` as the multiline Markdown summary; do not flatten the summary into a single line.
+20. Read `references/output-format.md`, then report the result using that exact structure; do not add, remove, rename, or reorder sections.
 
 ## References
 
 - Read `references/summary-format.md` before drafting the `msg` and `desc` values.
 - Read `references/output-format.md` before producing the final review PR report.
+- Use `$project-workflow` for repository command discovery, CI expectations, and `./bin` wiring before validation and `make review`.
 
 ## Notes
 
