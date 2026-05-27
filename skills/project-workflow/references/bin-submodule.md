@@ -9,6 +9,7 @@ Use this reference when you need to establish context quickly and discover how a
 3. Inspect CI configuration to learn what the repository expects to pass.
 4. Inspect which `bin/build/make/*.mak` fragments are included by the root `Makefile`, when relevant.
 5. Inspect only the files and scripts relevant to the requested task.
+6. Read `make-fragments.md` when you need to interpret likely behavior of included shared Makefile fragments or edit reusable `build/make/*.mak` files.
 
 ## Prefer Repository Entry Points
 
@@ -52,6 +53,7 @@ When workflow discovery is the final response, use exactly this Markdown structu
 
 - Treat the consuming repository as the primary execution context.
 - Inspect the root `Makefile` to see which `bin/build/make/*.mak` fragments are included.
+- Use `make-fragments.md` to interpret included shared fragments after checking the root `Makefile`; do not let the fragment map replace the repository's actual command surface.
 - Validate path-sensitive behavior from the consuming repository root, not from inside the `bin` submodule.
 - Be careful with targets that resolve helper paths through `$(PWD)/bin/...`; they may work in a downstream repo and fail inside the `bin` repo itself.
 - Be careful with `start` and `stop` helpers because they may depend on a sibling `../docker` checkout or SSH access.

@@ -1,12 +1,13 @@
-# Fragment Map
+# Make Fragments
 
-Use this reference after you have already identified which shared `bin/build/make/*.mak` fragments a repository includes and you need quick help interpreting their likely targets or gotchas.
+Use this reference after you have identified which shared `bin/build/make/*.mak` fragments a repository includes, or when editing reusable `build/make/*.mak` files in this repo.
 
 ## Scope
 
-- Treat the root `Makefile` as the actual interface and the included fragments as supporting context.
-- Use this reference to interpret fragment behavior, not to replace checking which targets the repository really exposes.
-- Use `project-workflow` first when you still need to discover the command surface.
+- Treat the root `Makefile` as the actual interface and included fragments as supporting context.
+- Use this reference to interpret likely fragment behavior, not to replace checking which targets the repository really exposes.
+- Validate path-sensitive behavior from the consuming repository root when targets depend on `$(PWD)/bin/...`.
+- Preserve downstream `./bin` path expectations unless the user explicitly asks to change them.
 
 ## Common Fragment Map
 
@@ -38,7 +39,7 @@ Use this reference after you have already identified which shared `bin/build/mak
 - `generate` and `push` depend on the consuming repository's Buf configuration.
 - `push` updates remote state and requires explicit user permission.
 
-### `http.mak`, `grpc.mak`, and `client.mak`
+### `http.mak`, `grpc.mak`, And `client.mak`
 
 - These are project-template fragments that combine Go, Ruby test harness, Docker, security, coverage, and helper targets.
 - `grpc.mak` also includes proto lint, format, generate, breaking, and push targets.

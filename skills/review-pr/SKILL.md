@@ -19,9 +19,9 @@ description: Reviews, validates, commits, force-pushes, and opens a draft pull r
 10. Use `$code-review` to inspect the current change before drafting PR text.
 11. Resolve any blocking review findings before continuing; if findings remain intentionally unresolved, call them out in the PR summary.
 12. If `$code-review` reports security findings or security validation gaps, resolve them or document them in the PR summary before `make review`.
-13. Use `$pr-summary` to draft a lowercase, unprefixed `msg` and Markdown PR summary from the current working tree.
-14. Follow `$pr-summary` commit-subject rules: `make review` adds the branch-derived `type(scope):` prefix, so treat branch words as routing metadata rather than message source material and do not repeat the type or scope in `msg`.
-15. Keep the summary in the `$pr-summary` format, including honest testing details.
+13. Read `references/summary-format.md`, then draft a lowercase, unprefixed `msg` and multiline Markdown `desc` from the current working tree.
+14. Follow the commit-subject rules: `make review` adds the branch-derived `type(scope):` prefix, so treat branch words as routing metadata rather than message source material and do not repeat the type or scope in `msg`.
+15. Keep `desc` in the summary format, including honest testing details.
 16. When attribution is appropriate or requested, append this footer to the summary instead of a `Co-authored-by:` trailer:
 
 ```text
@@ -34,11 +34,12 @@ AI-assisted-by: [Codex](https://openai.com/codex/)
 make msg="unprefixed subject" desc="summary" review
 ```
 
-18. Pass `desc` as the multiline Markdown summary from `$pr-summary`; do not flatten the summary into a single line.
+18. Pass `desc` as the multiline Markdown summary; do not flatten the summary into a single line.
 19. Read `references/output-format.md`, then report the result using that exact structure; do not add, remove, rename, or reorder sections.
 
 ## References
 
+- Read `references/summary-format.md` before drafting the `msg` and `desc` values.
 - Read `references/output-format.md` before producing the final review PR report.
 
 ## Notes

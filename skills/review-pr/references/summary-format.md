@@ -1,6 +1,6 @@
 # Summary Format
 
-Use this reference when the user asks for a PR or wants a shareable change summary.
+Use this reference when drafting the `msg` and `desc` values for `make review`.
 
 ## Scope
 
@@ -12,11 +12,10 @@ Use this reference when the user asks for a PR or wants a shareable change summa
 
 ## Required Format
 
-- When the user asks for a commit message and PR summary, use exactly this structure and do not add, remove, rename, or reorder sections:
+- Draft `msg` as a plain-text, lowercase, unprefixed commit message subject.
+- Draft `desc` as exactly these Markdown sections and do not add, remove, rename, or reorder sections:
 
 ```markdown
-commit message subject
-
 ## What
 
 - Describe the concrete change.
@@ -30,16 +29,12 @@ commit message subject
 - `command` - passed
 ```
 
-- When the user asks only for a commit message, output only the commit message subject.
-- When the user asks only for a PR summary, output only the `## What`, `## Why`, and `## Testing` sections from the template.
-- Keep the commit message as plain text only.
-- Keep the commit message entirely lowercase.
-- Do not add markdown, labels, bullets, quotes, or surrounding commentary to the commit message.
-- Do not add extra PR summary sections or alternate titles.
-- When another skill requires a footer, append it after `## Testing`; footers are allowed and are not sections.
+- Do not add markdown, labels, bullets, quotes, or surrounding commentary to `msg`.
+- Do not add extra PR summary sections or alternate titles to `desc`.
+- When a footer is needed, append it after `## Testing`; footers are allowed and are not sections.
 - If a PR summary section has no entries, write exactly `- None.`
 - Keep the testing section honest about what ran, what passed, and what did not run.
-- Include unresolved review findings, security findings, or validation gaps from caller workflows under `## Why` or `## Testing`; do not add a separate risk section.
+- Include unresolved review findings, security findings, or validation gaps under `## Why` or `## Testing`; do not add a separate risk section.
 
 ## Commit Message Subject
 

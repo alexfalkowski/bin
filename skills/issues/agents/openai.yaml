@@ -1,4 +1,0 @@
-interface:
-  display_name: "Issues"
-  short_description: "Find scoped issues with delegated review and implement fixes"
-  default_prompt: "Use $issues to delegate issue-finding in a package or folder, store confirmed findings in that scope's ISSUES.md, or propose and implement explicitly agreed fixes from a scoped ISSUES.md one issue at a time."
