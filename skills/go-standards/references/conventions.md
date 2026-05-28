@@ -9,11 +9,14 @@ Use this reference when working in Go repositories.
 
 ## Documentation
 
-- User-facing or documented Go APIs need clear, accurate, and detailed GoDoc for packages, exported types, functions, methods, and other supported entrypoints.
+- User-facing or documented Go APIs need clear, accurate, and detailed GoDoc for packages, exported types, functions, methods, constants, variables, and other supported entrypoints.
+- Go doc comments should directly precede the declaration they document with no intervening blank line.
+- Go doc comments for exported identifiers should start with the documented identifier where appropriate so generated documentation and summaries read clearly.
 - Keep package-level GoDoc in `doc.go` files.
 - Do not leave package documentation comments on unrelated source files such as `main.go`, `client.go`, or `types.go`.
 - Keep examples aligned with the real public interface and expected calling style when the repository's documentation style supports them.
 - When package documentation needs to change, update `doc.go` rather than scattering package comments across implementation files.
+- Preserve `Deprecated:` paragraphs in doc comments when documenting compatibility guidance for identifiers that remain available but should not be used.
 
 ## Testing
 

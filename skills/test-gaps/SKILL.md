@@ -33,12 +33,13 @@ Do not combine the two modes in one pass.
 15. Deduplicate overlapping findings and resolve conflicting agent conclusions by re-checking the code and tests directly.
 16. Confirm each candidate gap against the code and existing tests before recording it. Gaps must be concrete missing, weak, misleading, flaky, or wrong-layer coverage with credible risk to changed behavior, public contracts, compatibility, release-sensitive workflows, or documented command/API behavior.
 17. Do not record confirmed production bugs, security issues, compatibility breaks, or violated public contracts as test gaps. If such broken behavior is discovered during review, report it as out of scope for the test-gap ledger and recommend `$code-issues`; use this skill when the unprotected or poorly protected behavior is the finding.
-18. Do not report optional nice-to-have tests, private implementation coverage, arbitrary coverage percentage improvements, style preferences, or docs-only validation as findings by themselves. List them only as optional follow-up notes when relevant.
-19. If no confirmed test gaps are found, report that no test gaps were found and do not create `ISSUES.md`.
-20. If confirmed test gaps are found, write all findings to the scoped `ISSUES.md` before making any fixes.
-21. Assign every finding a unique ID for the session in the form `TEST-<number>`.
-22. Present the scoped `ISSUES.md` and a proposed test-fix plan to the user.
-23. Stop after presenting the ledger and plan. Do not fix findings in the same pass.
+18. Do not record standalone missing, weak, stale, misleading, or wrong-location documentation, README, example, comment, or docstring gaps as test gaps. Use `$docs-gaps` when documentation itself is the finding.
+19. Do not report optional nice-to-have tests, private implementation coverage, arbitrary coverage percentage improvements, style preferences, or docs-only validation as findings by themselves. List them only as docs gaps or optional follow-up notes when relevant.
+20. If no confirmed test gaps are found, report that no test gaps were found and do not create `ISSUES.md`.
+21. If confirmed test gaps are found, write all findings to the scoped `ISSUES.md` before making any fixes.
+22. Assign every finding a unique ID for the session in the form `TEST-<number>`.
+23. Present the scoped `ISSUES.md` and a proposed test-fix plan to the user.
+24. Stop after presenting the ledger and plan. Do not fix findings in the same pass.
 
 ## `ISSUES.md` Format
 
@@ -94,5 +95,6 @@ Keep optional follow-up notes separate from findings:
 
 - Use `$testing-standards` for cross-language test quality, coverage, fixtures, determinism, and test-layer decisions.
 - Use relevant language standards for local test idioms.
+- Use `$docs-gaps` instead when the user asks for a standalone missing, stale, misleading, or weak documentation, README, example, comment, or docstring pass.
 - Use `$project-workflow` for repository command discovery, CI expectations, and `./bin` wiring before review planning or validation.
 - Use `$change-validation` when selecting validation commands for implemented test fixes.
