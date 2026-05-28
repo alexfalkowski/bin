@@ -1,14 +1,14 @@
 ---
-name: docs-gaps
-description: Finds concrete missing, weak, stale, or misleading documentation in a package or folder, including README files, user-facing docs, examples, and code comments/docstrings required by relevant language standards, records confirmed gaps in that scope's ISSUES.md, and later proposes and implements explicitly agreed documentation fixes gap by gap. Use when the user asks to find $docs-gaps in a package or folder, find docs gaps in a package or folder, implement $docs-gaps in a package or folder, or implement docs gaps in a package or folder.
+name: doc-gaps
+description: Finds concrete missing, weak, stale, or misleading documentation in a package or folder, including README files, user-facing docs, examples, and code comments/docstrings required by relevant language standards, records confirmed gaps in that scope's ISSUES.md, and later proposes and implements explicitly agreed doc fixes gap by gap. Use when the user asks to find $doc-gaps in a package or folder, find doc gaps in a package or folder, implement $doc-gaps in a package or folder, or implement doc gaps in a package or folder.
 ---
 
-# Docs Gaps
+# Doc Gaps
 
 Use this skill in two distinct modes:
 
-- **Find mode**: `Find $docs-gaps in <package/folder>` or `Find docs gaps in <package/folder>`.
-- **Implement mode**: `Implement $docs-gaps in <package/folder>` or `Implement docs gaps in <package/folder>`.
+- **Find mode**: `Find $doc-gaps in <package/folder>` or `Find doc gaps in <package/folder>`.
+- **Implement mode**: `Implement $doc-gaps in <package/folder>` or `Implement doc gaps in <package/folder>`.
 
 Do not combine the two modes in one pass.
 
@@ -18,8 +18,8 @@ Do not combine the two modes in one pass.
 2. Use `ISSUES.md` in the requested package or folder as the review ledger, for example `<package/folder>/ISSUES.md`.
 3. If `ISSUES.md` already exists in the requested package or folder, stop. Tell the user the existing scoped ledger must be resolved first, or the human must delete that scoped `ISSUES.md` before a new find pass there.
 4. Use `$project-workflow` to discover repository entrypoints, CI expectations, documented commands, public APIs, examples, and `./bin` wiring before planning documentation review agents or validation.
-5. Treat `Find $docs-gaps in <package/folder>` or `Find docs gaps in <package/folder>` as the user's explicit request to delegate documentation review for that scope. Do not require the user to separately say "use sub-agents", "spawn agents", or "delegate".
-6. Use sub-agents for Find mode whenever the active runtime provides them and the runtime permits delegation for the request. Do not treat sub-agents as optional based on scope size, and do not perform the docs-gap review locally first.
+5. Treat `Find $doc-gaps in <package/folder>` or `Find doc gaps in <package/folder>` as the user's explicit request to delegate documentation review for that scope. Do not require the user to separately say "use sub-agents", "spawn agents", or "delegate".
+6. Use sub-agents for Find mode whenever the active runtime provides them and the runtime permits delegation for the request. Do not treat sub-agents as optional based on scope size, and do not perform the doc-gap review locally first.
 7. Do not claim that extra delegation wording is needed before launching review agents. The Find mode invocation is the explicit delegation request.
 8. If the runtime still requires an approval step before launching sub-agents, ask once with the concrete read-only agent plan. If delegation is denied, stop instead of falling back to a local review. If sub-agents are unavailable, say so briefly and perform the review locally for the requested scope.
 9. Ask for human permission before agents run commands that require approval, such as network, SSH, GitHub auth, registry auth, remote writes, or other non-read-only validation. Without that permission, agents should inspect code and docs only and suggest validation.
@@ -33,13 +33,13 @@ Do not combine the two modes in one pass.
 14. Wait for all agents to finish before aggregating results.
 15. Deduplicate overlapping findings and resolve conflicting agent conclusions by re-checking the code and docs directly.
 16. Confirm each candidate gap against the code, current docs, examples, and documented interfaces before recording it. Gaps must be concrete missing, weak, stale, misleading, or wrong-location documentation with credible risk to users, operators, maintainers, public APIs, documented command behavior, onboarding, setup, or contribution workflows.
-17. Do not record confirmed production bugs, security issues, compatibility breaks, or violated public contracts as docs gaps. If broken behavior is discovered during review, report it as out of scope for the docs-gap ledger and recommend `$code-issues`; use this skill when unclear, missing, stale, or misleading documentation is the finding.
-18. Do not record standalone missing, weak, flaky, misleading, or wrong-layer tests as docs gaps. Recommend `$test-gaps` when the unprotected behavior is the finding.
+17. Do not record confirmed production bugs, security issues, compatibility breaks, or violated public contracts as doc gaps. If broken behavior is discovered during review, report it as out of scope for the doc-gap ledger and recommend `$code-issues`; use this skill when unclear, missing, stale, or misleading documentation is the finding.
+18. Do not record standalone missing, weak, flaky, misleading, or wrong-layer tests as doc gaps. Recommend `$test-gaps` when the unprotected behavior is the finding.
 19. Do not report arbitrary wording preferences, style nits, exhaustive private implementation comments, or optional documentation polish as findings by themselves. List them only as optional follow-up notes when relevant.
-20. If no confirmed docs gaps are found, report that no docs gaps were found and do not create `ISSUES.md`.
-21. If confirmed docs gaps are found, write all findings to the scoped `ISSUES.md` before making any fixes.
+20. If no confirmed doc gaps are found, report that no doc gaps were found and do not create `ISSUES.md`.
+21. If confirmed doc gaps are found, write all findings to the scoped `ISSUES.md` before making any fixes.
 22. Assign every finding a unique ID for the session in the form `DOC-<number>`.
-23. Present the scoped `ISSUES.md` and a proposed documentation-fix plan to the user.
+23. Present the scoped `ISSUES.md` and a proposed doc-fix plan to the user.
 24. Stop after presenting the ledger and plan. Do not fix findings in the same pass.
 
 ## Documentation Review Standards
@@ -60,7 +60,7 @@ Use this structure:
 
 ## DOC-1: Short concrete title
 
-- Type: Docs Gap
+- Type: Doc Gap
 - Severity: Critical|High|Medium|Low
 - Scope: path/to/file-or-folder
 - Impact: Risk created by the missing, weak, stale, misleading, or wrong-location documentation.
@@ -72,7 +72,7 @@ Use this structure:
 Keep optional follow-up notes separate from findings:
 
 ```markdown
-## Optional Docs Follow-Ups
+## Optional Doc Follow-Ups
 
 - Optional or non-blocking note.
 ```
@@ -80,7 +80,7 @@ Keep optional follow-up notes separate from findings:
 ## Implement Mode
 
 1. Identify the requested package or folder scope. If no scope is provided, stop and ask for the package or folder.
-2. Read `ISSUES.md` in the requested package or folder first and treat it as the working docs-gap ledger.
+2. Read `ISSUES.md` in the requested package or folder first and treat it as the working doc-gap ledger.
    If scoped `ISSUES.md` does not exist, stop and ask whether to run Find mode first for that scope.
 3. Use `$project-workflow` before proposing or running validation so repository entrypoints, CI expectations, documented commands, public APIs, examples, and `./bin` wiring are current.
 4. Work through findings sequentially by ID unless the human explicitly names a different finding.
@@ -90,22 +90,22 @@ Keep optional follow-up notes separate from findings:
    - documentation-location, public-contract, example accuracy, compatibility, or maintenance tradeoffs.
    - the intended validation.
 6. Stop after proposing the solution. Do not edit files, update `ISSUES.md`, or start validation until the human explicitly agrees to that finding's solution.
-7. Ask questions when behavior, audience, documentation location, public-contract wording, examples, validation, or user intent is ambiguous. Treat silence or a broad "implement docs gaps" request as permission to start the proposal workflow, not as permission to edit.
+7. Ask questions when behavior, audience, documentation location, public-contract wording, examples, validation, or user intent is ambiguous. Treat silence or a broad "implement doc gaps" request as permission to start the proposal workflow, not as permission to edit.
 8. Once the solution for the current finding is agreed, implement only that finding with the smallest clear documentation change.
 9. Use relevant language standards for code comments and API docs. Use `$change-safety` when documentation changes public API, command, migration, or compatibility expectations.
 10. Validate the documentation change using checks appropriate to the changed files, such as markdown linting if present, generated documentation checks if present, relevant language linting, examples, or documented command smoke checks.
 11. Report the result for that finding and ask the human to verify and explicitly say `DOC-<number> is done`.
 12. Do not move to the next finding until the human says `DOC-<number> is done`.
-13. After the human confirms a finding is done, remove that finding from scoped `ISSUES.md`. If a finding is deemed invalid or not actually a docs gap, remove it only after explaining why and getting human agreement.
+13. After the human confirms a finding is done, remove that finding from scoped `ISSUES.md`. If a finding is deemed invalid or not actually a doc gap, remove it only after explaining why and getting human agreement.
 14. Then propose the solution for the next remaining finding and repeat the same agreement gate.
 15. Once all findings are resolved and confirmed done by the human, delete the scoped `ISSUES.md`.
-16. Summarize what changed, which docs gaps were resolved or dismissed, and which validation steps were run or still need to be carried out by the human.
+16. Summarize what changed, which doc gaps were resolved or dismissed, and which validation steps were run or still need to be carried out by the human.
 
 ## References
 
 - Use `$project-workflow` for repository command discovery, documented entrypoints, CI expectations, examples, and `./bin` wiring before review planning or validation.
 - Use relevant language standards for code comments, public API docs, and examples.
 - Use `$change-safety` when documentation affects public contracts, compatibility, migrations, security expectations, or documented operational behavior.
-- Use `$change-validation` when selecting validation commands for implemented documentation fixes.
+- Use `$change-validation` when selecting validation commands for implemented doc fixes.
 - Use `$code-issues` when the confirmed problem is broken behavior, a security issue, a compatibility break, or a violated public contract.
 - Use `$test-gaps` when the confirmed problem is missing or weak test coverage rather than documentation.
