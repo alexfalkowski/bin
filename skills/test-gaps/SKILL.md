@@ -32,17 +32,19 @@ Do not combine the two modes in one pass.
 14. Wait for all agents to finish before aggregating results.
 15. Deduplicate overlapping findings and resolve conflicting agent conclusions by re-checking the code and tests directly.
 16. Confirm each candidate gap against the code and existing tests before recording it. Gaps must be concrete missing, weak, misleading, flaky, or wrong-layer coverage with credible risk to changed behavior, public contracts, compatibility, release-sensitive workflows, or documented command/API behavior.
-17. Do not record gaps whose only meaningful test would assert pass-through behavior to an upstream library, standard library, or framework. This includes aliases, type aliases, thin wrappers, direct option forwarding, direct global setter/getter calls, and constructors where the repository adds no branching, validation, transformation, error handling, lifecycle behavior, compatibility policy, or composition contract of its own.
-18. Only record a gap around third-party integration when the untested behavior is repository-owned. Examples include local validation/normalization before calling the dependency, local input/output mapping, local error wrapping/classification/recovery, lifecycle ordering or cleanup owned by the repository, documented compatibility behavior promised across dependency versions, or end-to-end behavior through a supported public repo entrypoint where multiple repo-owned pieces are composed.
-19. When a candidate gap touches a wrapper around a dependency, explicitly ask: "Would the proposed test fail because repository code changed, or only because the dependency's behavior/shape changed?" Record it only when repository code owns the failing behavior.
-20. Do not record confirmed production bugs, security issues, compatibility breaks, or violated public contracts as test gaps. If such broken behavior is discovered during review, report it as out of scope for the test-gap ledger and recommend `$code-issues`; use this skill when the unprotected or poorly protected behavior is the finding.
-21. Do not record standalone missing, weak, stale, misleading, or wrong-location documentation, README, example, comment, or docstring gaps as test gaps. Use `$doc-gaps` when documentation itself is the finding.
-22. Do not report optional nice-to-have tests, private implementation coverage, arbitrary coverage percentage improvements, style preferences, or docs-only validation as findings by themselves. List them only as doc gaps or optional follow-up notes when relevant.
-23. If no confirmed test gaps are found, report that no test gaps were found and do not create `ISSUES.md`.
-24. If confirmed test gaps are found, write all findings to the scoped `ISSUES.md` before making any fixes.
-25. Assign every finding a unique ID for the session in the form `TEST-<number>`.
-26. Present the scoped `ISSUES.md` and a proposed test-fix plan to the user.
-27. Stop after presenting the ledger and plan. Do not fix findings in the same pass.
+17. For each candidate, explicitly identify the nearby existing test shape and why extending existing tests, fixtures, tables, helpers, or assertions does not already cover the behavior. Do not record a gap when the proposed fix would duplicate coverage already provided by that local shape.
+18. Do not record gaps whose only meaningful test would assert pass-through behavior to an upstream library, standard library, or framework. This includes aliases, type aliases, thin wrappers, direct option forwarding, direct global setter/getter calls, dependency injection container behavior, validator tag behavior, encoder/parser behavior, and constructors where the repository adds no branching, validation, transformation, error handling, lifecycle behavior, compatibility policy, or composition contract of its own.
+19. Only record a gap around third-party integration when the untested behavior is repository-owned. Examples include local validation/normalization before calling the dependency, local input/output mapping, local error wrapping/classification/recovery, lifecycle ordering or cleanup owned by the repository, documented compatibility behavior promised across dependency versions, or end-to-end behavior through a supported public repo entrypoint where multiple repo-owned pieces are composed.
+20. When a candidate gap touches a wrapper around a dependency, explicitly ask: "Would the proposed test fail because repository code changed, or only because the dependency's behavior/shape changed?" Record it only when repository code owns the failing behavior.
+21. Do not record gaps that require build tags, architecture-specific execution, optional services, integration environments, or other validation modes the repository does not normally run, unless the finding is explicitly that CI or the documented validation path must add that mode.
+22. Do not record confirmed production bugs, security issues, compatibility breaks, or violated public contracts as test gaps. If such broken behavior is discovered during review, report it as out of scope for the test-gap ledger and recommend `$code-issues`; use this skill when the unprotected or poorly protected behavior is the finding.
+23. Do not record standalone missing, weak, stale, misleading, or wrong-location documentation, README, example, comment, or docstring gaps as test gaps. Use `$doc-gaps` when documentation itself is the finding.
+24. Do not report optional nice-to-have tests, private implementation coverage, arbitrary coverage percentage improvements, style preferences, or docs-only validation as findings by themselves. List them only as doc gaps or optional follow-up notes when relevant.
+25. If no confirmed test gaps are found, report that no test gaps were found and do not create `ISSUES.md`.
+26. If confirmed test gaps are found, write all findings to the scoped `ISSUES.md` before making any fixes.
+27. Assign every finding a unique ID for the session in the form `TEST-<number>`.
+28. Present the scoped `ISSUES.md` and a proposed test-fix plan to the user.
+29. Stop after presenting the ledger and plan. Do not fix findings in the same pass.
 
 ## `ISSUES.md` Format
 
@@ -77,22 +79,24 @@ Keep optional follow-up notes separate from findings:
    If scoped `ISSUES.md` does not exist, stop and ask whether to run Find mode first for that scope.
 3. Use `$project-workflow` before proposing or running validation so repository entrypoints, CI expectations, and `./bin` wiring are current.
 4. Work through findings sequentially by ID unless the human explicitly names a different finding.
-5. For each finding, first present:
+5. Before proposing a fix for each finding, re-check the current code and nearby tests. Treat the ledger as something that can go stale: dismiss or revise findings that are already covered, would duplicate the local test shape, test only underlying libraries/frameworks, or require validation modes the repository does not run.
+6. For each finding, first present:
    - the issue ID and current evidence.
    - the proposed test solution.
+   - why the behavior is repository-owned and not already covered by existing tests.
    - test-layer, fixture, determinism, compatibility, or maintenance tradeoffs.
    - the intended validation.
-6. Stop after proposing the solution. Do not edit code, update `ISSUES.md`, or start validation until the human explicitly agrees to that finding's solution.
-7. Ask questions when behavior, compatibility, test layer, fixture strategy, validation, or user intent is ambiguous. Treat silence or a broad "implement test gaps" request as permission to start the proposal workflow, not as permission to code.
-8. Once the solution for the current finding is agreed, implement only that finding with the smallest clear test change.
-9. Use `$testing-standards` for test design and pair with the relevant language standard for local idioms.
-10. Validate the test change using checks appropriate to the changed tests.
-11. Report the result for that finding and ask the human to verify and explicitly say `TEST-<number> is done`.
-12. Do not move to the next finding until the human says `TEST-<number> is done`.
-13. After the human confirms a finding is done, remove that finding from scoped `ISSUES.md`. If a finding is deemed invalid or not actually a test gap, remove it only after explaining why and getting human agreement.
-14. Then propose the solution for the next remaining finding and repeat the same agreement gate.
-15. Once all findings are resolved and confirmed done by the human, delete the scoped `ISSUES.md`.
-16. Summarize what changed, which test gaps were resolved or dismissed, and which validation steps were run or still need to be carried out by the human.
+7. Stop after proposing the solution. Do not edit code, update `ISSUES.md`, or start validation until the human explicitly agrees to that finding's solution.
+8. Ask questions when behavior, compatibility, test layer, fixture strategy, validation, or user intent is ambiguous. Treat silence or a broad "implement test gaps" request as permission to start the proposal workflow, not as permission to code.
+9. Once the solution for the current finding is agreed, implement only that finding with the smallest clear test change, preferring the existing local test shape over new standalone structure.
+10. Use `$testing-standards` for test design and pair with the relevant language standard for local idioms.
+11. Validate the test change using checks appropriate to the changed tests.
+12. Report the result for that finding and ask the human to verify and explicitly say `TEST-<number> is done`.
+13. Do not move to the next finding until the human says `TEST-<number> is done`.
+14. After the human confirms a finding is done, remove that finding from scoped `ISSUES.md`. If a finding is deemed invalid or not actually a test gap, remove it only after explaining why and getting human agreement.
+15. Then propose the solution for the next remaining finding and repeat the same agreement gate.
+16. Once all findings are resolved and confirmed done by the human, delete the scoped `ISSUES.md`.
+17. Summarize what changed, which test gaps were resolved or dismissed, and which validation steps were run or still need to be carried out by the human.
 
 ## References
 
