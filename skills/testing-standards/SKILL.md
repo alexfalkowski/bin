@@ -16,11 +16,15 @@ description: Applies language-agnostic test design, coverage, fixtures, determin
 7. Preserve the repository's existing test framework, fixture layout, helper style, assertion idioms, and naming patterns unless the task explicitly changes testing infrastructure.
 8. Pair with the relevant language standard skill for language-specific idioms, and with `change-validation` for selecting or reporting commands.
 9. If another testing-focused skill applies, use this skill for cross-language test policy and the other skill only for specialized language, framework, or library details; this skill's cross-language rules take precedence unless the human or repository instructions explicitly say otherwise.
-10. Before finishing test changes or reviews, scan changed tests for repeated boolean or numeric assertions whose default failure output would not identify the behavior under test; add named subtests or assertion messages where needed.
+10. When tests use mocks, stubs, spies, fakes, or other test doubles, check whether each double protects a true boundary or only mirrors internal implementation; flag interaction-only tests that could pass while real behavior is broken.
+11. Before finishing test changes or reviews, scan changed tests for repeated boolean or numeric assertions whose default failure output would not identify the behavior under test; add named subtests or assertion messages where needed.
 
 ## Principles
 
 - Assert changed behavior and contracts, not incidental implementation details.
+- Prefer classicist, behavior-oriented tests over mockist, interaction-heavy tests: test observable outcomes through real in-process collaborators where practical, and avoid mocking your own code just to isolate a class, method, function, or file.
+- Treat the unit under test as a behavior at an appropriate boundary, not automatically a single class, method, function, or file.
+- Use test doubles mainly at true boundaries: network calls, databases, clocks, filesystem, subprocesses, randomness, third-party services, slow infrastructure, or hard-to-trigger failures. Avoid stubbing internal collaborators unless it makes the test more deterministic, focused, or practical without hiding the behavior under test.
 - Treat coverage as a useful signal, not a blind target: preserve existing meaningful coverage where practical, improve it when new or risky behavior is under-tested, and explain when coverage cannot reasonably be added.
 - Just because production code is written in one language does not mean new tests should be written in that language; follow the dominant relevant test harness when the repository tests behavior from another language or feature layer.
 - Prefer table-driven tests when covering multiple inputs, branches, edge cases, or examples, unless the repository's local style clearly uses another readable pattern.
