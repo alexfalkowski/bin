@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Filter the main Go coverage profile into the final report profile.
 
 set -eo pipefail
 

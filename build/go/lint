@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Run golangci-lint only when it is installed in PATH.
 
 set -eo pipefail
 

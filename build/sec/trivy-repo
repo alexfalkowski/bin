@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Scan the current repository for critical vulnerabilities with Trivy.
 
 set -eo pipefail
 

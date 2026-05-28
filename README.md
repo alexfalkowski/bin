@@ -84,7 +84,7 @@ This gives you targets like:
 - `make lint` / `make fix-lint` / `make format`
 - `make specs` (gotestsum + race + coverage written under `test/reports/`)
 - `make coverage` (HTML + func coverage from `test/reports/final.cov`)
-- `make sec` (govulncheck)
+- `make sec` (govulncheck + Trivy repo scan)
 
 ### Git workflow helpers
 
