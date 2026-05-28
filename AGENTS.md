@@ -22,7 +22,7 @@ skill instead of one broad default:
 - `security-audit`: security reviews, vulnerability checks, unsafe shell/filesystem/network/auth inspection, and Go/Ruby/shell audit guidance.
 - `code-issues`: find confirmed code issues into `ISSUES.md`, then implement agreed fixes one code issue at a time.
 - `test-gaps`: find confirmed missing or weak tests into `ISSUES.md`, then implement agreed test fixes gap by gap.
-- `docs-gaps`: find confirmed missing, stale, or misleading docs/comments into `ISSUES.md`, then implement agreed docs fixes gap by gap.
+- `doc-gaps`: find confirmed missing, stale, or misleading docs/comments into `ISSUES.md`, then implement agreed doc fixes gap by gap.
 - `review-pr`: create a commit, force-push, and open a draft PR with a generated summary.
 - `shell-standards`: Bash scripting, ShellCheck, text processing, directory
   scope, and function documentation conventions.
@@ -61,10 +61,10 @@ Common composition:
 - `test-gaps` orchestrates a two-phase test-gap workflow: aggregate confirmed
   `project-workflow` context and missing or weak test coverage into
   `ISSUES.md`, then implement agreed test fixes gap by gap.
-- `docs-gaps` orchestrates a two-phase documentation-gap workflow: aggregate
+- `doc-gaps` orchestrates a two-phase doc-gap workflow: aggregate
   confirmed `project-workflow` context and missing, stale, or misleading
   README, docs, examples, comments, and docstrings into `ISSUES.md`, then
-  implement agreed documentation fixes gap by gap.
+  implement agreed doc fixes gap by gap.
 - `code-review` conditionally consults `security-audit` for security-sensitive
   review scope while keeping the review findings format.
 - `security-audit` pairs with `change-safety` for code changes and

@@ -15,10 +15,10 @@ checks, and findings.
 - `test-gaps` orchestrates a two-phase test-gap workflow: first aggregate
   `project-workflow` context and confirmed missing or weak test coverage into
   `ISSUES.md`, then implement agreed test fixes one gap at a time.
-- `docs-gaps` orchestrates a two-phase documentation-gap workflow: first
+- `doc-gaps` orchestrates a two-phase doc-gap workflow: first
   aggregate `project-workflow` context and confirmed README, docs, examples,
   comments, and docstring gaps into `ISSUES.md`, then implement agreed
-  documentation fixes one gap at a time.
+  doc fixes one gap at a time.
 - `code-review` performs the review pass and conditionally consults
   `security-audit` for security-sensitive scope.
 - `security-audit` pairs with `change-safety` for code changes and
