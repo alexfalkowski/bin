@@ -109,7 +109,7 @@ benchmarks: build
 
 # Run Go tests with gotestsum (race + coverage) and write reports under test/reports/.
 specs:
-	@gotestsum --format testname --junitfile test/reports/specs.xml -- -vet=off -race -mod vendor -covermode=atomic -coverpkg=$(COVER_PACKAGES) -coverprofile=test/reports/profile.cov $(PACKAGES)
+	@gotestsum --format testdox --junitfile test/reports/specs.xml -- -vet=off -race -mod vendor -covermode=atomic -coverpkg=$(COVER_PACKAGES) -coverprofile=test/reports/profile.cov $(PACKAGES)
 
 # Open pprof for a captured profile under test/reports/ (set id/kind).
 pprof:

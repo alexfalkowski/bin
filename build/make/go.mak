@@ -71,7 +71,7 @@ format:
 
 # Run tests with gotestsum (race + coverage) and write reports under test/reports/.
 specs:
-	@gotestsum --format testname --junitfile test/reports/specs.xml -- -vet=off -race -mod vendor -covermode=atomic -coverpkg=$(COVER_PACKAGES) -coverprofile=test/reports/profile.cov $(PACKAGES)
+	@gotestsum --format testdox --junitfile test/reports/specs.xml -- -vet=off -race -mod vendor -covermode=atomic -coverpkg=$(COVER_PACKAGES) -coverprofile=test/reports/profile.cov $(PACKAGES)
 
 # Run benchmarks for package=$(package) and write $(BENCHMARK_PROFILE).
 # Set benchtime=<duration-or-count> to pass -benchtime to go test.
