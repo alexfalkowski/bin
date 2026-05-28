@@ -1,4 +1,4 @@
 interface:
   display_name: "Code Review"
   short_description: "Review diffs for bugs and regressions"
-  default_prompt: "Use $code-review for a general bug, regression, and missing-coverage review."
+  default_prompt: "Use $code-review for a general bug, regression, missing-coverage, documentation, and language-idiom risk review."
