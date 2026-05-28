@@ -9,6 +9,7 @@ Use this reference when the user asks for a review.
 - Focus on user-visible impact and maintenance risk before style nits.
 - Prefer concrete findings over broad summaries.
 - Ground each finding in the inspected code and describe the consequence, not just the preference.
+- Avoid broad "consider checking" comments. Each finding needs a concrete changed location, behavior at risk, evidence, and a clear place to start fixing.
 
 ## Severity
 
