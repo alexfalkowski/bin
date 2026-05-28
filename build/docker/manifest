@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2155
+# Create and push versioned and latest multi-architecture Docker manifests.
 
 set -eo pipefail
 

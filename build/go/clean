@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2155
+# Refresh Go dependencies and caches when go.sum differs from master.
 
 set -eo pipefail
 

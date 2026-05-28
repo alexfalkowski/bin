@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Run non-benchmark Cucumber features with coverage reporting enabled.
 
 set -eo pipefail
 

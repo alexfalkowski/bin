@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2086
+# Run benchmark-tagged Cucumber scenarios with coverage reporting enabled.
 
 set -eo pipefail
 

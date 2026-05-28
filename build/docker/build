@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2155
+# Build a local test Docker image for a service and platform.
 
 set -eo pipefail
 

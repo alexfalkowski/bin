@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Scan a built test Docker image for critical vulnerabilities with Trivy.
 
 set -eo pipefail
 
