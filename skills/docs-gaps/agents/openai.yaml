@@ -1,0 +1,4 @@
+interface:
+  display_name: "Docs Gaps"
+  short_description: "Find scoped documentation gaps"
+  default_prompt: "Use $docs-gaps to find scoped missing, weak, stale, or misleading docs and comments, store confirmed gaps in that scope's ISSUES.md, or propose and implement agreed documentation fixes one gap at a time."

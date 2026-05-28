@@ -11,6 +11,8 @@ Use this reference when working in Ruby repositories.
 ## Documentation
 
 - User-facing or documented Ruby APIs need clear, accurate, and detailed RDoc for modules, classes, methods, and other supported entrypoints.
+- Class and module RDoc should explain the purpose of the API and common uses.
+- Method RDoc should cover the synopsis, important examples, arguments when needed, corner cases, exceptions, and related methods when useful.
 - When a user-facing or documented API is non-trivial, include examples if the repository's documentation style supports them.
 - Keep examples aligned with the real public interface and expected calling style.
 

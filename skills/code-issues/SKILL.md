@@ -33,12 +33,13 @@ Do not combine the two modes in one pass.
 15. Deduplicate overlapping findings and resolve conflicting agent conclusions by re-checking the code directly.
 16. Confirm each candidate finding against the code before recording it. Findings must be concrete bugs, security issues, compatibility breaks, or violated public contracts with user-visible impact.
 17. Do not record standalone missing, weak, flaky, misleading, or wrong-layer tests as code issues unless they are tied to a confirmed bug, security issue, compatibility break, or violated public contract. Use `$test-gaps` for standalone missing or weak test coverage passes.
-18. Do not report optional regression tests, unused convenience aliases, API symmetry, or documentation polish as findings by themselves. List them only as testing gaps or optional follow-up notes when relevant.
-19. If no confirmed code issues are found, report that no code issues were found and do not create `ISSUES.md`.
-20. If confirmed code issues are found, write all findings to the scoped `ISSUES.md` before making any fixes.
-21. Assign every finding a unique ID for the session in the form `ISSUE-<number>`.
-22. Present the scoped `ISSUES.md` and a proposed fix plan to the user.
-23. Stop after presenting the ledger and plan. Do not fix findings in the same pass.
+18. Do not record standalone missing, weak, stale, misleading, or wrong-location documentation, README, example, comment, or docstring gaps as code issues unless they reveal a confirmed bug, security issue, compatibility break, or violated public contract. Use `$docs-gaps` for standalone documentation review passes.
+19. Do not report optional regression tests, unused convenience aliases, API symmetry, or documentation polish as findings by themselves. List them only as testing gaps, docs gaps, or optional follow-up notes when relevant.
+20. If no confirmed code issues are found, report that no code issues were found and do not create `ISSUES.md`.
+21. If confirmed code issues are found, write all findings to the scoped `ISSUES.md` before making any fixes.
+22. Assign every finding a unique ID for the session in the form `ISSUE-<number>`.
+23. Present the scoped `ISSUES.md` and a proposed fix plan to the user.
+24. Stop after presenting the ledger and plan. Do not fix findings in the same pass.
 
 ## `ISSUES.md` Format
 
@@ -95,5 +96,6 @@ Keep optional follow-up notes separate from findings:
 - Use `$security-audit` for security-sensitive review scope.
 - Use `$testing-standards` when deciding or reviewing regression coverage.
 - Use `$test-gaps` instead when the user asks for a standalone missing or weak test coverage pass.
+- Use `$docs-gaps` instead when the user asks for a standalone missing, stale, misleading, or weak documentation, README, example, comment, or docstring pass.
 - Use `$project-workflow` for repository command discovery, CI expectations, and `./bin` wiring before review planning or validation.
 - Use `$change-validation` when selecting validation commands for implemented fixes.
