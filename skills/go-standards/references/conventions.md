@@ -38,7 +38,14 @@ Use this reference when working in Go repositories.
 
 ## Imports And Naming
 
+- Apply these import rules while writing or reviewing code, before adding, approving, or keeping a direct import or alias.
 - Do not alias a Go import unless there is a real collision or required disambiguation.
-- If a project package has the same name as a standard-library package, keep the project package unaliased and alias only the standard-library import.
-- If the collision is at identifier level rather than import level, alias or rename only the referenced standard-library type, function, or variable.
-- Keep aliases short, obvious, and specific to the standard-library package they disambiguate.
+- If a project package has the same name as a standard-library package, keep the project package unaliased. Prefer adding missing wrapper functionality to the project package over importing the standard-library package directly. If the standard-library import is still needed, alias only that import.
+- If a project package wraps or centralizes another project, standard-library, or external package, prefer the project wrapper package and add missing surface there when that matches the repository's API shape.
+- If two project packages have the same package name or would collide in one file, inspect their dependency direction and domain ownership before choosing aliases. Keep the base or depended-on package unaliased, and alias the more-specific dependent package with its qualifier, such as `transportmeta` for `transport/meta` when it depends on `meta`.
+- If a project and external package overlap conceptually, prefer the project-owned domain package. For example, telemetry wrappers should own imports from OpenTelemetry or external metrics packages when that is the repository pattern.
+- Treat named packages in these rules as examples, not a fixed list. Apply the same ownership, wrapper, and dependency-direction checks to any package pair.
+- If there is no collision, use the package's declared name and do not alias it.
+- If the collision is at identifier level rather than import level, alias or rename only the referenced non-project type, function, or variable when possible.
+- Keep required aliases short, obvious, and specific to the package or domain they disambiguate.
+- If ownership, dependency direction, or wrapper intent is unclear, ask before choosing an import alias or bypassing a project package.
