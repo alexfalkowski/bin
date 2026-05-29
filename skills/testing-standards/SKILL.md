@@ -9,16 +9,17 @@ description: Applies language-agnostic test design, coverage, fixtures, determin
 
 1. Confirm the task involves adding tests, changing tests, reviewing test quality, planning coverage, or deciding where behavior should be exercised.
 2. Inspect the repository's existing tests, fixtures, helpers, entrypoints, CI targets, and the language or harness used by most relevant tests before adding new structure.
-3. Check whether the change should preserve, restore, or improve coverage; do not let meaningful behavior lose coverage without calling out the gap.
-4. Before adding a new standalone test, check whether the behavior is already covered by existing tests and whether the right change is to extend an existing table, fixture, helper, or assertion block.
-5. Choose the narrowest established test layer that credibly covers the changed behavior.
-6. Test through public or documented APIs, commands, tasks, or service entrypoints so coverage reflects real consumer behavior.
-7. Do not add tests against private functions, private methods, or internal-only seams unless the human explicitly asks for that approach; if private-surface testing seems necessary, ask first.
-8. Preserve the repository's existing test framework, fixture layout, helper style, assertion idioms, and naming patterns unless the task explicitly changes testing infrastructure.
-9. Pair with the relevant language standard skill for language-specific idioms, and with `change-validation` for selecting or reporting commands.
-10. If another testing-focused skill applies, use this skill for cross-language test policy and the other skill only for specialized language, framework, or library details; this skill's cross-language rules take precedence unless the human or repository instructions explicitly say otherwise.
-11. When tests use mocks, stubs, spies, fakes, or other test doubles, check whether each double protects a true boundary or only mirrors internal implementation; flag interaction-only tests that could pass while real behavior is broken.
-12. Before finishing test changes or reviews, scan changed tests for repeated boolean or numeric assertions whose default failure output would not identify the behavior under test; add named subtests or assertion messages where needed.
+3. Do not infer the repository's test strategy only from language-native test files such as `*_test.go`; inspect cross-language harness directories such as `test/`, `features/`, and `spec/`, plus CI or make targets, before adding tests.
+4. Check whether the change should preserve, restore, or improve coverage; do not let meaningful behavior lose coverage without calling out the gap.
+5. Before adding a new standalone test, check whether the behavior is already covered by existing tests and whether the right change is to extend an existing table, fixture, helper, or assertion block.
+6. Choose the narrowest established test layer that credibly covers the changed behavior.
+7. Test through public or documented APIs, commands, tasks, or service entrypoints so coverage reflects real consumer behavior.
+8. Do not add tests against private functions, private methods, or internal-only seams unless the human explicitly asks for that approach; if private-surface testing seems necessary, ask first.
+9. Preserve the repository's existing test framework, fixture layout, helper style, assertion idioms, and naming patterns unless the task explicitly changes testing infrastructure.
+10. Pair with the relevant language standard skill for language-specific idioms, and with `change-validation` for selecting or reporting commands.
+11. If another testing-focused skill applies, use this skill for cross-language test policy and the other skill only for specialized language, framework, or library details; this skill's cross-language rules take precedence unless the human or repository instructions explicitly say otherwise.
+12. When tests use mocks, stubs, spies, fakes, or other test doubles, check whether each double protects a true boundary or only mirrors internal implementation; flag interaction-only tests that could pass while real behavior is broken.
+13. Before finishing test changes or reviews, scan changed tests for repeated boolean or numeric assertions whose default failure output would not identify the behavior under test; add named subtests or assertion messages where needed.
 
 ## Principles
 
