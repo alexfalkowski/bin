@@ -1,4 +1,4 @@
 interface:
   display_name: "Go Standards"
-  short_description: "Apply Go conventions for these repos"
-  default_prompt: "Use $go-standards when changing Go code in this repository."
+  short_description: "Apply Go conventions, including no guessed import aliases"
+  default_prompt: "Use $go-standards when changing Go code in this repository. Before writing imports, inspect nearby files for existing package names and wrappers. Do not invent import aliases; use an alias only for a confirmed collision or required disambiguation."

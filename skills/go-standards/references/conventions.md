@@ -39,8 +39,9 @@ Use this reference when working in Go repositories.
 ## Imports And Naming
 
 - Apply these import rules while writing or reviewing code, before adding, approving, or keeping a direct import or alias.
+- Before writing code that adds or changes imports, inspect nearby files in the same package and adjacent packages for existing import names and package patterns. Match the existing unaliased package name unless a real collision requires otherwise.
 - Resolve wrapper ownership before deciding import aliases: first decide whether code should use or expand a project wrapper, then decide whether any remaining import needs an alias.
-- Do not alias a Go import unless there is a real collision or required disambiguation.
+- Do not alias a Go import unless there is a real collision or required disambiguation. Do not preemptively alias imports for readability, brevity, style, or guesswork.
 - If a project package has the same name as a standard-library package, keep the project package unaliased. Prefer adding missing wrapper functionality to the project package over importing the standard-library package directly. If the standard-library import is still needed, alias only that import.
 - If a project package wraps or centralizes another project, standard-library, or external package, prefer the project wrapper package and add missing surface there when that matches the repository's API shape.
 - When a project package wraps or centralizes an external package, prefer expanding the project wrapper with a narrow missing constant, helper, constructor, or contract-checking function before importing the external package directly from nearby code or tests. Keep the added wrapper surface within the package's documented responsibility. Import the external package directly only when the needed API is outside that responsibility, too broad to wrap honestly, or would make the project wrapper misleading.
