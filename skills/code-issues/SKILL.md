@@ -81,7 +81,7 @@ Keep optional follow-up notes separate from findings:
 6. Stop after proposing the solution. Do not edit code, update `ISSUES.md`, or start validation until the human explicitly agrees to that issue's solution.
 7. Ask questions when behavior, compatibility, security, validation, or user intent is ambiguous. Treat silence or a broad "implement code issues" request as permission to start the proposal workflow, not as permission to code.
 8. Once the solution for the current issue is agreed, implement only that issue with the smallest safe change.
-9. Use `$testing-standards` when deciding whether to add or update regression tests for the fix.
+9. Use `$testing-standards` when deciding whether to add or update regression tests for the fix, and prefer its test-first or scenario-first loop when a behavior-changing fix has a credible test or BDD layer.
 10. Validate the fix using checks appropriate to the changed code.
 11. Report the result for that issue and ask the human to verify and explicitly say `ISSUE-<number> is done`.
 12. Do not move to the next issue until the human says `ISSUE-<number> is done`.

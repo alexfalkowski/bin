@@ -46,10 +46,14 @@ In brief: inspect the repository's existing tests, fixtures, helpers,
 entrypoints, CI targets, and dominant test harness before adding new structure.
 Prefer the narrowest established test layer that credibly covers changed
 behavior through a public or documented surface; private-surface tests need
-explicit human approval. Preserve meaningful coverage where practical, check
-whether new or risky behavior needs better coverage, and explain unavoidable
-gaps. Keep tests readable, edge-aware, deterministic, and descriptive when they
-fail.
+explicit human approval. For behavior-changing code, prefer a test-first loop:
+add or update the focused test first in TDD-style projects, or the focused
+scenario, feature, or spec first in BDD-style projects. Run it red when
+practical, make the smallest implementation change to go green, then refactor
+while keeping tests green. Report that trace in the final update so the workflow
+is auditable. Preserve meaningful coverage where practical, check whether new or
+risky behavior needs better coverage, and explain unavoidable gaps. Keep tests
+readable, edge-aware, deterministic, and descriptive when they fail.
 
 ## Network And Remote Commands
 
