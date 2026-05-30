@@ -1,6 +1,6 @@
 ---
 name: testing-standards
-description: Applies language-agnostic test design, coverage, fixtures, determinism, and test-layer conventions. Use when adding, reviewing, refactoring, or planning tests across languages; pair with language standards for language-specific idioms and change-validation for commands.
+description: Applies language-agnostic test design, test-first/TDD or scenario-first/BDD workflow, coverage, fixtures, determinism, and test-layer conventions. Use when adding, reviewing, refactoring, or planning tests across languages; pair with language standards for language-specific idioms and change-validation for commands.
 ---
 
 # Testing Standards
@@ -10,20 +10,24 @@ description: Applies language-agnostic test design, coverage, fixtures, determin
 1. Confirm the task involves adding tests, changing tests, reviewing test quality, planning coverage, or deciding where behavior should be exercised.
 2. Inspect the repository's existing tests, fixtures, helpers, entrypoints, CI targets, and the language or harness used by most relevant tests before adding new structure.
 3. Do not infer the repository's test strategy only from language-native test files such as `*_test.go`; inspect cross-language harness directories such as `test/`, `features/`, and `spec/`, plus CI or make targets, before adding tests.
-4. Check whether the change should preserve, restore, or improve coverage; do not let meaningful behavior lose coverage without calling out the gap.
-5. Before adding a new standalone test, check whether the behavior is already covered by existing tests and whether the right change is to extend an existing table, fixture, helper, or assertion block.
-6. Choose the narrowest established test layer that credibly covers the changed behavior.
-7. Test through public or documented APIs, commands, tasks, or service entrypoints so coverage reflects real consumer behavior.
-8. Do not add tests against private functions, private methods, or internal-only seams unless the human explicitly asks for that approach; if private-surface testing seems necessary, ask first.
-9. Preserve the repository's existing test framework, fixture layout, helper style, assertion idioms, and naming patterns unless the task explicitly changes testing infrastructure.
-10. Pair with the relevant language standard skill for language-specific idioms, and with `change-validation` for selecting or reporting commands.
-11. If another testing-focused skill applies, use this skill for cross-language test policy and the other skill only for specialized language, framework, or library details; this skill's cross-language rules take precedence unless the human or repository instructions explicitly say otherwise.
-12. When tests use mocks, stubs, spies, fakes, or other test doubles, check whether each double protects a true boundary or only mirrors internal implementation; flag interaction-only tests that could pass while real behavior is broken.
-13. Before finishing test changes or reviews, scan changed tests for repeated boolean or numeric assertions whose default failure output would not identify the behavior under test; add named subtests or assertion messages where needed.
+4. Detect the dominant local test style before choosing the loop: prefer BDD/scenario-first when behavior is primarily exercised through `features/`, Cucumber/Gherkin, RSpec-style specs, acceptance tests, or Given/When/Then scenarios; prefer TDD/test-first when behavior is primarily exercised through unit, package, table-driven, or assertion-based tests. When both exist, choose the narrowest established layer that protects the changed behavior.
+5. Check whether the change should preserve, restore, or improve coverage; do not let meaningful behavior lose coverage without calling out the gap.
+6. Before adding a new standalone test, check whether the behavior is already covered by existing tests and whether the right change is to extend an existing table, fixture, helper, or assertion block.
+7. For behavior-changing code, prefer a test-first loop. In TDD-style projects, write or update the narrowest credible test first; in BDD-style projects, write or update the narrowest credible scenario, feature, or spec first. Run it and confirm it fails for the expected reason when practical, implement the smallest code change to pass it, then refactor while keeping tests green.
+8. Choose the narrowest established test layer that credibly covers the changed behavior.
+9. Test through public or documented APIs, commands, tasks, or service entrypoints so coverage reflects real consumer behavior.
+10. Do not add tests against private functions, private methods, or internal-only seams unless the human explicitly asks for that approach; if private-surface testing seems necessary, ask first.
+11. Preserve the repository's existing test framework, fixture layout, helper style, assertion idioms, and naming patterns unless the task explicitly changes testing infrastructure.
+12. Pair with the relevant language standard skill for language-specific idioms, and with `change-validation` for selecting or reporting commands.
+13. If another testing-focused skill applies, use this skill for cross-language test policy and the other skill only for specialized language, framework, or library details; this skill's cross-language rules take precedence unless the human or repository instructions explicitly say otherwise.
+14. When tests use mocks, stubs, spies, fakes, or other test doubles, check whether each double protects a true boundary or only mirrors internal implementation; flag interaction-only tests that could pass while real behavior is broken.
+15. Before finishing test changes or reviews, scan changed tests for repeated boolean or numeric assertions whose default failure output would not identify the behavior under test; add named subtests or assertion messages where needed.
+16. When using the test-first loop, report the trace in the final update using this shape: `Style detected`, `First test/scenario`, `Red`, `Green`, and `Refactor`. Include the test, scenario, feature, or spec added or updated first; whether the red step failed for the expected reason or why it was not practical to run; the implementation change that made it green; and any refactor after green.
 
 ## Principles
 
 - Assert changed behavior and contracts, not incidental implementation details.
+- Use test-first or scenario-first development for behavior changes when the repository has a credible test or BDD layer. If the change is docs-only, formatting-only, mechanical, or cannot reasonably be exercised first, call out the exception and validate with the appropriate lint or check instead.
 - Prefer classicist, behavior-oriented tests over mockist, interaction-heavy tests: test observable outcomes through real in-process collaborators where practical, and avoid mocking your own code just to isolate a class, method, function, or file.
 - Treat the unit under test as a behavior at an appropriate boundary, not automatically a single class, method, function, or file.
 - Treat audit findings as candidates, not marching orders. Re-check whether nearby tests already cover the behavior before adding new tests.

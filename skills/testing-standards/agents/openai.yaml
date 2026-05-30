@@ -1,4 +1,4 @@
 interface:
   display_name: "Testing Standards"
-  short_description: "Design behavior-focused cross-language tests"
-  default_prompt: "Use $testing-standards to design or review focused tests for this change."
+  short_description: "Design TDD/BDD behavior tests"
+  default_prompt: "Use $testing-standards to design or review focused tests for this change, preferring a test-first or scenario-first loop for behavior changes."

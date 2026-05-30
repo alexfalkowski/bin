@@ -89,7 +89,7 @@ Keep optional follow-up notes separate from findings:
 7. Stop after proposing the solution. Do not edit code, update `ISSUES.md`, or start validation until the human explicitly agrees to that finding's solution.
 8. Ask questions when behavior, compatibility, test layer, fixture strategy, validation, or user intent is ambiguous. Treat silence or a broad "implement test gaps" request as permission to start the proposal workflow, not as permission to code.
 9. Once the solution for the current finding is agreed, implement only that finding with the smallest clear test change, preferring the existing local test shape over new standalone structure.
-10. Use `$testing-standards` for test design and pair with the relevant language standard for local idioms.
+10. Use `$testing-standards` for test design and pair with the relevant language standard for local idioms. If implementing the test gap requires production behavior to change, prefer the test-first or scenario-first loop from `$testing-standards`.
 11. Validate the test change using checks appropriate to the changed tests.
 12. Report the result for that finding and ask the human to verify and explicitly say `TEST-<number> is done`.
 13. Do not move to the next finding until the human says `TEST-<number> is done`.
