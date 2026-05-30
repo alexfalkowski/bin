@@ -195,7 +195,7 @@ build-test:
 
 # Run in dev mode with air; builds and runs "$(NAME) server" using test config.
 dev:
-	@air --build.cmd "make dep build" --build.bin "./$(NAME) server -i file:test/.config/server.yml"
+	@air --build.cmd "make dep build" --build.bin "./$(NAME) server -config file:test/.config/server.yml"
 
 # Build a test docker image tagged alexfalkowski/$(NAME):test.$(platform).
 build-docker:
