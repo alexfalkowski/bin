@@ -1,4 +1,4 @@
 interface:
   display_name: "Testing Standards"
-  short_description: "Design TDD/BDD behavior tests"
-  default_prompt: "Use $testing-standards to design or review focused tests for this change, preferring a test-first or scenario-first loop for behavior changes."
+  short_description: "Design focused behavior tests"
+  default_prompt: "Use $testing-standards to design or review focused tests for this change, preferring public or documented entrypoints and a test-first or scenario-first loop for behavior changes. Do not write private-surface tests unless you first explain why the behavior cannot be covered publicly and get human agreement."
