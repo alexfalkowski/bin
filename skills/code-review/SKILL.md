@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: Reviews changed code for bugs, regressions, risky assumptions, missing tests, compatibility breaks, missing documentation, and language-specific maintainability or idiom risks. Use when the user asks for a general code review, diff review, PR check, or pre-merge issue pass; delegate explicit security scope to security-audit.
+description: Reviews changed code for bugs, regressions, risky assumptions, missing tests, compatibility breaks, missing documentation, and language-specific maintainability or idiom risks. Use when the user asks for a general code review, diff review, PR check, or pre-merge issue pass; delegate explicit security scope to $security-audit.
 ---
 
 # Code Review

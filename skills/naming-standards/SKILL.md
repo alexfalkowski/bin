@@ -1,6 +1,6 @@
 ---
 name: naming-standards
-description: Applies cross-language naming judgment for domain clarity, vocabulary consistency, abstraction level, ambiguity, boolean phrasing, public API terminology, and rename safety. Use when writing, reviewing, refactoring, documenting, or discussing names across code, tests, commands, configuration, docs, and public interfaces; pair with language standards for language-specific idioms.
+description: Applies cross-language naming judgment for domain clarity, vocabulary consistency, abstraction level, ambiguity, boolean phrasing, public API terminology, and rename safety. Use when writing, reviewing, refactoring, documenting, or discussing names across code, tests, commands, configuration, docs, and public interfaces; pair with $go-standards, $ruby-standards, or $shell-standards for language-specific idioms.
 ---
 
 # Naming Standards
