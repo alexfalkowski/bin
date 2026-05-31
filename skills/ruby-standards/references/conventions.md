@@ -33,4 +33,5 @@ Use this reference when working in Ruby repositories.
 - Keep method signatures, return shapes, exceptions, and side effects aligned with the repository's existing Ruby conventions.
 - Prefer explicit objects and methods over clever DSLs or implicit behavior unless the repository already uses that style.
 - When changing a documented command or task interface, update the corresponding docs and examples in the repo's established locations.
+- Use `$naming-standards` for concept clarity, vocabulary consistency, abstraction level, public terminology, and rename safety. Use this reference for Ruby-specific module, class, method, predicate, bang-method, constant, and test idioms.
 - Match the repository's established naming, error-handling, and test idioms instead of imposing a global Ruby style.

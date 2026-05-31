@@ -18,6 +18,8 @@ skill instead of one broad default:
 - `change-validation`: test, lint, CI, security, benchmark, and validation selection.
 - `testing-standards`: language-agnostic test design, coverage, fixtures,
   determinism, and test-layer guidance.
+- `naming-standards`: cross-language naming judgment for domain clarity,
+  consistency, abstraction level, public terminology, and rename safety.
 - `code-review`: review findings, risk assessment, and missing coverage.
 - `security-audit`: security reviews, vulnerability checks, unsafe shell/filesystem/network/auth inspection, and Go/Ruby/shell audit guidance.
 - `code-issues`: find confirmed code issues into `ISSUES.md`, then implement agreed fixes one code issue at a time.
@@ -26,9 +28,9 @@ skill instead of one broad default:
 - `review-pr`: create a commit, force-push, and open a draft PR with a generated summary.
 - `shell-standards`: Bash scripting, ShellCheck, text processing, directory
   scope, and function documentation conventions.
-- `go-standards`: Go API, documentation, import, naming, and testing
+- `go-standards`: Go API, documentation, import, naming idiom, and testing
   conventions for repos using this tooling.
-- `ruby-standards`: Ruby API, documentation, style, and validation
+- `ruby-standards`: Ruby API, documentation, naming idiom, style, and validation
   conventions for repos using this tooling.
 
 Treat this `AGENTS.md` as the repo-specific companion to those skills.
@@ -71,6 +73,9 @@ Common composition:
   `change-validation` for scanner, lint, or CI command selection.
 - `testing-standards` pairs with language standards for test idioms and
   `change-validation` for command selection.
+- `naming-standards` pairs with language standards when a change creates,
+  reviews, or renames identifiers, commands, flags, files, tests, fixtures, or
+  documentation terms.
 - `project-workflow` covers command discovery, CI expectations, downstream
   `./bin` wiring, and shared Makefile fragment behavior.
 - `change-validation` should use `project-workflow` context before selecting

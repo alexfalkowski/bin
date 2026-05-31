@@ -26,12 +26,17 @@ checks, and findings.
 - `testing-standards` covers language-agnostic test design and coverage
   decisions; pair it with language standards for idioms and
   `change-validation` for command selection.
+- `naming-standards` covers cross-language naming judgment for domain clarity,
+  vocabulary consistency, abstraction level, ambiguity, public terminology, and
+  rename safety; pair it with language standards for language-specific idioms.
 - `project-workflow` covers command discovery, CI expectations, downstream
   `./bin` wiring, and shared Makefile fragment behavior.
 - `change-validation` should use `project-workflow` context before selecting
   validation commands for orchestrated workflows.
 - Language standards pair with `change-validation` for check selection and
   `change-safety` when public APIs, commands, or documented behavior change.
+  They pair with `naming-standards` when a change creates, reviews, or renames
+  identifiers, commands, flags, files, tests, fixtures, or documentation terms.
 
 ## Format Rule
 

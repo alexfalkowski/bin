@@ -28,7 +28,7 @@ Do not combine the two modes in one pass.
    - documentation files directly under the requested root package/folder.
    - source files directly under the requested root package/folder whose comments or docstrings are in scope.
    - each first-level subpackage/subfolder under the requested root.
-12. Each subpackage/subfolder agent owns recursive review of the rest of that subtree. Each agent must perform a thorough documentation review for its assigned scope, pairing with relevant language standards (`$go-standards`, `$ruby-standards`, `$shell-standards`) before recording language-specific comment, docstring, or API documentation findings and `$change-validation` for likely validation commands.
+12. Each subpackage/subfolder agent owns recursive review of the rest of that subtree. Each agent must perform a thorough documentation review for its assigned scope, pairing with relevant language standards (`$go-standards`, `$ruby-standards`, `$shell-standards`) before recording language-specific comment, docstring, or API documentation findings, `$naming-standards` for unclear or inconsistent documentation terminology, command/API names, examples, comments, or public vocabulary, and `$change-validation` for likely validation commands.
 13. Require each agent to return findings in the same shape as the `ISSUES.md` format, without final IDs unless useful locally.
 14. Wait for all agents to finish before aggregating results.
 15. Deduplicate overlapping findings and resolve conflicting agent conclusions by re-checking the code and docs directly.
@@ -49,6 +49,7 @@ Use these standards to decide whether a documentation concern is concrete enough
 - **README and project docs**: README files should quickly explain what the project does, why it is useful, how users get started, where to get help, and who maintains or contributes to it. Prefer root, `.github/`, or `docs/` README placement when GitHub rendering matters. Keep startup docs concise, current, structured with headings, and linked to deeper docs instead of burying long manuals in the README.
 - **Examples and commands**: Installation, setup, usage, Make targets, CLI examples, environment variables, and API examples should be copy-paste-ready when practical and aligned with real entrypoints.
 - **Code comments**: Comments should explain non-obvious intent, tradeoffs, invariants, unidiomatic choices, bug-workaround context, copied-code sources, and helpful external references. Do not demand comments that merely restate obvious code. If a clear comment cannot be written because the code itself is confused, recommend `$code-issues`.
+- **Naming and terminology**: Use `$naming-standards` when documentation terminology, command/API names, examples, comments, or public vocabulary are unclear, inconsistent with code, or misleading.
 - **Language-specific docs**: Use the relevant standards skill for code comments, docstrings, public API docs, and language-specific examples before recording findings. Keep GoDoc details in `$go-standards`, RDoc details in `$ruby-standards`, and shell script/function comment rules in `$shell-standards`.
 
 ## `ISSUES.md` Format
@@ -105,6 +106,7 @@ Keep optional follow-up notes separate from findings:
 
 - Use `$project-workflow` for repository command discovery, documented entrypoints, CI expectations, examples, and `./bin` wiring before review planning or validation.
 - Use relevant language standards for code comments, public API docs, and examples.
+- Use `$naming-standards` when documentation terminology, command/API names, examples, comments, or public vocabulary are unclear, inconsistent, or misleading.
 - Use `$change-safety` when documentation affects public contracts, compatibility, migrations, security expectations, or documented operational behavior.
 - Use `$change-validation` when selecting validation commands for implemented doc fixes.
 - Use `$code-issues` when the confirmed problem is broken behavior, a security issue, a compatibility break, or a violated public contract.
