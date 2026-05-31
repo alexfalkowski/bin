@@ -1,6 +1,6 @@
 ---
 name: go-standards
-description: Applies this repository ecosystem's Go coding, documentation, import, naming idiom, and testing conventions. Use when writing, reviewing, refactoring, or documenting Go packages in repos that use this shared ./bin tooling; pair with $naming-standards for cross-language concept clarity and rename safety.
+description: Applies this repository ecosystem's Go coding, documentation, import, naming idiom, and testing conventions. Use when writing, reviewing, refactoring, or documenting Go packages in repos that use this shared ./bin tooling; pair with $naming-standards when names or renames are part of the change.
 ---
 
 # Go Standards

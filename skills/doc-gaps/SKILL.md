@@ -28,7 +28,10 @@ Do not combine the two modes in one pass.
    - documentation files directly under the requested root package/folder.
    - source files directly under the requested root package/folder whose comments or docstrings are in scope.
    - each first-level subpackage/subfolder under the requested root.
-12. Each subpackage/subfolder agent owns recursive review of the rest of that subtree. Each agent must perform a thorough documentation review for its assigned scope, pairing with relevant language standards (`$go-standards`, `$ruby-standards`, `$shell-standards`) before recording language-specific comment, docstring, or API documentation findings, `$naming-standards` for unclear or inconsistent documentation terminology, command/API names, examples, comments, or public vocabulary, and `$change-validation` for likely validation commands.
+12. Each subpackage/subfolder agent owns recursive review of the rest of that subtree. Each agent must perform a thorough documentation review for its assigned scope, pairing with:
+   - relevant language standards (`$go-standards`, `$ruby-standards`, `$shell-standards`) before recording language-specific comment, docstring, or API documentation findings.
+   - `$naming-standards` when documentation terminology, command/API names, examples, comments, or public vocabulary are unclear or inconsistent.
+   - `$change-validation` for likely validation commands.
 13. Require each agent to return findings in the same shape as the `ISSUES.md` format, without final IDs unless useful locally.
 14. Wait for all agents to finish before aggregating results.
 15. Deduplicate overlapping findings and resolve conflicting agent conclusions by re-checking the code and docs directly.

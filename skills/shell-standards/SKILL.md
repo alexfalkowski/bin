@@ -1,6 +1,6 @@
 ---
 name: shell-standards
-description: Applies this repository ecosystem's Bash scripting, ShellCheck, text-processing, directory-scope, naming idiom, and function documentation conventions. Use when writing, reviewing, refactoring, linting, or documenting shell scripts in repos that use this shared ./bin tooling; pair with $naming-standards for cross-language concept clarity and rename safety.
+description: Applies this repository ecosystem's Bash scripting, ShellCheck, text-processing, directory-scope, naming idiom, and function documentation conventions. Use when writing, reviewing, refactoring, linting, or documenting shell scripts in repos that use this shared ./bin tooling; pair with $naming-standards when names or renames are part of the change.
 ---
 
 # Shell Standards
