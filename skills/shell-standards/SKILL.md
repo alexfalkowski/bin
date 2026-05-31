@@ -1,6 +1,6 @@
 ---
 name: shell-standards
-description: Applies this repository ecosystem's Bash scripting, ShellCheck, text-processing, directory-scope, and function documentation conventions. Use when writing, reviewing, refactoring, linting, or documenting shell scripts in repos that use this shared ./bin tooling.
+description: Applies this repository ecosystem's Bash scripting, ShellCheck, text-processing, directory-scope, naming idiom, and function documentation conventions. Use when writing, reviewing, refactoring, linting, or documenting shell scripts in repos that use this shared ./bin tooling; pair with $naming-standards for cross-language concept clarity and rename safety.
 ---
 
 # Shell Standards
@@ -11,9 +11,10 @@ description: Applies this repository ecosystem's Bash scripting, ShellCheck, tex
 2. Read `references/conventions.md` before editing script structure, ShellCheck directives, text processing, directory handling, or functions.
 3. Preserve the repository's existing shell style, argument handling, and command wrappers.
 4. Use Bash for scripts with `#!/usr/bin/env bash` and catch failures early with `set -eo pipefail`.
-5. Pair this skill with `$security-audit` for `eval`, shell-command construction, broad file deletion/writes, downloads, temp files, env/secrets, or other trust-boundary changes.
-6. Pair this skill with `$testing-standards` when designing, reviewing, or refactoring script behavior tests.
-7. Pair this skill with `change-validation` when selecting ShellCheck or script lint commands.
+5. Pair this skill with `$naming-standards` when creating, reviewing, or renaming scripts, functions, flags, environment variables, files, tests, fixtures, or documentation terms.
+6. Pair this skill with `$security-audit` for `eval`, shell-command construction, broad file deletion/writes, downloads, temp files, env/secrets, or other trust-boundary changes.
+7. Pair this skill with `$testing-standards` when designing, reviewing, or refactoring script behavior tests.
+8. Pair this skill with `$change-validation` when selecting ShellCheck or script lint commands.
 
 ## References
 

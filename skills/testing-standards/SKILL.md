@@ -18,7 +18,7 @@ description: Applies language-agnostic test design, test-first/TDD or scenario-f
 9. Test through public or documented APIs, commands, tasks, or service entrypoints so coverage reflects real consumer behavior.
 10. Do not add tests against private functions, private methods, or internal-only seams unless the human explicitly asks for that approach. If private-surface testing seems necessary, first explain why the behavior cannot be covered through a public or documented entrypoint, then ask before writing it.
 11. Preserve the repository's existing test framework, fixture layout, helper style, assertion idioms, and naming patterns unless the task explicitly changes testing infrastructure.
-12. Pair with the relevant language standard skill for language-specific idioms, and with `change-validation` for selecting or reporting commands.
+12. Pair with the relevant language standard skill for language-specific idioms, and with `$change-validation` for selecting or reporting commands.
 13. If another testing-focused skill applies, use this skill for cross-language test policy and the other skill only for specialized language, framework, or library details; this skill's cross-language rules take precedence unless the human or repository instructions explicitly say otherwise.
 14. When tests use mocks, stubs, spies, fakes, or other test doubles, check whether each double protects a true boundary or only mirrors internal implementation; flag interaction-only tests that could pass while real behavior is broken.
 15. Before finishing test changes or reviews, scan changed tests for repeated boolean or numeric assertions whose default failure output would not identify the behavior under test; add named subtests or assertion messages where needed.

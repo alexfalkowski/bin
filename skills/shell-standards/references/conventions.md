@@ -32,6 +32,7 @@ Use this reference when working with shell scripts.
 
 ## Functions
 
+- Use `$naming-standards` for concept clarity, vocabulary consistency, abstraction level, public terminology, and rename safety. Use this reference for shell-specific script, function, flag, environment variable, and file idioms.
 - In included or sourced shell library files, typically files ending in `.sh`, add comments for public functions.
 - In included or sourced shell library files, functions starting with `_` are private and do not require comments.
 - In standalone executable scripts, functions do not need a leading `_` just to avoid public API treatment.

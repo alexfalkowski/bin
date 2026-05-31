@@ -14,7 +14,7 @@ description: Reviews security-sensitive code, scripts, Makefile glue, Docker hel
    - `references/shell.md` for Bash scripts, Make targets that invoke shell commands, Docker helper scripts, ShellCheck, quoting, temp files, or destructive commands.
    - `references/skills.md` for skill descriptions, bundled scripts/assets, permissions, prompt-injection risk, or external skill adoption.
    - `references/shared.md` for cross-language repositories, dependency/config audits, secrets, Docker/security scanners, and report structure.
-3. Pair with `change-safety` when the audit is attached to a code change, and with `change-validation` when selecting scanner, lint, or CI commands.
+3. Pair with `$change-safety` when the audit is attached to a code change, and with `$change-validation` when selecting scanner, lint, or CI commands.
 4. Ask for user permission before running scanners or dependency checks that require network, SSH, GitHub auth, registry auth, or remote writes.
 5. Inspect concrete data/control flow before reporting a risk. Prefer file and line references over general advice.
 6. Report exploitable findings first.
