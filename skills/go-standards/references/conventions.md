@@ -24,7 +24,8 @@ Use this reference when working in Go repositories.
 - Infer the project type from existing tests and CI: Go libraries commonly use unit and integration tests, while services in this ecosystem may rely on Cucumber feature flows around the service.
 - In this repository ecosystem, prefer `github.com/stretchr/testify/require` when adding assertion-based tests unless the package already uses a different local pattern.
 - When changing Go tests, scan changed `require.True`, `require.False`, `require.Equal`, `require.EqualValues`, `require.Less`, and `require.LessOrEqual` calls. Repeated or scenario-sensitive boolean and numeric assertions should include a message unless the test or subtest name already makes the behavior obvious.
-- Prefer external test packages named `<package>_test` when the behavior can be exercised through the public interface.
+- Use this decision gate before creating or changing a Go test file: default to an external test package named `<package>_test`; use the production package only after explaining why the public or documented entrypoint cannot cover the behavior.
+- Do not write internal Go tests in the production package just to reach unexported functions, methods, fields, or collaborators.
 - Keep test cases and test functions first in the file. Place fakes, stubs, spies, mock implementations, and helper types after the tests at the bottom of the file.
 
 ## Method Layout
