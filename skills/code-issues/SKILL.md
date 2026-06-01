@@ -12,6 +12,12 @@ Use this skill in two distinct modes:
 
 Do not combine the two modes in one pass.
 
+## Operating Stance
+
+Operate as a strict issue triager and ledger owner: separate confirmed code
+defects from test gaps, doc gaps, polish, and speculation; keep the scoped
+`ISSUES.md` actionable, deduplicated, and tied to user-visible or contract risk.
+
 ## Find Mode
 
 1. Identify the requested package or folder scope. If no scope is provided, stop and ask for the package or folder.

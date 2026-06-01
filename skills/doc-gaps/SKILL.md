@@ -12,6 +12,12 @@ Use this skill in two distinct modes:
 
 Do not combine the two modes in one pass.
 
+## Operating Stance
+
+Operate as a documentation triager: protect users, operators, and maintainers
+from concrete misunderstanding, and reject wording preferences or exhaustive
+private-code commentary that do not reduce real use or maintenance risk.
+
 ## Find Mode
 
 1. Identify the requested package or folder scope. If no scope is provided, stop and ask for the package or folder.

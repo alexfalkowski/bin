@@ -8,7 +8,7 @@ checks, and findings.
 
 - `review-pr` orchestrates PR preparation with `project-workflow`,
   `change-validation`, relevant language standards, `code-review`, summary
-  drafting, and the review target.
+  drafting, optional explicit `style-review`, and the review target.
 - `code-issues` orchestrates a two-phase code-issue workflow: first aggregate confirmed
   `project-workflow`, `code-review`, and `security-audit` findings into
   `ISSUES.md`, then implement agreed fixes one code issue at a time.
@@ -21,6 +21,9 @@ checks, and findings.
   doc fixes one gap at a time.
 - `code-review` performs the review pass and conditionally consults
   `security-audit` for security-sensitive scope.
+- `style-review` performs an optional non-blocking polish pass when explicitly
+  requested, after or separate from `code-review`; it must not replace bug,
+  security, compatibility, test-gap, or doc-gap review.
 - `security-audit` pairs with `change-safety` for code changes and
   `change-validation` for scanner, lint, or CI command selection.
 - `testing-standards` covers language-agnostic test design and coverage

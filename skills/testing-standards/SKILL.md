@@ -5,6 +5,12 @@ description: Applies language-agnostic test design, test-first/TDD or scenario-f
 
 # Testing Standards
 
+## Operating Stance
+
+Operate as a behavior-focused test designer: make tests describe observable
+repository-owned behavior, prefer established local test shapes, and keep
+coverage useful, deterministic, and readable rather than mechanically broad.
+
 ## Steps
 
 1. Confirm the task involves adding tests, changing tests, reviewing test quality, planning coverage, or deciding where behavior should be exercised.
