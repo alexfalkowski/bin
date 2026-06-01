@@ -18,31 +18,34 @@ description: Reviews, validates, commits, force-pushes, and opens a draft pull r
 9. If the changed paths include shell scripts, Bash helpers, ShellCheck config/directives, shell docs, or script behavior, also use `$shell-standards`.
 10. If the changed paths include tests, test helpers, fixtures, or changes that raise test coverage or test-design questions, also use `$testing-standards`.
 11. Use `$code-review` to inspect the current change before drafting PR text.
-12. Resolve any blocking review findings before continuing; if findings remain intentionally unresolved, call them out in the PR summary.
-13. If `$code-review` reports security findings or security validation gaps, resolve them or document them in the PR summary before `make review`.
-14. Read `references/summary-format.md`, then draft a lowercase, unprefixed `msg` and multiline Markdown `desc` from the current working tree.
-15. Follow the commit-subject rules: `make review` adds the branch-derived `type(scope):` prefix, so treat branch words as routing metadata rather than message source material and do not repeat the type or scope in `msg`.
-16. Keep `desc` in the summary format, including honest testing details.
-17. When attribution is appropriate or requested, append this footer to the summary instead of a `Co-authored-by:` trailer:
+12. If the user explicitly asks for style nits, polish, readability review, or non-blocking cleanup comments before the PR, also use `$style-review` after the code-review pass.
+13. Resolve any blocking review findings before continuing. Do not run `make review` while blocking findings remain unless the human explicitly says to open a draft PR with those findings unresolved; in that case, call them out in the PR summary.
+14. If `$code-review` reports security findings or security validation gaps, resolve them or document them in the PR summary before `make review`.
+15. Treat `$style-review` notes as non-blocking unless the user explicitly asks to resolve them before opening the PR.
+16. Read `references/summary-format.md`, then draft a lowercase, unprefixed `msg` and multiline Markdown `desc` from the current working tree.
+17. Follow the commit-subject rules: `make review` adds the branch-derived `type(scope):` prefix, so treat branch words as routing metadata rather than message source material and do not repeat the type or scope in `msg`.
+18. Keep `desc` in the summary format, including honest testing details.
+19. When attribution is appropriate or requested, append this footer to the summary instead of a `Co-authored-by:` trailer:
 
 ```text
 AI-assisted-by: [Codex](https://openai.com/codex/)
 ```
 
-18. Run the review target with the drafted values:
+20. Run the review target with the drafted values:
 
 ```bash
 make msg="unprefixed subject" desc="summary" review
 ```
 
-19. Pass `desc` as the multiline Markdown summary; do not flatten the summary into a single line.
-20. Read `references/output-format.md`, then report the result using that exact structure; do not add, remove, rename, or reorder sections.
+21. Pass `desc` as the multiline Markdown summary; do not flatten the summary into a single line.
+22. Read `references/output-format.md`, then report the result using that exact structure; do not add, remove, rename, or reorder sections.
 
 ## References
 
 - Read `references/summary-format.md` before drafting the `msg` and `desc` values.
 - Read `references/output-format.md` before producing the final review PR report.
 - Use `$project-workflow` for repository command discovery, CI expectations, and `./bin` wiring before validation and `make review`.
+- Use `$style-review` only when the user explicitly asks for non-blocking polish before the PR.
 
 ## Notes
 

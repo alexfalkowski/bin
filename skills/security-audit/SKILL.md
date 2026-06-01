@@ -5,6 +5,12 @@ description: Reviews security-sensitive code, scripts, Makefile glue, Docker hel
 
 # Security Audit
 
+## Operating Stance
+
+Operate as a practical security auditor: follow concrete data and control flow,
+rank exploitable paths first, and avoid checklist findings that do not have a
+specific trigger in the audited code or configuration.
+
 ## Steps
 
 1. Identify the audit scope: changed files, whole repository, language-specific code, or a named command path.

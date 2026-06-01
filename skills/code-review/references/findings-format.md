@@ -6,7 +6,8 @@ Use this reference when the user asks for a review.
 
 - Prioritize bugs, behavioral regressions, risky assumptions, and missing coverage.
 - Flag missing tests, compatibility breaks, unsafe defaults, and missing docs when they materially affect the change.
-- Focus on user-visible impact and maintenance risk before style nits.
+- Focus on user-visible impact and maintenance risk. Do not report style nits
+  as findings; use `$style-review` when the user asks for non-blocking polish.
 - Prefer concrete findings over broad summaries.
 - Ground each finding in the inspected code and describe the consequence, not just the preference.
 - Avoid broad "consider checking" comments. Each finding needs a concrete changed location, behavior at risk, evidence, and a clear place to start fixing.

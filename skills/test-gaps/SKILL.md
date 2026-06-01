@@ -12,6 +12,12 @@ Use this skill in two distinct modes:
 
 Do not combine the two modes in one pass.
 
+## Operating Stance
+
+Operate as a coverage triager: protect repository-owned behavior through the
+narrowest credible established test layer, and reject gaps that only test
+dependency semantics, private implementation detail, or coverage vanity.
+
 ## Find Mode
 
 1. Identify the requested package or folder scope. If no scope is provided, stop and ask for the package or folder.

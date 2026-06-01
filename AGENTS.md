@@ -21,6 +21,8 @@ skill instead of one broad default:
 - `naming-standards`: cross-language naming judgment for domain clarity,
   consistency, abstraction level, public terminology, and rename safety.
 - `code-review`: review findings, risk assessment, and missing coverage.
+- `style-review`: non-blocking readability, consistency, idiom, and polish
+  suggestions that should not be reported as code-review findings.
 - `security-audit`: security reviews, vulnerability checks, unsafe shell/filesystem/network/auth inspection, and Go/Ruby/shell audit guidance.
 - `code-issues`: find confirmed code issues into `ISSUES.md`, then implement agreed fixes one code issue at a time.
 - `test-gaps`: find confirmed missing or weak tests into `ISSUES.md`, then implement agreed test fixes gap by gap.
@@ -56,7 +58,7 @@ Common composition:
 
 - `review-pr` orchestrates PR preparation with `project-workflow`,
   `change-validation`, relevant language standards, `code-review`, summary
-  drafting, and the review target.
+  drafting, optional explicit `style-review`, and the review target.
 - `code-issues` orchestrates a two-phase code-issue workflow: aggregate confirmed
   `project-workflow`, `code-review`, and `security-audit` findings into
   `ISSUES.md`, then implement agreed fixes one code issue at a time.
@@ -69,6 +71,9 @@ Common composition:
   implement agreed doc fixes gap by gap.
 - `code-review` conditionally consults `security-audit` for security-sensitive
   review scope while keeping the review findings format.
+- `style-review` performs an optional non-blocking polish pass when explicitly
+  requested, after or separate from `code-review`; it must not replace bug,
+  security, compatibility, test-gap, or doc-gap review.
 - `security-audit` pairs with `change-safety` for code changes and
   `change-validation` for scanner, lint, or CI command selection.
 - `testing-standards` pairs with language standards for test idioms and

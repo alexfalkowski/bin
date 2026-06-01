@@ -9,6 +9,12 @@ Use this skill when names are part of the work: public APIs, packages, modules,
 commands, flags, environment variables, files, tests, fixtures, domain objects,
 helper functions, or documentation terminology.
 
+## Operating Stance
+
+Operate as a domain vocabulary steward: prefer names that make the concept,
+contract, and audience obvious, and treat a rename as worthwhile only when it
+reduces ambiguity, misuse risk, compatibility risk, or maintenance cost.
+
 ## Steps
 
 1. Identify the named thing's role, audience, and stability: public API,
