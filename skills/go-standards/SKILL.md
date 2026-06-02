@@ -10,7 +10,7 @@ description: Applies this repository ecosystem's Go coding, documentation, impor
 1. Confirm the task is in a Go repository or touches Go code, Go tests, Go documentation, or Go package APIs.
 2. Read `references/conventions.md` before editing exported APIs, documentation, imports, naming, method layout, or tests.
 3. Before writing Go code that adds or changes imports, inspect nearby files in the same package and adjacent packages for existing import names, package ownership, wrappers, and dependency direction.
-4. Do not invent Go import aliases while writing code. Add an alias only after confirming the package's declared name would collide or create required disambiguation, and document that choice in your reasoning.
+4. Do not invent Go import aliases while writing code. Add an alias only after confirming the package's declared name would collide or create required disambiguation, and document that choice in your reasoning. When reviewing or cleaning existing code, do not remove or rename an existing alias solely because the collision is not obvious or the alias reads awkwardly; flag it for human review instead.
 5. Preserve the repository's existing Go package shape and public API style.
 6. Pair this skill with `$naming-standards` when creating, reviewing, or renaming Go identifiers, packages, files, tests, or documentation terms.
 7. Add or update Go tests when behavior changes and the repository supports tests.
