@@ -27,13 +27,18 @@ security, compatibility, testing, or documentation findings.
    missing tests, missing docs, or broken public contracts as style notes.
    Recommend `$code-review`, `$security-audit`, `$test-gaps`, or `$doc-gaps`
    instead when those are the real issue.
-6. Prefer concrete suggestions over taste. Each note should explain why the
+6. Treat GoDoc link syntax, comment wording, and local readability as style
+   notes only when the existing documentation is accurate enough. If the note
+   would add, remove, or materially change public API behavior, safety
+   constraints, panic/error behavior, lifecycle semantics, defaults, or
+   operational guidance, route it to `$doc-gaps` or `$code-review` instead.
+7. Prefer concrete suggestions over taste. Each note should explain why the
    change would make the code easier to read, maintain, or align with local
    patterns.
-7. Do not create or update `ISSUES.md`; style notes are not ledger findings.
-8. When style-review is the final response, use the exact structure below; do
+8. Do not create or update `ISSUES.md`; style notes are not ledger findings.
+9. When style-review is the final response, use the exact structure below; do
    not add, remove, rename, or reorder sections.
-9. When another skill embeds style notes, preserve the non-blocking nature,
+10. When another skill embeds style notes, preserve the non-blocking nature,
    file references, suggestions, and rationale in the caller's output format.
 
 ## Output Format
