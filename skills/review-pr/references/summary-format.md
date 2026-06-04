@@ -18,15 +18,27 @@ Use this reference when drafting the `msg` and `desc` values for `make review`.
 ```markdown
 ## What
 
-- Describe the concrete change.
+- Describe what changed in terms of behavior, documentation, commands,
+  configuration, or public/reviewer-visible outcomes.
+- Mention the context the code cannot fully tell the reviewer, such as scope,
+  intentional boundaries, compatibility notes, non-goals, or user-facing effect.
+- Avoid implementation mechanics unless they are the observable change.
 
 ## Why
 
-- Describe why the change was made.
+- Explain why the PR matters: the problem, risk, workflow gap, maintenance
+  benefit, or user value it addresses.
+- Make this the selling point of the PR.
+- Do not repeat the What section or rely on the diff to imply motivation.
 
 ## Testing
 
 - `command` - passed
+- Mention new or changed tests and what behavior, edge case, or risk they cover.
+- Mention expected CI coverage only as additional verification, not as a
+  replacement for unrun local checks.
+- Call out validation gaps, manual verification still needed, or intentionally
+  scoped testing.
 ```
 
 - Do not add markdown, labels, bullets, quotes, or surrounding commentary to `msg`.
