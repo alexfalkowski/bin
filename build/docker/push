@@ -29,5 +29,5 @@ if [[ -f "$version_file" ]]; then
 
   # Build and push docker.
   validate
-  docker build --build-arg "name=$name" --build-arg "version=$latest_tag" -t "$image" -f "$dockerfile" --push .
+  docker build --platform "linux/$platform" --build-arg "name=$name" --build-arg "version=$latest_tag" -t "$image" -f "$dockerfile" --push .
 fi

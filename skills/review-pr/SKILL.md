@@ -31,18 +31,18 @@ description: Reviews, validates, commits, force-pushes, and opens a draft pull r
 AI-assisted-by: [Codex](https://openai.com/codex/)
 ```
 
-20. Run the review target with the drafted values:
+20. Write the multiline Markdown `desc` to a temporary file with `mktemp`, then run the review target with the drafted subject and file path:
 
 ```bash
-make msg="unprefixed subject" desc="summary" review
+make msg="unprefixed subject" desc_file="$desc_file" review
 ```
 
-21. Pass `desc` as the multiline Markdown summary; do not flatten the summary into a single line.
+21. Pass `desc_file` as the path to the multiline Markdown summary; do not flatten the summary into a single line or pass Markdown through a quoted shell argument.
 22. Read `references/output-format.md`, then report the result using that exact structure; do not add, remove, rename, or reorder sections.
 
 ## References
 
-- Read `references/summary-format.md` before drafting the `msg` and `desc` values.
+- Read `references/summary-format.md` before drafting the `msg` value and PR summary content.
 - Read `references/output-format.md` before producing the final review PR report.
 - Use `$project-workflow` for repository command discovery, CI expectations, and `./bin` wiring before validation and `make review`.
 - Use `$style-review` only when the user explicitly asks for non-blocking polish before the PR.

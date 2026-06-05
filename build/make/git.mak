@@ -2,11 +2,14 @@
 
 USER:=$(shell ruby -e 'require "etc"; print "#{Etc.getpwuid(Process.uid).name}-#{Random.rand(0...100_000)}"')
 BRANCH:=$(shell git branch --show-current)
+export BRANCH
 NEW_BRANCH:=$(subst $() ,-,$(name))
-PREFIX:=$(shell ruby -e '_, t, n = (ARGV[0] || "").split("/"); print "#{t}(#{n}):" unless t.nil?' $(BRANCH))
+PREFIX:=$(shell ruby -e '_, t, n = (ENV["BRANCH"] || "").split("/"); print "#{t}(#{n}):" unless t.nil?')
+export PREFIX
 
 override export msg := $(value msg)
 override export desc := $(value desc)
+override export desc_file := $(value desc_file)
 
 # Checkout the master branch.
 master:
@@ -38,7 +41,7 @@ update-submodule:
 
 # Print the current git branch.
 branch:
-	@echo "bin: current branch '$(BRANCH)'"
+	@printf "bin: current branch '%s'\n" "$$BRANCH"
 
 # Create and checkout a new branch named $(USER)/$(branch).
 checkout:
@@ -77,11 +80,11 @@ new-release: new-branch
 
 # Delete the current branch.
 delete:
-	@git branch -D $(BRANCH)
+	@git branch -D "$$BRANCH"
 
 # Update from master and delete the current branch.
 done: branch latest delete
-	@echo "bin: done with branch '$(BRANCH)'"
+	@printf "bin: done with branch '%s'\n" "$$BRANCH"
 
 # Rebase the current branch onto origin/master.
 sync:
@@ -95,24 +98,28 @@ amend: add
 edit-amend: add
 	@git commit --amend
 
-# Commit all changes with a prefix derived from the branch (set msg/desc).
+# Commit all changes with a prefix derived from the branch (set msg and desc or desc_file).
 commit: add
-	@printf '%s\n\n%s\n' "$(PREFIX) $${msg}" "$${desc}" | git commit -a -F -
+	@file="$$(mktemp)"; \
+	trap 'rm -f "$$file"' EXIT; \
+	printf '%s\n\n' "$${PREFIX} $${msg}" > "$$file"; \
+	if [ -n "$${desc_file}" ]; then cat "$${desc_file}"; else printf '%s\n' "$${desc}"; fi >> "$$file"; \
+	git commit -a -F "$$file"
 
 # Force-push the current branch to origin.
 push:
-	@git push -f origin $(BRANCH)
+	@git push -f origin "$$BRANCH"
 
 # Amend the last commit and force-push.
 force: amend push
 
 # Create a draft PR for the current branch (gh pr create --draft).
 draft:
-	@gh pr create -d -a @me --fill-first --head $(BRANCH)
+	@gh pr create -d -a @me --fill-first --head "$$BRANCH"
 
 # Create a PR for the current branch (gh pr create).
 pr:
-	@gh pr create -a @me --fill-first --head $(BRANCH)
+	@gh pr create -a @me --fill-first --head "$$BRANCH"
 
 # Enable auto squash-merge for the current PR.
 merge:

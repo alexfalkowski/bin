@@ -1,6 +1,6 @@
 ---
 name: test-gaps
-description: Finds concrete missing, weak, or misleading test coverage in a package or folder, records confirmed gaps in that scope's ISSUES.md, and later proposes and implements explicitly agreed test fixes gap by gap. Use when the user asks to find $test-gaps in a package or folder, find test gaps in a package or folder, implement $test-gaps in a package or folder, or implement test gaps in a package or folder.
+description: Finds concrete missing, weak, misleading, flaky, or wrong-layer test coverage in a package or folder, records confirmed gaps in that scope's ISSUES.md, and later proposes and implements explicitly agreed test fixes gap by gap. Use when the user asks to find $test-gaps in a package or folder, find test gaps in a package or folder, find flaky tests in a package or folder, find wrong-layer tests in a package or folder, implement $test-gaps in a package or folder, or implement test gaps in a package or folder.
 ---
 
 # Test Gaps

@@ -56,10 +56,10 @@ Use this reference for any security audit, then load language-specific reference
 ## Severity
 
 Use these security-specific examples after filtering out low-confidence or
-unsupported candidates. They align with `../../references/finding-severity.md`,
-but this security-audit report format uses only `High`, `Medium`, and `Low`.
+unsupported candidates. They align with `../../references/finding-severity.md`.
 
-- High: likely secret exposure, auth bypass, command injection, arbitrary file write/delete, path traversal to sensitive files, remote code execution, or exploitable critical dependency issue.
+- Critical: near-certain remote code execution, credential exposure, auth bypass, data loss or corruption, or exploitable critical dependency issue with broad severe impact.
+- High: likely exploitable command injection, arbitrary file write/delete, path traversal to sensitive files, sensitive information disclosure, or other serious security issue with narrower impact.
 - Medium: constrained injection, sensitive information disclosure, unsafe TLS/auth defaults, dangerous local-only behavior likely to be copied into production, or scanner coverage gaps on security-sensitive changes.
 - Low: hardening issue, defense-in-depth improvement, unclear validation gap, or risky pattern without a demonstrated exploit path.
 
@@ -70,7 +70,7 @@ but this security-audit report format uses only `High`, `Medium`, and `Low`.
 ```markdown
 ## Findings
 
-- severity: High
+- severity: Critical
   file: `path/to/file:42`
   risk: Untrusted input reaches shell execution.
   trigger: User-controlled CLI arguments are interpolated into a shell command.
@@ -88,7 +88,7 @@ but this security-audit report format uses only `High`, `Medium`, and `Low`.
 - None.
 ```
 
-- Use only these severity values for findings: `High`, `Medium`, `Low`. Use `None` only for the required no-findings entry.
+- Use only these severity values for findings: `Critical`, `High`, `Medium`, `Low`. Use `None` only for the required no-findings entry.
 - Use only these validation results: `passed`, `failed`, `not run`, `no-op`.
 - Use `file: n/a` only for repository-wide dependency, configuration, or validation findings that do not have a precise source line.
 - If there are no findings, write exactly one finding entry with `severity: None`, `file: n/a`, `risk: No findings.`, `trigger: n/a`, `impact: n/a`, and `remediation: n/a`.

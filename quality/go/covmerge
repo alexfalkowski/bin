@@ -10,7 +10,7 @@ path = 'test/reports/filter'
 FileUtils.rm_rf path
 FileUtils.mkdir_p path
 
-Dir['test/reports/*.cov'].each do |f|
+Dir['test/reports/*.cov'].reject { |f| File.basename(f) == 'final.cov' }.each do |f|
   filter_file = File.join(path, File.basename(f))
 
   File.open(filter_file, 'w') do |out_file|

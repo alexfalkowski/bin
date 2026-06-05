@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC2086
 # Run benchmark-tagged Cucumber scenarios with coverage reporting enabled.
 
 set -eo pipefail
 
 readonly feature="$1"
 
-COVERAGE_NAME=benchmarks bundler exec cucumber --profile report $feature --tags @benchmark
+args=(--profile report)
+
+if [ -n "$feature" ]; then
+  args+=("$feature")
+fi
+
+args+=(--tags @benchmark)
+
+COVERAGE_NAME=benchmarks bundler exec cucumber "${args[@]}"

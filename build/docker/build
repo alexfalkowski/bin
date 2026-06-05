@@ -24,4 +24,4 @@ validate() {
 
 # Build docker.
 validate
-docker build --build-arg "name=$name" --build-arg version="latest" -t "$image" -f "$dockerfile" .
+docker build --platform "linux/$platform" --build-arg "name=$name" --build-arg version="latest" -t "$image" -f "$dockerfile" .
