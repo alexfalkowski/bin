@@ -35,17 +35,18 @@ defects from test gaps, doc gaps, polish, and speculation; keep the scoped
    - each first-level subpackage/subfolder under the requested root.
 12. Each subpackage/subfolder agent owns recursive review of the rest of that subtree. Each agent must perform a thorough and accurate `$code-review` and `$security-audit` for its assigned scope, using `$testing-standards` for concrete missing-coverage or weak-test analysis and `$change-validation` for likely validation commands.
 13. Require each agent to return findings in the same shape as the `ISSUES.md` format, without final IDs unless useful locally.
-14. Wait for all agents to finish before aggregating results.
-15. Deduplicate overlapping findings and resolve conflicting agent conclusions by re-checking the code directly.
-16. Confirm each candidate finding against the code before recording it. Findings must be concrete bugs, security issues, compatibility breaks, or violated public contracts with user-visible impact.
-17. Do not record standalone missing, weak, flaky, misleading, or wrong-layer tests as code issues unless they are tied to a confirmed bug, security issue, compatibility break, or violated public contract. Use `$test-gaps` for standalone missing or weak test coverage passes.
-18. Do not record standalone missing, weak, stale, misleading, or wrong-location documentation, README, example, comment, or docstring gaps as code issues unless they reveal a confirmed bug, security issue, compatibility break, or violated public contract. Use `$doc-gaps` for standalone documentation review passes.
-19. Do not report optional regression tests, unused convenience aliases, API symmetry, or documentation polish as findings by themselves. List them only as testing gaps, doc gaps, or optional follow-up notes when relevant.
-20. If no confirmed code issues are found, report that no code issues were found and do not create `ISSUES.md`.
-21. If confirmed code issues are found, write all findings to the scoped `ISSUES.md` before making any fixes.
-22. Assign every finding a unique ID for the session in the form `ISSUE-<number>`.
-23. Present the scoped `ISSUES.md` and a proposed fix plan to the user.
-24. Stop after presenting the ledger and plan. Do not fix findings in the same pass.
+14. Use `../references/finding-severity.md` to discard low-confidence candidates before assigning severity.
+15. Wait for all agents to finish before aggregating results.
+16. Deduplicate overlapping findings and resolve conflicting agent conclusions by re-checking the code directly.
+17. Confirm each candidate finding against the code before recording it. Findings must be concrete bugs, security issues, compatibility breaks, or violated public contracts with user-visible impact.
+18. Do not record standalone missing, weak, flaky, misleading, or wrong-layer tests as code issues unless they are tied to a confirmed bug, security issue, compatibility break, or violated public contract. Use `$test-gaps` for standalone missing or weak test coverage passes.
+19. Do not record standalone missing, weak, stale, misleading, or wrong-location documentation, README, example, comment, or docstring gaps as code issues unless they reveal a confirmed bug, security issue, compatibility break, or violated public contract. Use `$doc-gaps` for standalone documentation review passes.
+20. Do not report optional regression tests, unused convenience aliases, API symmetry, or documentation polish as findings by themselves. List them only as testing gaps, doc gaps, or optional follow-up notes when relevant.
+21. If no confirmed code issues are found, report that no code issues were found and do not create `ISSUES.md`.
+22. If confirmed code issues are found, write all findings to the scoped `ISSUES.md` before making any fixes.
+23. Assign every finding a unique ID for the session in the form `ISSUE-<number>`.
+24. Present the scoped `ISSUES.md` and a proposed fix plan to the user.
+25. Stop after presenting the ledger and plan. Do not fix findings in the same pass.
 
 ## `ISSUES.md` Format
 
@@ -98,6 +99,7 @@ Keep optional follow-up notes separate from findings:
 
 ## References
 
+- Use `../references/finding-severity.md` for confidence filtering and severity.
 - Use `$code-review` for review rigor and finding quality.
 - Use `$security-audit` for security-sensitive review scope.
 - Use `$testing-standards` when deciding or reviewing regression coverage.

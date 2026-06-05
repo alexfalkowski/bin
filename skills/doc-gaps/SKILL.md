@@ -39,17 +39,18 @@ private-code commentary that do not reduce real use or maintenance risk.
    - `$naming-standards` when documentation terminology, command/API names, examples, comments, or public vocabulary are unclear or inconsistent.
    - `$change-validation` for likely validation commands.
 13. Require each agent to return findings in the same shape as the `ISSUES.md` format, without final IDs unless useful locally.
-14. Wait for all agents to finish before aggregating results.
-15. Deduplicate overlapping findings and resolve conflicting agent conclusions by re-checking the code and docs directly.
-16. Confirm each candidate gap against the code, current docs, examples, and documented interfaces before recording it. Gaps must be concrete missing, weak, stale, misleading, or wrong-location documentation with credible risk to users, operators, maintainers, public APIs, documented command behavior, onboarding, setup, or contribution workflows.
-17. Do not record confirmed production bugs, security issues, compatibility breaks, or violated public contracts as doc gaps. If broken behavior is discovered during review, report it as out of scope for the doc-gap ledger and recommend `$code-issues`; use this skill when unclear, missing, stale, or misleading documentation is the finding.
-18. Do not record standalone missing, weak, flaky, misleading, or wrong-layer tests as doc gaps. Recommend `$test-gaps` when the unprotected behavior is the finding.
-19. Do not report arbitrary wording preferences, style nits, exhaustive private implementation comments, or optional documentation polish as findings by themselves. List them only as optional follow-up notes when relevant.
-20. If no confirmed doc gaps are found, report that no doc gaps were found and do not create `ISSUES.md`.
-21. If confirmed doc gaps are found, write all findings to the scoped `ISSUES.md` before making any fixes.
-22. Assign every finding a unique ID for the session in the form `DOC-<number>`.
-23. Present the scoped `ISSUES.md` and a proposed doc-fix plan to the user.
-24. Stop after presenting the ledger and plan. Do not fix findings in the same pass.
+14. Use `../references/finding-severity.md` to discard low-confidence candidates before assigning severity.
+15. Wait for all agents to finish before aggregating results.
+16. Deduplicate overlapping findings and resolve conflicting agent conclusions by re-checking the code and docs directly.
+17. Confirm each candidate gap against the code, current docs, examples, and documented interfaces before recording it. Gaps must be concrete missing, weak, stale, misleading, or wrong-location documentation with credible risk to users, operators, maintainers, public APIs, documented command behavior, onboarding, setup, or contribution workflows.
+18. Do not record confirmed production bugs, security issues, compatibility breaks, or violated public contracts as doc gaps. If broken behavior is discovered during review, report it as out of scope for the doc-gap ledger and recommend `$code-issues`; use this skill when unclear, missing, stale, or misleading documentation is the finding.
+19. Do not record standalone missing, weak, flaky, misleading, or wrong-layer tests as doc gaps. Recommend `$test-gaps` when the unprotected behavior is the finding.
+20. Do not report arbitrary wording preferences, style nits, exhaustive private implementation comments, or optional documentation polish as findings by themselves. List them only as optional follow-up notes when relevant.
+21. If no confirmed doc gaps are found, report that no doc gaps were found and do not create `ISSUES.md`.
+22. If confirmed doc gaps are found, write all findings to the scoped `ISSUES.md` before making any fixes.
+23. Assign every finding a unique ID for the session in the form `DOC-<number>`.
+24. Present the scoped `ISSUES.md` and a proposed doc-fix plan to the user.
+25. Stop after presenting the ledger and plan. Do not fix findings in the same pass.
 
 ## Documentation Review Standards
 
@@ -113,6 +114,7 @@ Keep optional follow-up notes separate from findings:
 
 ## References
 
+- Use `../references/finding-severity.md` for confidence filtering and severity.
 - Use `$project-workflow` for repository command discovery, documented entrypoints, CI expectations, examples, and `./bin` wiring before review planning or validation.
 - Use relevant language standards for code comments, public API docs, and examples.
 - Use `$naming-standards` when documentation terminology, command/API names, examples, comments, or public vocabulary are unclear, inconsistent, or misleading.

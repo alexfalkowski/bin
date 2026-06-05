@@ -55,6 +55,10 @@ Use this reference for any security audit, then load language-specific reference
 
 ## Severity
 
+Use these security-specific examples after filtering out low-confidence or
+unsupported candidates. They align with `../../references/finding-severity.md`,
+but this security-audit report format uses only `High`, `Medium`, and `Low`.
+
 - High: likely secret exposure, auth bypass, command injection, arbitrary file write/delete, path traversal to sensitive files, remote code execution, or exploitable critical dependency issue.
 - Medium: constrained injection, sensitive information disclosure, unsafe TLS/auth defaults, dangerous local-only behavior likely to be copied into production, or scanner coverage gaps on security-sensitive changes.
 - Low: hardening issue, defense-in-depth improvement, unclear validation gap, or risky pattern without a demonstrated exploit path.
