@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Run ShellCheck over Bash scripts under build/ and quality/.
+# Run ShellCheck over Bash scripts and sourced shell libraries.
 
 set -eo pipefail
 
@@ -12,7 +12,7 @@ while IFS= read -r -d '' file; do
   if [[ $first_line == "#!/usr/bin/env bash" || $first_line == "#!/bin/bash" ]]; then
     files+=("$file")
   fi
-done < <(find build quality -type f -print0)
+done < <(find build quality lib -type f -print0)
 
 if ((${#files[@]} > 0)); then
   shellcheck "${files[@]}"

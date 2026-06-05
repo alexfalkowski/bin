@@ -1,4 +1,4 @@
-.PHONY: validate-config validate-package validate-profile vendor
+.PHONY: vendor
 
 NAME:=$(shell basename $(CURDIR))
 MODULE:=$(shell head -n 1 go.mod | sed 's/module //')
@@ -14,15 +14,6 @@ override export module := $(value module)
 override export cmd := $(value cmd)
 override export id := $(value id)
 override export kind := $(value kind)
-
-validate-config:
-	@$(PWD)/bin/build/test/validate-config
-
-validate-package:
-	@$(PWD)/bin/build/go/validate-package
-
-validate-profile:
-	@$(PWD)/bin/build/go/validate-profile cmd id kind
 
 download:
 	@go mod download
@@ -131,7 +122,7 @@ specs:
 
 # Open pprof for a captured profile under test/reports/ (set cmd/id/kind).
 pprof:
-	@$(PWD)/bin/build/go/pprof "$${NAME}-$${cmd}-$${id}-$${kind}.prof" cmd id kind
+	@$(PWD)/bin/quality/go/pprof "$${NAME}-$${cmd}-$${id}-$${kind}.prof" cmd id kind
 
 # Fetch a Go module (set module=<path>).
 go-get:
@@ -235,7 +226,7 @@ create-certs:
 
 # Generate a dependency graph PNG for package=$(package), or the module root when unset.
 create-diagram:
-	@$(PWD)/bin/build/go/create-diagram
+	@$(PWD)/bin/quality/go/create-diagram
 
 # Analyse binary size with gsa (non-fatal if gsa is missing/fails).
 analyse:
