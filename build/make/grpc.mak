@@ -1,10 +1,27 @@
-.PHONY: vendor
+.PHONY: validate-config validate-package validate-profile vendor
 
 NAME:=$(shell basename $(CURDIR))
 MODULE:=$(shell head -n 1 go.mod | sed 's/module //')
-SOURCE:=$(shell find . -name '*.go' -not -path './bin*/*' -not -path './test*/*' -not -path './vendor/*' -type f | sort)
+SOURCE:=$(shell find . -name '*.go' -not -path './bin/*' -not -path './test/*' -not -path './vendor/*' -type f | sort)
 PACKAGES=$(shell go list $(sort $(dir $(SOURCE))))
 COVER_PACKAGES=$(shell echo $(PACKAGES) | tr ' ' ',')
+
+export MODULE NAME
+override export gem := $(value gem)
+override export package := $(value package)
+override export platform := $(value platform)
+override export module := $(value module)
+override export id := $(value id)
+override export kind := $(value kind)
+
+validate-config:
+	@ruby -e 'kind = ENV.fetch("kind", ""); valid = !kind.empty? && kind.match?(/\A[A-Za-z0-9_.-]+\z/) && !kind.include?(".."); abort("invalid kind: #{kind}") unless valid'
+
+validate-package:
+	@ruby -e 'package = ENV.fetch("package", ""); valid = !package.empty? && !package.start_with?("/") && !package.include?("..") && package.split("/").all? { |part| part.match?(/\A[A-Za-z0-9_.-]+\z/) && part != "." }; abort("invalid package: #{package}") unless valid'
+
+validate-profile:
+	@ruby -e 'ARGV.each { |key| value = ENV.fetch(key, ""); next if value.empty?; valid = value.match?(/\A[A-Za-z0-9_.-]+\z/) && !value.include?(".."); abort("invalid #{key}: #{value}") unless valid }' id kind
 
 download:
 	@go mod download
@@ -136,12 +153,12 @@ specs:
 	@gotestsum --format testdox --junitfile test/reports/specs.xml -- -vet=off -race -mod vendor -covermode=atomic -coverpkg=$(COVER_PACKAGES) -coverprofile=test/reports/profile.cov $(PACKAGES)
 
 # Open pprof for a captured profile under test/reports/ (set id/kind).
-pprof:
-	@go tool pprof test/reports/$(NAME)-server-$(id)-$(kind).prof
+pprof: validate-profile
+	@go tool pprof "test/reports/$${NAME}-server-$${id}-$${kind}.prof"
 
 # Fetch a Go module (set module=<path>).
 go-get:
-	@go get $(module)
+	@go get "$$module"
 
 # Update one Go module (module=<path>) and re-vendor.
 go-update-dep: go-get tidy vendor
@@ -155,7 +172,7 @@ go-dep: download tidy vendor
 
 # Update a single gem in test/ (set gem=<name>).
 ruby-update-dep:
-	@make -C test gem=$(gem) update-dep
+	@make -C test gem="$${gem}" update-dep
 
 # Install gem dependencies in test/.
 ruby-dep:
@@ -204,7 +221,7 @@ go-sec:
 
 # Scan the test image with Trivy (CRITICAL severity).
 trivy-image:
-	@$(PWD)/bin/build/sec/trivy-image $(NAME) $(platform)
+	@$(PWD)/bin/build/sec/trivy-image "$${NAME}" "$${platform}"
 
 # Scan the repository with Trivy (CRITICAL severity).
 trivy-repo:
@@ -215,11 +232,11 @@ sec: go-sec trivy-repo
 
 # Build a static-ish release binary named $(NAME).
 build:
-	@go build -ldflags="-s -w" -buildvcs=false -tags netgo -a -o $(NAME) .
+	@go build -ldflags="-s -w" -buildvcs=false -tags netgo -a -o "$${NAME}" .
 
 # Build a test binary with -tags features and coverage instrumentation.
 build-test:
-	@go test -vet=off -race -mod vendor -c -tags features -covermode=atomic -coverpkg=$(COVER_PACKAGES) -o $(NAME) $(MODULE)
+	@go test -vet=off -race -mod vendor -c -tags features -covermode=atomic -coverpkg=$(COVER_PACKAGES) -o "$${NAME}" "$${MODULE}"
 
 # Run in dev mode with air; builds and runs "$(NAME) server" using test config.
 dev:
@@ -227,19 +244,19 @@ dev:
 
 # Build a test docker image tagged alexfalkowski/$(NAME):test.$(platform).
 build-docker:
-	@$(PWD)/bin/build/docker/build $(NAME) $(platform)
+	@$(PWD)/bin/build/docker/build "$${NAME}" "$${platform}"
 
 # Push the image to docker hub (only if the version file exists).
 push-docker:
-	@$(PWD)/bin/build/docker/push $(NAME) $(platform)
+	@$(PWD)/bin/build/docker/push "$${NAME}" "$${platform}"
 
 # Create and push multi-arch manifests (only if the version file exists).
 manifest-docker:
-	@$(PWD)/bin/build/docker/manifest $(NAME)
+	@$(PWD)/bin/build/docker/manifest "$${NAME}"
 
 # Base64-encode test/$(kind).yml as a single line.
-encode-config:
-	@cat test/$(kind).yml | base64 -w 0
+encode-config: validate-config
+	@cat "test/$${kind}.yml" | base64 -w 0
 
 # Create server and client TLS certs under test/certs/ using mkcert.
 create-certs:
@@ -248,12 +265,12 @@ create-certs:
 	@cp "$$(mkcert -CAROOT)/rootCA.pem" test/certs/rootCA.pem
 
 # Generate a dependency graph PNG for package=$(package) into assets/.
-create-diagram:
-	@goda graph github.com/alexfalkowski/$(NAME)/$(package)/... | dot -Tpng -o assets/$(package).png
+create-diagram: validate-package
+	@goda graph "$${MODULE}/$${package}/..." | dot -Tpng -o "assets/$${package}.png"
 
 # Analyse binary size with gsa (non-fatal if gsa is missing/fails).
 analyse:
-	@gsa $(NAME) || true
+	@gsa "$${NAME}" || true
 
 # Report cost statistics with scc.
 cost:

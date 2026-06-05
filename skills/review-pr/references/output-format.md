@@ -9,7 +9,7 @@ unprefixed subject
 
 ## PR Summary
 
-<multiline Markdown summary passed as desc>
+<multiline Markdown summary passed via desc_file>
 
 ## Validation
 
@@ -25,7 +25,7 @@ unprefixed subject
 
 ## Review Target
 
-- command: `make msg="..." desc="..." review`
+- command: `make msg="..." desc_file="..." review`
   result: passed
   pr: https://github.com/org/repo/pull/123
 

@@ -1,11 +1,22 @@
-.PHONY: vendor sync
+.PHONY: validate-config validate-package vendor sync
 
 NAME:=$(shell basename $(CURDIR))
 MODULE:=$(shell head -n 1 go.mod | sed 's/module //')
-SOURCE:=$(shell find . -name '*.go' -not -path './bin*/*' -not -path './test*/*' -not -path './vendor/*' -type f | sort)
+SOURCE:=$(shell find . -name '*.go' -not -path './bin/*' -not -path './test/*' -not -path './vendor/*' -type f | sort)
 PACKAGES=$(shell go list $(sort $(dir $(SOURCE))))
 COVER_PACKAGES=$(shell echo $(PACKAGES) | tr ' ' ',')
-BENCHMARK_PROFILE=test/reports/$(package).prof
+
+export MODULE NAME
+override export kind := $(value kind)
+override export module := $(value module)
+override export package := $(value package)
+override export benchtime := $(value benchtime)
+
+validate-config:
+	@ruby -e 'kind = ENV.fetch("kind", ""); valid = !kind.empty? && kind.match?(/\A[A-Za-z0-9_.-]+\z/) && !kind.include?(".."); abort("invalid kind: #{kind}") unless valid'
+
+validate-package:
+	@ruby -e 'package = ENV.fetch("package", ""); valid = !package.empty? && !package.start_with?("/") && !package.include?("..") && package.split("/").all? { |part| part.match?(/\A[A-Za-z0-9_.-]+\z/) && part != "." }; abort("invalid package: #{package}") unless valid'
 
 download:
 	@go mod download
@@ -17,7 +28,7 @@ vendor:
 	@go mod vendor
 
 get:
-	@go get $(module)
+	@go get "$$module"
 
 get-all:
 	@go get -u all
@@ -75,13 +86,16 @@ specs:
 
 # Run benchmarks for package=$(package) and write $(BENCHMARK_PROFILE).
 # Set benchtime=<duration-or-count> to pass -benchtime to go test.
-benchmark:
-	@mkdir -p $(dir $(BENCHMARK_PROFILE))
-	@go test -vet=off -mod vendor -bench=. -run=Benchmark -benchmem $(if $(benchtime),-benchtime=$(benchtime),) -memprofile $(BENCHMARK_PROFILE) ./$(package)
+benchmark: validate-package
+	@profile="test/reports/$${package}.prof"; \
+	mkdir -p "$$(dirname "$$profile")"; \
+	set --; \
+	if [ -n "$$benchtime" ]; then set -- "-benchtime=$$benchtime"; fi; \
+	go test -vet=off -mod vendor -bench=. -run=Benchmark -benchmem "$$@" -memprofile "$$profile" "./$${package}"
 
-# Inspect benchmark memprofile via pprof ($(BENCHMARK_PROFILE)).
-benchmark-pprof:
-	@go tool pprof $(BENCHMARK_PROFILE)
+# Inspect benchmark memprofile via pprof (test/reports/$(package).prof).
+benchmark-pprof: validate-package
+	@go tool pprof "test/reports/$${package}.prof"
 
 remove-generated-coverage:
 	@$(PWD)/bin/quality/go/covfilter
@@ -117,8 +131,8 @@ trivy-repo:
 sec: govulncheck trivy-repo
 
 # Base64-encode test/$(kind).yml as a single line.
-encode-config:
-	@cat test/$(kind).yml | base64 -w 0
+encode-config: validate-config
+	@cat "test/$${kind}.yml" | base64 -w 0
 
 # Create server and client TLS certs under test/certs/ using mkcert.
 create-certs:
@@ -127,12 +141,12 @@ create-certs:
 	@cp "$$(mkcert -CAROOT)/rootCA.pem" test/certs/rootCA.pem
 
 # Generate a dependency graph PNG for package=$(package) into assets/.
-create-diagram:
-	@goda graph $(MODULE)/$(package)/... | dot -Tpng -o assets/$(package).png
+create-diagram: validate-package
+	@goda graph "$${MODULE}/$${package}/..." | dot -Tpng -o "assets/$${package}.png"
 
 # Analyse binary size with gsa (non-fatal if gsa is missing/fails).
 analyse:
-	@gsa $(NAME) || true
+	@gsa "$${NAME}" || true
 
 # Report cost statistics with scc.
 cost:

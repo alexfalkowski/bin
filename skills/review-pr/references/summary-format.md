@@ -1,6 +1,6 @@
 # Summary Format
 
-Use this reference when drafting the `msg` and `desc` values for `make review`.
+Use this reference when drafting the `msg` value and PR summary content for `make review`.
 
 ## Scope
 
