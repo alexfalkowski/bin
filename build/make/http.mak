@@ -15,13 +15,13 @@ override export id := $(value id)
 override export kind := $(value kind)
 
 validate-config:
-	@ruby -e 'kind = ENV.fetch("kind", ""); valid = !kind.empty? && kind.match?(/\A[A-Za-z0-9_.-]+\z/) && !kind.include?(".."); abort("invalid kind: #{kind}") unless valid'
+	@$(PWD)/bin/build/test/validate-config
 
 validate-package:
-	@ruby -e 'package = ENV.fetch("package", ""); valid = !package.empty? && (package == "." || (!package.start_with?("/") && !package.include?("..") && package.split("/").all? { |part| part.match?(/\A[A-Za-z0-9_.-]+\z/) && part != "." })); abort("invalid package: #{package}") unless valid'
+	@$(PWD)/bin/build/go/validate-package
 
 validate-profile:
-	@ruby -e 'ARGV.each { |key| value = ENV.fetch(key, ""); next if value.empty?; valid = value.match?(/\A[A-Za-z0-9_.-]+\z/) && !value.include?(".."); abort("invalid #{key}: #{value}") unless valid }' id kind
+	@$(PWD)/bin/build/go/validate-profile id kind
 
 download:
 	@go mod download
@@ -129,8 +129,8 @@ specs:
 	@gotestsum --format testdox --junitfile test/reports/specs.xml -- -vet=off -race -mod vendor -covermode=atomic -coverpkg=$(COVER_PACKAGES) -coverprofile=test/reports/profile.cov $(PACKAGES)
 
 # Open pprof for a captured profile under test/reports/ (set id/kind).
-pprof: validate-profile
-	@go tool pprof "test/reports/$${NAME}-server-$${id}-$${kind}.prof"
+pprof:
+	@$(PWD)/bin/build/go/pprof "$${NAME}-server-$${id}-$${kind}.prof" id kind
 
 # Fetch a Go module (set module=<path>).
 go-get:
@@ -227,8 +227,8 @@ manifest-docker:
 	@$(PWD)/bin/build/docker/manifest "$${NAME}"
 
 # Base64-encode test/$(kind).yml as a single line.
-encode-config: validate-config
-	@cat "test/$${kind}.yml" | base64 -w 0
+encode-config:
+	@$(PWD)/bin/build/test/encode-config
 
 # Create server and client TLS certs under test/certs/ using mkcert.
 create-certs:
@@ -237,17 +237,8 @@ create-certs:
 	@cp "$$(mkcert -CAROOT)/rootCA.pem" test/certs/rootCA.pem
 
 # Generate a dependency graph PNG for package=$(package), or the module root when unset.
-create-diagram: override export package := $(or $(value package),.)
-
-create-diagram: validate-package
-	@diagram_package="$${package}"; \
-	diagram_pattern="$${MODULE}/$${package}/..."; \
-	if [ "$$diagram_package" = "." ]; then \
-		diagram_package="diagram"; \
-		diagram_pattern="$${MODULE}/..."; \
-	fi; \
-	mkdir -p "$$(dirname "assets/$${diagram_package}.png")"; \
-	goda graph "$$diagram_pattern" | dot -Tpng -o "assets/$${diagram_package}.png"
+create-diagram:
+	@$(PWD)/bin/build/go/create-diagram
 
 # Analyse binary size with gsa (non-fatal if gsa is missing/fails).
 analyse:

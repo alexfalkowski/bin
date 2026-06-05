@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Open the benchmark memory profile for package, defaulting to the module root.
+
+set -eo pipefail
+
+package="${package:-.}"
+export package
+
+"$(dirname "$0")/validate-package"
+
+profile_package="$package"
+if [[ $profile_package == "." ]]; then
+  profile_package="benchmark"
+fi
+
+go tool pprof "test/reports/$profile_package.prof"

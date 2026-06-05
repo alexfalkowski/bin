@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Run Go benchmarks for package, defaulting to the module root.
+
+set -eo pipefail
+
+package="${package:-.}"
+export package
+
+"$(dirname "$0")/validate-package"
+
+profile_package="$package"
+if [[ $profile_package == "." ]]; then
+  profile_package="benchmark"
+fi
+
+profile="test/reports/$profile_package.prof"
+args=()
+
+if [[ -n ${benchtime:-} ]]; then
+  args+=("-benchtime=$benchtime")
+fi
+
+mkdir -p "$(dirname "$profile")"
+go test -vet=off -mod vendor -bench=. -run=Benchmark -benchmem "${args[@]}" -memprofile "$profile" "./$package"
