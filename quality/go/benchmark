@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC1091
 # Run Go benchmarks for package, defaulting to the module root.
 
 set -eo pipefail
@@ -6,7 +7,8 @@ set -eo pipefail
 package="${package:-.}"
 export package
 
-"$(dirname "$0")/validate-package"
+source "$(dirname "$0")/../../lib/validate.sh"
+validate_package
 
 profile_package="$package"
 if [[ $profile_package == "." ]]; then

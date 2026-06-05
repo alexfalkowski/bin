@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC1091
 # Base64-encode the test configuration selected by kind.
 
 set -eo pipefail
 
-"$(dirname "$0")/validate-config"
+source "$(dirname "$0")/../../lib/validate.sh"
+validate_config
 
 readonly kind_value="${kind:-}"
 

@@ -1,4 +1,4 @@
-.PHONY: validate-config validate-package vendor sync
+.PHONY: vendor sync
 
 NAME:=$(shell basename $(CURDIR))
 MODULE:=$(shell head -n 1 go.mod | sed 's/module //')
@@ -11,12 +11,6 @@ override export kind := $(value kind)
 override export module := $(value module)
 override export package := $(value package)
 override export benchtime := $(value benchtime)
-
-validate-config:
-	@$(PWD)/bin/build/test/validate-config
-
-validate-package:
-	@$(PWD)/bin/build/go/validate-package
 
 download:
 	@go mod download
@@ -87,11 +81,11 @@ specs:
 # Run benchmarks for package=$(package), or the module root when unset.
 # Set benchtime=<duration-or-count> to pass -benchtime to go test.
 benchmark:
-	@$(PWD)/bin/build/go/benchmark
+	@$(PWD)/bin/quality/go/benchmark
 
 # Inspect benchmark memprofile via pprof for package=$(package), or the module root when unset.
 benchmark-pprof:
-	@$(PWD)/bin/build/go/benchmark-pprof
+	@$(PWD)/bin/quality/go/benchmark-pprof
 
 remove-generated-coverage:
 	@$(PWD)/bin/quality/go/covfilter
@@ -138,7 +132,7 @@ create-certs:
 
 # Generate a dependency graph PNG for package=$(package), or the module root when unset.
 create-diagram:
-	@$(PWD)/bin/build/go/create-diagram
+	@$(PWD)/bin/quality/go/create-diagram
 
 # Analyse binary size with gsa (non-fatal if gsa is missing/fails).
 analyse:

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC1091
 # Generate a dependency graph for package, defaulting to the module root.
 
 set -eo pipefail
@@ -7,7 +8,8 @@ package="${package:-.}"
 module="${MODULE:-$(head -n 1 go.mod | sed 's/module //')}"
 export package
 
-"$(dirname "$0")/validate-package"
+source "$(dirname "$0")/../../lib/validate.sh"
+validate_package
 
 diagram_package="$package"
 diagram_pattern="$module/$package/..."
