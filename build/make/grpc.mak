@@ -18,7 +18,7 @@ validate-config:
 	@ruby -e 'kind = ENV.fetch("kind", ""); valid = !kind.empty? && kind.match?(/\A[A-Za-z0-9_.-]+\z/) && !kind.include?(".."); abort("invalid kind: #{kind}") unless valid'
 
 validate-package:
-	@ruby -e 'package = ENV.fetch("package", ""); valid = !package.empty? && !package.start_with?("/") && !package.include?("..") && package.split("/").all? { |part| part.match?(/\A[A-Za-z0-9_.-]+\z/) && part != "." }; abort("invalid package: #{package}") unless valid'
+	@ruby -e 'package = ENV.fetch("package", ""); valid = !package.empty? && (package == "." || (!package.start_with?("/") && !package.include?("..") && package.split("/").all? { |part| part.match?(/\A[A-Za-z0-9_.-]+\z/) && part != "." })); abort("invalid package: #{package}") unless valid'
 
 validate-profile:
 	@ruby -e 'ARGV.each { |key| value = ENV.fetch(key, ""); next if value.empty?; valid = value.match?(/\A[A-Za-z0-9_.-]+\z/) && !value.include?(".."); abort("invalid #{key}: #{value}") unless valid }' id kind
@@ -264,9 +264,18 @@ create-certs:
 	@mkcert -client -key-file test/certs/client-key.pem -cert-file test/certs/client-cert.pem localhost
 	@cp "$$(mkcert -CAROOT)/rootCA.pem" test/certs/rootCA.pem
 
-# Generate a dependency graph PNG for package=$(package) into assets/.
+# Generate a dependency graph PNG for package=$(package), or the module root when unset.
+create-diagram: override export package := $(or $(value package),.)
+
 create-diagram: validate-package
-	@goda graph "$${MODULE}/$${package}/..." | dot -Tpng -o "assets/$${package}.png"
+	@diagram_package="$${package}"; \
+	diagram_pattern="$${MODULE}/$${package}/..."; \
+	if [ "$$diagram_package" = "." ]; then \
+		diagram_package="diagram"; \
+		diagram_pattern="$${MODULE}/..."; \
+	fi; \
+	mkdir -p "$$(dirname "assets/$${diagram_package}.png")"; \
+	goda graph "$$diagram_pattern" | dot -Tpng -o "assets/$${diagram_package}.png"
 
 # Analyse binary size with gsa (non-fatal if gsa is missing/fails).
 analyse:

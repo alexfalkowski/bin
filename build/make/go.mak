@@ -16,7 +16,7 @@ validate-config:
 	@ruby -e 'kind = ENV.fetch("kind", ""); valid = !kind.empty? && kind.match?(/\A[A-Za-z0-9_.-]+\z/) && !kind.include?(".."); abort("invalid kind: #{kind}") unless valid'
 
 validate-package:
-	@ruby -e 'package = ENV.fetch("package", ""); valid = !package.empty? && !package.start_with?("/") && !package.include?("..") && package.split("/").all? { |part| part.match?(/\A[A-Za-z0-9_.-]+\z/) && part != "." }; abort("invalid package: #{package}") unless valid'
+	@ruby -e 'package = ENV.fetch("package", ""); valid = !package.empty? && (package == "." || (!package.start_with?("/") && !package.include?("..") && package.split("/").all? { |part| part.match?(/\A[A-Za-z0-9_.-]+\z/) && part != "." })); abort("invalid package: #{package}") unless valid'
 
 download:
 	@go mod download
@@ -84,18 +84,24 @@ format:
 specs:
 	@gotestsum --format testdox --junitfile test/reports/specs.xml -- -vet=off -race -mod vendor -covermode=atomic -coverpkg=$(COVER_PACKAGES) -coverprofile=test/reports/profile.cov $(PACKAGES)
 
-# Run benchmarks for package=$(package) and write $(BENCHMARK_PROFILE).
+# Run benchmarks for package=$(package), or the module root when unset.
 # Set benchtime=<duration-or-count> to pass -benchtime to go test.
+benchmark benchmark-pprof: override export package := $(or $(value package),.)
+
 benchmark: validate-package
-	@profile="test/reports/$${package}.prof"; \
+	@profile_package="$${package}"; \
+	if [ "$$profile_package" = "." ]; then profile_package="benchmark"; fi; \
+	profile="test/reports/$${profile_package}.prof"; \
 	mkdir -p "$$(dirname "$$profile")"; \
 	set --; \
 	if [ -n "$$benchtime" ]; then set -- "-benchtime=$$benchtime"; fi; \
 	go test -vet=off -mod vendor -bench=. -run=Benchmark -benchmem "$$@" -memprofile "$$profile" "./$${package}"
 
-# Inspect benchmark memprofile via pprof (test/reports/$(package).prof).
+# Inspect benchmark memprofile via pprof for package=$(package), or the module root when unset.
 benchmark-pprof: validate-package
-	@go tool pprof "test/reports/$${package}.prof"
+	@profile_package="$${package}"; \
+	if [ "$$profile_package" = "." ]; then profile_package="benchmark"; fi; \
+	go tool pprof "test/reports/$${profile_package}.prof"
 
 remove-generated-coverage:
 	@$(PWD)/bin/quality/go/covfilter
@@ -140,9 +146,18 @@ create-certs:
 	@mkcert -client -key-file test/certs/client-key.pem -cert-file test/certs/client-cert.pem localhost
 	@cp "$$(mkcert -CAROOT)/rootCA.pem" test/certs/rootCA.pem
 
-# Generate a dependency graph PNG for package=$(package) into assets/.
+# Generate a dependency graph PNG for package=$(package), or the module root when unset.
+create-diagram: override export package := $(or $(value package),.)
+
 create-diagram: validate-package
-	@goda graph "$${MODULE}/$${package}/..." | dot -Tpng -o "assets/$${package}.png"
+	@diagram_package="$${package}"; \
+	diagram_pattern="$${MODULE}/$${package}/..."; \
+	if [ "$$diagram_package" = "." ]; then \
+		diagram_package="diagram"; \
+		diagram_pattern="$${MODULE}/..."; \
+	fi; \
+	mkdir -p "$$(dirname "assets/$${diagram_package}.png")"; \
+	goda graph "$$diagram_pattern" | dot -Tpng -o "assets/$${diagram_package}.png"
 
 # Analyse binary size with gsa (non-fatal if gsa is missing/fails).
 analyse:
