@@ -14,12 +14,14 @@ Use this reference when the user asks for a review.
 
 ## Severity
 
-- `critical`: Near-certain production breakage, data loss or corruption, remote code execution, credential exposure, auth bypass, or a change that makes the project unusable for its primary path.
-- `high`: Likely user-visible regression, compatibility break, security issue, CI or release blocker, or broken primary workflow with a clear trigger.
-- `medium`: Real bug, missing validation, edge-case regression, or maintainability risk that can affect users but is scoped, recoverable, or not on the primary path.
-- `low`: Minor correctness issue, hardening gap, confusing behavior, missing docs or tests for a low-risk path, or maintainability concern with limited impact.
-- Do not inflate severity for style preferences, speculative risks, or missing tests without a concrete failure mode.
-- If severity depends on assumptions about downstream use, state the triggering scenario in `Impact` or `Evidence`.
+- Use `../../references/finding-severity.md` to filter low-confidence
+  candidates before assigning severity.
+- For code-review output, write severity values in lowercase:
+  `critical`, `high`, `medium`, or `low`.
+- Do not inflate severity for style preferences, speculative risks, or missing
+  tests without a concrete failure mode.
+- If severity depends on assumptions about downstream use, state the triggering
+  scenario in `Impact` or `Evidence`.
 
 ## Output Format
 
