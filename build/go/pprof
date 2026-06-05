@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Open a Go profile from test/reports after validating profile components.
+
+set -eo pipefail
+
+readonly profile="$1"
+shift
+
+"$(dirname "$0")/validate-profile" "$@"
+
+go tool pprof "test/reports/$profile"

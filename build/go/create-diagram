@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Generate a dependency graph for package, defaulting to the module root.
+
+set -eo pipefail
+
+package="${package:-.}"
+module="${MODULE:-$(head -n 1 go.mod | sed 's/module //')}"
+export package
+
+"$(dirname "$0")/validate-package"
+
+diagram_package="$package"
+diagram_pattern="$module/$package/..."
+
+if [[ $diagram_package == "." ]]; then
+  diagram_package="diagram"
+  diagram_pattern="$module/..."
+fi
+
+output="assets/$diagram_package.png"
+
+mkdir -p "$(dirname "$output")"
+goda graph "$diagram_pattern" | dot -Tpng -o "$output"

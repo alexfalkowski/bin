@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Validate profile filename components supplied through environment variables.
+
+set -eo pipefail
+
+for key in "$@"; do
+  value="${!key:-}"
+
+  if [[ -z $value ]]; then
+    continue
+  fi
+
+  if [[ ! $value =~ ^[A-Za-z0-9_.-]+$ || $value == *..* ]]; then
+    echo "invalid $key: $value" >&2
+    exit 1
+  fi
+done

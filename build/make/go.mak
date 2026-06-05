@@ -13,10 +13,10 @@ override export package := $(value package)
 override export benchtime := $(value benchtime)
 
 validate-config:
-	@ruby -e 'kind = ENV.fetch("kind", ""); valid = !kind.empty? && kind.match?(/\A[A-Za-z0-9_.-]+\z/) && !kind.include?(".."); abort("invalid kind: #{kind}") unless valid'
+	@$(PWD)/bin/build/test/validate-config
 
 validate-package:
-	@ruby -e 'package = ENV.fetch("package", ""); valid = !package.empty? && (package == "." || (!package.start_with?("/") && !package.include?("..") && package.split("/").all? { |part| part.match?(/\A[A-Za-z0-9_.-]+\z/) && part != "." })); abort("invalid package: #{package}") unless valid'
+	@$(PWD)/bin/build/go/validate-package
 
 download:
 	@go mod download
@@ -86,22 +86,12 @@ specs:
 
 # Run benchmarks for package=$(package), or the module root when unset.
 # Set benchtime=<duration-or-count> to pass -benchtime to go test.
-benchmark benchmark-pprof: override export package := $(or $(value package),.)
-
-benchmark: validate-package
-	@profile_package="$${package}"; \
-	if [ "$$profile_package" = "." ]; then profile_package="benchmark"; fi; \
-	profile="test/reports/$${profile_package}.prof"; \
-	mkdir -p "$$(dirname "$$profile")"; \
-	set --; \
-	if [ -n "$$benchtime" ]; then set -- "-benchtime=$$benchtime"; fi; \
-	go test -vet=off -mod vendor -bench=. -run=Benchmark -benchmem "$$@" -memprofile "$$profile" "./$${package}"
+benchmark:
+	@$(PWD)/bin/build/go/benchmark
 
 # Inspect benchmark memprofile via pprof for package=$(package), or the module root when unset.
-benchmark-pprof: validate-package
-	@profile_package="$${package}"; \
-	if [ "$$profile_package" = "." ]; then profile_package="benchmark"; fi; \
-	go tool pprof "test/reports/$${profile_package}.prof"
+benchmark-pprof:
+	@$(PWD)/bin/build/go/benchmark-pprof
 
 remove-generated-coverage:
 	@$(PWD)/bin/quality/go/covfilter
@@ -137,8 +127,8 @@ trivy-repo:
 sec: govulncheck trivy-repo
 
 # Base64-encode test/$(kind).yml as a single line.
-encode-config: validate-config
-	@cat "test/$${kind}.yml" | base64 -w 0
+encode-config:
+	@$(PWD)/bin/build/test/encode-config
 
 # Create server and client TLS certs under test/certs/ using mkcert.
 create-certs:
@@ -147,17 +137,8 @@ create-certs:
 	@cp "$$(mkcert -CAROOT)/rootCA.pem" test/certs/rootCA.pem
 
 # Generate a dependency graph PNG for package=$(package), or the module root when unset.
-create-diagram: override export package := $(or $(value package),.)
-
-create-diagram: validate-package
-	@diagram_package="$${package}"; \
-	diagram_pattern="$${MODULE}/$${package}/..."; \
-	if [ "$$diagram_package" = "." ]; then \
-		diagram_package="diagram"; \
-		diagram_pattern="$${MODULE}/..."; \
-	fi; \
-	mkdir -p "$$(dirname "assets/$${diagram_package}.png")"; \
-	goda graph "$$diagram_pattern" | dot -Tpng -o "assets/$${diagram_package}.png"
+create-diagram:
+	@$(PWD)/bin/build/go/create-diagram
 
 # Analyse binary size with gsa (non-fatal if gsa is missing/fails).
 analyse:

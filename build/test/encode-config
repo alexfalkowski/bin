@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Base64-encode the test configuration selected by kind.
+
+set -eo pipefail
+
+"$(dirname "$0")/validate-config"
+
+readonly kind_value="${kind:-}"
+
+base64 -w 0 "test/$kind_value.yml"
