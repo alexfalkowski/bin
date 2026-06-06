@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Commit staged and tracked changes using the Makefile-provided message parts.
+
+set -eo pipefail
+
+file="$(mktemp)"
+trap 'rm -f "$file"' EXIT
+
+printf '%s\n\n' "${PREFIX:-} ${msg:-}" > "$file"
+
+if [[ -n ${desc_file:-} ]]; then
+  cat "$desc_file"
+else
+  printf '%s\n' "${desc:-}"
+fi >> "$file"
+
+git commit -a -F "$file"

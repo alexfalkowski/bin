@@ -6,8 +6,8 @@ Use this reference after you have identified which shared `bin/build/make/*.mak`
 
 - Treat the root `Makefile` as the actual interface and included fragments as supporting context.
 - Use this reference to interpret likely fragment behavior, not to replace checking which targets the repository really exposes.
-- Validate path-sensitive behavior from the consuming repository root when targets depend on `$(PWD)/bin/...`.
-- Preserve downstream `./bin` path expectations unless the user explicitly asks to change them.
+- Validate path-sensitive behavior from this repository root and from the consuming repository root when helper paths or downstream layouts matter.
+- Preserve downstream `./bin` include behavior unless the user explicitly asks to change it.
 
 ## Common Fragment Map
 
@@ -19,7 +19,7 @@ Use this reference after you have identified which shared `bin/build/make/*.mak`
 ### `ruby.mak`
 
 - Especially relevant targets: `dep`, `lint`, `format`, `features`, `benchmarks`, `sec`, `start`, `stop`.
-- `features` and `benchmarks` call wrappers under `$(PWD)/bin/quality/ruby/...`, so they should be run from the consuming repo root.
+- `features` and `benchmarks` call wrappers under `BIN_ROOT/quality/ruby/...`; downstream test layout still controls whether they can run successfully.
 - `start` and `stop` delegate to `bin/build/docker/env`, which may require access to a sibling `../docker` checkout and SSH-based cloning if that repo is missing.
 - `dep`, `update-dep`, `update-all-dep`, `sec`, `start`, and `stop` may require network access or external credentials depending on the consuming repo.
 
@@ -43,7 +43,7 @@ Use this reference after you have identified which shared `bin/build/make/*.mak`
 
 - These are project-template fragments that combine Go, Ruby test harness, Docker, security, coverage, and helper targets.
 - `grpc.mak` also includes proto lint, format, generate, breaking, and push targets.
-- `features` and `benchmarks` depend on downstream test/build layout and wrappers under `$(PWD)/bin/quality/ruby/...`.
+- `features` and `benchmarks` depend on downstream test/build layout and wrappers under `BIN_ROOT/quality/ruby/...`.
 - `specs`, coverage, and report cleanup assume downstream `test/reports/` paths.
 - Docker and certificate helper targets depend on external CLIs such as Docker, `mkcert`, `dot`, and `air` depending on the target.
 - Docker push, manifest, release, and registry-publishing targets update remote state and require explicit user permission.

@@ -6,7 +6,7 @@ Use this reference for any security audit, then load language-specific reference
 
 - Determine whether the user wants a diff audit, full repository audit, dependency scan, or one command/script path.
 - Identify trust boundaries: CLI args, env vars, config files, network input, filesystem paths, generated files, dependency metadata, and CI secrets.
-- For shared `./bin` tooling, consider both this repository root and downstream usage where helpers are invoked through `$(PWD)/bin/...`.
+- For shared `./bin` tooling, consider both this repository root and downstream usage where helpers are invoked through `BIN_ROOT`.
 
 ## Common Risks
 
@@ -21,7 +21,7 @@ Use this reference for any security audit, then load language-specific reference
 - Prefer repository-defined targets before ad hoc scanners.
 - Ask for permission before running scanners or dependency checks that need network, SSH, GitHub auth, registry auth, or remote writes.
 - In this repository, relevant checks include:
-  - `make sec-lint` for Trivy repository scanning.
+  - `make sec` for Trivy repository scanning.
   - `make scripts-lint` for ShellCheck coverage of shared scripts.
   - `make docker-lint` for Hadolint coverage of the Go Dockerfile.
   - `make lint` for RuboCop coverage of Ruby code.
@@ -79,7 +79,7 @@ unsupported candidates. They align with `../../references/finding-severity.md`.
 
 ## Validation
 
-- command: `make sec-lint`
+- command: `make sec`
   result: passed
   coverage: Trivy repository scan for critical vulnerabilities.
 

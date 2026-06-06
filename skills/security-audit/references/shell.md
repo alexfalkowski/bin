@@ -17,7 +17,7 @@ Use this reference for Bash scripts, Make recipes that execute shell code, Docke
 
 - Prefer repo-defined targets first.
 - In this repository, use `make scripts-lint` for ShellCheck coverage of shared scripts.
-- For Docker-related script changes, consider `make docker-lint` and `make sec-lint` when relevant.
+- For Docker-related script changes, consider `make docker-lint` and `make sec` when relevant.
 - ShellCheck is necessary but not sufficient: still inspect trust boundaries, path constraints, and command construction manually.
 - Report `make scripts-lint` as not run or no-op if `shellcheck` is unavailable.
 

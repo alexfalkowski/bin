@@ -21,6 +21,7 @@ After repeating the same build/lint/test/CI glue across projects, it’s useful 
 | Path            | What it contains                                                                  |
 |-----------------|------------------------------------------------------------------------------------|
 | `build/make/`   | Makefile include fragments (Go, Ruby, git workflow, buf/proto, project templates). |
+| `build/git/`    | Git workflow helper scripts used by `build/make/git.mak`.                          |
 | `build/go/`     | Go-related helper scripts (`lint`, `clean`, `fa`).                                 |
 | `build/docker/` | Docker helpers and `build/docker/go/Dockerfile`.                                   |
 | `build/sec/`    | Security scanning helpers (Trivy).                                                 |
@@ -29,7 +30,9 @@ After repeating the same build/lint/test/CI glue across projects, it’s useful 
 
 ## Using this repo (recommended: Git submodule)
 
-Most make fragments invoke scripts via `$(PWD)/bin/...`, so the intended usage is:
+Make fragments derive helper paths from their own location, so they work from
+this repository root and from downstream repositories. The recommended
+downstream usage is still:
 
 - your project has this repo checked out at `./bin`
 - your project `Makefile` includes one or more fragments from `./bin/build/make/*.mak`
@@ -141,7 +144,7 @@ make clean-dep
 make scripts-lint
 make docker-lint
 make lint
-make sec-lint
+make sec
 ```
 
 ## CircleCI note

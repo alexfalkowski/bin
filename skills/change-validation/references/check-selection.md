@@ -68,12 +68,12 @@ For standalone validation reports, use exactly this Markdown structure and do no
 - If the repository exposes named test entry points, use the one that matches the affected behavior instead of inventing a different test vocabulary.
 - If the repository exposes benchmark or coverage targets that are relevant to the change, prefer those entry points over ad hoc commands.
 - If a repo exposes `dep`, `lint`, `specs`, `features`, `benchmarks`, `coverage`, or `sec`, prefer those names over ad hoc tool invocations.
-- For this shared `bin` repo itself, CI currently runs `make dep`, `make clean-dep`, `make scripts-lint`, `make docker-lint`, `make lint`, and `make sec-lint`.
+- For this shared `bin` repo itself, CI currently runs `make dep`, `make clean-dep`, `make scripts-lint`, `make docker-lint`, `make lint`, and `make sec`.
 - Dependency setup, scanners, Docker commands, Buf commands, and Go module commands may require network access; identify that before relying on them.
 - Push, publish, release, Docker manifest push, Buf push, and PR open/update flows require explicit user permission.
 
 ## `./bin`-Specific Caution
 
-- If a repo vendors this shared `bin` project, run validation from the consuming repo when targets depend on `$(PWD)/bin/...`.
+- If a repo vendors this shared `bin` project, run validation from the consuming repo when targets depend on downstream include wiring or test/build layout.
 - Do not assume a helper script proves anything unless the downstream wiring matches the way the repo actually executes it.
 - If a wrapper depends on optional tools such as `golangci-lint`, `shellcheck`, `hadolint`, or `govulncheck`, report clearly when the command could not provide full coverage.

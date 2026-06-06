@@ -56,5 +56,5 @@ coverage useful, deterministic, and readable rather than mechanically broad.
 - Use broader suites for shared infrastructure, compatibility-sensitive behavior, release-sensitive behavior, or changes that cross package, command, or service boundaries.
 - Do not add behavioral tests for docs-only or formatting-only changes; run relevant lint, docs, or formatting validation when available.
 - When reviewing tests, check these rules explicitly and flag tests that use private surfaces without approval, follow the wrong harness, miss important edge cases, produce unclear failures, or are hard to read.
-- For shared `./bin` scripts and make fragments, validate from the consuming repository root when behavior depends on downstream `$(PWD)/bin/...` wiring.
+- For shared `./bin` scripts and make fragments, validate from the consuming repository root when behavior depends on downstream include wiring or test/build layout.
 - Report validation gaps honestly, including lint-only coverage, missing tools, skipped checks, environment limits, and wrappers that no-op.

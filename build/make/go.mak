@@ -1,5 +1,7 @@
 .PHONY: vendor sync
 
+BIN_ROOT ?= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))../..)
+
 NAME:=$(shell basename $(CURDIR))
 MODULE:=$(shell head -n 1 go.mod | sed 's/module //')
 SOURCE:=$(shell find . -name '*.go' -not -path './bin/*' -not -path './test/*' -not -path './vendor/*' -type f | sort)
@@ -46,23 +48,23 @@ outdated-dep:
 
 # Clear golangci-lint cache (no-op if golangci-lint is not installed).
 clean-lint:
-	@$(PWD)/bin/build/go/lint cache clean
+	@$(BIN_ROOT)/build/go/lint cache clean
 
 # Refresh deps and caches when go.sum differs from master.
 clean:
-	@$(PWD)/bin/build/go/clean
+	@$(BIN_ROOT)/build/go/clean
 
 field-alignment:
-	@$(PWD)/bin/build/go/fa
+	@$(BIN_ROOT)/build/go/fa
 
 fix-field-alignment:
-	@$(PWD)/bin/build/go/fa -fix
+	@$(BIN_ROOT)/build/go/fa -fix
 
 golangci-lint:
-	@$(PWD)/bin/build/go/lint run --timeout 5m
+	@$(BIN_ROOT)/build/go/lint run --timeout 5m
 
 fix-golangci-lint:
-	@$(PWD)/bin/build/go/lint run --timeout 5m --fix
+	@$(BIN_ROOT)/build/go/lint run --timeout 5m --fix
 
 # Run fieldalignment and golangci-lint.
 lint: field-alignment golangci-lint
@@ -81,14 +83,14 @@ specs:
 # Run benchmarks for package=$(package), or the module root when unset.
 # Set benchtime=<duration-or-count> to pass -benchtime to go test.
 benchmark:
-	@$(PWD)/bin/quality/go/benchmark
+	@$(BIN_ROOT)/quality/go/benchmark
 
 # Inspect benchmark memprofile via pprof for package=$(package), or the module root when unset.
 benchmark-pprof:
-	@$(PWD)/bin/quality/go/benchmark-pprof
+	@$(BIN_ROOT)/quality/go/benchmark-pprof
 
 remove-generated-coverage:
-	@$(PWD)/bin/quality/go/covfilter
+	@$(BIN_ROOT)/quality/go/covfilter
 
 # Generate HTML coverage report from test/reports/final.cov.
 html-coverage: remove-generated-coverage
@@ -115,14 +117,14 @@ govulncheck:
 
 # Scan the repository with Trivy (CRITICAL severity).
 trivy-repo:
-	@$(PWD)/bin/build/sec/trivy-repo
+	@$(BIN_ROOT)/build/sec/trivy-repo
 
 # Run security checks.
 sec: govulncheck trivy-repo
 
 # Base64-encode test/$(kind).yml as a single line.
 encode-config:
-	@$(PWD)/bin/build/test/encode-config
+	@$(BIN_ROOT)/build/test/encode-config
 
 # Create server and client TLS certs under test/certs/ using mkcert.
 create-certs:
@@ -132,7 +134,7 @@ create-certs:
 
 # Generate a dependency graph PNG for package=$(package), or the module root when unset.
 create-diagram:
-	@$(PWD)/bin/quality/go/create-diagram
+	@$(BIN_ROOT)/quality/go/create-diagram
 
 # Analyse binary size with gsa (non-fatal if gsa is missing/fails).
 analyse:
@@ -144,8 +146,8 @@ cost:
 
 # Start shared docker environment via the sibling ../docker repo.
 start:
-	@$(PWD)/bin/build/docker/env start
+	@$(BIN_ROOT)/build/docker/env start
 
 # Stop shared docker environment via the sibling ../docker repo.
 stop:
-	@$(PWD)/bin/build/docker/env stop
+	@$(BIN_ROOT)/build/docker/env stop

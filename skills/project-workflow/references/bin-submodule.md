@@ -54,7 +54,7 @@ When workflow discovery is the final response, use exactly this Markdown structu
 - If a section has no entries, write exactly `- None.`
 - Use `Command Surface` for local commands, Make targets, scripts, or package-manager entrypoints.
 - Use `CI Expectations` for checks required by CI configuration.
-- Use `Bin Wiring` for included `bin/build/make/*.mak` fragments or `$(PWD)/bin/...` path behavior.
+- Use `Bin Wiring` for included `bin/build/make/*.mak` fragments or shared `BIN_ROOT` helper path behavior.
 - Use `Constraints` for missing tools, downstream-only paths, CI-only behavior, SSH/network/auth requirements, remote-write targets, or other workflow limits.
 - When another skill embeds workflow discovery, keep the same command, CI, bin-wiring, and constraint facts but use the caller's required output sections.
 
@@ -63,7 +63,7 @@ When workflow discovery is the final response, use exactly this Markdown structu
 - Treat the consuming repository as the primary execution context.
 - Inspect the root `Makefile` to see which `bin/build/make/*.mak` fragments are included.
 - Use `make-fragments.md` to interpret included shared fragments after checking the root `Makefile`; do not let the fragment map replace the repository's actual command surface.
-- Validate path-sensitive behavior from the consuming repository root, not from inside the `bin` submodule.
-- Be careful with targets that resolve helper paths through `$(PWD)/bin/...`; they may work in a downstream repo and fail inside the `bin` repo itself.
+- Validate path-sensitive behavior from the consuming repository root when downstream layout affects target behavior.
+- Be careful with targets that resolve helper paths through `BIN_ROOT`; they should work in downstream repos and inside the `bin` repo itself, but downstream test/build layouts may still differ.
 - If a Make target reports an unexpected tool or version problem in the agent environment but works in the user's shell, report the mismatch and keep the Makefile target as the intended command.
 - Be careful with `start` and `stop` helpers because they may depend on a sibling `../docker` checkout or SSH access.
