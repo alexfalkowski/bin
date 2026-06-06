@@ -18,5 +18,5 @@ description: Discovers project-local workflow, command surfaces, CI expectations
 
 ## References
 
-- Read `references/bin-submodule.md` when a repository includes `bin/build/make/*.mak`, vendors this project as `./bin`, or has targets that call `$(PWD)/bin/...`.
+- Read `references/bin-submodule.md` when a repository includes `bin/build/make/*.mak`, vendors this project as `./bin`, or uses shared helper paths through `BIN_ROOT`.
 - Read `references/make-fragments.md` after discovering which shared Makefile fragments are included and before editing or debugging reusable `build/make/*.mak` behavior.

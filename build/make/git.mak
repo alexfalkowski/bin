@@ -1,5 +1,7 @@
 .PHONY: status
 
+BIN_ROOT ?= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))../..)
+
 USER:=$(shell ruby -e 'require "etc"; print "#{Etc.getpwuid(Process.uid).name}-#{Random.rand(0...100_000)}"')
 BRANCH:=$(shell git branch --show-current)
 export BRANCH
@@ -100,11 +102,7 @@ edit-amend: add
 
 # Commit all changes with a prefix derived from the branch (set msg and desc or desc_file).
 commit: add
-	@file="$$(mktemp)"; \
-	trap 'rm -f "$$file"' EXIT; \
-	printf '%s\n\n' "$${PREFIX} $${msg}" > "$$file"; \
-	if [ -n "$${desc_file}" ]; then cat "$${desc_file}"; else printf '%s\n' "$${desc}"; fi >> "$$file"; \
-	git commit -a -F "$$file"
+	@$(BIN_ROOT)/build/git/commit
 
 # Force-push the current branch to origin.
 push:
@@ -168,9 +166,4 @@ delete-version:
 
 # Enable performance-related git settings and run git gc.
 optimise:
-	@git config feature.manyFiles true
-	@git update-index --index-version 4
-	@git config core.untrackedcache true
-	@git config core.commitgraph true
-	@git config fetch.writeCommitGraph true
-	@git gc
+	@$(BIN_ROOT)/build/git/optimise

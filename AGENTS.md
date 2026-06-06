@@ -47,8 +47,9 @@ as vendored shared tooling:
   submodule wiring.
 - Prefer searches from the consuming repo that exclude unrelated submodule
   contents, for example `rg --glob '!bin/**' ...`.
-- If a Make target invokes `$(PWD)/bin/...`, reason about that path from the
-  consuming repository root without exploring unrelated files inside `bin/`.
+- Make fragments derive shared helper paths from their own include location
+  through `BIN_ROOT`; reason about target behavior from the consuming
+  repository root without exploring unrelated files inside `bin/`.
 
 When changing a skill's trigger, scope, workflow, or user-facing behavior,
 check the matching `skills/<name>/agents/openai.yaml` and update it if the
@@ -103,9 +104,9 @@ From this repository root:
   - `make scripts-lint` (runs `shellcheck` over various scripts)
   - `make docker-lint` (runs `hadolint` on `build/docker/go/Dockerfile`)
 - Security scanning:
-  - `make sec-lint` (runs Trivy over the repository)
+  - `make sec` (runs Trivy over the repository)
 
-CI runs (CircleCI): `make dep`, `make clean-dep`, `make scripts-lint`, `make docker-lint`, `make lint`, `make sec-lint` (see `.circleci/config.yml`).
+CI runs (CircleCI): `make dep`, `make clean-dep`, `make scripts-lint`, `make docker-lint`, `make lint`, `make sec` (see `.circleci/config.yml`).
 
 ## Command execution policy
 
@@ -173,6 +174,11 @@ Only rely on a command if you can find it being invoked in the relevant `.mak`/s
   - `lint`: wrapper that only runs `golangci-lint` if it exists in `$PATH`.
   - `clean`: helper that may trigger dependency cleanup if `go.sum` differs from `master`.
   - `fa`: wrapper around `fieldalignment` with optional `.gofa` package filtering.
+- `build/git/`
+  - `commit`: helper used by `build/make/git.mak` to build the conventional-ish
+    commit message from `PREFIX`, `msg`, `desc`, or `desc_file`.
+  - `optimise`: helper used by `build/make/git.mak` to enable git performance
+    settings and run `git gc`.
 - `build/sec/`
   - `trivy-repo`, `trivy-image`: Trivy scanning helpers.
 - `quality/`
@@ -208,10 +214,12 @@ Only rely on a command if you can find it being invoked in the relevant `.mak`/s
 
 ## Gotchas
 
-- **Submodule path expectations**: many make fragments invoke tools via `$(PWD)/bin/...` (e.g. `build/make/ruby.mak`, `build/make/go.mak`).
-  - That’s intended when *this repo is checked out as `./bin` inside another repo*.
-  - When running from this repo root, any target that references `$(PWD)/bin/...` will resolve to `<repo>/bin/...` (which usually does **not** exist here) and will fail.
-  - For changes that affect these targets, validate the path logic against the intended usage model.
+- **Shared helper path expectations**: make fragments derive `BIN_ROOT` from the
+  included make fragment's location, then invoke tools through that root.
+  - This supports the usual downstream `./bin` checkout and this repository
+    root, where the root `Makefile` includes `build/make/ruby.mak` directly.
+  - For changes that affect these targets, validate the path logic against both
+    direct repository usage and the downstream include model when feasible.
 
 - **`build/docker/env` clones via SSH**: it uses `git clone git@github.com:alexfalkowski/docker.git` into `../docker` if missing (`build/docker/env:14`). Agents without SSH keys/permissions won’t be able to run `make start/stop` paths that depend on it.
 
@@ -242,7 +250,7 @@ Only rely on a command if you can find it being invoked in the relevant `.mak`/s
   - `make scripts-lint`
   - `make docker-lint`
   - `make lint`
-  - `make sec-lint`
+  - `make sec`
 
 ## When changing this repo
 
@@ -250,6 +258,6 @@ Only rely on a command if you can find it being invoked in the relevant `.mak`/s
 - After edits, re-run at least:
   - `make dep`
   - `make lint`
-  - `make sec-lint`
+  - `make sec`
   - `make scripts-lint` (if `shellcheck` is available)
   - `make docker-lint` (if `hadolint` is available)

@@ -15,7 +15,7 @@ Use this reference for Ruby scripts, libraries, tests, Bundler metadata, or Ruby
 ## Validation
 
 - Prefer repo-defined Ruby targets first.
-- In this repository, `make lint` runs RuboCop and `make sec-lint` runs Trivy repo scanning.
+- In this repository, `make lint` runs RuboCop and `make sec` runs Trivy repo scanning.
 - If `build/make/ruby.mak` is included downstream, use `make sec` for Trivy repository scanning.
 - If Bundler audit tooling is present in a consuming repo, use the repo's configured entry point rather than inventing one.
 - Report when security coverage is limited to static linting or dependency scanning and no behavior tests exercise the risky path.

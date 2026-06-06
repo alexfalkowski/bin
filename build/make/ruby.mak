@@ -1,5 +1,7 @@
 .PHONY: vendor features
 
+BIN_ROOT ?= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))../..)
+
 # Lint Ruby code with RuboCop.
 lint:
 	@bundler exec rubocop
@@ -41,11 +43,11 @@ update-bundler: path
 
 # Run cucumber features (feature=<path> optional; excludes @benchmark; tags=<expr> optional).
 features:
-	@$(PWD)/bin/quality/ruby/feature "$(feature)" "$(tags)"
+	@$(BIN_ROOT)/quality/ruby/feature "$(feature)" "$(tags)"
 
 # Run cucumber benchmarks (features tagged @benchmark; feature=<path> optional).
 benchmarks:
-	@$(PWD)/bin/quality/ruby/benchmark $(feature)
+	@$(BIN_ROOT)/quality/ruby/benchmark $(feature)
 
 # Remove generated report artifacts under test/reports/.
 clean-reports:
@@ -57,7 +59,7 @@ codecov-upload:
 
 # Scan the repository with Trivy (CRITICAL severity).
 trivy-repo:
-	@$(PWD)/bin/build/sec/trivy-repo
+	@$(BIN_ROOT)/build/sec/trivy-repo
 
 # Run security checks.
 sec: trivy-repo
@@ -68,8 +70,8 @@ cost:
 
 # Start shared docker environment via the sibling ../docker repo.
 start:
-	@$(PWD)/bin/build/docker/env start
+	@$(BIN_ROOT)/build/docker/env start
 
 # Stop shared docker environment via the sibling ../docker repo.
 stop:
-	@$(PWD)/bin/build/docker/env stop
+	@$(BIN_ROOT)/build/docker/env stop
