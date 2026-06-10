@@ -56,16 +56,17 @@ preferences, and findings that depend on undocumented future requirements.
    - missing concrete NALSD assumptions, capacity estimates, bottleneck analysis, or failure-domain reasoning where the code or docs already make scale or availability claims.
 19. Do not record generic advice to add monitoring, runbooks, autoscaling, retries, queues, circuit breakers, chaos testing, load tests, Kubernetes probes, or dashboards unless a concrete current failure mode and repository-owned fix are identified.
 20. Do not record findings whose evidence is only a repository preference, transport choice, hosting choice, cloud architecture preference, or environment setup assumption. For example, an SSH Git remote or submodule URL is not a reliability gap unless a documented repository-owned workflow currently fails for intended operators and the repository owns the fix.
-21. Do not record reliability gaps whose only support is an undocumented future scale target, hypothetical product direction, architecture preference, or a conclusion reached from briefly noticing a pattern without verifying a concrete failure path.
-22. Do not record confirmed production bugs, security issues, compatibility breaks, or violated public contracts as reliability gaps. If broken behavior is discovered during review, report it as out of scope for the reliability-gap ledger and recommend `$code-issues`, `$security-audit`, or `$change-safety` as appropriate.
-23. Do not record standalone missing, weak, flaky, misleading, or wrong-layer tests as reliability gaps. Use `$test-gaps` when missing failure-path coverage is the finding.
-24. Do not record standalone missing, weak, stale, misleading, or wrong-location operational docs as reliability gaps. Use `$doc-gaps` when documentation itself is the finding.
-25. Do not report optional maturity improvements, cloud-architecture preferences, private implementation preferences, or "best practice" checkboxes as findings by themselves. List them only as optional follow-up notes when relevant.
-26. If no confirmed reliability gaps are found, report that no reliability gaps were found and do not create `ISSUES.md`.
-27. If confirmed reliability gaps are found, write all findings to the scoped `ISSUES.md` before making any fixes.
-28. Assign every finding a unique ID for the session in the form `REL-<number>`.
-29. Present the scoped `ISSUES.md` and a proposed reliability-fix plan to the user.
-30. Stop after presenting the ledger and plan. Do not fix findings in the same pass.
+21. For release or supply-chain findings involving Docker/image scans, first trace the exact artifacts through CI, Make targets, scripts, Dockerfiles, tags, build arguments, and push commands. Do not record a pre-publish scan or release-gate gap merely because CI scans a test image or runs scan jobs on non-release branches. Record the gap only when the scanned artifact and published artifact can materially differ, the release build bypasses a repository-owned required scan, or a documented release contract is violated.
+22. Do not record reliability gaps whose only support is an undocumented future scale target, hypothetical product direction, architecture preference, or a conclusion reached from briefly noticing a pattern without verifying a concrete failure path.
+23. Do not record confirmed production bugs, security issues, compatibility breaks, or violated public contracts as reliability gaps. If broken behavior is discovered during review, report it as out of scope for the reliability-gap ledger and recommend `$code-issues`, `$security-audit`, or `$change-safety` as appropriate.
+24. Do not record standalone missing, weak, flaky, misleading, or wrong-layer tests as reliability gaps. Use `$test-gaps` when missing failure-path coverage is the finding.
+25. Do not record standalone missing, weak, stale, misleading, or wrong-location operational docs as reliability gaps. Use `$doc-gaps` when documentation itself is the finding.
+26. Do not report optional maturity improvements, cloud-architecture preferences, private implementation preferences, or "best practice" checkboxes as findings by themselves. List them only as optional follow-up notes when relevant.
+27. If no confirmed reliability gaps are found, report that no reliability gaps were found and do not create `ISSUES.md`.
+28. If confirmed reliability gaps are found, write all findings to the scoped `ISSUES.md` before making any fixes.
+29. Assign every finding a unique ID for the session in the form `REL-<number>`.
+30. Present the scoped `ISSUES.md` and a proposed reliability-fix plan to the user.
+31. Stop after presenting the ledger and plan. Do not fix findings in the same pass.
 
 ## `ISSUES.md` Format
 
