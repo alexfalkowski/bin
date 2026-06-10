@@ -177,7 +177,7 @@ Only rely on a command if you can find it being invoked in the relevant `.mak`/s
     - `build/make/git.mak`: branch/workflow helpers and conventional-ish commit prefixing.
     - `build/make/go.mak`: go deps, lint, tests, coverage, security.
     - `build/make/{http,grpc,client}.mak`: project templates combining Go + Ruby test harness.
-    - `build/make/buf.mak`: buf lint/generate/push/breaking.
+    - `build/make/buf.mak`: buf lint/generate/stale/push/breaking.
 - `build/docker/`
   - `go/Dockerfile`: multi-stage Go build into distroless runtime.
   - `env`: helper that clones/updates a sibling `../docker` repo and runs `make …` there.
