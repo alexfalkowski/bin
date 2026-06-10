@@ -61,8 +61,10 @@ For standalone validation reports, use exactly this Markdown structure and do no
 ## Helpful Heuristics
 
 - For shell scripts, Dockerfiles, and Makefile glue, prefer the repo's lint targets when available.
-- For Go changes, prefer the repo's test and lint entry points before inventing ad hoc commands.
-- For Ruby changes, prefer the repo's lint and feature/benchmark entry points when they exist.
+- For changes in any implementation language, first identify the majority relevant repository-defined test harness for the affected behavior; prefer the matching test entry point before inventing ad hoc commands.
+- Run language-specific lint or formatting commands for changed code when the repository exposes them, regardless of which harness owns the behavior tests.
+- For Go changes whose majority relevant tests are Go-based, prefer the repo's Go test entry points.
+- For Ruby changes whose majority relevant tests are Ruby-based, prefer the repo's Ruby feature, spec, or benchmark entry points.
 - For CI or build changes, validate the closest local command that mirrors the affected pipeline step.
 - If the repository exposes `lint`, use it after relevant edits unless a narrower lint target is clearly better.
 - If the repository exposes named test entry points, use the one that matches the affected behavior instead of inventing a different test vocabulary.

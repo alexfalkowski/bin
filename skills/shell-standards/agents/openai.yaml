@@ -1,4 +1,4 @@
 interface:
   display_name: "Shell Standards"
   short_description: "Apply Bash, ShellCheck, and script documentation conventions"
-  default_prompt: "Use $shell-standards when changing shell scripts in this repository, pairing with $naming-standards when names or renames are part of the change."
+  default_prompt: "Use $shell-standards when changing shell scripts in this repository, pairing with $naming-standards when names or renames are part of the change. When test coverage is needed, do not assume shell-native tests; pair with $testing-standards and follow the majority relevant existing harness."

@@ -1,4 +1,4 @@
 interface:
   display_name: "Ruby Standards"
   short_description: "Apply Ruby conventions for these repos"
-  default_prompt: "Use $ruby-standards when changing Ruby code in this repository, pairing with $naming-standards when names or renames are part of the change."
+  default_prompt: "Use $ruby-standards when changing Ruby code in this repository, pairing with $naming-standards when names or renames are part of the change. When test coverage is needed, do not assume Ruby tests; pair with $testing-standards and follow the majority relevant existing harness."

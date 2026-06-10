@@ -99,6 +99,22 @@ Common composition:
 - `change-validation` should use `project-workflow` context before selecting
   validation commands for orchestrated workflows.
 
+## Test harness selection
+
+- Do not infer the test language from the implementation language. Before
+  recommending, adding, or reviewing tests, inspect the relevant Makefile
+  targets, CI jobs, existing tests, fixtures, and harness directories (`test/`,
+  `features/`, `spec/`, `*_test.go`, etc.).
+- Follow the majority pattern of the relevant existing tests for the behavior,
+  even when that means testing one implementation language from another
+  language or harness. For example, a Go service can be tested mostly through
+  Ruby features, and Ruby code can be tested mostly through another harness.
+- Add language-native tests only when that is the majority relevant local
+  pattern, the changed surface is a language-level package/API contract, or the
+  user explicitly asks for that level of coverage. If there is no clear
+  majority relevant pattern, use the repository-defined Make/CI entrypoint that
+  owns the behavior and state the uncertainty.
+
 ## Quick commands (this repo)
 
 From this repository root:

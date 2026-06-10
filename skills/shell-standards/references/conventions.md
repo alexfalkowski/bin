@@ -28,6 +28,7 @@ Use this reference when working with shell scripts.
 
 - Follow `$testing-standards` for cross-language test design, coverage, fixtures, determinism, and test-layer decisions.
 - Prefer validating shell changes through public or documented commands, scripts, Make targets, and argument flows.
+- Do not create shell-native tests solely because the production code is shell. If the majority relevant coverage uses another language or harness, update that harness unless the changed surface is specifically a shell library or script contract tested at that layer.
 - Cover relevant failure paths such as invalid arguments, missing files/tools, non-zero commands, path errors, permissions, and argument pass-through.
 
 ## Functions

@@ -59,7 +59,13 @@ and use the caller's output format.
 
 Use `testing-standards` when adding, reviewing, refactoring, or planning tests.
 In brief: inspect the repository's existing tests, fixtures, helpers,
-entrypoints, CI targets, and dominant test harness before adding new structure.
+entrypoints, CI targets, and majority relevant test harness before adding new
+structure.
+Do not infer the test language from the implementation language; recommend or
+update the majority relevant existing harness, even when it tests code written
+in another language. Add language-native tests only when that is the majority
+relevant pattern, the changed surface is a language-level package/API contract,
+or the user explicitly asks for that level of coverage.
 Prefer the narrowest established test layer that credibly covers changed
 behavior through a public or documented surface; private-surface tests need
 explicit human approval. Treat tests as executable specifications for observable

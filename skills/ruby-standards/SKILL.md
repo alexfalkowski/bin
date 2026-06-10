@@ -9,7 +9,7 @@ description: Applies this repository ecosystem's Ruby coding, API, documentation
 
 1. Confirm the task touches Ruby code, Ruby APIs, Ruby docs, Ruby linting, or Ruby feature/benchmark flows.
 2. Read `references/conventions.md` before editing documented modules, classes, methods, commands, or task interfaces.
-3. Preserve the repository's existing Ruby style, naming, error handling, and test idioms.
+3. Preserve the repository's existing Ruby style, naming, error handling, and test idioms. Do not assume Ruby changes require Ruby tests; use `$testing-standards` to identify the majority relevant existing harness first.
 4. Avoid clever metaprogramming or monkey patches unless the repository already relies on them or the task requires them.
 5. Pair this skill with `$naming-standards` when creating, reviewing, or renaming Ruby modules, classes, methods, commands, tests, fixtures, or documentation terms.
 6. Pair this skill with `$change-safety` when Ruby changes affect documented commands, public methods, task interfaces, or migration expectations.
