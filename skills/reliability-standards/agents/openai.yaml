@@ -1,0 +1,4 @@
+interface:
+  display_name: "Reliability Standards"
+  short_description: "Review SRE and production readiness"
+  default_prompt: "Use $reliability-standards to review SRE, NALSD, and production-readiness concerns for this change, focusing on concrete SLO impact, failure modes, overload behavior, observability, release safety, recovery, and operator actionability."

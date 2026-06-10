@@ -27,6 +27,10 @@ skill instead of one broad default:
 - `code-issues`: find confirmed code issues into `ISSUES.md`, then implement agreed fixes one code issue at a time.
 - `test-gaps`: find confirmed missing or weak tests into `ISSUES.md`, then implement agreed test fixes gap by gap.
 - `doc-gaps`: find confirmed missing, stale, or misleading docs/comments into `ISSUES.md`, then implement agreed doc fixes gap by gap.
+- `reliability-standards`: SRE, NALSD, production-readiness, SLO, overload,
+  observability, release-safety, recovery, and operability guidance.
+- `reliability-gaps`: find confirmed reliability gaps into `ISSUES.md`, then
+  implement agreed reliability fixes gap by gap.
 - `review-pr`: create a commit, force-push, and open a draft PR with a generated summary.
 - `shell-standards`: Bash scripting, ShellCheck, text processing, directory
   scope, and function documentation conventions.
@@ -70,6 +74,10 @@ Common composition:
   confirmed `project-workflow` context and missing, stale, or misleading
   README, docs, examples, comments, and docstrings into `ISSUES.md`, then
   implement agreed doc fixes gap by gap.
+- `reliability-gaps` orchestrates a two-phase reliability-gap workflow:
+  aggregate confirmed `project-workflow` context and SRE, NALSD, operability,
+  overload, observability, release-safety, recovery, or data-integrity gaps into
+  `ISSUES.md`, then implement agreed reliability fixes gap by gap.
 - `code-review` conditionally consults `security-audit` for security-sensitive
   review scope while keeping the review findings format.
 - `style-review` performs an optional non-blocking polish pass when explicitly
@@ -79,6 +87,10 @@ Common composition:
   `change-validation` for scanner, lint, or CI command selection.
 - `testing-standards` pairs with language standards for test idioms and
   `change-validation` for command selection.
+- `reliability-standards` pairs with `change-safety`, `security-audit`,
+  `testing-standards`, and `change-validation` when changes affect production
+  readiness, SLOs, overload, observability, release safety, recovery, or
+  operability.
 - `naming-standards` pairs with language standards when a change creates,
   reviews, or renames identifiers, commands, flags, files, tests, fixtures, or
   documentation terms.

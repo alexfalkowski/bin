@@ -19,6 +19,10 @@ checks, and findings.
   aggregate `project-workflow` context and confirmed README, docs, examples,
   comments, and docstring gaps into `ISSUES.md`, then implement agreed
   doc fixes one gap at a time.
+- `reliability-gaps` orchestrates a two-phase reliability-gap workflow: first
+  aggregate `project-workflow` context and confirmed SRE, NALSD, operability,
+  overload, observability, release-safety, recovery, or data-integrity gaps into
+  `ISSUES.md`, then implement agreed reliability fixes one gap at a time.
 - `code-review` performs the review pass and conditionally consults
   `security-audit` for security-sensitive scope.
 - `style-review` performs an optional non-blocking polish pass when explicitly
@@ -29,6 +33,10 @@ checks, and findings.
 - `testing-standards` covers language-agnostic test design and coverage
   decisions; pair it with language standards for idioms and
   `change-validation` for command selection.
+- `reliability-standards` covers SRE, NALSD, production-readiness, SLO,
+  overload, observability, release-safety, recovery, and operability judgment;
+  pair it with `change-safety`, `security-audit`, `testing-standards`, and
+  `change-validation` as the scope requires.
 - `naming-standards` covers cross-language naming judgment for domain clarity,
   vocabulary consistency, abstraction level, ambiguity, public terminology, and
   rename safety; pair it with language standards for language-specific idioms.
