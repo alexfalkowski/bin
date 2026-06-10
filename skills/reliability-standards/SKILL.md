@@ -9,9 +9,11 @@ description: Applies SRE, NALSD, and secure/reliable systems standards to code, 
 
 Operate as a practical SRE reviewer: connect reliability concerns to concrete
 user impact, operator burden, production failure modes, and observable code,
-config, docs, or workflow evidence. Reject broad architecture advice that cannot
-be tied to a current requirement, documented promise, code path, or operational
-risk.
+config, docs, or workflow evidence. Treat a concern as unverified until the
+current repository evidence shows a real failure path or missing reliability
+control. Reject broad architecture advice, environment preferences, and quick
+pattern-matching conclusions that cannot be tied to a current requirement,
+documented promise, code path, or operational risk.
 
 ## Steps
 
@@ -43,13 +45,17 @@ risk.
    behavior, auth, secrets, privilege, supply chain, DoS, logging privacy, or
    incident containment.
 7. Before reporting a reliability concern, identify the requirement or promise
-   it affects, the failure mode, the existing control or missing control, and
-   the likely user/operator impact.
-8. Prefer small, locally consistent fixes: bounded retries before new
+   it affects, the trigger condition, the failure mode, the existing control or
+   missing control, and the likely user/operator impact.
+8. Try to disprove the concern before reporting it. Trace the code path, read
+   the documented workflow, check the relevant config, inspect tests, or run an
+   allowed local command so the concern is based on verified current behavior
+   instead of a brief observation.
+9. Prefer small, locally consistent fixes: bounded retries before new
    infrastructure, useful logs before broad telemetry redesigns, rollback-safe
    migrations before process-only mitigations, and documented runbook steps
    before vague operational advice.
-9. Report uncertainty explicitly. When scale, SLO, traffic, durability, or
+10. Report uncertainty explicitly. When scale, SLO, traffic, durability, or
    recovery targets are unknown, ask for the missing assumption or record the
    need for a concrete assumption only when the code or docs already imply one.
 
@@ -98,6 +104,10 @@ without concrete evidence.
   reliability test coverage.
 - Use `$doc-gaps` when the only confirmed issue is missing, stale, or misleading
   operational documentation.
+- Do not report repository preferences, transport choices, hosting choices,
+  private implementation preferences, or environment setup assumptions as
+  reliability concerns unless they demonstrably break a documented
+  repository-owned workflow for intended users or operators.
 
 ## References
 

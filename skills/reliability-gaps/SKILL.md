@@ -1,6 +1,6 @@
 ---
 name: reliability-gaps
-description: Finds concrete missing or weak reliability, operability, SLO, overload, observability, release-safety, recovery, data-integrity, disaster-readiness, or NALSD design evidence in a package or folder, records confirmed gaps in that scope's ISSUES.md, and later proposes and implements explicitly agreed fixes gap by gap. Use when the user asks to find $reliability-gaps in a package or folder, find reliability gaps in a package or folder, review production readiness for a package or folder, implement $reliability-gaps in a package or folder, or implement reliability gaps in a package or folder.
+description: Finds verified missing or weak reliability, operability, SLO, overload, observability, release-safety, recovery, data-integrity, disaster-readiness, or NALSD design evidence in a package or folder, records confirmed gaps in that scope's ISSUES.md, and later proposes and implements explicitly agreed fixes gap by gap. Use when the user asks to find $reliability-gaps in a package or folder, find reliability gaps in a package or folder, review production readiness for a package or folder, implement $reliability-gaps in a package or folder, or implement reliability gaps in a package or folder.
 ---
 
 # Reliability Gaps
@@ -14,10 +14,12 @@ Do not combine the two modes in one pass.
 
 ## Operating Stance
 
-Operate as a production-readiness triager: record only confirmed reliability
-gaps with concrete evidence, credible user or operator impact, and an actionable
-fix. Reject speculative scalability advice, generic SRE checklists, and findings
-that depend on undocumented future requirements.
+Operate as a production-readiness triager: record only verified reliability gaps
+with concrete evidence, credible user or operator impact, and an actionable fix.
+Treat a candidate as unconfirmed until the current code, config, docs, tests, or
+command behavior show how a repository-owned reliability control can fail.
+Reject speculative scalability advice, generic SRE checklists, environment
+preferences, and findings that depend on undocumented future requirements.
 
 ## Find Mode
 
@@ -43,7 +45,7 @@ that depend on undocumented future requirements.
 14. Use `../references/finding-severity.md` to discard low-confidence candidates before assigning severity.
 15. Wait for all agents to finish before aggregating results.
 16. Deduplicate overlapping findings and resolve conflicting agent conclusions by re-checking the code, config, tests, docs, and CI directly.
-17. Confirm each candidate gap against current evidence before recording it. A gap must name the affected reliability promise or operational expectation, the failure mode, the missing or weak control, and the likely user or operator impact.
+17. Confirm each candidate gap against current evidence before recording it. Try to disprove the candidate by tracing the current code path, reading the documented workflow, checking the relevant config, inspecting existing tests, or running an allowed local command. A gap must name the affected reliability promise or operational expectation, the trigger condition, the failure mode, the missing or weak control, and the likely user or operator impact.
 18. Record reliability gaps only when they involve repository-owned behavior or documented/implicit operational contracts, such as:
    - missing or weak SLO, SLI, alertability, dashboard, runbook, or operator diagnostic coverage for behavior the repository claims or owns.
    - unbounded or unsafe timeouts, retries, backoff, jitter, concurrency, queues, subprocesses, files, disk, memory, network, or worker resources.
@@ -53,16 +55,17 @@ that depend on undocumented future requirements.
    - missing health/readiness/shutdown/drain behavior for long-running services or workers.
    - missing concrete NALSD assumptions, capacity estimates, bottleneck analysis, or failure-domain reasoning where the code or docs already make scale or availability claims.
 19. Do not record generic advice to add monitoring, runbooks, autoscaling, retries, queues, circuit breakers, chaos testing, load tests, Kubernetes probes, or dashboards unless a concrete current failure mode and repository-owned fix are identified.
-20. Do not record reliability gaps whose only support is an undocumented future scale target, hypothetical product direction, or architecture preference.
-21. Do not record confirmed production bugs, security issues, compatibility breaks, or violated public contracts as reliability gaps. If broken behavior is discovered during review, report it as out of scope for the reliability-gap ledger and recommend `$code-issues`, `$security-audit`, or `$change-safety` as appropriate.
-22. Do not record standalone missing, weak, flaky, misleading, or wrong-layer tests as reliability gaps. Use `$test-gaps` when missing failure-path coverage is the finding.
-23. Do not record standalone missing, weak, stale, misleading, or wrong-location operational docs as reliability gaps. Use `$doc-gaps` when documentation itself is the finding.
-24. Do not report optional maturity improvements, cloud-architecture preferences, private implementation preferences, or "best practice" checkboxes as findings by themselves. List them only as optional follow-up notes when relevant.
-25. If no confirmed reliability gaps are found, report that no reliability gaps were found and do not create `ISSUES.md`.
-26. If confirmed reliability gaps are found, write all findings to the scoped `ISSUES.md` before making any fixes.
-27. Assign every finding a unique ID for the session in the form `REL-<number>`.
-28. Present the scoped `ISSUES.md` and a proposed reliability-fix plan to the user.
-29. Stop after presenting the ledger and plan. Do not fix findings in the same pass.
+20. Do not record findings whose evidence is only a repository preference, transport choice, hosting choice, cloud architecture preference, or environment setup assumption. For example, an SSH Git remote or submodule URL is not a reliability gap unless a documented repository-owned workflow currently fails for intended operators and the repository owns the fix.
+21. Do not record reliability gaps whose only support is an undocumented future scale target, hypothetical product direction, architecture preference, or a conclusion reached from briefly noticing a pattern without verifying a concrete failure path.
+22. Do not record confirmed production bugs, security issues, compatibility breaks, or violated public contracts as reliability gaps. If broken behavior is discovered during review, report it as out of scope for the reliability-gap ledger and recommend `$code-issues`, `$security-audit`, or `$change-safety` as appropriate.
+23. Do not record standalone missing, weak, flaky, misleading, or wrong-layer tests as reliability gaps. Use `$test-gaps` when missing failure-path coverage is the finding.
+24. Do not record standalone missing, weak, stale, misleading, or wrong-location operational docs as reliability gaps. Use `$doc-gaps` when documentation itself is the finding.
+25. Do not report optional maturity improvements, cloud-architecture preferences, private implementation preferences, or "best practice" checkboxes as findings by themselves. List them only as optional follow-up notes when relevant.
+26. If no confirmed reliability gaps are found, report that no reliability gaps were found and do not create `ISSUES.md`.
+27. If confirmed reliability gaps are found, write all findings to the scoped `ISSUES.md` before making any fixes.
+28. Assign every finding a unique ID for the session in the form `REL-<number>`.
+29. Present the scoped `ISSUES.md` and a proposed reliability-fix plan to the user.
+30. Stop after presenting the ledger and plan. Do not fix findings in the same pass.
 
 ## `ISSUES.md` Format
 
@@ -77,7 +80,7 @@ Use this structure:
 - Severity: Critical|High|Medium|Low
 - Scope: path/to/file-or-folder
 - Impact: User, operator, incident, availability, recovery, data-integrity, or scaling risk.
-- Evidence: Concrete file and line references, command behavior, config, docs, tests, missing control, failure mode, or calculation gap.
+- Evidence: Concrete file and line references, command behavior, config, docs, tests, missing control, failure mode, calculation gap, and the verification path used to rule out a guess.
 - Proposed fix: Smallest credible reliability improvement using established local patterns.
 - Validation: Suggested checks for the reliability change.
 ```
