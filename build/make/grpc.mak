@@ -29,6 +29,10 @@ proto-breaking:
 proto-generate:
 	@make -C api generate
 
+# Check whether generated code from api/ protobufs is stale.
+proto-stale:
+	@make -C api stale
+
 # Push the api/ module to the Buf Schema Registry (buf push).
 proto-push:
 	@make -C api push

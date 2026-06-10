@@ -34,15 +34,16 @@ Use this reference after you have identified which shared `bin/build/make/*.mak`
 
 ### `buf.mak`
 
-- Especially relevant targets: `lint`, `fix-lint`, `format`, `generate`, `breaking`, `push`, `update-all-dep`.
+- Especially relevant targets: `lint`, `fix-lint`, `format`, `generate`, `stale`, `breaking`, `push`, `update-all-dep`.
 - `breaking` compares against `https://github.com/alexfalkowski/$(NAME).git#branch=master`, so branch and remote assumptions matter.
-- `generate` and `push` depend on the consuming repository's Buf configuration.
+- `generate`, `stale`, and `push` depend on the consuming repository's Buf configuration.
+- `stale` runs `buf generate` from the Buf module directory that included the fragment, then runs `git diff --exit-code`; Git checks the whole worktree, so generated outputs outside that child directory are still detected.
 - `push` updates remote state and requires explicit user permission.
 
 ### `http.mak`, `grpc.mak`, And `client.mak`
 
 - These are project-template fragments that combine Go, Ruby test harness, Docker, security, coverage, and helper targets.
-- `grpc.mak` also includes proto lint, format, generate, breaking, and push targets.
+- `grpc.mak` also includes proto lint, format, generate, stale, breaking, and push targets.
 - `features` and `benchmarks` depend on downstream test/build layout and wrappers under `BIN_ROOT/quality/ruby/...`.
 - `specs`, coverage, and report cleanup assume downstream `test/reports/` paths.
 - Docker and certificate helper targets depend on external CLIs such as Docker, `mkcert`, `dot`, and `air` depending on the target.
@@ -59,7 +60,7 @@ Use this reference after you have identified which shared `bin/build/make/*.mak`
 
 - If the root `Makefile` includes `ruby.mak`, expect Ruby lint and cucumber-style feature flows.
 - If it includes `go.mak`, expect Go lint, test, coverage, and security flows.
-- If it includes `buf.mak`, expect Buf lint, format, generate, push, and breaking-change flows.
+- If it includes `buf.mak`, expect Buf lint, format, generate, stale-output, push, and breaking-change flows.
 - If it includes `http.mak`, `grpc.mak`, or `client.mak`, expect combined Go/Ruby validation and downstream test harness assumptions.
 - If the repo exposes both `features` and `specs`, choose the target that best matches the area under change.
 - If the repo overrides a target after including a fragment, trust the root `Makefile` behavior over the fragment default.

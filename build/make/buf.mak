@@ -20,6 +20,10 @@ update-all-dep:
 generate:
 	@buf generate
 
+# Check whether generated protobuf outputs are stale.
+stale: generate
+	@git diff --exit-code
+
 # Push module to the Buf Schema Registry (buf push).
 push:
 	@buf push
