@@ -18,7 +18,7 @@ Use this reference for Go code, tests, module metadata, or Go-related Make targe
 - Prefer repo-defined Go targets first.
 - If `build/make/go.mak` is included, use `make sec` for `govulncheck` plus Trivy.
 - Use `govulncheck -show verbose -test ./...` when a narrower direct vulnerability check is appropriate.
-- Use Go tests for behavioral security fixes, especially path constraints, input validation, auth decisions, and error handling.
+- For behavioral security fixes, use the majority relevant test harness for the risky behavior, especially path constraints, input validation, auth decisions, and error handling. Do not default to Go tests unless Go is the relevant established coverage layer or the changed surface is a Go package/API contract.
 - If `golangci-lint` is wrapped by `build/go/lint`, remember it may no-op when `golangci-lint` is missing.
 
 ## Findings

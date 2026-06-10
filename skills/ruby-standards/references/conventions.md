@@ -19,7 +19,8 @@ Use this reference when working in Ruby repositories.
 ## Testing
 
 - Follow `$testing-standards` for cross-language test design, coverage, fixtures, determinism, and test-layer decisions.
-- Infer the project type from existing tests and CI: Ruby libraries commonly use unit and integration tests such as RSpec, while services in this ecosystem commonly use Cucumber feature flows.
+- Infer the project type from the majority relevant existing tests and CI before recommending or adding tests. Ruby libraries commonly use unit and integration tests such as RSpec, while services in this ecosystem commonly use Cucumber feature flows, but repository-local patterns take precedence.
+- Do not create Ruby tests solely because the production code is Ruby. If the majority relevant coverage uses another language or harness, update that harness unless the changed surface is specifically a Ruby API contract.
 - Match the repository's established Ruby test, feature, helper, assertion, and naming idioms.
 - When changing RSpec tests, scan changed boolean and numeric expectations such as `be(true)`, `be(false)`, `eq(...)`, comparison matchers, and count/status expectations. Repeated or scenario-sensitive expectations should have descriptive example names, contexts, or failure messages unless the surrounding example already makes the behavior obvious.
 

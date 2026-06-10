@@ -21,7 +21,8 @@ Use this reference when working in Go repositories.
 ## Testing
 
 - Follow `$testing-standards` for cross-language test design, coverage, fixtures, determinism, and test-layer decisions.
-- Infer the project type from existing tests and CI: Go libraries commonly use unit and integration tests, while services in this ecosystem may rely on Cucumber feature flows around the service.
+- Infer the project type from the majority relevant existing tests and CI before recommending or adding tests. Go libraries commonly use unit and integration tests, while services in this ecosystem may be exercised primarily through another language or harness.
+- Do not create Go `*_test.go` files solely because the production code is Go. If the majority relevant coverage uses another language or harness, update that harness unless the changed surface is specifically a Go package/API contract.
 - In this repository ecosystem, prefer `github.com/stretchr/testify/require` when adding assertion-based tests unless the package already uses a different local pattern.
 - When changing Go tests, scan changed `require.True`, `require.False`, `require.Equal`, `require.EqualValues`, `require.Less`, and `require.LessOrEqual` calls. Repeated or scenario-sensitive boolean and numeric assertions should include a message unless the test or subtest name already makes the behavior obvious.
 - Use this decision gate before creating or changing a Go test file: default to an external test package named `<package>_test`; use the production package only after explaining why the public or documented entrypoint cannot cover the behavior.
