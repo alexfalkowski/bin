@@ -20,7 +20,7 @@ checks, and findings.
   comments, and docstring gaps into `ISSUES.md`, then implement agreed
   doc fixes one gap at a time.
 - `reliability-gaps` orchestrates a two-phase reliability-gap workflow: first
-  aggregate `project-workflow` context and confirmed SRE, NALSD, operability,
+  aggregate `project-workflow` context and verified SRE, NALSD, operability,
   overload, observability, release-safety, recovery, or data-integrity gaps into
   `ISSUES.md`, then implement agreed reliability fixes one gap at a time.
 - `code-review` performs the review pass and conditionally consults
