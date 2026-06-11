@@ -8,6 +8,9 @@ Use this reference when choosing which checks to run.
 - Run the narrowest check that gives credible confidence for the change.
 - Prefer repository-defined commands because they encode project conventions.
 - Use direct commands when they are clearly narrower or better aligned with the task than a broader repo wrapper.
+- Before selecting tests, identify the dominant relevant test harness and repository-defined entry point for the affected behavior.
+- Do not add or select an ad hoc language-native test command when the repository's established harness owns the behavior, unless the user explicitly asked for that layer or the behavior cannot be covered through the established harness.
+- If bypassing the dominant harness is necessary, stop before editing or validating and state why the established harness cannot cover the behavior.
 - Use CI configuration as a strong signal for which checks matter most.
 - Run the repository's setup target, such as `make dep`, when checks depend on installed dependencies, generated files, or vendored state.
 - Ask for permission before running checks that require SSH credentials, GitHub auth, registry auth, cloning, pushing, publishing, opening PRs, or updating remote state.
@@ -44,6 +47,7 @@ For standalone validation reports, use exactly this Markdown structure and do no
 - command: `make lint`
   result: passed
   coverage: Ruby linting for changed files.
+  local-pattern: Repo lint target; no new validation layer.
 
 ## Gaps
 
@@ -55,6 +59,7 @@ For standalone validation reports, use exactly this Markdown structure and do no
 - Use `not run` when a relevant command was intentionally skipped or could not be run.
 - If no commands ran, write one `Validation` entry with `command: none` and `result: not run`.
 - In `coverage`, state what the command actually validated or why it did not validate anything.
+- In `local-pattern`, state the repository-defined validation path or dominant harness used, and state when no new validation layer was introduced.
 - If there are no validation gaps, write exactly `- None.`
 - When embedding validation in another skill's output format, preserve command, result, coverage, and gap details without adding standalone sections.
 
@@ -62,6 +67,7 @@ For standalone validation reports, use exactly this Markdown structure and do no
 
 - For shell scripts, Dockerfiles, and Makefile glue, prefer the repo's lint targets when available.
 - For changes in any implementation language, first identify the majority relevant repository-defined test harness for the affected behavior; prefer the matching test entry point before inventing ad hoc commands.
+- If a service behavior is primarily covered by Cucumber, Gherkin, RSpec-style features, acceptance tests, or another cross-language harness, validate through that harness unless the user explicitly asks for lower-level tests.
 - Run language-specific lint or formatting commands for changed code when the repository exposes them, regardless of which harness owns the behavior tests.
 - For Go changes whose majority relevant tests are Go-based, prefer the repo's Go test entry points.
 - For Ruby changes whose majority relevant tests are Ruby-based, prefer the repo's Ruby feature, spec, or benchmark entry points.
@@ -70,7 +76,7 @@ For standalone validation reports, use exactly this Markdown structure and do no
 - If the repository exposes named test entry points, use the one that matches the affected behavior instead of inventing a different test vocabulary.
 - If the repository exposes benchmark or coverage targets that are relevant to the change, prefer those entry points over ad hoc commands.
 - If a repo exposes `dep`, `lint`, `specs`, `features`, `benchmarks`, `coverage`, or `sec`, prefer those names over ad hoc tool invocations.
-- For this shared `bin` repo itself, CI currently runs `make dep`, `make clean-dep`, `make scripts-lint`, `make docker-lint`, `make lint`, and `make sec`.
+- For this shared `bin` repo itself, CI currently runs `make dep`, `make clean-dep`, `make scripts-lint`, `make skills-lint`, `make docker-lint`, `make lint`, and `make sec`.
 - Dependency setup, scanners, Docker commands, Buf commands, and Go module commands may require network access; identify that before relying on them.
 - Push, publish, release, Docker manifest push, Buf push, and PR open/update flows require explicit user permission.
 

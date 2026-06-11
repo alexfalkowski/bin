@@ -6,6 +6,53 @@ This repository is a collection of shared **executables** and **Makefile include
 
 Most of the code here is small Bash/Ruby utilities plus reusable make fragments under `build/make/`.
 
+## Non-negotiable agent rules
+
+The instructions in this file and the selected `skills/**/SKILL.md` files are
+mandatory operating rules, not advisory guidance. Agents MUST follow them
+before applying personal judgment.
+
+Agents MUST:
+
+- Read and follow the smallest matching skill before taking task action.
+- Follow existing repository patterns over personal judgment.
+- Treat skill workflow steps using "must", "do not", or "stop" language as
+  blocking requirements.
+- Stop and ask before deviating from a selected skill, repository instruction,
+  dominant test harness, local style, or documented workflow.
+- State the exact instruction being deviated from before proposing any
+  deviation.
+
+Agents MUST NOT:
+
+- Add tests in a different layer after the selected skill says to inspect and
+  follow the dominant relevant harness.
+- Introduce import aliases, abstractions, helpers, files, or validation paths
+  for personal clarity when local patterns already exist.
+- Treat `AGENTS.md` or `SKILL.md` instructions as optional.
+- Continue after discovering they violated an instruction; they must correct
+  course immediately and remove their own noncompliant change.
+
+If there is a conflict, precedence is:
+
+1. System/developer instructions.
+2. The consuming repository's `AGENTS.md`.
+3. This shared `bin/AGENTS.md`.
+4. The selected `skills/**/SKILL.md`.
+5. Existing local code, test, docs, and workflow patterns.
+6. Agent judgment.
+
+## Local pattern binding
+
+Before editing, agents MUST inspect nearby files and the relevant test,
+configuration, documentation, and validation surfaces. Agents MUST preserve
+local import, naming, file layout, configuration key, test-layer, and validation
+patterns unless the task explicitly requires changing them.
+
+Do not introduce import aliases, new helper layers, new test layers, or new
+validation paths merely to avoid ambiguity. Use the existing local style. If the
+existing style appears unsafe or insufficient, stop and ask before changing it.
+
 ## Shared skills
 
 This repository ships focused skills under `skills/`. Use the smallest matching
@@ -128,13 +175,14 @@ From this repository root:
   - `make lint`
   - `make fix-lint`
   - `make format`
-- Script / Dockerfile linting:
+- Script / skill / Dockerfile linting:
   - `make scripts-lint` (runs `shellcheck` over various scripts)
+  - `make skills-lint` (checks required shared skill policy markers)
   - `make docker-lint` (runs `hadolint` on `build/docker/go/Dockerfile`)
 - Security scanning:
   - `make sec` (runs Trivy over the repository)
 
-CI runs (CircleCI): `make dep`, `make clean-dep`, `make scripts-lint`, `make docker-lint`, `make lint`, `make sec` (see `.circleci/config.yml`).
+CI runs (CircleCI): `make dep`, `make clean-dep`, `make scripts-lint`, `make skills-lint`, `make docker-lint`, `make lint`, `make sec` (see `.circleci/config.yml`).
 
 ## Command execution policy
 
@@ -276,6 +324,7 @@ Only rely on a command if you can find it being invoked in the relevant `.mak`/s
 - Bundler deps are cached under `vendor/`.
 - The required checks in CI are:
   - `make scripts-lint`
+  - `make skills-lint`
   - `make docker-lint`
   - `make lint`
   - `make sec`
@@ -288,4 +337,5 @@ Only rely on a command if you can find it being invoked in the relevant `.mak`/s
   - `make lint`
   - `make sec`
   - `make scripts-lint` (if `shellcheck` is available)
+  - `make skills-lint`
   - `make docker-lint` (if `hadolint` is available)

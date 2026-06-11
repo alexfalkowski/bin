@@ -10,12 +10,15 @@ Use this reference when you need to establish context quickly and discover how a
 4. Inspect which `bin/build/make/*.mak` fragments are included by the root `Makefile`, when relevant.
 5. Inspect only the files and scripts relevant to the requested task.
 6. Read `make-fragments.md` when you need to interpret likely behavior of included shared Makefile fragments or edit reusable `build/make/*.mak` files.
+7. Before editing, identify the local pattern for the changed surface, including import style, naming, file layout, dominant test harness, documented config keys, and repository validation target.
+8. Treat the consuming repository's `AGENTS.md`, this shared `bin/AGENTS.md`, and the selected skills as mandatory rules. If a needed edit would deviate from them or from the discovered local pattern, stop and ask before editing.
 
 ## Prefer Repository Entry Points
 
 - Prefer repository entry points such as `make` targets over calling tools directly.
 - Use direct tool invocations only when the repository does not provide a stable entry point or when a narrower check is clearly better for the task.
 - Confirm that a target or script is actually wired into the repo before relying on it.
+- Preserve the repository's established validation path instead of inventing a new direct command for convenience.
 - Identify whether a command fetches, clones, pushes, publishes, opens PRs, updates remote state, or requires SSH/GitHub/registry credentials before running it.
 - When `help.mak` is included, use `make` or `make help` as the quickest way to discover the command surface.
 - When planning work, note whether the repository exposes setup targets such as `dep` so you can use them later when the task moves from discovery to edits or validation.
@@ -61,9 +64,11 @@ When workflow discovery is the final response, use exactly this Markdown structu
 ## When The Repo Uses `./bin`
 
 - Treat the consuming repository as the primary execution context.
+- Treat the consuming repository's `AGENTS.md` as binding local policy before applying shared `./bin` defaults.
 - Inspect the root `Makefile` to see which `bin/build/make/*.mak` fragments are included.
 - Use `make-fragments.md` to interpret included shared fragments after checking the root `Makefile`; do not let the fragment map replace the repository's actual command surface.
 - Validate path-sensitive behavior from the consuming repository root when downstream layout affects target behavior.
+- Preserve downstream local code, test, documentation, configuration, and validation patterns unless the user explicitly asks to change them.
 - Be careful with targets that resolve helper paths through `BIN_ROOT`; they should work in downstream repos and inside the `bin` repo itself, but downstream test/build layouts may still differ.
 - If a Make target reports an unexpected tool or version problem in the agent environment but works in the user's shell, report the mismatch and keep the Makefile target as the intended command.
 - Be careful with `start` and `stop` helpers because they may depend on a sibling `../docker` checkout or SSH access.

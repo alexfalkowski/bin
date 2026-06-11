@@ -13,8 +13,10 @@ description: Discovers project-local workflow, command surfaces, CI expectations
 4. Inspect only the files, scripts, and make fragments relevant to the user's task.
 5. Read `references/make-fragments.md` when you need to interpret included `bin/build/make/*.mak` fragments, edit reusable make fragments, or reason about likely target behavior.
 6. Identify commands that require network, SSH, GitHub auth, registry auth, cloning, pushing, publishing, opening PRs, or updating remote state before running or recommending them.
-7. When workflow discovery is the final response, use the exact structure in `references/bin-submodule.md`; do not add, remove, rename, or reorder sections.
-8. When another skill embeds this discovery, preserve the discovered commands, CI expectations, bin wiring, and constraints in the caller's output format.
+7. Before editing code, tests, docs, config, scripts, or validation paths, identify the local pattern for the changed surface: import style, naming style, file layout, dominant test harness, documented config keys, and repository validation target. Agents MUST preserve those patterns unless the user explicitly asks to change them.
+8. If an edit would deviate from the discovered local pattern, stop and ask before editing. State the exact pattern, why it cannot work, and the proposed deviation.
+9. When workflow discovery is the final response, use the exact structure in `references/bin-submodule.md`; do not add, remove, rename, or reorder sections.
+10. When another skill embeds this discovery, preserve the discovered commands, CI expectations, bin wiring, constraints, and local-pattern facts in the caller's output format.
 
 ## References
 

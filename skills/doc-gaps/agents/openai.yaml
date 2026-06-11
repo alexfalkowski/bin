@@ -1,4 +1,4 @@
 interface:
   display_name: "Doc Gaps"
   short_description: "Find scoped documentation gaps"
-  default_prompt: "Use $doc-gaps to find scoped missing, weak, stale, misleading, or terminology-confusing docs and comments, store confirmed gaps in that scope's ISSUES.md, or propose and implement agreed doc fixes one gap at a time."
+  default_prompt: "Use $doc-gaps to find scoped missing, weak, stale, misleading, or terminology-confusing docs and comments, store confirmed gaps in that scope's ISSUES.md, or propose and implement agreed doc fixes one gap at a time. Before editing, state the local documentation pattern and validation path."
