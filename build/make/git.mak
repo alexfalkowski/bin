@@ -92,9 +92,10 @@ delete:
 done: branch latest delete
 	@printf "bin: done with branch '%s'\n" "$$BRANCH"
 
-# Fetch remote refs and rebase the current branch onto origin/master.
+# Fetch remote refs, integrate the current remote branch when present, and
+# rebase the current branch onto origin/master.
 sync: fetch
-	@git rebase -X theirs origin/master
+	@$(BIN_ROOT)/build/git/sync
 
 # Amend the last commit with staged changes (no message edit).
 amend: add

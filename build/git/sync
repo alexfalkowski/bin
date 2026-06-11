@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Rebase the current branch for guarded force-pushes after remote refs are fetched.
+
+set -eo pipefail
+
+readonly branch="${BRANCH:-$(git branch --show-current)}"
+
+# The push target uses --force-with-lease --force-if-includes, so after fetch Git
+# rejects a forced update if origin/$branch moved and this checkout has not
+# integrated that remote tip. Rebase onto origin/$branch first so remote branch
+# updates are included in the history we rewrite, then rebase that combined
+# history onto origin/master.
+if [[ -n $branch ]] && git show-ref --verify --quiet "refs/remotes/origin/$branch"; then
+  git rebase "origin/$branch"
+fi
+
+git rebase -X theirs origin/master
