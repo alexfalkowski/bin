@@ -1,4 +1,4 @@
 interface:
   display_name: "Reliability Gaps"
   short_description: "Find scoped SRE readiness gaps"
-  default_prompt: "Use $reliability-gaps to find scoped reliability, operability, SLO, overload, observability, release-safety, recovery, or NALSD gaps, verify each candidate against a concrete current failure path before storing confirmed findings in that scope's ISSUES.md, or propose and implement agreed reliability fixes one gap at a time. Before editing, state the local pattern, dominant test harness, and validation path."
+  default_prompt: "Use $reliability-gaps to find scoped reliability gaps, answer REL-N follow-ups, propose agreed fixes one at a time, and implement each fix with explicit TDD decision, red, green, refactor, and validation reporting before waiting for REL-N is done."

@@ -1,6 +1,6 @@
 ---
 name: reliability-gaps
-description: Finds verified missing or weak reliability, operability, SLO, overload, observability, release-safety, recovery, data-integrity, disaster-readiness, or NALSD design evidence in a package or folder, records confirmed gaps in that scope's ISSUES.md, and later proposes and implements explicitly agreed fixes gap by gap. Use when the user asks to find $reliability-gaps in a package or folder, find reliability gaps in a package or folder, review production readiness for a package or folder, implement $reliability-gaps in a package or folder, or implement reliability gaps in a package or folder.
+description: Finds verified missing or weak reliability, operability, SLO, overload, observability, release-safety, recovery, data-integrity, disaster-readiness, or NALSD design evidence in a package or folder, records confirmed gaps in that scope's ISSUES.md, and later proposes and implements explicitly agreed fixes gap by gap. Use when the user asks to find $reliability-gaps in a package or folder, find reliability gaps in a package or folder, review production readiness for a package or folder, implement $reliability-gaps in a package or folder, implement reliability gaps in a package or folder, asks what the fix is for REL-<number>, asks to fix REL-<number>, asks to verify REL-<number>, or says REL-<number> is done.
 ---
 
 # Reliability Gaps
@@ -111,15 +111,22 @@ Keep optional follow-up notes separate from findings:
 7. Stop after proposing the solution. Do not edit files, update `ISSUES.md`, or start validation until the human explicitly agrees to that finding's solution.
 8. Ask questions when SLOs, expected failure behavior, operator workflow, compatibility, rollout, validation, or user intent is ambiguous. Treat silence or a broad "implement reliability gaps" request as permission to start the proposal workflow, not as permission to edit.
 9. After the human agrees and before editing, state the selected local code/config/docs pattern, dominant relevant test harness, planned validation command, and any deviation from `AGENTS.md` or selected skills. If a deviation is needed, stop and ask before editing.
-10. Once the solution for the current finding is agreed and the local-pattern gate is satisfied, implement only that finding with the smallest clear reliability change.
-11. Use `$reliability-standards` for reliability design, `$change-safety` for public or operational compatibility, `$testing-standards` for failure-path tests, and `$change-validation` for checks. Pair with `$security-audit` when the fix touches auth, secrets, privilege, DoS, logs, supply chain, or incident containment.
-12. Validate the reliability change using checks appropriate to the changed behavior. Prefer repository Make targets and documented entrypoints.
-13. Report the result for that finding and ask the human to verify and explicitly say `REL-<number> is done`.
-14. Do not move to the next finding until the human says `REL-<number> is done`.
-15. After the human confirms a finding is done, remove that finding from scoped `ISSUES.md`. If a finding is deemed invalid or not actually a reliability gap, remove it only after explaining why and getting human agreement.
-16. Then propose the solution for the next remaining finding and repeat the same agreement gate.
-17. Once all findings are resolved and confirmed done by the human, delete the scoped `ISSUES.md`.
-18. Summarize what changed, which reliability gaps were resolved or dismissed, and which validation steps were run or still need to be carried out by the human.
+10. For behavior-changing fixes, state the reliability execution checklist before editing:
+   - `TDD decision`: yes/no, with the concrete reason if no.
+   - `First test/scenario`: the narrowest test, table, fixture, or scenario to add or update first.
+   - `Expected red`: the command and failure expected before production edits.
+   - `Intended green change`: the smallest code/config/docs change expected to pass.
+   - `Refactor checkpoint`: the cleanup pass planned after green, or `none`.
+   - `Validation`: the focused and expanded commands intended after refactor.
+11. Once the solution for the current finding is agreed and the local-pattern gate is satisfied, implement only that finding with the smallest clear reliability change.
+12. Use `$reliability-standards` for reliability design, `$change-safety` for public or operational compatibility, `$testing-standards` for failure-path tests, and `$change-validation` for checks. Pair with `$security-audit` when the fix touches auth, secrets, privilege, DoS, logs, supply chain, or incident containment.
+13. Validate the reliability change using checks appropriate to the changed behavior. Prefer repository Make targets and documented entrypoints.
+14. Report the result for that finding with `Red`, `Green`, `Refactor`, and `Validation` entries. Use `Refactor: none` when no cleanup was needed after green. Then ask the human to verify and explicitly say `REL-<number> is done`.
+15. Do not move to the next finding until the human says `REL-<number> is done`.
+16. After the human confirms a finding is done, remove that finding from scoped `ISSUES.md`. If a finding is deemed invalid or not actually a reliability gap, remove it only after explaining why and getting human agreement.
+17. Then propose the solution for the next remaining finding and repeat the same agreement gate.
+18. Once all findings are resolved and confirmed done by the human, delete the scoped `ISSUES.md`.
+19. Summarize what changed, which reliability gaps were resolved or dismissed, and which validation steps were run or still need to be carried out by the human.
 
 ## References
 
