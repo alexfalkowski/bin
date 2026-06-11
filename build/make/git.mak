@@ -21,6 +21,10 @@ master:
 pull:
 	@git pull --rebase
 
+# Fetch remote refs.
+fetch:
+	@git fetch origin
+
 # Stage all changes (tracked + untracked).
 add:
 	@git add -A
@@ -88,9 +92,9 @@ delete:
 done: branch latest delete
 	@printf "bin: done with branch '%s'\n" "$$BRANCH"
 
-# Rebase the current branch onto origin/master.
-sync:
-	@git fetch && git rebase -X theirs origin/master
+# Fetch remote refs and rebase the current branch onto origin/master.
+sync: fetch
+	@git rebase -X theirs origin/master
 
 # Amend the last commit with staged changes (no message edit).
 amend: add
@@ -104,11 +108,11 @@ edit-amend: add
 commit: add
 	@$(BIN_ROOT)/build/git/commit
 
-# Force-push the current branch to origin.
+# Force-push the current branch to origin with a lease and inclusion check.
 push:
-	@git push -f origin "$$BRANCH"
+	@git push --force-with-lease --force-if-includes origin "$$BRANCH"
 
-# Amend the last commit and force-push.
+# Amend the last commit and force-push with a lease and inclusion check.
 force: amend push
 
 # Create a draft PR for the current branch (gh pr create --draft).
@@ -123,10 +127,10 @@ pr:
 merge:
 	@gh pr merge --auto --squash
 
-# Commit, force-push, and open a draft PR.
+# Commit, force-push with a lease and inclusion check, and open a draft PR.
 review: commit push draft
 
-# Commit, force-push, open PR, and enable auto-merge.
+# Commit, force-push with a lease and inclusion check, open PR, and enable auto-merge.
 ready: commit push pr merge
 
 # Checkout master, pull, and update submodules.
