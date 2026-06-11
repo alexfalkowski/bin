@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2155
-# Build a local test Docker image for a service and platform.
+# Build a local test or production Docker image for a service and platform.
 
 set -eo pipefail
 
 readonly name="$1"
 readonly platform="$2"
+readonly image_type="${3:-test}"
 readonly dir="$(dirname "$(readlink -f "$0")")"
 readonly dockerfile="$dir/go/Dockerfile"
-readonly image="alexfalkowski/$name:test.$platform"
+readonly version_file="${APP_VERSION_FILE:-/tmp/workspace/release-version.txt}"
 
 # Print an error and stop the script.
 die() {
@@ -19,9 +20,36 @@ die() {
 # Validate Docker image reference components before invoking Docker.
 validate() {
   [[ "$name" =~ ^[a-z0-9]+([._-][a-z0-9]+)*$ ]] || die "invalid image name: $name"
+  if [[ "$name" =~ ^(test|latest)$ ]]; then
+    die "reserved image name: $name"
+  fi
   [[ "$platform" =~ ^(amd64|arm64)$ ]] || die "invalid platform: $platform"
+  [[ "$image_type" =~ ^(test|production)$ ]] || die "invalid image type: $image_type"
+}
+
+# Validate Docker image tag components before invoking Docker.
+validate_tag() {
+  [[ "$1" =~ ^[A-Za-z0-9_][A-Za-z0-9_.-]{0,127}$ ]] || die "invalid image tag: $1"
+  if [[ "$1" =~ ^(test|latest)$ ]]; then
+    die "reserved image tag: $1"
+  fi
 }
 
 # Build docker.
 validate
-docker build --platform "linux/$platform" --build-arg "name=$name" --build-arg version="latest" -t "$image" -f "$dockerfile" .
+case "$image_type" in
+  test)
+    readonly image_tag="test.$platform"
+    readonly version="latest"
+    ;;
+  production)
+    [[ -f "$version_file" ]] || exit 0
+    readonly latest_tag="$(cat "$version_file")"
+    validate_tag "$latest_tag"
+    readonly image_tag="$latest_tag.$platform"
+    readonly version="$latest_tag"
+    ;;
+esac
+
+readonly image="alexfalkowski/$name:$image_tag"
+docker build --platform "linux/$platform" --build-arg "name=$name" --build-arg "version=$version" -t "$image" -f "$dockerfile" .
