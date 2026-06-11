@@ -15,7 +15,13 @@ die() {
 # Validate Docker image reference components before invoking Docker.
 validate() {
   [[ "$name" =~ ^[a-z0-9]+([._-][a-z0-9]+)*$ ]] || die "invalid image name: $name"
+  if [[ "$name" =~ ^(test|latest)$ ]]; then
+    die "reserved image name: $name"
+  fi
   [[ "$latest_tag" =~ ^[A-Za-z0-9_][A-Za-z0-9_.-]{0,127}$ ]] || die "invalid image tag: $latest_tag"
+  if [[ "$latest_tag" =~ ^(test|latest)$ ]]; then
+    die "reserved image tag: $latest_tag"
+  fi
 }
 
 if [[ -f "$version_file" ]]; then
