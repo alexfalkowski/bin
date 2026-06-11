@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2155
-# Build and push a versioned Docker image for a service and platform.
+# Push a versioned Docker image for a service and platform.
 
 set -eo pipefail
 
 readonly version_file="${APP_VERSION_FILE:-/tmp/workspace/release-version.txt}"
+readonly image_type="${3:-production}"
 
 # Print an error and stop the script.
 die() {
@@ -15,19 +16,24 @@ die() {
 # Validate Docker image reference components before invoking Docker.
 validate() {
   [[ "$name" =~ ^[a-z0-9]+([._-][a-z0-9]+)*$ ]] || die "invalid image name: $name"
+  if [[ "$name" =~ ^(test|latest)$ ]]; then
+    die "reserved image name: $name"
+  fi
   [[ "$platform" =~ ^(amd64|arm64)$ ]] || die "invalid platform: $platform"
+  [[ "$image_type" == "production" ]] || die "push only supports production images: $image_type"
   [[ "$latest_tag" =~ ^[A-Za-z0-9_][A-Za-z0-9_.-]{0,127}$ ]] || die "invalid image tag: $latest_tag"
+  if [[ "$latest_tag" =~ ^(test|latest)$ ]]; then
+    die "reserved image tag: $latest_tag"
+  fi
 }
 
 if [[ -f "$version_file" ]]; then
   readonly name="$1"
   readonly platform="$2"
   readonly latest_tag="$(cat "$version_file")"
-  readonly dir="$(dirname "$(readlink -f "$0")")"
-  readonly dockerfile="$dir/go/Dockerfile"
   readonly image="alexfalkowski/$name:$latest_tag.$platform"
 
-  # Build and push docker.
+  # Push docker.
   validate
-  docker build --platform "linux/$platform" --build-arg "name=$name" --build-arg "version=$latest_tag" -t "$image" -f "$dockerfile" --push .
+  docker push "$image"
 fi

@@ -12,6 +12,7 @@ export MODULE NAME
 override export gem := $(value gem)
 override export package := $(value package)
 override export platform := $(value platform)
+override export image_type := $(value image_type)
 override export module := $(value module)
 override export id := $(value id)
 override export kind := $(value kind)
@@ -164,9 +165,9 @@ clean:
 go-sec:
 	@govulncheck -show verbose -test ./...
 
-# Scan the test image with Trivy (CRITICAL severity).
+# Scan the test image with Trivy (CRITICAL severity); set image_type=production for the versioned image.
 trivy-image:
-	@$(BIN_ROOT)/build/sec/trivy-image "$${NAME}" "$${platform}"
+	@$(BIN_ROOT)/build/sec/trivy-image "$${NAME}" "$${platform}" "$(or $(image_type),test)"
 
 # Scan the repository with Trivy (CRITICAL severity).
 trivy-repo:
@@ -183,13 +184,21 @@ build:
 build-test:
 	@go test -vet=off -race -mod vendor -c -tags features -covermode=atomic -coverpkg=$(COVER_PACKAGES) -o "$${NAME}" "$${MODULE}"
 
-# Build a test docker image tagged alexfalkowski/$(NAME):test.$(platform).
+# Build a test docker image; set image_type=production for the versioned image.
 build-docker:
-	@$(BIN_ROOT)/build/docker/build "$${NAME}" "$${platform}"
+	@$(BIN_ROOT)/build/docker/build "$${NAME}" "$${platform}" "$(or $(image_type),test)"
 
-# Push the image to docker hub (only if the version file exists).
+# Build and scan the test docker image.
+test-docker: build-docker trivy-image
+
+# Push the versioned image to docker hub (only if the version file exists).
+push-docker: override image_type := production
 push-docker:
-	@$(BIN_ROOT)/build/docker/push "$${NAME}" "$${platform}"
+	@$(BIN_ROOT)/build/docker/push "$${NAME}" "$${platform}" "$(or $(image_type),production)"
+
+# Build, scan, and push the versioned docker image.
+release-docker: override image_type := production
+release-docker: build-docker trivy-image push-docker
 
 # Create and push multi-arch manifests (only if the version file exists).
 manifest-docker:

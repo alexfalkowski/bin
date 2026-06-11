@@ -1,10 +1,50 @@
 #!/usr/bin/env bash
-# Scan a built test Docker image for critical vulnerabilities with Trivy.
+# Scan a built test or production Docker image for critical vulnerabilities with Trivy.
 
 set -eo pipefail
 
 readonly name="$1"
 readonly platform="$2"
+readonly image_type="${3:-test}"
+readonly version_file="${APP_VERSION_FILE:-/tmp/workspace/release-version.txt}"
+
+# Print an error and stop the script.
+die() {
+  printf 'error: %s\n' "$1" >&2
+  exit 1
+}
+
+# Validate Docker image reference components before invoking Trivy.
+validate() {
+  [[ "$name" =~ ^[a-z0-9]+([._-][a-z0-9]+)*$ ]] || die "invalid image name: $name"
+  if [[ "$name" =~ ^(test|latest)$ ]]; then
+    die "reserved image name: $name"
+  fi
+  [[ "$platform" =~ ^(amd64|arm64)$ ]] || die "invalid platform: $platform"
+  [[ "$image_type" =~ ^(test|production)$ ]] || die "invalid image type: $image_type"
+}
+
+# Validate Docker image tag components before invoking Trivy.
+validate_tag() {
+  [[ "$1" =~ ^[A-Za-z0-9_][A-Za-z0-9_.-]{0,127}$ ]] || die "invalid image tag: $1"
+  if [[ "$1" =~ ^(test|latest)$ ]]; then
+    die "reserved image tag: $1"
+  fi
+}
 
 # Scan using trivy.
-trivy image --db-repository public.ecr.aws/aquasecurity/trivy-db:2 --exit-code 1 --severity CRITICAL "alexfalkowski/$name:test.$platform"
+validate
+case "$image_type" in
+  test)
+    readonly image_tag="test.$platform"
+    ;;
+  production)
+    [[ -f "$version_file" ]] || exit 0
+    latest_tag="$(cat "$version_file")"
+    readonly latest_tag
+    validate_tag "$latest_tag"
+    readonly image_tag="$latest_tag.$platform"
+    ;;
+esac
+
+trivy image --db-repository public.ecr.aws/aquasecurity/trivy-db:2 --exit-code 1 --severity CRITICAL "alexfalkowski/$name:$image_tag"

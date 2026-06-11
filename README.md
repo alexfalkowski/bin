@@ -116,8 +116,10 @@ These are used by `build/make/ruby.mak` targets `features` and `benchmarks`.
 ### Docker helpers
 
 - `build/docker/go/Dockerfile` is a multi-stage Dockerfile to build a Go binary and copy it into a distroless image.
-- `build/docker/build` builds a **test** image tagged `alexfalkowski/<name>:test.<platform>`.
-- `build/docker/push` and `build/docker/manifest` are gated: they only run if `APP_VERSION_FILE` exists (default: `/tmp/workspace/release-version.txt`).
+- `build/docker/build` builds a **test** image tagged `alexfalkowski/<name>:test.<platform>` by default; pass `production` as the third argument to build `alexfalkowski/<name>:<version>.<platform>` from `APP_VERSION_FILE`.
+- `build/sec/trivy-image` scans the **test** image by default; pass `production` as the third argument to scan the versioned image that will be pushed.
+- In service Make targets, use `test-docker` for build-and-scan branch checks and `release-docker` for build-scan-push release checks; both preserve `platform=<arch>`.
+- `build/docker/push` pushes the already-built versioned image and only allows the `production` image type; `push-docker` forces that type in service Make targets. `build/docker/manifest` creates manifests. Both are gated: they only run if `APP_VERSION_FILE` exists (default: `/tmp/workspace/release-version.txt`).
 
 ### Local environment helper
 
