@@ -87,15 +87,16 @@ Keep optional follow-up notes separate from findings:
    - the intended validation.
 6. Stop after proposing the solution. Do not edit code, update `ISSUES.md`, or start validation until the human explicitly agrees to that issue's solution.
 7. Ask questions when behavior, compatibility, security, validation, or user intent is ambiguous. Treat silence or a broad "implement code issues" request as permission to start the proposal workflow, not as permission to code.
-8. Once the solution for the current issue is agreed, implement only that issue with the smallest safe change.
-9. Use `$testing-standards` when deciding whether to add or update regression tests for the fix, and prefer its test-first or scenario-first loop when a behavior-changing fix has a credible test or BDD layer.
-10. Validate the fix using checks appropriate to the changed code.
-11. Report the result for that issue and ask the human to verify and explicitly say `ISSUE-<number> is done`.
-12. Do not move to the next issue until the human says `ISSUE-<number> is done`.
-13. After the human confirms an issue is done, remove that issue from scoped `ISSUES.md`. If an issue is deemed invalid or not actually a code issue, remove it only after explaining why and getting human agreement.
-14. Then propose the solution for the next remaining issue and repeat the same agreement gate.
-15. Once all findings are resolved and confirmed done by the human, delete the scoped `ISSUES.md`.
-16. Summarize what changed, which code issues were resolved or dismissed, and which validation steps were run or still need to be carried out by the human.
+8. After the human agrees and before editing, state the selected local code pattern, dominant relevant test harness, planned validation command, and any deviation from `AGENTS.md` or selected skills. If a deviation is needed, stop and ask before editing.
+9. Once the solution for the current issue is agreed and the local-pattern gate is satisfied, implement only that issue with the smallest safe change.
+10. Use `$testing-standards` when deciding whether to add or update regression tests for the fix, and prefer its test-first or scenario-first loop when a behavior-changing fix has a credible test or BDD layer.
+11. Validate the fix using checks appropriate to the changed code.
+12. Report the result for that issue and ask the human to verify and explicitly say `ISSUE-<number> is done`.
+13. Do not move to the next issue until the human says `ISSUE-<number> is done`.
+14. After the human confirms an issue is done, remove that issue from scoped `ISSUES.md`. If an issue is deemed invalid or not actually a code issue, remove it only after explaining why and getting human agreement.
+15. Then propose the solution for the next remaining issue and repeat the same agreement gate.
+16. Once all findings are resolved and confirmed done by the human, delete the scoped `ISSUES.md`.
+17. Summarize what changed, which code issues were resolved or dismissed, and which validation steps were run or still need to be carried out by the human.
 
 ## References
 

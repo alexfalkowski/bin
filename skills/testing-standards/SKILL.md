@@ -12,11 +12,29 @@ specifications for observable repository-owned behavior, prefer established
 local test shapes, and keep coverage useful, deterministic, and readable rather
 than mechanically broad.
 
+## Mandatory Stop Gates
+
+These are mandatory gates, not guidance.
+
+- Before adding or changing tests, agents MUST identify the dominant relevant
+  test harness for the affected behavior.
+- If the dominant relevant harness is Cucumber, Gherkin, RSpec-style features,
+  another cross-language harness, or another repository-defined layer, agents
+  MUST NOT add language-native tests unless the user explicitly asks for that
+  layer or the behavior cannot be exercised through the dominant harness.
+- If an exception is claimed, agents MUST stop before editing and explain why
+  the dominant harness cannot cover the behavior.
+- If a wrong-layer test is added, agents MUST remove it immediately and continue
+  with the dominant relevant harness.
+- Personal clarity, convenience, faster local execution, implementation
+  language, or direct access to private functions are not valid reasons to
+  bypass the dominant harness.
+
 ## Steps
 
 1. Confirm the task involves adding tests, changing tests, reviewing test quality, planning coverage, or deciding where behavior should be exercised.
 2. Inspect the repository's existing tests, fixtures, helpers, entrypoints, CI targets, and the language or harness used by most relevant tests before recommending, adding, or changing test structure.
-3. Do not infer the repository's test strategy or test language from the implementation language. Follow the majority pattern of the relevant existing tests for the behavior, even when that means testing one implementation language from another language or harness. Add language-native tests only when that is the majority relevant local pattern, the changed surface is a language-level package/API contract, or the user explicitly asks for that level of coverage.
+3. Do not infer the repository's test strategy or test language from the implementation language. Agents MUST follow the majority pattern of the relevant existing tests for the behavior, even when that means testing one implementation language from another language or harness. Add language-native tests only when that is the majority relevant local pattern, the changed surface is a language-level package/API contract, or the user explicitly asks for that level of coverage.
 4. Do not infer the repository's test strategy only from language-native test files such as `*_test.go`; inspect cross-language harness directories such as `test/`, `features/`, and `spec/`, plus CI or make targets, before adding tests.
 5. Detect the dominant local test style before choosing the loop: prefer BDD/scenario-first when behavior is primarily exercised through `features/`, Cucumber/Gherkin, RSpec-style specs, acceptance tests, or Given/When/Then scenarios; prefer TDD/test-first when behavior is primarily exercised through unit, package, table-driven, or assertion-based tests. When both exist, choose the narrowest established layer that protects the changed behavior.
 6. Check whether the change should preserve, restore, or improve coverage; do not let meaningful behavior lose coverage without calling out the gap.

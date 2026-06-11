@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+# Check that agent policy hardening markers remain in shared skills.
+
+set -eo pipefail
+
+missing=0
+
+require_pattern() {
+  local file="$1"
+  local pattern="$2"
+
+  if [[ ! -f "$file" ]]; then
+    printf 'missing file: %s\n' "$file" >&2
+    missing=1
+    return
+  fi
+
+  if ! grep -Fq -- "$pattern" "$file"; then
+    printf 'missing policy marker in %s: %s\n' "$file" "$pattern" >&2
+    missing=1
+  fi
+}
+
+require_pattern AGENTS.md "mandatory operating rules, not advisory guidance"
+require_pattern AGENTS.md "## Local pattern binding"
+
+require_pattern skills/README.md "Skills are mandatory operating rules, not advisory notes."
+
+require_pattern skills/project-workflow/SKILL.md "Before editing code, tests, docs, config, scripts, or validation paths, identify the local pattern"
+require_pattern skills/project-workflow/references/bin-submodule.md "Treat the consuming repository's \`AGENTS.md\` as binding local policy"
+
+require_pattern skills/change-validation/references/check-selection.md "Before selecting tests, identify the dominant relevant test harness"
+require_pattern skills/change-validation/references/check-selection.md "Do not add or select an ad hoc language-native test command"
+
+require_pattern skills/testing-standards/SKILL.md "## Mandatory Stop Gates"
+require_pattern skills/testing-standards/SKILL.md "MUST NOT add language-native tests"
+
+require_pattern skills/go-standards/SKILL.md "Agents MUST NOT add an import alias"
+require_pattern skills/go-standards/SKILL.md "Agents MUST stop and explain before creating Go tests when another harness owns the behavior."
+require_pattern skills/go-standards/references/conventions.md "Being cautious is not a valid import-alias reason"
+
+require_pattern skills/code-issues/SKILL.md "After the human agrees and before editing, state the selected local code pattern"
+require_pattern skills/test-gaps/SKILL.md "After the human agrees and before editing, state the selected local test pattern"
+require_pattern skills/doc-gaps/SKILL.md "After the human agrees and before editing, state the selected local documentation pattern"
+require_pattern skills/reliability-gaps/SKILL.md "After the human agrees and before editing, state the selected local code/config/docs pattern"
+
+require_pattern skills/project-workflow/agents/openai.yaml "Treat AGENTS.md and selected skills as mandatory rules."
+require_pattern skills/testing-standards/agents/openai.yaml "MUST identify the dominant relevant existing test harness before editing"
+require_pattern skills/go-standards/agents/openai.yaml "MUST NOT invent import aliases for readability, caution, brevity, or personal clarity"
+
+exit "$missing"

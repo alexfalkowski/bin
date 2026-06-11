@@ -4,6 +4,14 @@ Use the smallest skill that matches the task. Compose skills by letting the
 outer workflow own the final response format and embedded skills provide facts,
 checks, and findings.
 
+## Mandatory Rule
+
+Skills are mandatory operating rules, not advisory notes. When a selected skill
+or repository `AGENTS.md` says to read, inspect, preserve, stop, ask, or avoid a
+pattern, agents must do that before applying personal judgment. If an agent
+believes a rule cannot work for the task, it must stop before editing, quote the
+specific rule or local pattern, and ask for approval to deviate.
+
 ## Common Composition
 
 - `review-pr` orchestrates PR preparation with `project-workflow`,
@@ -66,6 +74,10 @@ update the majority relevant existing harness, even when it tests code written
 in another language. Add language-native tests only when that is the majority
 relevant pattern, the changed surface is a language-level package/API contract,
 or the user explicitly asks for that level of coverage.
+If the dominant relevant harness is Cucumber, Gherkin, RSpec-style features,
+acceptance tests, or another cross-language repository-defined layer, agents
+must not add language-native tests for convenience or private access. They must
+stop and ask before using a different layer.
 Prefer the narrowest established test layer that credibly covers changed
 behavior through a public or documented surface; private-surface tests need
 explicit human approval. Treat tests as executable specifications for observable

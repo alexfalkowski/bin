@@ -144,6 +144,7 @@ Common checks used in CI (`.circleci/config.yml`):
 make dep
 make clean-dep
 make scripts-lint
+make skills-lint
 make docker-lint
 make lint
 make sec

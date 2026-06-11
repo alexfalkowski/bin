@@ -95,15 +95,16 @@ Keep optional follow-up notes separate from findings:
    - the intended validation.
 7. Stop after proposing the solution. Do not edit code, update `ISSUES.md`, or start validation until the human explicitly agrees to that finding's solution.
 8. Ask questions when behavior, compatibility, test layer, fixture strategy, validation, or user intent is ambiguous. Treat silence or a broad "implement test gaps" request as permission to start the proposal workflow, not as permission to code.
-9. Once the solution for the current finding is agreed, implement only that finding with the smallest clear test change, preferring the existing local test shape over new standalone structure.
-10. Use `$testing-standards` for test design and pair with the relevant language standard for local idioms. If implementing the test gap requires production behavior to change, prefer the test-first or scenario-first loop from `$testing-standards`.
-11. Validate the test change using checks appropriate to the changed tests.
-12. Report the result for that finding and ask the human to verify and explicitly say `TEST-<number> is done`.
-13. Do not move to the next finding until the human says `TEST-<number> is done`.
-14. After the human confirms a finding is done, remove that finding from scoped `ISSUES.md`. If a finding is deemed invalid or not actually a test gap, remove it only after explaining why and getting human agreement.
-15. Then propose the solution for the next remaining finding and repeat the same agreement gate.
-16. Once all findings are resolved and confirmed done by the human, delete the scoped `ISSUES.md`.
-17. Summarize what changed, which test gaps were resolved or dismissed, and which validation steps were run or still need to be carried out by the human.
+9. After the human agrees and before editing, state the selected local test pattern, dominant relevant test harness, planned validation command, and any deviation from `AGENTS.md` or selected skills. If a deviation is needed, stop and ask before editing.
+10. Once the solution for the current finding is agreed and the local-pattern gate is satisfied, implement only that finding with the smallest clear test change, preferring the existing local test shape over new standalone structure.
+11. Use `$testing-standards` for test design and pair with the relevant language standard for local idioms. If implementing the test gap requires production behavior to change, prefer the test-first or scenario-first loop from `$testing-standards`.
+12. Validate the test change using checks appropriate to the changed tests.
+13. Report the result for that finding and ask the human to verify and explicitly say `TEST-<number> is done`.
+14. Do not move to the next finding until the human says `TEST-<number> is done`.
+15. After the human confirms a finding is done, remove that finding from scoped `ISSUES.md`. If a finding is deemed invalid or not actually a test gap, remove it only after explaining why and getting human agreement.
+16. Then propose the solution for the next remaining finding and repeat the same agreement gate.
+17. Once all findings are resolved and confirmed done by the human, delete the scoped `ISSUES.md`.
+18. Summarize what changed, which test gaps were resolved or dismissed, and which validation steps were run or still need to be carried out by the human.
 
 ## References
 

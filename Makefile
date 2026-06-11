@@ -6,6 +6,10 @@ include build/make/git.mak
 scripts-lint:
 	@quality/shell/lint
 
+# Lint shared skill policy markers.
+skills-lint:
+	@quality/skills/lint
+
 # Lint all docker files.
 docker-lint:
 	@hadolint build/docker/go/Dockerfile
