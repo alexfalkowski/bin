@@ -29,6 +29,13 @@ These are mandatory gates, not guidance.
 - Personal clarity, convenience, faster local execution, implementation
   language, or direct access to private functions are not valid reasons to
   bypass the dominant harness.
+- If the human asks to remove, skip, or simplify a test during a behavior
+  change, agents MUST NOT infer that test-first workflow or coverage is waived.
+  Ask whether to replace it with better-shaped coverage or explicitly accept no
+  test for that change.
+- If the intended red test or scenario passes unexpectedly, agents MUST stop
+  before production edits and either strengthen the test, choose a better layer,
+  or report that existing coverage already protects the behavior.
 
 ## Steps
 
@@ -40,7 +47,7 @@ These are mandatory gates, not guidance.
 6. Check whether the change should preserve, restore, or improve coverage; do not let meaningful behavior lose coverage without calling out the gap.
 7. Before adding a new standalone test, check whether the behavior is already covered by existing tests and whether the right change is to extend an existing table, fixture, helper, or assertion block.
 8. Before editing behavior-changing production code, make an explicit test-first decision. State either `TDD: yes` with the first test/scenario you will add or update, or `TDD: no` with the concrete reason test-first is not practical. Do this before production edits, not retroactively after implementation.
-9. For behavior-changing code, prefer a test-first loop. In TDD-style projects, write or update the narrowest credible test first; in BDD-style projects, write or update the narrowest credible scenario, feature, or spec first. Run it and confirm it fails for the expected reason when practical. If the test passes unexpectedly, re-check whether the behavior is already covered or whether the new assertion is too weak. Implement the smallest code change to pass it, then refactor while keeping tests green.
+9. For behavior-changing code, prefer a test-first loop. In TDD-style projects, write or update the narrowest credible test first; in BDD-style projects, write or update the narrowest credible scenario, feature, or spec first. Run it and confirm it fails for the expected reason when practical. If the test passes unexpectedly, stop before production edits and re-check whether the behavior is already covered, whether the assertion is too weak, or whether a different test layer is needed. Implement the smallest code change to pass it, then perform a refactor pass while keeping tests green.
 10. If behavior-changing production code was edited before the test-first decision, stop and correct course: add or update the narrowest credible test immediately, run it against the current state when practical, and explicitly report that the red step was missed before continuing.
 11. Choose the narrowest established test layer that credibly covers the changed behavior.
 12. Test through public or documented APIs, commands, tasks, or service entrypoints so coverage reflects real consumer behavior.
@@ -51,10 +58,11 @@ These are mandatory gates, not guidance.
 17. When tests use mocks, stubs, spies, fakes, or other test doubles, check whether each double protects a true boundary or only mirrors internal implementation; flag interaction-only tests that could pass while real behavior is broken.
 18. Before finishing test changes or reviews, do a mutation-style gap scan against changed behavior. Ask whether the tests would fail if a comparison changed, a boundary moved, a boolean flipped, an error path returned success, a collection or string operation changed, a fallback/default was removed, or an observable side effect disappeared. Strengthen the behavior test when the answer is no. Ask the human only when the correct boundary or product behavior is ambiguous.
 19. Before accepting or repeating a coverage claim, run the repository's selected coverage command when practical and inspect every metric the tool reports, not only line coverage. If coverage drops or a metric is weak, ask what repository-owned behavior is untested before adding line-targeted tests.
-20. Before finishing test changes or reviews, do a readability pass after formatting. Check that tests describe observable behavior, avoid hard-coded private implementation details unless those details are the public contract, keep setup expressions simple enough for review, and place helper functions according to the local or language-specific convention.
-21. Before finishing test changes or reviews, scan changed tests for repeated boolean or numeric assertions whose default failure output would not identify the behavior under test; add named subtests or assertion messages where needed.
-22. When reviewing test quality, evaluate whether the tests are understandable, maintainable, repeatable, atomic, necessary, granular, fast enough for their layer, and first/test-driven where that is relevant. Use scores only when the human asks for a scored review; otherwise turn the rubric into concrete findings and improvements.
-23. For behavior-changing code, report the trace in the final update using this shape: `TDD decision`, `Style detected`, `First test/scenario`, `Red`, `Green`, and `Refactor`. Include the test, scenario, feature, or spec added or updated first; whether the red step failed for the expected reason, passed unexpectedly, was not practical to run, or was missed; the implementation change that made it green; any mutation-style or coverage gap found; and any refactor after green.
+20. After green and before broad validation, perform an explicit refactor pass on changed production code and tests. Remove duplication, simplify awkward setup, align with local naming/helpers, and keep behavior unchanged. If no cleanup is needed, record `Refactor: none`.
+21. Before finishing test changes or reviews, do a readability pass after formatting. Check that tests describe observable behavior, avoid hard-coded private implementation details unless those details are the public contract, keep setup expressions simple enough for review, and place helper functions according to the local or language-specific convention.
+22. Before finishing test changes or reviews, scan changed tests for repeated boolean or numeric assertions whose default failure output would not identify the behavior under test; add named subtests or assertion messages where needed.
+23. When reviewing test quality, evaluate whether the tests are understandable, maintainable, repeatable, atomic, necessary, granular, fast enough for their layer, and first/test-driven where that is relevant. Use scores only when the human asks for a scored review; otherwise turn the rubric into concrete findings and improvements.
+24. For behavior-changing code, report the trace in the final update using this shape: `TDD decision`, `Style detected`, `First test/scenario`, `Red`, `Green`, and `Refactor`. Include the test, scenario, feature, or spec added or updated first; whether the red step failed for the expected reason, passed unexpectedly, was not practical to run, or was missed; the implementation change that made it green; any mutation-style or coverage gap found; and any refactor after green. Use `Refactor: none` when no cleanup was needed.
 
 ## Principles
 

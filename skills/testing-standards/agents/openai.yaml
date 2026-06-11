@@ -1,4 +1,4 @@
 interface:
   display_name: "Testing Standards"
   short_description: "Design focused behavior tests"
-  default_prompt: "Use $testing-standards to design or review focused behavior tests for this change. MUST identify the dominant relevant existing test harness before editing; do not infer test language from implementation language, and MUST NOT add tests outside that harness unless the user explicitly asks or the behavior cannot be covered there. Stop and explain before any exception. For behavior changes, state the TDD/test-first decision before production edits, prefer public or documented entrypoints, run a mutation-style gap scan, verify coverage claims when practical, and report the red/green/refactor trace."
+  default_prompt: "Use $testing-standards to design or review focused behavior tests. MUST identify the dominant relevant existing test harness before editing, stop on unexpected green tests, treat human test-removal requests as coverage decisions, and report TDD decision, red, green, refactor, and validation."

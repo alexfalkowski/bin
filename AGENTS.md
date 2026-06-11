@@ -22,6 +22,9 @@ Agents MUST:
   dominant test harness, local style, or documented workflow.
 - State the exact instruction being deviated from before proposing any
   deviation.
+- Re-read the selected skill and identify the governing instruction when the
+  human challenges process, asks what the skill says, or points out a suspected
+  instruction violation.
 
 Agents MUST NOT:
 
@@ -198,6 +201,11 @@ CI runs (CircleCI): `make dep`, `make clean-dep`, `make scripts-lint`, `make ski
   differs from the user's normal terminal, treat that as an environment
   mismatch or validation gap, not as evidence that the repository command is
   wrong.
+- In Codex/tool shells, verify `ruby` and `make` resolution against the
+  initialized user shell before reporting repository command failures. Compare
+  the default tool shell with `zsh -lic 'command -v ruby; command -v make'`; if
+  they differ, rerun Make targets through the initialized shell, for example
+  `zsh -lic 'make lint'`, before treating the failure as real.
 - Do not replace a Makefile target with guessed direct commands just because the
   agent environment cannot find the same tools as the user's shell.
 - When diagnosing command-environment mismatches, check the command surface

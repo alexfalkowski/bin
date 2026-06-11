@@ -5,6 +5,91 @@ set -eo pipefail
 
 missing=0
 
+check_skill_yaml() {
+  ruby <<'RUBY'
+require "yaml"
+
+ok = true
+
+Dir["skills/*/SKILL.md"].sort.each do |path|
+  text = File.read(path)
+  match = text.match(/\A---\n(.*?)\n---/m)
+  unless match
+    warn "missing frontmatter: #{path}"
+    ok = false
+    next
+  end
+
+  begin
+    data = YAML.safe_load(match[1])
+  rescue Psych::SyntaxError => e
+    warn "invalid frontmatter YAML in #{path}: #{e.message}"
+    ok = false
+    next
+  end
+
+  unless data.is_a?(Hash)
+    warn "frontmatter must be a mapping: #{path}"
+    ok = false
+    next
+  end
+
+  extra = data.keys - %w[name description]
+  unless extra.empty?
+    warn "unexpected frontmatter keys in #{path}: #{extra.join(", ")}"
+    ok = false
+  end
+
+  %w[name description].each do |key|
+    unless data[key].is_a?(String) && !data[key].strip.empty?
+      warn "missing or empty #{key} in #{path}"
+      ok = false
+    end
+  end
+end
+
+Dir["skills/*/agents/openai.yaml"].sort.each do |path|
+  skill_name = path.split("/")[1]
+
+  begin
+    data = YAML.safe_load(File.read(path))
+  rescue Psych::SyntaxError => e
+    warn "invalid agent YAML in #{path}: #{e.message}"
+    ok = false
+    next
+  end
+
+  interface = data.is_a?(Hash) ? data["interface"] : nil
+  unless interface.is_a?(Hash)
+    warn "missing interface mapping: #{path}"
+    ok = false
+    next
+  end
+
+  %w[display_name short_description default_prompt].each do |key|
+    unless interface[key].is_a?(String) && !interface[key].strip.empty?
+      warn "missing or empty interface.#{key} in #{path}"
+      ok = false
+    end
+  end
+
+  short_description = interface["short_description"]
+  if short_description.is_a?(String) && !(25..64).cover?(short_description.length)
+    warn "interface.short_description must be 25-64 chars in #{path}"
+    ok = false
+  end
+
+  default_prompt = interface["default_prompt"]
+  if default_prompt.is_a?(String) && !default_prompt.include?("$#{skill_name}")
+    warn "interface.default_prompt must mention $#{skill_name} in #{path}"
+    ok = false
+  end
+end
+
+exit(ok ? 0 : 1)
+RUBY
+}
+
 require_pattern() {
   local file="$1"
   local pattern="$2"
@@ -21,8 +106,14 @@ require_pattern() {
   fi
 }
 
+if ! check_skill_yaml; then
+  missing=1
+fi
+
 require_pattern AGENTS.md "mandatory operating rules, not advisory guidance"
 require_pattern AGENTS.md "## Local pattern binding"
+require_pattern AGENTS.md "Re-read the selected skill and identify the governing instruction"
+require_pattern AGENTS.md "rerun Make targets through the initialized"
 
 require_pattern skills/README.md "Skills are mandatory operating rules, not advisory notes."
 
@@ -31,9 +122,13 @@ require_pattern skills/project-workflow/references/bin-submodule.md "Treat the c
 
 require_pattern skills/change-validation/references/check-selection.md "Before selecting tests, identify the dominant relevant test harness"
 require_pattern skills/change-validation/references/check-selection.md "Do not add or select an ad hoc language-native test command"
+require_pattern skills/change-validation/SKILL.md "Treat validation as valid only for the file state it tested"
 
 require_pattern skills/testing-standards/SKILL.md "## Mandatory Stop Gates"
 require_pattern skills/testing-standards/SKILL.md "MUST NOT add language-native tests"
+require_pattern skills/testing-standards/SKILL.md "If the human asks to remove, skip, or simplify a test during a behavior"
+require_pattern skills/testing-standards/SKILL.md "If the intended red test or scenario passes unexpectedly"
+require_pattern skills/testing-standards/SKILL.md "If no cleanup is needed, record \`Refactor: none\`"
 
 require_pattern skills/go-standards/SKILL.md "Agents MUST NOT add an import alias"
 require_pattern skills/go-standards/SKILL.md "Agents MUST stop and explain before creating Go tests when another harness owns the behavior."
@@ -43,9 +138,15 @@ require_pattern skills/code-issues/SKILL.md "After the human agrees and before e
 require_pattern skills/test-gaps/SKILL.md "After the human agrees and before editing, state the selected local test pattern"
 require_pattern skills/doc-gaps/SKILL.md "After the human agrees and before editing, state the selected local documentation pattern"
 require_pattern skills/reliability-gaps/SKILL.md "After the human agrees and before editing, state the selected local code/config/docs pattern"
+require_pattern skills/reliability-gaps/SKILL.md "asks what the fix is for REL-<number>"
+require_pattern skills/reliability-gaps/SKILL.md "state the reliability execution checklist before editing"
+require_pattern skills/reliability-gaps/SKILL.md "\`Red\`, \`Green\`, \`Refactor\`, and \`Validation\`"
 
 require_pattern skills/project-workflow/agents/openai.yaml "Treat AGENTS.md and selected skills as mandatory rules."
 require_pattern skills/testing-standards/agents/openai.yaml "MUST identify the dominant relevant existing test harness before editing"
+require_pattern skills/testing-standards/agents/openai.yaml "stop on unexpected green tests"
 require_pattern skills/go-standards/agents/openai.yaml "MUST NOT invent import aliases for readability, caution, brevity, or personal clarity"
+require_pattern skills/reliability-gaps/agents/openai.yaml "answer REL-N follow-ups"
+require_pattern skills/change-validation/agents/openai.yaml "file changes make prior validation stale"
 
 exit "$missing"
