@@ -30,7 +30,7 @@ jobs:
     resource_class: arm.large
   sync:
     docker:
-      - image: alexfalkowski/release:8.13
+      - image: alexfalkowski/release:8.15
     steps:
       - checkout:
           method: blobless
@@ -40,7 +40,7 @@ jobs:
     resource_class: arm.large
   version:
     docker:
-      - image: alexfalkowski/release:8.13
+      - image: alexfalkowski/release:8.15
     steps:
       - checkout:
           method: blobless
