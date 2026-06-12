@@ -109,11 +109,11 @@ edit-amend: add
 commit: add
 	@$(BIN_ROOT)/build/git/commit
 
-# Force-push the current branch to origin with a lease and inclusion check.
+# Force-push the current branch to origin when it still matches the fetched ref.
 push:
-	@git push --force-with-lease --force-if-includes origin "$$BRANCH"
+	@$(BIN_ROOT)/build/git/push
 
-# Amend the last commit and force-push with a lease and inclusion check.
+# Amend the last commit and force-push with a lease.
 force: amend push
 
 # Create a draft PR for the current branch (gh pr create --draft).
@@ -128,10 +128,10 @@ pr:
 merge:
 	@gh pr merge --auto --squash
 
-# Commit, force-push with a lease and inclusion check, and open a draft PR.
+# Commit, force-push with a lease, and open a draft PR.
 review: commit push draft
 
-# Commit, force-push with a lease and inclusion check, open PR, and enable auto-merge.
+# Commit, force-push with a lease, open PR, and enable auto-merge.
 ready: commit push pr merge
 
 # Checkout master, pull, and update submodules.
