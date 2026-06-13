@@ -1,4 +1,4 @@
 interface:
   display_name: "Review PR"
   short_description: "Prepare an approved review PR flow"
-  default_prompt: "Use $review-pr when I explicitly ask to commit, push, and open or update a review PR."
+  default_prompt: "Use $review-pr with its active plan when I explicitly ask to commit, push, and open or update a review PR."

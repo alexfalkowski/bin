@@ -59,6 +59,12 @@ matching skill for the task.
 Keeping only this pointer in downstream repos avoids repeating the shared skill
 list. Update `bin/AGENTS.md` when the shared skill set changes.
 
+Workflow skills may load `bin/skills/<name>/references/plan.md` as a canonical
+plan template, but downstream users should still invoke the skill itself, for
+example `Find $test-gaps in <folder>`. Active plans are per-session runtime
+state; durable findings continue to live in the scoped `ISSUES.md` files
+defined by the relevant skill.
+
 ## Makefile includes (examples)
 
 ### Ruby-only project
