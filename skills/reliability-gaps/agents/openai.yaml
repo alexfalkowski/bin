@@ -1,4 +1,4 @@
 interface:
   display_name: "Reliability Gaps"
   short_description: "Find scoped SRE readiness gaps"
-  default_prompt: "Use $reliability-gaps to find scoped reliability gaps, answer REL-N follow-ups, propose agreed fixes one at a time, and implement each fix with explicit TDD decision, red, green, refactor, and validation reporting before waiting for REL-N is done."
+  default_prompt: "Use $reliability-gaps with its active plan to find scoped reliability gaps, answer REL-N follow-ups, and implement each agreed fix with explicit TDD, red, green, refactor, and validation reporting."

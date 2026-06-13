@@ -57,6 +57,16 @@ specific rule or local pattern, and ask for approval to deviate.
   They pair with `naming-standards` when a change creates, reviews, or renames
   identifiers, commands, flags, files, tests, fixtures, or documentation terms.
 
+## Workflow Plan Templates
+
+Stateful workflow skills may include `references/plan.md`. These files are
+canonical plan templates for active runtime execution state, not durable task
+artifacts. Invoke the skill, for example `Find $test-gaps in <folder>`; the
+skill loads its plan template and instantiates it against the current repository
+root. In downstream repositories that vendor this project as `./bin`, the
+consuming repository remains the execution context and `bin/skills/**` remains
+shared guidance.
+
 ## Format Rule
 
 When a skill is used as the final answer, use that skill's required output
