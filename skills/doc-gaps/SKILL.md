@@ -16,6 +16,9 @@ Before starting Find mode or Implement mode, read `references/plan.md` and use
 it to maintain the active execution plan. The active plan is runtime state; do
 not write it into the repository unless the human explicitly asks for a durable
 plan file.
+When the runtime supports goals, bind the selected mode and requested scope to
+one active goal and update that goal as ledger, proposal, approval, validation,
+or human-confirmation state changes.
 
 ## Operating Stance
 
