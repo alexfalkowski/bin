@@ -17,6 +17,22 @@ repository root and keep `bin/` as shared guidance.
 - Record durable findings only in the scoped `ISSUES.md` ledger defined by the
   skill.
 
+## Goal State Rules
+
+- Bind the active goal to the selected mode and requested scope.
+- In Find mode, the goal is complete when no confirmed code issues are found and
+  reported, or when the scoped `ISSUES.md` ledger is written and presented.
+- In Implement mode, the goal is waiting while the human has not approved the
+  proposed issue solution, or after validation until the human confirms
+  `ISSUE-<number> is done`.
+- In Implement mode, the goal is complete for an issue only after the human
+  confirms it is done and the scoped ledger is updated accordingly.
+- Record a blocked reason when a required scope is missing, the scoped ledger
+  required by the mode is absent or already exists in a conflicting state,
+  required permission is denied, or the selected issue cannot be re-checked
+  without human input. Follow runtime rules for when that reason changes goal
+  status.
+
 ## Find Mode Plan
 
 1. Confirm the requested package or folder scope.

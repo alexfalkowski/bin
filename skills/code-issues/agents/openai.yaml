@@ -1,4 +1,4 @@
 interface:
   display_name: "Code Issues"
   short_description: "Find scoped code defects and risks"
-  default_prompt: "Use $code-issues with its active plan to delegate scoped code issue finding, store confirmed findings in that scope's ISSUES.md, or propose and implement explicitly agreed fixes one code issue at a time."
+  default_prompt: "Use $code-issues with its active goal and plan to delegate scoped code issue finding, store confirmed findings in that scope's ISSUES.md, or propose and implement explicitly agreed fixes one code issue at a time."

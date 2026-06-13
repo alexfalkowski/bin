@@ -67,6 +67,23 @@ root. In downstream repositories that vendor this project as `./bin`, the
 consuming repository remains the execution context and `bin/skills/**` remains
 shared guidance.
 
+## Goal Binding
+
+When the runtime supports goals, stateful workflow skills should bind one active
+goal to the selected skill mode and requested scope. The goal states the
+user-visible outcome, current waiting or blocked reason, and completion
+condition. Goals are per-session runtime state, like active plans; do not write
+them into the repository unless the human explicitly asks for a durable goal
+artifact.
+
+Goals do not bypass skill steps, stop gates, permission gates, scoped
+`ISSUES.md` ledgers, human confirmation requirements, or validation freshness
+rules. The selected skill still owns the workflow plan; the goal only makes the
+intended outcome and current state explicit.
+When the runtime has stricter status-transition rules, follow those runtime
+rules and use the skill's goal rules to explain the waiting, blocked, or done
+reason.
+
 ## Format Rule
 
 When a skill is used as the final answer, use that skill's required output

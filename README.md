@@ -65,6 +65,11 @@ example `Find $test-gaps in <folder>`. Active plans are per-session runtime
 state; durable findings continue to live in the scoped `ISSUES.md` files
 defined by the relevant skill.
 
+When the runtime supports goals, stateful workflow skills may also bind one
+active goal to the selected mode and scope. Goals are per-session runtime state
+for the user-visible outcome, waiting or blocked reason, and completion
+condition; they do not replace active plans or scoped `ISSUES.md` ledgers.
+
 ## Makefile includes (examples)
 
 ### Ruby-only project
