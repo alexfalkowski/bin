@@ -60,9 +60,11 @@ field-alignment:
 fix-field-alignment:
 	@$(BIN_ROOT)/build/go/fa -fix
 
+# Run golangci-lint. Set package=<path> to lint one package.
 golangci-lint:
 	@$(BIN_ROOT)/build/go/lint run --timeout 5m
 
+# Auto-fix golangci-lint issues. Set package=<path> to lint one package.
 fix-golangci-lint:
 	@$(BIN_ROOT)/build/go/lint run --timeout 5m --fix
 
