@@ -77,8 +77,9 @@ format:
 	@go fmt ./...
 
 # Run tests with gotestsum (race + coverage) and write reports under test/reports/.
+# Set package=<path> to test one package.
 specs:
-	@gotestsum --format testdox --junitfile test/reports/specs.xml -- -vet=off -race -mod vendor -covermode=atomic -coverpkg=$(COVER_PACKAGES) -coverprofile=test/reports/profile.cov $(PACKAGES)
+	@$(BIN_ROOT)/build/go/test "$(if $(package),,$(COVER_PACKAGES))" $(if $(package),,$(PACKAGES))
 
 # Run benchmarks for package=$(package), or the module root when unset.
 # Set benchtime=<duration-or-count> to pass -benchtime to go test.

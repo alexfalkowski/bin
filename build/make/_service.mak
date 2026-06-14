@@ -106,8 +106,9 @@ benchmarks: build
 	@make -C test benchmarks
 
 # Run Go tests with gotestsum (race + coverage) and write reports under test/reports/.
+# Set package=<path> to test one package.
 specs:
-	@gotestsum --format testdox --junitfile test/reports/specs.xml -- -vet=off -race -mod vendor -covermode=atomic -coverpkg=$(COVER_PACKAGES) -coverprofile=test/reports/profile.cov $(PACKAGES)
+	@$(BIN_ROOT)/build/go/test "$(if $(package),,$(COVER_PACKAGES))" $(if $(package),,$(PACKAGES))
 
 # Fetch a Go module (set module=<path>).
 go-get:

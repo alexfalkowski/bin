@@ -22,7 +22,7 @@ After repeating the same build/lint/test/CI glue across projects, it’s useful 
 |-----------------|------------------------------------------------------------------------------------|
 | `build/make/`   | Makefile include fragments (Go, Ruby, git workflow, buf/proto, project templates). |
 | `build/git/`    | Git workflow helper scripts used by `build/make/git.mak`.                          |
-| `build/go/`     | Go-related helper scripts (`lint`, `clean`, `fa`).                                 |
+| `build/go/`     | Go-related helper scripts (`lint`, `clean`, `fa`, `test`).                         |
 | `build/docker/` | Docker helpers and `build/docker/go/Dockerfile`.                                   |
 | `build/sec/`    | Security scanning helpers (Trivy).                                                 |
 | `quality/`      | Quality/test helpers (Go coverage processing, cucumber wrappers).                  |
@@ -96,7 +96,7 @@ This gives you targets like:
 
 - `make dep` (download/tidy/vendor)
 - `make lint` / `make fix-lint` / `make format`
-- `make specs` (gotestsum + race + coverage written under `test/reports/`)
+- `make specs` (gotestsum + race + coverage written under `test/reports/`; set `package=<path>` to test one package)
 - `make coverage` (HTML + func coverage from `test/reports/final.cov`)
 - `make sec` (govulncheck + Trivy repo scan)
 
