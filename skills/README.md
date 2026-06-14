@@ -24,10 +24,11 @@ specific rule or local pattern, and ask for approval to deviate.
 - `test-gaps` orchestrates a two-phase test-gap workflow: first aggregate
   `project-workflow` context and confirmed missing or weak test coverage into
   `ISSUES.md`, then implement agreed test fixes one gap at a time.
-- `doc-gaps` orchestrates a two-phase doc-gap workflow: first
-  aggregate `project-workflow` context and confirmed `$doc-standards` findings
-  for README, docs, examples, comments, and docstring gaps into `ISSUES.md`,
-  then implement agreed doc fixes one gap at a time.
+- `doc-gaps` orchestrates a one-pass doc-gap workflow: aggregate
+  `project-workflow` context and confirmed `$doc-standards` findings for
+  README, docs, examples, comments, and docstring gaps, implement confirmed
+  documentation fixes, validate them, and use `ISSUES.md` only for audit-only
+  requests or unresolved gaps.
 - `reliability-gaps` orchestrates a two-phase reliability-gap workflow: first
   aggregate `project-workflow` context and verified SRE, NALSD, operability,
   overload, observability, release-safety, recovery, or data-integrity gaps into

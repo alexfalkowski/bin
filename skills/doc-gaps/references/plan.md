@@ -12,79 +12,82 @@ repository root and keep `bin/` as shared guidance.
 - Preserve stop gates as plan boundaries; do not continue past a stop gate based
   on silence or a broad request.
 - Update the active plan when scope, documentation location, validation,
-  delegation, or ledger state changes.
+  delegation, edits, summary, or unresolved ledger state changes.
 - Treat validation as stale when files change after a command ran.
-- Record durable findings only in the scoped `ISSUES.md` ledger defined by the
-  skill.
+- Use a scoped `ISSUES.md` ledger only for audit-only mode, unresolved confirmed
+  gaps, or an existing doc-gap ledger being completed.
 
 ## Goal State Rules
 
 - Bind the active goal to the selected mode and requested scope.
-- In Find mode, the goal is complete when no confirmed doc gaps are found and
-  reported, or when the scoped `ISSUES.md` ledger is written and presented.
-- In Implement mode, the goal is waiting while the human has not approved the
-  proposed doc-gap solution, or after validation until the human confirms
-  `DOC-<number> is done`.
-- In Implement mode, the goal is complete for a finding only after the human
-  confirms it is done and the scoped ledger is updated accordingly.
-- Record a blocked reason when a required scope is missing, the scoped ledger
-  required by the mode is absent or already exists in a conflicting state,
-  required permission is denied, or the selected finding cannot be re-checked
-  without human input. Follow runtime rules for when that reason changes goal
-  status.
+- In one-pass mode, the goal is complete when confirmed gaps are fixed and
+  validated, no confirmed gaps are found and reported, or unresolved findings
+  are recorded because a stop gate prevents a correct fix.
+- In audit-only mode, the goal is complete when no confirmed doc gaps are found
+  and reported, or when the scoped `ISSUES.md` ledger is written and presented.
+- Record a blocked reason when a required scope is missing, required permission
+  is denied, an existing scoped ledger is unrelated or ambiguous, or a selected
+  finding cannot be fixed or recorded without human input. Follow runtime rules
+  for when that reason changes goal status.
 
-## Find Mode Plan
+## One-Pass Mode Plan
 
 1. Confirm the requested package or folder scope.
-2. Check whether scoped `ISSUES.md` already exists and stop if it does.
+2. If scoped `ISSUES.md` exists, read it. Incorporate doc-gap ledger findings,
+   or stop if the file is unrelated or ambiguous active work.
 3. Run `$project-workflow` discovery for entrypoints, CI, documented commands,
    public APIs, examples, and `./bin` wiring.
-4. Identify existing documentation locations, examples, comments, docstrings,
-   `$doc-standards`, and language-specific documentation standards for the
-   requested scope.
-5. Build the read-only documentation review delegation plan from the requested
-   root and its first-level subfolders.
+4. Identify existing documentation locations, examples, command help, package
+   documentation, comments, docstrings, `$doc-standards`, and
+   language-specific documentation standards for the requested scope.
+5. Build the read-only documentation review delegation plan from root docs,
+   README files, and first-level subfolders; use as many independent review
+   agents as the runtime can safely run.
 6. Ask for required permission before any agent runs non-read-only, network,
    auth, remote-write, or otherwise approval-gated commands.
 7. Launch the required review agents when available, or perform the local
    fallback only when sub-agents are unavailable.
 8. Wait for all review work to finish.
 9. Deduplicate candidates and directly re-check conflicting or overlapping
-   conclusions against code, docs, examples, and public interfaces.
-10. Confirm each finding is a concrete missing, weak, stale, misleading, or
-    wrong-location documentation gap with real user, operator, or maintainer
-    risk.
-11. If no confirmed gaps remain, report that result and do not create
+   conclusions against code, docs, examples, command help, package docs, and
+   public interfaces.
+10. Route each candidate to the correct documentation surface by identifying
+    the intended audience, user action or maintenance decision at risk, current
+    documentation surface, target surface, and any missing non-obvious contract
+    required by `$doc-standards`.
+11. Confirm each finding is a concrete missing, weak, stale, misleading, or
+    wrong-location documentation gap with real user, operator, package
+    consumer, or maintainer risk.
+12. Dismiss candidates already covered by the correct surface, candidates below
+    the finding threshold, and candidates that belong to code, security, test,
+    or reliability workflows.
+13. If no confirmed gaps remain, report that result and do not create
     `ISSUES.md`.
-12. If confirmed gaps remain, write the scoped `ISSUES.md` with `DOC-<number>`
-    IDs.
-13. Present the scoped ledger and proposed doc-fix plan.
-14. Stop before making fixes.
+14. Implement confirmed doc gaps with the smallest clear documentation changes.
+15. If a confirmed gap cannot be fixed correctly in this pass, write or update
+    the scoped `ISSUES.md` with `DOC-<number>` entries for unresolved gaps.
+16. If an existing doc-gap ledger is fully resolved, delete it.
+17. Validate the documentation change with commands appropriate to the changed
+    files.
+18. Present fixed gaps, dismissed or out-of-scope candidates when relevant,
+    unresolved ledger entries if any, and validation results.
 
-## Implement Mode Plan
+## Audit-Only Mode Plan
 
 1. Confirm the requested package or folder scope.
-2. Read scoped `ISSUES.md`, or stop and ask whether to run Find mode first.
-3. Run `$project-workflow` discovery for current entrypoints, CI, documented
-   commands, public APIs, examples, and `./bin` wiring.
-4. Select the next finding by ID unless the human named a specific finding.
-5. Re-check the finding against current code, docs, examples, and public
-   interfaces.
-6. Present the finding evidence, proposed documentation solution, location,
-   public-contract, example accuracy, compatibility, maintenance tradeoffs, and
-   intended validation.
-7. Stop until the human explicitly agrees to that finding's solution.
-8. After agreement, state the local documentation pattern, dominant relevant
-   validation path, planned validation, and any needed deviation.
-9. If a deviation is needed, stop and ask before editing.
-10. Implement only the agreed doc gap with the smallest clear documentation
-    change.
-11. Use `$doc-standards` and relevant language standards for comments,
-    docstrings, and public API docs.
-12. Validate the documentation change with commands appropriate to the changed
-    files.
-13. Report the result and ask the human to verify with `DOC-<number> is done`.
-14. Stop until that confirmation arrives.
-15. After confirmation, remove or revise the finding in scoped `ISSUES.md`.
-16. Continue with the next finding, or delete scoped `ISSUES.md` after all gaps
-    are confirmed resolved.
+2. Check whether scoped `ISSUES.md` already exists and stop unless the human
+   explicitly asked to refresh or overwrite that ledger.
+3. Run `$project-workflow` discovery for entrypoints, CI, documented commands,
+   public APIs, examples, and `./bin` wiring.
+4. Identify existing documentation locations, examples, command help, package
+   documentation, comments, docstrings, `$doc-standards`, and
+   language-specific documentation standards for the requested scope.
+5. Build and launch the same documentation review delegation plan as one-pass
+   mode.
+6. Deduplicate, route, and confirm candidates against code, docs, examples,
+   command help, package docs, and public interfaces.
+7. If no confirmed gaps remain, report that result and do not create
+   `ISSUES.md`.
+8. If confirmed gaps remain, write the scoped `ISSUES.md` with `DOC-<number>`
+   IDs.
+9. Present the scoped audit ledger and stop before making fixes.

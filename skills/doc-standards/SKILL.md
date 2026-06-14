@@ -23,9 +23,9 @@ real use or maintenance risk.
    documentation directly affected by the current change. Do not perform a
    package-wide documentation audit unless the user explicitly asks for
    `$doc-gaps` or a broader docs pass.
-4. For `$doc-gaps`, use these standards as the quality bar for recording
-   confirmed missing, weak, stale, misleading, or wrong-location documentation
-   in the scoped `ISSUES.md` ledger.
+4. For `$doc-gaps`, use these standards as the quality bar for fixing or
+   recording confirmed missing, weak, stale, misleading, or wrong-location
+   documentation.
 5. Pair with relevant language standards for language-specific public API
    comments and docstrings. Pair with `$naming-standards` when terminology,
    command/API names, examples, or public vocabulary are unclear or
@@ -85,6 +85,25 @@ Apply these rules strictly for code comments, public API comments, docstrings,
 RDoc, GoDoc, shell function comments, and any language-specific documentation
 near code.
 
+For package docs and exported API comments, do not only check whether a comment
+exists or starts with the identifier. Audit whether it documents the
+repository-owned contract that a caller cannot safely infer from the signature.
+For each exported package, type, function, method, variable, or constant in
+scope, check whether the comment needs to cover:
+
+- behavior and purpose;
+- error, panic, nil, empty, or zero-value behavior;
+- side effects, lifecycle, cleanup, global registration, or process behavior;
+- concurrency, caching, retry, timeout, cancellation, or idempotency behavior;
+- configuration defaults, limits, validation, and fallback behavior;
+- security, operational, compatibility, or data-loss risks; and
+- alias, wrapper, re-export, or dependency ownership boundaries.
+
+Do not require every comment to mention every category. Require the relevant
+non-obvious contract to be documented. If none of these categories apply and the
+comment only restates the name or signature, remove or keep it minimal according
+to the language lint requirement.
+
 These rules follow the rule set from Stack Overflow's "Best practices for
 writing code comments":
 https://stackoverflow.blog/2021/12/23/best-practices-for-writing-code-comments/
@@ -128,11 +147,23 @@ how to exercise its public surface.
 
 README headings should use a short, relevant emoji prefix to make the document
 easier to scan and add visual colour. Use one emoji per heading, keep the
-heading text clear without relying on the emoji for meaning, and preserve a
-stronger local heading convention when one already exists.
+heading text clear without relying on the emoji for meaning, and preserve local
+heading names and order only when they keep the canonical README
+responsibilities easy to find.
 
-Use this default README shape unless the repository already has a stronger
-local convention:
+Use this default README shape as the canonical README audit model. A repository
+may keep different heading names, order, or grouping only when the README
+clearly covers the same responsibilities: project identity, why or boundary,
+install or bootstrap, usage, configuration, operations when applicable, and
+references.
+
+Do not dismiss README structure gaps merely because the current README is large,
+locally consistent, or has an established heading style. Treat missing,
+hard-to-find, stale, or wrong-location coverage for these responsibilities as a
+documentation gap.
+
+Do not rename or reorder headings only for cosmetic template conformity when the
+equivalent responsibility is already clear.
 
 ```markdown
 # 📦 <Project Name>
@@ -172,6 +203,23 @@ the project has no operator-facing behavior.>
 <Links to generated API docs, protobuf contracts, examples, changelog, package
 docs, or deeper design notes.>
 ```
+
+When reviewing a README, explicitly check whether it covers:
+
+- Identity: project name, module/package/service purpose, and intended
+  audience.
+- Boundary: what the project owns, what it does not own, and when to use it.
+- Bootstrap: first commands or setup required before useful work.
+- Usage: minimal copy-paste-ready example through the main public surface.
+- Configuration: required config shape, examples, defaults, and links to
+  schemas or authoritative config docs.
+- Operations: security, deployment, health, compatibility, migration,
+  observability, data-loss, or lifecycle notes when applicable.
+- References: generated docs, API contracts, examples, changelog, templates, or
+  deeper design docs.
+
+A README may group or rename sections, but missing or hard-to-find coverage for
+an applicable responsibility is a documentation gap.
 
 Keep, add, remove, or rename sections based on the project type:
 
@@ -249,7 +297,7 @@ gap. When the confirmed problem is missing or weak test coverage, use
 - `$code-review` and `$review-pr`: changed docs plus directly affected nearby
   docs.
 - `$doc-gaps`: the requested package or folder, recursively, using that skill's
-  ledger and delegation rules.
+  one-pass, audit-only, and delegation rules.
 - Direct user request: the scope the user named. If no scope is clear and the
   decision affects edit size or review cost, ask for the intended documentation
   surface before auditing broadly.
