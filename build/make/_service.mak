@@ -32,9 +32,11 @@ field-alignment:
 fix-field-alignment:
 	@$(BIN_ROOT)/build/go/fa -fix
 
+# Run golangci-lint with build-tags=features. Set package=<path> to lint one package.
 golangci-lint:
 	@$(BIN_ROOT)/build/go/lint run --build-tags features  --timeout 5m
 
+# Auto-fix golangci-lint issues with build-tags=features. Set package=<path> to lint one package.
 fix-golangci-lint:
 	@$(BIN_ROOT)/build/go/lint run --build-tags features --timeout 5m --fix
 

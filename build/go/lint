@@ -1,8 +1,22 @@
 #!/usr/bin/env bash
-# Run golangci-lint only when it is installed in PATH.
+# shellcheck disable=SC1091
+# Run golangci-lint only when it is installed in PATH, optionally limited to package.
 
 set -eo pipefail
 
-if command -v golangci-lint >/dev/null 2>&1; then
-  golangci-lint "$@"
+if ! command -v golangci-lint >/dev/null 2>&1; then
+  exit 0
 fi
+
+args=("$@")
+
+if [[ ${args[0]:-} == "run" && -n ${package:-} ]]; then
+  export package
+
+  source "$(dirname "$0")/../../lib/validate.sh"
+  validate_package
+
+  args+=("./$package")
+fi
+
+golangci-lint "${args[@]}"
