@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC1091
+# Run Go tests with gotestsum, optionally limited to package.
+
+set -eo pipefail
+
+cover_packages="$1"
+shift
+
+packages=("$@")
+
+if [[ -n ${package:-} ]]; then
+  export package
+
+  source "$(dirname "$0")/../../lib/validate.sh"
+  validate_package
+
+  packages=("$(go list "./$package")")
+  cover_packages="${packages[0]}"
+fi
+
+gotestsum --format testdox --junitfile test/reports/specs.xml -- -vet=off -race -mod vendor -covermode=atomic -coverpkg="$cover_packages" -coverprofile=test/reports/profile.cov "${packages[@]}"
