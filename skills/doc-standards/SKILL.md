@@ -126,43 +126,48 @@ inventory of the repository. Prefer content that helps a new user, service
 owner, operator, or contributor decide what the project is, when to use it, and
 how to exercise its public surface.
 
+README headings should use a short, relevant emoji prefix to make the document
+easier to scan and add visual colour. Use one emoji per heading, keep the
+heading text clear without relying on the emoji for meaning, and preserve a
+stronger local heading convention when one already exists.
+
 Use this default README shape unless the repository already has a stronger
 local convention:
 
 ```markdown
-# <Project Name>
+# 📦 <Project Name>
 
 <One or two sentences explaining what this project does and who should use it.>
 
-## Why This Exists
+## 🎯 Why This Exists
 
 <The problem it solves, the boundary it owns, and the tradeoff or design choice
 that helps users decide whether it fits.>
 
-## Install Or Bootstrap
+## 🚀 Install Or Bootstrap
 
 <Only the commands required before the first useful command can run, such as
 package installation, submodule initialization, dependency setup, or required
 runtime assets.>
 
-## Usage
+## 💻 Usage
 
 <A minimal, copy-paste-ready example through the main public API, CLI, service
 endpoint, package import, or configuration path.>
 
-## Configuration
+## 🔧 Configuration
 
 <Only the configuration users must understand to run or integrate the project.
 Link to schema, examples, generated docs, or sample config when exhaustive
 field documentation belongs there.>
 
-## Operations
+## 🛠️ Operations
 
 <Security, deployment, compatibility, data freshness, health, migration,
 shutdown, or observability notes that affect real use. Omit this section when
 the project has no operator-facing behavior.>
 
-## References
+## 🔗 References
 
 <Links to generated API docs, protobuf contracts, examples, changelog, package
 docs, or deeper design notes.>

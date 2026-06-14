@@ -1,4 +1,4 @@
 interface:
   display_name: "Doc Standards"
-  short_description: "Review concise docs and useful comments"
-  default_prompt: "Use $doc-standards when reviewing changed docs, examples, README content, public API comments, code comments, docstrings, or behavior changes that may make documentation stale; keep READMEs concise, avoid duplicating command catalogs or CI config, and reject comments that merely repeat the code."
+  short_description: "Review concise docs and emoji README headings"
+  default_prompt: "Use $doc-standards when reviewing changed docs, examples, README content, public API comments, code comments, docstrings, or behavior changes that may make documentation stale; keep READMEs concise with emoji-prefixed headings, avoid duplicating command catalogs or CI config, and reject comments that merely repeat the code."
