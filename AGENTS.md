@@ -68,7 +68,7 @@ skill instead of one broad default:
 - `change-validation`: test, lint, CI, security, benchmark, and validation selection.
 - `testing-standards`: language-agnostic test design, coverage, fixtures,
   determinism, and test-layer guidance.
-- `docs-standards`: documentation quality standards for README files, docs,
+- `doc-standards`: documentation quality standards for README files, docs,
   examples, command/config docs, public API comments, docstrings, and stale-doc
   review.
 - `naming-standards`: cross-language naming judgment for domain clarity,
@@ -115,7 +115,7 @@ display name, short description, or default prompt became stale.
 Common composition:
 
 - `review-pr` orchestrates PR preparation with `project-workflow`,
-  `change-validation`, relevant language standards, `docs-standards`,
+  `change-validation`, relevant language standards, `doc-standards`,
   `code-review`, summary drafting, optional explicit `style-review`, and the
   review target.
 - `code-issues` orchestrates a two-phase code-issue workflow: aggregate confirmed
@@ -125,7 +125,7 @@ Common composition:
   `project-workflow` context and missing or weak test coverage into
   `ISSUES.md`, then implement agreed test fixes gap by gap.
 - `doc-gaps` orchestrates a two-phase doc-gap workflow: aggregate
-  confirmed `project-workflow` context and `$docs-standards` findings for
+  confirmed `project-workflow` context and `$doc-standards` findings for
   missing, stale, or misleading README, docs, examples, comments, and docstrings
   into `ISSUES.md`, then implement agreed doc fixes gap by gap.
 - `reliability-gaps` orchestrates a two-phase reliability-gap workflow:
@@ -141,7 +141,7 @@ Common composition:
   `change-validation` for scanner, lint, or CI command selection.
 - `testing-standards` pairs with language standards for test idioms and
   `change-validation` for command selection.
-- `docs-standards` pairs with language standards for API comments and docstrings,
+- `doc-standards` pairs with language standards for API comments and docstrings,
   `naming-standards` for terminology, `change-safety` for documented contract
   changes, and `change-validation` for docs-related validation.
 - `reliability-standards` pairs with `change-safety`, `security-audit`,
