@@ -58,6 +58,10 @@ Projects that use the shared git workflow can include it separately:
 include bin/build/make/git.mak
 ```
 
+Consuming repositories choose which fragments to include and remain responsible
+for project-specific configuration such as service code, image names, release
+version files, and environment-specific settings.
+
 ## 🤖 Agent Skills
 
 This repository also ships shared agent guidance in `skills/`. Downstream

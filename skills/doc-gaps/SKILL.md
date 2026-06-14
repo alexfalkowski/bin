@@ -1,69 +1,91 @@
 ---
 name: doc-gaps
-description: Finds concrete missing, weak, stale, or misleading documentation in a package or folder, including README files, user-facing docs, examples, and code comments/docstrings required by $doc-standards and relevant language standards, records confirmed gaps in that scope's ISSUES.md, and later proposes and implements explicitly agreed doc fixes gap by gap. Use when the user asks to find $doc-gaps in a package or folder, find doc gaps in a package or folder, implement $doc-gaps in a package or folder, or implement doc gaps in a package or folder.
+description: Finds and fixes concrete missing, weak, stale, or misleading documentation in a package or folder in one pass, including README files, user-facing docs, examples, command help, package docs, public API comments, code comments, and docstrings required by $doc-standards and relevant language standards. Uses parallel review agents when available, applies confirmed documentation fixes, validates the changes, and writes ISSUES.md only for audit-only requests or unresolved gaps. Use when the user asks to run $doc-gaps in a package or folder, find doc gaps in a package or folder, fix doc gaps in a package or folder, review docs for gaps, or audit-only doc gaps.
 ---
 
 # Doc Gaps
 
-Use this skill in two distinct modes:
+Use this skill in one-pass mode by default:
 
-- **Find mode**: `Find $doc-gaps in <package/folder>` or `Find doc gaps in <package/folder>`.
-- **Implement mode**: `Implement $doc-gaps in <package/folder>` or `Implement doc gaps in <package/folder>`.
+- **One-pass mode**: `Run $doc-gaps in <package/folder>`, `Find doc gaps in <package/folder>`, or `Fix doc gaps in <package/folder>`.
+- **Audit-only mode**: `Audit-only $doc-gaps in <package/folder>` or `Find doc gaps in <package/folder> without editing`.
 
-Do not combine the two modes in one pass.
-
-Before starting Find mode or Implement mode, read `references/plan.md` and use
-it to maintain the active execution plan. The active plan is runtime state; do
-not write it into the repository unless the human explicitly asks for a durable
-plan file.
+Before starting one-pass mode or audit-only mode, read `references/plan.md` and
+use it to maintain the active execution plan. The active plan is runtime state;
+do not write it into the repository unless the human explicitly asks for a
+durable plan file.
 When the runtime supports goals, bind the selected mode and requested scope to
-one active goal and update that goal as ledger, proposal, approval, validation,
-or human-confirmation state changes.
+one active goal and update that goal as delegation, edit, validation, summary,
+or unresolved-ledger state changes.
 
 ## Operating Stance
 
-Operate as a scoped documentation ledger manager: use `$doc-standards` for
-documentation quality judgment, and use this skill for scope control,
-delegation, `ISSUES.md` recording, and gap-by-gap implementation.
+Operate as a scoped documentation maintainer: use `$doc-standards` for
+documentation quality judgment, use this skill for scope control and
+delegation, and fix confirmed documentation gaps in the same pass unless a stop
+gate requires human input.
 
-## Find Mode
+## One-Pass Mode
 
-Follow `references/plan.md#find-mode-plan`.
+Follow `references/plan.md#one-pass-mode-plan`.
 
 These rules remain mandatory:
 
 - If no scope is provided, stop and ask for the package or folder.
-- Use `ISSUES.md` in the requested package or folder as the review ledger, for example `<package/folder>/ISSUES.md`.
-- If `ISSUES.md` already exists in the requested package or folder, stop. Tell the user the existing scoped ledger must be resolved first, or the human must delete that scoped `ISSUES.md` before a new find pass there.
-- Treat `Find $doc-gaps in <package/folder>` or `Find doc gaps in <package/folder>` as the user's explicit request to delegate documentation review for that scope. Do not require the user to separately say "use sub-agents", "spawn agents", or "delegate".
-- Use sub-agents for Find mode whenever the active runtime provides them and the runtime permits delegation for the request. Do not treat sub-agents as optional based on scope size, and do not perform the doc-gap review locally first.
-- Do not claim that extra delegation wording is needed before launching review agents. The Find mode invocation is the explicit delegation request.
+- Treat `Run $doc-gaps in <package/folder>`, `Find doc gaps in <package/folder>`, or `Fix doc gaps in <package/folder>` as permission to delegate review, edit documentation in scope, run appropriate validation, and summarize the result in one pass.
+- Use audit-only mode only when the user explicitly asks not to edit or asks only for an audit or ledger. When a stop gate prevents a correct documentation fix during one-pass mode, record unresolved confirmed findings instead of switching modes.
+- If scoped `ISSUES.md` already exists, read it before reviewing. If it is a doc-gap ledger, include unresolved findings in the candidate set and update or delete the ledger after fixing them. If it is unrelated or ambiguous active work, stop and ask before editing it.
+- Use as many independent review agents as the runtime can safely run when the active runtime provides sub-agents and permits delegation for the request. Do not perform the doc-gap review locally first when delegation is available.
+- Treat the doc-gap invocation as the user's explicit request to delegate documentation review for that scope. Do not require the user to separately say "use sub-agents", "spawn agents", or "delegate".
 - If delegation is denied, stop instead of falling back to a local review. If sub-agents are unavailable, say so briefly and perform the review locally for the requested scope.
 - Ask for human permission before agents run commands that require approval, such as network, SSH, GitHub auth, registry auth, remote writes, or other non-read-only validation.
 - Exclude generated files and folders, vendored dependencies, caches, build output, generated API docs, and generated lockfile churn unless the requested scope is explicitly about them.
-- Each subpackage/subfolder agent owns recursive review of the rest of that subtree. Each agent must perform a thorough documentation review for its assigned scope, pairing with `$doc-standards`, relevant language standards, `$naming-standards` when terminology is unclear or inconsistent, and `$change-validation` for likely validation commands.
-- Require each agent to return findings in the same shape as the `ISSUES.md` format, without final IDs unless useful locally.
+- Assign review agents by root documentation surfaces and first-level subfolders when possible. Each subpackage/subfolder agent owns recursive review of the rest of that subtree.
+- Each agent must perform a thorough documentation review for its assigned scope, pairing with `$doc-standards`, relevant language standards, `$naming-standards` when terminology is unclear or inconsistent, and `$change-validation` for likely validation commands.
+- Each agent must audit the relevant documentation surfaces before returning candidates: README files, docs, examples, command help, package documentation, exported API comments, code comments, and docstrings. For each candidate, identify the intended audience, the user action or maintenance decision at risk, the existing documentation surface, the correct target surface, and any missing non-obvious contract required by `$doc-standards`.
+- Require each agent to return candidates in the candidate format below, without final IDs unless useful locally.
 - Use `../references/finding-severity.md` to discard low-confidence candidates before assigning severity.
-- Confirm each candidate gap against the code, current docs, examples, and documented interfaces before recording it, using `$doc-standards` as the finding threshold.
-- Do not record candidates that `$doc-standards` routes to `$code-review`, `$code-issues`, `$security-audit`, `$testing-standards`, or `$test-gaps`.
-- List optional documentation polish only as optional follow-up notes when relevant.
+- Confirm each candidate gap against the code, current docs, examples, and documented interfaces before fixing it, using `$doc-standards` as the finding threshold.
+- Before fixing or dismissing a candidate, route it to the correct documentation surface: README, docs, examples, command help, package documentation, exported API comment, code comment, docstring, or no change. Do not treat package GoDoc or code-comment improvements as sufficient when first-use, setup, configuration, operational behavior, security expectations, or service-author workflows would reasonably be expected in README files, user-facing docs, examples, or command help.
+- When dismissing a candidate because existing documentation is sufficient, identify the existing surface that covers the audience and action at risk in the final summary.
+- Do not fix candidates that `$doc-standards` routes to `$code-review`, `$code-issues`, `$security-audit`, `$testing-standards`, or `$test-gaps`. Report those as out of scope when relevant.
+- Before editing in one-pass mode, state the selected local documentation pattern, dominant relevant validation path, planned validation command, and any deviation from `AGENTS.md` or selected skills. If a deviation is needed, stop and ask before editing.
+- For unresolved-ledger fixes or any case where human approval is still required: After the human agrees and before editing, state the selected local documentation pattern, dominant relevant validation path, planned validation command, and any deviation from `AGENTS.md` or selected skills. If a deviation is needed, stop and ask before editing.
+- Implement confirmed doc gaps with the smallest clear documentation change using the established documentation location and style.
+- Stop and ask before editing when behavior, audience, documentation location, public-contract wording, examples, validation, or user intent is ambiguous enough that a correct documentation change cannot be inferred from local context.
+- Write unresolved confirmed findings to the scoped `ISSUES.md` only when they cannot be fixed in the same pass, the user requested audit-only mode, validation or permission is blocked, or the scope is too large to complete.
+- Validate documentation changes with commands appropriate to the changed files.
 - If no confirmed doc gaps are found, report that no doc gaps were found and do not create `ISSUES.md`.
-- If confirmed doc gaps are found, write all findings to the scoped `ISSUES.md` before making any fixes.
-- Assign every finding a unique ID for the session in the form `DOC-<number>`.
-- Stop after presenting the ledger and plan. Do not fix findings in the same pass.
+- If all confirmed doc gaps are fixed, do not leave a new `ISSUES.md` behind. If an existing doc-gap ledger is fully resolved, delete it.
+- Final output must summarize fixed gaps, dismissed or out-of-scope candidates when relevant, unresolved findings written to `ISSUES.md` if any, and validation results.
+
+## Audit-Only Mode
+
+Follow `references/plan.md#audit-only-mode-plan`.
+
+These rules remain mandatory:
+
+- If no scope is provided, stop and ask for the package or folder.
+- Use `ISSUES.md` in the requested package or folder as the audit ledger, for example `<package/folder>/ISSUES.md`.
+- If `ISSUES.md` already exists in the requested package or folder, stop unless the human explicitly asked to refresh or overwrite that scoped ledger.
+- Use the same delegation, surface-routing, candidate confirmation, severity, and out-of-scope rules as one-pass mode.
+- If no confirmed doc gaps are found, report that no doc gaps were found and do not create `ISSUES.md`.
+- If confirmed doc gaps are found, write all findings to the scoped `ISSUES.md` with `DOC-<number>` IDs.
+- Stop after presenting the audit ledger. Do not make fixes in audit-only mode.
 
 ## Documentation Review Standards
 
 Use `$doc-standards` to decide whether a documentation concern is concrete
-enough to record. Use the relevant language standards for code comments,
-docstrings, public API docs, and language-specific examples before recording
-findings. Keep GoDoc details in `$go-standards`, RDoc details in
+enough to fix or record. Use the relevant language standards for code comments,
+docstrings, public API docs, and language-specific examples before fixing or
+recording findings. Keep GoDoc details in `$go-standards`, RDoc details in
 `$ruby-standards`, and shell script/function comment rules in
 `$shell-standards`.
 
-## `ISSUES.md` Format
+## Candidate And `ISSUES.md` Format
 
-Use this structure:
+Use this structure for review candidates and unresolved or audit-only ledger
+entries:
 
 ```markdown
 # Issues
@@ -73,6 +95,11 @@ Use this structure:
 - Type: Doc Gap
 - Severity: Critical|High|Medium|Low
 - Scope: path/to/file-or-folder
+- Audience: Service author|Operator|Package consumer|Maintainer
+- User action at risk: Concrete action or decision the reader cannot safely complete from current docs.
+- Current surface: Existing README/docs/examples/command help/package docs/API comments/code comments coverage, or "missing".
+- Target surface: README|docs|example|command help|package docs|API comment|code comment|docstring.
+- Missing contract: Behavior/purpose|error/panic/nil/empty/zero-value|side effect/lifecycle/cleanup|concurrency/cache/retry/timeout/cancellation/idempotency|config default/limit/validation/fallback|security/operations/compatibility/data-loss|alias/wrapper/re-export/dependency boundary|none.
 - Impact: Risk created by the missing, weak, stale, misleading, or wrong-location documentation.
 - Evidence: Concrete file and line references, command/API behavior, existing docs, examples, or comment/docstring gap.
 - Proposed fix: Brief documentation direction using the established documentation location and style.
@@ -87,28 +114,9 @@ Keep optional follow-up notes separate from findings:
 - Optional or non-blocking note.
 ```
 
-## Implement Mode
-
-Follow `references/plan.md#implement-mode-plan`.
-
-These rules remain mandatory:
-
-- If no scope is provided, stop and ask for the package or folder.
-- Read `ISSUES.md` in the requested package or folder first and treat it as the working doc-gap ledger.
-- If scoped `ISSUES.md` does not exist, stop and ask whether to run Find mode first for that scope.
-- Work through findings sequentially by ID unless the human explicitly names a different finding.
-- Stop after proposing the solution. Do not edit files, update `ISSUES.md`, or start validation until the human explicitly agrees to that finding's solution.
-- Ask questions when behavior, audience, documentation location, public-contract wording, examples, validation, or user intent is ambiguous. Treat silence or a broad "implement doc gaps" request as permission to start the proposal workflow, not as permission to edit.
-- After the human agrees and before editing, state the selected local documentation pattern, dominant relevant validation path, planned validation command, and any deviation from `AGENTS.md` or selected skills. If a deviation is needed, stop and ask before editing.
-- Implement only the agreed finding with the smallest clear documentation change.
-- Use `$doc-standards` and relevant language standards for code comments and API docs. Use `$change-safety` when documentation changes public API, command, migration, or compatibility expectations.
-- Do not move to the next finding until the human says `DOC-<number> is done`.
-- After the human confirms a finding is done, remove that finding from scoped `ISSUES.md`. If a finding is deemed invalid or not actually a doc gap, remove it only after explaining why and getting human agreement.
-- Once all findings are resolved and confirmed done by the human, delete the scoped `ISSUES.md`.
-
 ## References
 
-- Read `references/plan.md` before starting Find mode or Implement mode.
+- Read `references/plan.md` before starting one-pass mode or audit-only mode.
 - Use `$doc-standards` as the documentation quality bar and routing threshold.
 - Use `../references/finding-severity.md` for confidence filtering and severity.
 - Use `$project-workflow` for repository command discovery, documented entrypoints, CI expectations, examples, and `./bin` wiring before review planning or validation.
