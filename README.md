@@ -1,19 +1,19 @@
 [![CircleCI](https://circleci.com/gh/alexfalkowski/bin.svg?style=shield)](https://circleci.com/gh/alexfalkowski/bin)
 [![Stability: Active](https://masterminds.github.io/stability/active.svg)](https://masterminds.github.io/stability/active.html)
 
-# bin
+# 🧰 bin
 
 Shared executables, Makefile includes, and agent skills for projects that use
 this repository as a Git submodule at `./bin`.
 
-## Why This Exists
+## 🎯 Why This Exists
 
 The projects that use this repository share the same build, lint, test,
 security, Docker, release, and agent-workflow glue. Keeping that glue here makes
 the consuming repositories smaller while giving them one supported integration
 path.
 
-## Install Or Bootstrap
+## 🚀 Install Or Bootstrap
 
 Add this repository as the downstream project's `bin` submodule:
 
@@ -30,7 +30,7 @@ git submodule update --init
 git submodule update --init
 ```
 
-## Usage
+## 💻 Usage
 
 Include only the Make fragments your project needs. The fragments derive helper
 paths from their own location, so downstream includes work when this repository
@@ -58,7 +58,7 @@ Projects that use the shared git workflow can include it separately:
 include bin/build/make/git.mak
 ```
 
-## Agent Skills
+## 🤖 Agent Skills
 
 This repository also ships shared agent guidance in `skills/`. Downstream
 repositories should point agents at the shared instructions instead of copying
@@ -75,7 +75,7 @@ matching skill for the task.
 Update `AGENTS.md` when the shared skill set, composition rules, or repository
 workflow guidance changes.
 
-## Operations
+## 🛠️ Operations
 
 This repository is shared tooling. Changes can affect every downstream project
 that vendors it, so prefer small compatible changes and validate through the
@@ -87,7 +87,7 @@ version files; security helpers assume Trivy is available; shell and Dockerfile
 lint targets depend on `shellcheck` and `hadolint`; `build/docker/env` needs SSH
 access to clone or update the sibling `../docker` repository when it is missing.
 
-## References
+## 🔗 References
 
 - `make` or `make help`: current command catalog for this repository.
 - `build/make/*.mak`: reusable Makefile fragments for downstream projects.
