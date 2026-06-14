@@ -1,4 +1,4 @@
 interface:
   display_name: "Review PR"
   short_description: "Prepare an approved review PR flow"
-  default_prompt: "Use $review-pr with its active goal and plan when I explicitly ask to commit, push, and open or update a review PR; include review-time documentation judgment through $docs-standards."
+  default_prompt: "Use $review-pr with its active goal and plan when I explicitly ask to commit, push, and open or update a review PR; include review-time documentation judgment through $doc-standards."

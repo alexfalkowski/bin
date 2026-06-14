@@ -12,6 +12,8 @@ Use this reference when working in Go repositories.
 - User-facing or documented Go APIs need clear, accurate, and detailed GoDoc for packages, exported types, functions, methods, constants, variables, and other supported entrypoints.
 - Go doc comments should directly precede the declaration they document with no intervening blank line.
 - Go doc comments for exported identifiers should start with the documented identifier where appropriate so generated documentation and summaries read clearly.
+- GoDoc must still follow `$doc-standards`: do not write comments that only restate the declaration, obvious type shape, or implementation. Prefer contract, behavior, error semantics, compatibility, side effects, constraints, or examples that generated docs cannot infer from the signature.
+- For Go aliases, re-exports, and thin wrappers, keep GoDoc minimal: say that the identifier aliases, re-exports, or wraps the canonical identifier to keep call sites on the project-owned surface or reduce repeated imports, and link to the canonical package documentation when practical. Mention compatibility only when that is the real reason. Do not copy the upstream GoDoc into the alias.
 - Keep package-level GoDoc in `doc.go` files.
 - Do not leave package documentation comments on unrelated source files such as `main.go`, `client.go`, or `types.go`.
 - Keep examples aligned with the real public interface and expected calling style when the repository's documentation style supports them.

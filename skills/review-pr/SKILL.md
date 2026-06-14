@@ -23,7 +23,7 @@ These rules remain mandatory:
 - Make the remote-write behavior of `make review` explicit before running it: the target commits, force-pushes, and opens a draft PR.
 - Use `$change-validation` to select and run credible validation for the full change before `make review`; language-specific standards may refine that validation.
 - Use the relevant language standards for changed Go, Ruby, shell, and test paths.
-- Use `$docs-standards` for changed README files, user-facing docs, examples, command/config docs, public API comments, docstrings, or behavior changes that may make nearby existing documentation stale.
+- Use `$doc-standards` for changed README files, user-facing docs, examples, command/config docs, public API comments, docstrings, or behavior changes that may make nearby existing documentation stale.
 - Use `$code-review` to inspect the current change before drafting PR text.
 - If the user explicitly asks for style nits, polish, readability review, or non-blocking cleanup comments before the PR, also use `$style-review` after the code-review pass.
 - Resolve any blocking review findings before continuing. Do not run `make review` while blocking findings remain unless the human explicitly says to open a draft PR with those findings unresolved; in that case, call them out in the PR summary.
@@ -53,7 +53,7 @@ make msg="unprefixed subject" desc_file="$desc_file" review
 - Read `references/summary-format.md` before drafting the `msg` value and PR summary content.
 - Read `references/output-format.md` before producing the final review PR report.
 - Use `$project-workflow` for repository command discovery, CI expectations, and `./bin` wiring before validation and `make review`.
-- Use `$docs-standards` for review-time documentation judgment; use `$doc-gaps` only when the user explicitly asks for a scoped documentation audit.
+- Use `$doc-standards` for review-time documentation judgment; use `$doc-gaps` only when the user explicitly asks for a scoped documentation audit.
 - Use `$style-review` only when the user explicitly asks for non-blocking polish before the PR.
 
 ## Notes

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Docs Standards"
-  short_description: "Review documentation quality"
-  default_prompt: "Use $docs-standards when reviewing changed docs, examples, README content, public API comments, or behavior changes that may make documentation stale."

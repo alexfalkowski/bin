@@ -3,50 +3,66 @@
 
 # bin
 
-A collection of shared **executables** and **Makefile includes** intended to be reused across projects (typically as a Git submodule checked out at `./bin`).
+Shared executables, Makefile includes, and agent skills for projects that use
+this repository as a Git submodule at `./bin`.
 
-This repo contains:
+## Why This Exists
 
-- reusable `build/make/*.mak` fragments (Go/Ruby/proto helpers)
-- small Bash/Ruby scripts under `build/` and `quality/`
-- shared agent skills and references under `skills/`
-- a Dockerfile template for building Go services (`build/docker/go/Dockerfile`)
+The projects that use this repository share the same build, lint, test,
+security, Docker, release, and agent-workflow glue. Keeping that glue here makes
+the consuming repositories smaller while giving them one supported integration
+path.
 
-## Rationale
+## Install Or Bootstrap
 
-After repeating the same build/lint/test/CI glue across projects, it’s useful to standardize it once and reuse it.
-
-## Repository layout
-
-| Path            | What it contains                                                                  |
-|-----------------|------------------------------------------------------------------------------------|
-| `build/make/`   | Makefile include fragments (Go, Ruby, git workflow, buf/proto, project templates). |
-| `build/git/`    | Git workflow helper scripts used by `build/make/git.mak`.                          |
-| `build/go/`     | Go-related helper scripts (`lint`, `clean`, `fa`, `test`).                         |
-| `build/docker/` | Docker helpers and `build/docker/go/Dockerfile`.                                   |
-| `build/sec/`    | Security scanning helpers (Trivy).                                                 |
-| `quality/`      | Quality/test helpers (Go coverage processing, cucumber wrappers).                  |
-| `skills/`       | Shared agent skills and references.                                                |
-
-## Using this repo (recommended: Git submodule)
-
-Make fragments derive helper paths from their own location, so they work from
-this repository root and from downstream repositories. The recommended
-downstream usage is still:
-
-- your project has this repo checked out at `./bin`
-- your project `Makefile` includes one or more fragments from `./bin/build/make/*.mak`
-
-Example:
+Add this repository as the downstream project's `bin` submodule:
 
 ```bash
 git submodule add git@github.com:alexfalkowski/bin.git bin
 git submodule update --init
 ```
 
-### Agent skill setup
+> [!IMPORTANT]
+> In a fresh checkout of a project that already has the submodule, initialize it
+> before using targets supplied by `bin`.
 
-This repo also ships shared agent guidance in focused skills under `skills/`. In downstream repositories, add a short pointer to the root `AGENTS.md` so agents discover the canonical shared guidance from the project root without copying the whole skill list:
+```bash
+git submodule update --init
+```
+
+## Usage
+
+Include only the Make fragments your project needs. The fragments derive helper
+paths from their own location, so downstream includes work when this repository
+is mounted at `./bin`. Inside this repository, the root `Makefile` includes the
+same fragments from `build/make/`.
+
+For command discovery, include `help.mak` and run `make` or `make help` in the
+consuming repository.
+
+```make
+include bin/build/make/help.mak
+include bin/build/make/go.mak
+```
+
+Ruby projects typically include the Ruby fragment instead:
+
+```make
+include bin/build/make/help.mak
+include bin/build/make/ruby.mak
+```
+
+Projects that use the shared git workflow can include it separately:
+
+```make
+include bin/build/make/git.mak
+```
+
+## Agent Skills
+
+This repository also ships shared agent guidance in `skills/`. Downstream
+repositories should point agents at the shared instructions instead of copying
+the skill list:
 
 ```markdown
 ## Shared skills
@@ -56,111 +72,26 @@ This repository uses the shared skills from `bin/skills/`. Read
 matching skill for the task.
 ```
 
-Keeping only this pointer in downstream repos avoids repeating the shared skill
-list. Update `bin/AGENTS.md` when the shared skill set changes.
+Update `AGENTS.md` when the shared skill set, composition rules, or repository
+workflow guidance changes.
 
-Workflow skills may load `bin/skills/<name>/references/plan.md` as a canonical
-plan template, but downstream users should still invoke the skill itself, for
-example `Find $test-gaps in <folder>`. Active plans are per-session runtime
-state; durable findings continue to live in the scoped `ISSUES.md` files
-defined by the relevant skill.
+## Operations
 
-When the runtime supports goals, stateful workflow skills may also bind one
-active goal to the selected mode and scope. Goals are per-session runtime state
-for the user-visible outcome, waiting or blocked reason, and completion
-condition; they do not replace active plans or scoped `ISSUES.md` ledgers.
+This repository is shared tooling. Changes can affect every downstream project
+that vendors it, so prefer small compatible changes and validate through the
+repository Make targets.
 
-## Makefile includes (examples)
+Some helpers intentionally depend on tools or services outside this repository:
+Docker helpers assume the consuming project supplies image names and release
+version files; security helpers assume Trivy is available; shell and Dockerfile
+lint targets depend on `shellcheck` and `hadolint`; `build/docker/env` needs SSH
+access to clone or update the sibling `../docker` repository when it is missing.
 
-### Ruby-only project
+## References
 
-```make
-include bin/build/make/help.mak
-include bin/build/make/ruby.mak
-```
-
-This gives you targets like:
-
-- `make dep` (bundler install into `vendor/bundle`)
-- `make lint` / `make fix-lint` / `make format` (rubocop)
-- `make features` / `make benchmarks` (cucumber wrappers)
-
-### Go project
-
-```make
-include bin/build/make/help.mak
-include bin/build/make/go.mak
-```
-
-This gives you targets like:
-
-- `make dep` (download/tidy/vendor)
-- `make lint` / `make fix-lint` / `make format`
-- `make specs` (gotestsum + race + coverage written under `test/reports/`; set `package=<path>` to test one package)
-- `make coverage` (HTML + func coverage from `test/reports/final.cov`)
-- `make sec` (govulncheck + Trivy repo scan)
-
-### Git workflow helpers
-
-```make
-include bin/build/make/git.mak
-```
-
-This adds convenience targets such as `make new-feature name=<something>`, `make sync`, and `make optimise`.
-
-## Executables and helpers (examples)
-
-### Go coverage helpers
-
-- `quality/go/covfilter` filters `test/reports/profile.cov` into `test/reports/final.cov` using an exclude regex.
-  - Default exclude is `test` unless `.gocov` exists.
-- `quality/go/covmerge` filters each `test/reports/*.cov` into `test/reports/filter/` and merges them into `test/reports/final.cov`.
-  - Default exclude is `test|.pb|main.go` unless `.gocov` exists.
-
-### Cucumber wrappers
-
-- `quality/ruby/feature` runs cucumber with the `report` profile and excludes `@benchmark`.
-- `quality/ruby/benchmark` runs only `@benchmark` scenarios.
-
-These are used by `build/make/ruby.mak` targets `features` and `benchmarks`.
-
-### Docker helpers
-
-- `build/docker/go/Dockerfile` is a multi-stage Dockerfile to build a Go binary and copy it into a distroless image.
-- `build/docker/build` builds a **test** image tagged `alexfalkowski/<name>:test.<platform>` by default; pass `production` as the third argument to build `alexfalkowski/<name>:<version>.<platform>` from `APP_VERSION_FILE`.
-- `build/sec/trivy-image` scans the **test** image by default; pass `production` as the third argument to scan the versioned image that will be pushed.
-- In service Make targets, use `test-docker` for build-and-scan branch checks and `release-docker` for build-scan-push release checks; both preserve `platform=<arch>`.
-- `build/docker/push` pushes the already-built versioned image and only allows the `production` image type; `push-docker` forces that type in service Make targets. `build/docker/manifest` creates manifests. Both are gated: they only run if `APP_VERSION_FILE` exists (default: `/tmp/workspace/release-version.txt`).
-
-### Local environment helper
-
-`build/docker/env` is a convenience wrapper for a sibling checkout of `../docker`:
-
-- if `../docker` exists, it updates it via `git pull --rebase` and updates submodules
-- otherwise, it tries to `git clone git@github.com:alexfalkowski/docker.git` (SSH)
-
-It then runs `(cd ../docker && make kind=deps <command>)`.
-
-## Working on this repo
-
-List available targets:
-
-```bash
-make
-```
-
-Common checks used in CI (`.circleci/config.yml`):
-
-```bash
-make dep
-make clean-dep
-make scripts-lint
-make skills-lint
-make docker-lint
-make lint
-make sec
-```
-
-## CircleCI note
-
-CircleCI jobs in this repo explicitly run `git submodule sync` / `git submodule update --init` because submodules require extra handling in CI (see `.circleci/config.yml`).
+- `make` or `make help`: current command catalog for this repository.
+- `build/make/*.mak`: reusable Makefile fragments for downstream projects.
+- `build/docker/go/Dockerfile`: shared Go service Dockerfile template.
+- `quality/`: shared lint, feature, benchmark, and coverage helpers.
+- `skills/README.md`: shared skill composition and lifecycle guidance.
+- `AGENTS.md`: repository instructions and shared agent operating rules.

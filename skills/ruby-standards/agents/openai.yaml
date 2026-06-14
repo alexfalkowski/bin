@@ -1,4 +1,4 @@
 interface:
   display_name: "Ruby Standards"
-  short_description: "Apply Ruby conventions for these repos"
-  default_prompt: "Use $ruby-standards when changing Ruby code in this repository, pairing with $naming-standards when names or renames are part of the change. When test coverage is needed, do not assume Ruby tests; pair with $testing-standards and follow the majority relevant existing harness."
+  short_description: "Apply Ruby code, docs, and test conventions"
+  default_prompt: "Use $ruby-standards when changing Ruby code or Ruby documentation in this repository, pairing with $naming-standards when names or renames are part of the change and $doc-standards for RDoc. RDoc must add purpose, contract, or constraints rather than repeat code; alias docs should state project-owned surface/import reduction and point to canonical docs. When test coverage is needed, do not assume Ruby tests; pair with $testing-standards and follow the majority relevant existing harness."

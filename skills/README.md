@@ -15,7 +15,7 @@ specific rule or local pattern, and ask for approval to deviate.
 ## Common Composition
 
 - `review-pr` orchestrates PR preparation with `project-workflow`,
-  `change-validation`, relevant language standards, `docs-standards`,
+  `change-validation`, relevant language standards, `doc-standards`,
   `code-review`, summary drafting, optional explicit `style-review`, and the
   review target.
 - `code-issues` orchestrates a two-phase code-issue workflow: first aggregate confirmed
@@ -25,7 +25,7 @@ specific rule or local pattern, and ask for approval to deviate.
   `project-workflow` context and confirmed missing or weak test coverage into
   `ISSUES.md`, then implement agreed test fixes one gap at a time.
 - `doc-gaps` orchestrates a two-phase doc-gap workflow: first
-  aggregate `project-workflow` context and confirmed `$docs-standards` findings
+  aggregate `project-workflow` context and confirmed `$doc-standards` findings
   for README, docs, examples, comments, and docstring gaps into `ISSUES.md`,
   then implement agreed doc fixes one gap at a time.
 - `reliability-gaps` orchestrates a two-phase reliability-gap workflow: first
@@ -42,7 +42,7 @@ specific rule or local pattern, and ask for approval to deviate.
 - `testing-standards` covers language-agnostic test design and coverage
   decisions; pair it with language standards for idioms and
   `change-validation` for command selection.
-- `docs-standards` covers README, docs, examples, command/config docs, public
+- `doc-standards` covers README, docs, examples, command/config docs, public
   API comments, docstrings, and stale-doc review; pair it with language
   standards for API comments and docstrings, `naming-standards` for terminology,
   `change-safety` for documented contract changes, and `change-validation` for

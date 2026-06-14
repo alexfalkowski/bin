@@ -40,7 +40,7 @@ repository root and keep `bin/` as shared guidance.
 3. Run `$project-workflow` discovery for entrypoints, CI, documented commands,
    public APIs, examples, and `./bin` wiring.
 4. Identify existing documentation locations, examples, comments, docstrings,
-   `$docs-standards`, and language-specific documentation standards for the
+   `$doc-standards`, and language-specific documentation standards for the
    requested scope.
 5. Build the read-only documentation review delegation plan from the requested
    root and its first-level subfolders.
@@ -79,7 +79,7 @@ repository root and keep `bin/` as shared guidance.
 9. If a deviation is needed, stop and ask before editing.
 10. Implement only the agreed doc gap with the smallest clear documentation
     change.
-11. Use `$docs-standards` and relevant language standards for comments,
+11. Use `$doc-standards` and relevant language standards for comments,
     docstrings, and public API docs.
 12. Validate the documentation change with commands appropriate to the changed
     files.
