@@ -43,7 +43,8 @@ repository root and keep `bin/` as shared guidance.
    force-pushes, and opens a draft PR.
 6. Select and run credible validation for the full change with
    `$change-validation`.
-7. Apply relevant language and test standards for the changed paths.
+7. Apply relevant language, test, and documentation standards for the changed
+   paths.
 8. Run `$code-review` on the current change.
 9. Run `$style-review` only when the human explicitly asked for non-blocking
    polish.
