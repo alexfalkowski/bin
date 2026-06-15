@@ -1,6 +1,6 @@
 ---
 name: doc-gaps
-description: Finds and fixes concrete missing, weak, stale, or misleading documentation in a package or folder in one pass, including README files, user-facing docs, examples, command help, package docs, public API comments, code comments, and docstrings required by $doc-standards and relevant language standards. Uses parallel review agents when available, applies confirmed documentation fixes, validates the changes, and writes ISSUES.md only for audit-only requests or unresolved gaps. Use when the user asks to run $doc-gaps in a package or folder, find doc gaps in a package or folder, fix doc gaps in a package or folder, review docs for gaps, or audit-only doc gaps.
+description: Finds and fixes concrete missing, weak, stale, or misleading documentation in a package or folder in one pass, including README files, user-facing docs, examples, command help, package docs, public API comments, code comments, and docstrings required by $doc-standards and relevant language standards. Uses parallel review agents when the active runtime provides them and permits delegation, applies confirmed documentation fixes, validates the changes, and writes ISSUES.md only for audit-only requests or unresolved gaps. Use when the user asks to run $doc-gaps in a package or folder, find doc gaps in a package or folder, fix doc gaps in a package or folder, review docs for gaps, or audit-only doc gaps.
 ---
 
 # Doc Gaps
@@ -35,19 +35,19 @@ These rules remain mandatory:
 - Treat `Run $doc-gaps in <package/folder>`, `Find doc gaps in <package/folder>`, or `Fix doc gaps in <package/folder>` as permission to delegate review, edit documentation in scope, run appropriate validation, and summarize the result in one pass.
 - Use audit-only mode only when the user explicitly asks not to edit or asks only for an audit or ledger. When a stop gate prevents a correct documentation fix during one-pass mode, record unresolved confirmed findings instead of switching modes.
 - If scoped `ISSUES.md` already exists, read it before reviewing. If it is a doc-gap ledger, include unresolved findings in the candidate set and update or delete the ledger after fixing them. If it is unrelated or ambiguous active work, stop and ask before editing it.
-- Use as many independent review agents as the runtime can safely run when the active runtime provides sub-agents and permits delegation for the request. Do not perform the doc-gap review locally first when delegation is available.
+- Use as many independent review agents as the runtime can safely run when the active runtime provides sub-agents and runtime policy/tooling permits delegation. Do not perform the doc-gap review locally first when delegation is available.
 - Treat the doc-gap invocation as the user's explicit request to delegate documentation review for that scope. Do not require the user to separately say "use sub-agents", "spawn agents", or "delegate".
 - If delegation is denied, stop instead of falling back to a local review. If sub-agents are unavailable, say so briefly and perform the review locally for the requested scope.
 - Ask for human permission before agents run commands that require approval, such as network, SSH, GitHub auth, registry auth, remote writes, or other non-read-only validation.
 - Exclude generated files and folders, vendored dependencies, caches, build output, generated API docs, and generated lockfile churn unless the requested scope is explicitly about them.
 - Assign review agents by root documentation surfaces and first-level subfolders when possible. Each subpackage/subfolder agent owns recursive review of the rest of that subtree.
 - Each agent must perform a thorough documentation review for its assigned scope, pairing with `$doc-standards`, relevant language standards, `$naming-standards` when terminology is unclear or inconsistent, and `$change-validation` for likely validation commands.
-- Each agent must audit the relevant documentation surfaces before returning candidates: README files, docs, examples, command help, package documentation, exported API comments, code comments, and docstrings. For each candidate, identify the intended audience, the user action or maintenance decision at risk, the existing documentation surface, the correct target surface, and any missing non-obvious contract required by `$doc-standards`.
+- Each agent must audit the relevant documentation surfaces before returning candidates: README files, docs, examples, command help, package documentation, exported API comments, code comments, and docstrings. For each candidate, apply `$doc-standards`' adequacy gate by identifying the public surface, intended audience, user action or maintenance decision at risk, existing documentation surface, correct target surface, minimum successful example or command, and missing non-obvious contract.
 - Require each agent to return candidates in the candidate format below, without final IDs unless useful locally.
 - Use `../references/finding-severity.md` to discard low-confidence candidates before assigning severity.
-- Confirm each candidate gap against the code, current docs, examples, and documented interfaces before fixing it, using `$doc-standards` as the finding threshold.
-- Before fixing or dismissing a candidate, route it to the correct documentation surface: README, docs, examples, command help, package documentation, exported API comment, code comment, docstring, or no change. Do not treat package GoDoc or code-comment improvements as sufficient when first-use, setup, configuration, operational behavior, security expectations, or service-author workflows would reasonably be expected in README files, user-facing docs, examples, or command help.
-- When dismissing a candidate because existing documentation is sufficient, identify the existing surface that covers the audience and action at risk in the final summary.
+- Confirm each candidate gap against the code, current docs, examples, and documented interfaces before fixing it, using `$doc-standards` as the finding threshold. Do not confirm or dismiss a candidate merely because documentation exists; verify adequacy, ownership, discoverability, example coverage, and the relevant non-obvious contract.
+- Before fixing or dismissing a candidate, route it to the correct documentation surface: README, docs, examples, command help, package documentation, exported API comment, code comment, docstring, or no change. Do not treat package GoDoc or code-comment improvements as sufficient when first-use, setup, configuration, operational behavior, security expectations, or service-author workflows would reasonably be expected in README files, user-facing docs, examples, or command help. Do not treat README prose as sufficient when `$doc-standards` and the paired language standard route reusable API contracts to GoDoc, RDoc, docstrings, executable examples, specs, or features.
+- When dismissing a candidate because existing documentation is sufficient, identify the existing surface that covers the audience and action at risk in the final summary, and state why that surface is the authoritative owner under `$doc-standards`.
 - Do not fix candidates that `$doc-standards` routes to `$code-review`, `$code-issues`, `$security-audit`, `$testing-standards`, or `$test-gaps`. Report those as out of scope when relevant.
 - Before editing in one-pass mode, state the selected local documentation pattern, dominant relevant validation path, planned validation command, and any deviation from `AGENTS.md` or selected skills. If a deviation is needed, stop and ask before editing.
 - For unresolved-ledger fixes or any case where human approval is still required: After the human agrees and before editing, state the selected local documentation pattern, dominant relevant validation path, planned validation command, and any deviation from `AGENTS.md` or selected skills. If a deviation is needed, stop and ask before editing.
@@ -95,10 +95,13 @@ entries:
 - Type: Doc Gap
 - Severity: Critical|High|Medium|Low
 - Scope: path/to/file-or-folder
+- Public surface: Command|API|package|service|configuration|example|file format|operator behavior.
 - Audience: Service author|Operator|Package consumer|Maintainer
 - User action at risk: Concrete action or decision the reader cannot safely complete from current docs.
 - Current surface: Existing README/docs/examples/command help/package docs/API comments/code comments coverage, or "missing".
 - Target surface: README|docs|example|command help|package docs|API comment|code comment|docstring.
+- Minimum example or command: Smallest successful usage path the documentation should support, or "none" when not applicable.
+- Adequacy failure: Missing, weak, stale, misleading, wrong-location, not discoverable, non-executable example, or "none" for dismissed candidates.
 - Missing contract: Behavior/purpose|error/panic/nil/empty/zero-value|side effect/lifecycle/cleanup|concurrency/cache/retry/timeout/cancellation/idempotency|config default/limit/validation/fallback|security/operations/compatibility/data-loss|alias/wrapper/re-export/dependency boundary|none.
 - Impact: Risk created by the missing, weak, stale, misleading, or wrong-location documentation.
 - Evidence: Concrete file and line references, command/API behavior, existing docs, examples, or comment/docstring gap.

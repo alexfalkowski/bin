@@ -15,6 +15,13 @@ before applying personal judgment.
 Agents MUST:
 
 - Read and follow the smallest matching skill before taking task action.
+- Treat sub-agents as available to every selected skill when the active runtime
+  provides them. Use sub-agents for delegation, parallel review, forward-testing,
+  independent validation, read-only exploration, or disjoint implementation work
+  whenever they can materially improve coverage or throughput.
+- Use sub-agents when the selected skill requires delegation, parallel review,
+  or forward-testing. Do not treat required sub-agent use as optional based on
+  scope size, convenience, or local confidence.
 - Follow existing repository patterns over personal judgment.
 - Treat skill workflow steps using "must", "do not", or "stop" language as
   blocking requirements.
@@ -35,6 +42,8 @@ Agents MUST NOT:
 - Treat `AGENTS.md` or `SKILL.md` instructions as optional.
 - Continue after discovering they violated an instruction; they must correct
   course immediately and remove their own noncompliant change.
+- Claim extra delegation wording is needed when the selected skill says the
+  user's invocation is already explicit permission to use sub-agents.
 
 If there is a conflict, precedence is:
 

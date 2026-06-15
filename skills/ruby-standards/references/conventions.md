@@ -19,8 +19,17 @@ Use this reference when working in Ruby repositories.
 - Method RDoc should cover the synopsis, important examples, arguments when needed, corner cases, exceptions, and related methods when useful.
 - RDoc must still follow `$doc-standards`: do not write comments that only restate the class, module, method name, argument names, return type, or obvious implementation. Prefer purpose, contract, examples, exceptions, compatibility, side effects, and constraints that readers cannot infer from the method signature.
 - For Ruby aliases, delegated APIs, compatibility shims, or thin wrappers, keep RDoc minimal: say that the API aliases, delegates to, or wraps the canonical API to keep call sites on the project-owned surface or reduce repeated requires/imports, and link to the canonical documentation when practical. Mention compatibility only when that is the real reason. Do not copy the original documentation into the alias.
-- When a user-facing or documented API is non-trivial, include examples if the repository's documentation style supports them.
-- Keep examples aligned with the real public interface and expected calling style.
+- For reusable Ruby APIs, keep purpose, contract, exceptions, lifecycle, side
+  effects, and non-obvious examples in RDoc near the public module, class, or
+  method. README examples should focus on first-use gem, command, task, or
+  integration workflows and link to API docs or executable specs/features when
+  deeper reusable API behavior belongs there.
+- When a user-facing or documented API is non-trivial, include examples if the
+  repository's documentation style or executable harness supports them.
+- Keep examples aligned with the real public interface and expected calling
+  style. Do not accept README-only examples as sufficient for non-trivial
+  reusable API contracts that should be documented in RDoc or executable
+  specs/features.
 
 ## Testing
 

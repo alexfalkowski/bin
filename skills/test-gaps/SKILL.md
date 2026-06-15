@@ -36,7 +36,7 @@ These rules remain mandatory:
 - Use `ISSUES.md` in the requested package or folder as the review ledger, for example `<package/folder>/ISSUES.md`.
 - If `ISSUES.md` already exists in the requested package or folder, stop. Tell the user the existing scoped ledger must be resolved first, or the human must delete that scoped `ISSUES.md` before a new find pass there.
 - Treat `Find $test-gaps in <package/folder>` or `Find test gaps in <package/folder>` as the user's explicit request to delegate test-gap review for that scope. Do not require the user to separately say "use sub-agents", "spawn agents", or "delegate".
-- Use sub-agents for Find mode whenever the active runtime provides them and the runtime permits delegation for the request. Do not treat sub-agents as optional based on scope size, and do not perform the test-gap review locally first.
+- Use sub-agents for Find mode whenever the active runtime provides them and runtime policy/tooling permits delegation. Do not treat sub-agents as optional based on scope size, and do not perform the test-gap review locally first.
 - Do not claim that extra delegation wording is needed before launching review agents. The Find mode invocation is the explicit delegation request.
 - If delegation is denied, stop instead of falling back to a local review. If sub-agents are unavailable, say so briefly and perform the review locally for the requested scope.
 - Ask for human permission before agents run commands that require approval, such as network, SSH, GitHub auth, registry auth, remote writes, or other non-read-only validation.

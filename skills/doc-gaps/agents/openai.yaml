@@ -1,4 +1,4 @@
 interface:
   display_name: "Doc Gaps"
-  short_description: "Find and fix scoped documentation gaps"
-  default_prompt: "Use $doc-gaps with its active goal and plan plus $doc-standards to run a one-pass scoped documentation gap workflow: delegate review broadly, route each gap to the right documentation surface, identify missing non-obvious contracts, apply confirmed doc fixes, validate, and write ISSUES.md only for audit-only requests or unresolved gaps."
+  short_description: "Find and fix scoped doc adequacy gaps"
+  default_prompt: "Use $doc-gaps with its active goal and plan plus $doc-standards to run a one-pass scoped documentation gap workflow: delegate review broadly, apply the adequacy gate, route each gap to the authoritative documentation surface, identify wrong-location or missing non-obvious contracts, apply confirmed doc fixes, validate, and write ISSUES.md only for audit-only requests or unresolved gaps."

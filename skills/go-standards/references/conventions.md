@@ -21,7 +21,14 @@ Use this reference when working in Go repositories.
 - For Go aliases, re-exports, and thin wrappers, keep GoDoc minimal: say that the identifier aliases, re-exports, or wraps the canonical identifier to keep call sites on the project-owned surface or reduce repeated imports, and link to the canonical package documentation when practical. Mention compatibility only when that is the real reason. Do not copy the upstream GoDoc into the alias.
 - Keep package-level GoDoc in `doc.go` files.
 - Do not leave package documentation comments on unrelated source files such as `main.go`, `client.go`, or `types.go`.
-- Keep examples aligned with the real public interface and expected calling style when the repository's documentation style supports them.
+- For reusable Go libraries, prefer executable examples in `*_test.go` using
+  Go's `Example`, `ExampleType`, `ExampleType_Method`, or equivalent example
+  forms when an example teaches public API usage. README examples should stay
+  minimal and link to GoDoc, package docs, or executable examples.
+- Keep examples aligned with the real public interface and expected calling
+  style. Do not accept README-only examples as sufficient when a non-trivial
+  reusable API should be documented by an executable Go example and the
+  repository's harness supports it.
 - When package documentation needs to change, update `doc.go` rather than scattering package comments across implementation files.
 - Preserve `Deprecated:` paragraphs in doc comments when documenting compatibility guidance for identifiers that remain available but should not be used.
 

@@ -12,6 +12,17 @@ pattern, agents must do that before applying personal judgment. If an agent
 believes a rule cannot work for the task, it must stop before editing, quote the
 specific rule or local pattern, and ask for approval to deviate.
 
+All skills may use sub-agents when the active runtime provides them. Use
+sub-agents for delegation, parallel review, forward-testing, independent
+validation, read-only exploration, or disjoint implementation work whenever they
+can materially improve coverage or throughput.
+
+When a selected skill requires delegation, parallel review, or forward-testing,
+agents must use sub-agents. Do not treat required sub-agent use as optional
+based on scope size, convenience, or local confidence, and do not claim extra
+delegation wording is needed when the selected skill says the user's invocation
+already grants permission.
+
 ## Common Composition
 
 - `review-pr` orchestrates PR preparation with `project-workflow`,

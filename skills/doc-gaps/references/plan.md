@@ -51,16 +51,18 @@ repository root and keep `bin/` as shared guidance.
 9. Deduplicate candidates and directly re-check conflicting or overlapping
    conclusions against code, docs, examples, command help, package docs, and
    public interfaces.
-10. Route each candidate to the correct documentation surface by identifying
-    the intended audience, user action or maintenance decision at risk, current
-    documentation surface, target surface, and any missing non-obvious contract
-    required by `$doc-standards`.
+10. Route each candidate through `$doc-standards`' adequacy gate and identify
+    the public surface, intended audience, user action or maintenance decision
+    at risk, current documentation surface, target surface, minimum successful
+    example or command, adequacy failure, and any missing non-obvious contract.
 11. Confirm each finding is a concrete missing, weak, stale, misleading, or
     wrong-location documentation gap with real user, operator, package
-    consumer, or maintainer risk.
-12. Dismiss candidates already covered by the correct surface, candidates below
-    the finding threshold, and candidates that belong to code, security, test,
-    or reliability workflows.
+    consumer, or maintainer risk. Documentation length, heading count, lint
+    shape, or comment presence is not sufficient evidence of adequacy.
+12. Dismiss candidates already covered by the correct authoritative surface,
+    candidates below the finding threshold, and candidates that belong to code,
+    security, test, or reliability workflows. When dismissing, record why the
+    existing surface owns the audience and action at risk.
 13. If no confirmed gaps remain, report that result and do not create
     `ISSUES.md`.
 14. Implement confirmed doc gaps with the smallest clear documentation changes.
