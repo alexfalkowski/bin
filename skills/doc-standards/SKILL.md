@@ -1,6 +1,6 @@
 ---
 name: doc-standards
-description: Applies strict documentation adequacy standards for README files, user-facing docs, examples, command/config docs, public API comments, docstrings, and behavior changes that may make existing documentation stale. Use when writing, reviewing, or updating documentation; when changed code affects documented behavior; when $code-review or $review-pr needs documentation judgment; and when $doc-gaps needs criteria for scoped documentation triage.
+description: Use when writing, reviewing, or updating documentation; when changed code affects documented behavior; when $code-review or $review-pr needs documentation judgment; or when $doc-gaps needs criteria for scoped documentation triage. Apply strict documentation adequacy standards for README files, user-facing docs, examples, command/config docs, public API comments, docstrings, and stale-doc review.
 ---
 
 # Doc Standards
@@ -237,20 +237,20 @@ omit irrelevant sections rather than keeping placeholders to satisfy the
 example shape.
 
 ```markdown
-# 📦 <Project Name>
+# Project Name
 
-<One or two sentences explaining what this project does and who should use it.>
+One or two sentences explaining what this project does and who should use it.
 
 ## 🎯 Why This Exists
 
-<The problem it solves, the boundary it owns, and the tradeoff or design choice
-that helps users decide whether it fits.>
+The problem it solves, the boundary it owns, and the tradeoff or design choice
+that helps users decide whether it fits.
 
 ## 🚀 Install Or Bootstrap
 
-<Only the commands required before the first useful command can run, such as
+Only the commands required before the first useful command can run, such as
 package installation, submodule initialization, dependency setup, or required
-runtime assets.>
+runtime assets.
 
 ## 💻 Usage
 

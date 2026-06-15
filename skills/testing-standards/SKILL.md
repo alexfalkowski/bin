@@ -1,6 +1,6 @@
 ---
 name: testing-standards
-description: Applies language-agnostic test design, test-first/TDD or scenario-first/BDD workflow, coverage, fixtures, determinism, and test-layer conventions. Use when adding, reviewing, refactoring, or planning tests across languages; pair with $go-standards, $ruby-standards, or $shell-standards for language-specific idioms and $change-validation for commands.
+description: Use when adding, reviewing, refactoring, or planning tests across languages. Apply language-agnostic test design, test-first/TDD or scenario-first/BDD workflow, coverage, fixtures, determinism, and test-layer conventions; pair with $go-standards, $ruby-standards, or $shell-standards for language-specific idioms and $change-validation for commands.
 ---
 
 # Testing Standards

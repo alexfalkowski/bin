@@ -1,6 +1,6 @@
 ---
 name: reliability-standards
-description: Applies SRE, NALSD, and secure/reliable systems standards to code, designs, scripts, Make targets, services, jobs, deployment/config, observability, incident, recovery, capacity, and production-readiness work. Use when reviewing or changing reliability-sensitive behavior, retries, timeouts, backpressure, SLOs, SLIs, error budgets, monitoring, alerting, runbooks, release safety, overload handling, cascading failures, data integrity, disaster recovery, or concrete NALSD design estimates; pair with $reliability-gaps for scoped reliability-gap discovery.
+description: Use when reviewing or changing reliability-sensitive behavior, retries, timeouts, backpressure, SLOs, SLIs, error budgets, monitoring, alerting, runbooks, release safety, overload handling, cascading failures, data integrity, disaster recovery, or concrete NALSD design estimates. Apply SRE, NALSD, and secure/reliable systems standards to code, designs, scripts, Make targets, services, jobs, deployment/config, observability, incident, recovery, capacity, and production-readiness work; pair with $reliability-gaps for scoped reliability-gap discovery.
 ---
 
 # Reliability Standards

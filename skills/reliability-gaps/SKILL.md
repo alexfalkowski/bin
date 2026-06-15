@@ -1,14 +1,14 @@
 ---
 name: reliability-gaps
-description: Finds verified missing or weak reliability, operability, SLO, overload, observability, release-safety, recovery, data-integrity, disaster-readiness, or NALSD design evidence in a package or folder, records confirmed gaps in that scope's ISSUES.md, and later proposes and implements explicitly agreed fixes gap by gap. Use when the user asks to find $reliability-gaps in a package or folder, find reliability gaps in a package or folder, review production readiness for a package or folder, implement $reliability-gaps in a package or folder, implement reliability gaps in a package or folder, asks what the fix is for REL-<number>, asks to fix REL-<number>, asks to verify REL-<number>, or says REL-<number> is done.
+description: Use when the user asks to find $reliability-gaps in a package or folder, find reliability gaps in a package or folder, review production readiness for a package or folder, implement $reliability-gaps in a package or folder, implement reliability gaps in a package or folder, asks about reliability gap IDs such as REL-1, asks what the fix is for REL-1, asks to fix or verify REL-1, or says REL-1 is done. Find verified reliability, operability, SLO, overload, observability, release-safety, recovery, data-integrity, disaster-readiness, or NALSD evidence gaps and implement agreed fixes gap by gap.
 ---
 
 # Reliability Gaps
 
 Use this skill in two distinct modes:
 
-- **Find mode**: `Find $reliability-gaps in <package/folder>` or `Find reliability gaps in <package/folder>`.
-- **Implement mode**: `Implement $reliability-gaps in <package/folder>` or `Implement reliability gaps in <package/folder>`.
+- **Find mode**: `Find $reliability-gaps in PACKAGE_OR_FOLDER` or `Find reliability gaps in PACKAGE_OR_FOLDER`.
+- **Implement mode**: `Implement $reliability-gaps in PACKAGE_OR_FOLDER` or `Implement reliability gaps in PACKAGE_OR_FOLDER`.
 
 Do not combine the two modes in one pass.
 
@@ -36,9 +36,9 @@ Follow `references/plan.md#find-mode-plan`.
 These rules remain mandatory:
 
 - If no scope is provided, stop and ask for the package or folder.
-- Use `ISSUES.md` in the requested package or folder as the review ledger, for example `<package/folder>/ISSUES.md`.
+- Use `ISSUES.md` in the requested package or folder as the review ledger, for example `PACKAGE_OR_FOLDER/ISSUES.md`.
 - If `ISSUES.md` already exists in the requested package or folder, stop. Tell the user the existing scoped ledger must be resolved first, or the human must delete that scoped `ISSUES.md` before a new find pass there.
-- Treat `Find $reliability-gaps in <package/folder>` or `Find reliability gaps in <package/folder>` as the user's explicit request to delegate reliability review for that scope. Do not require the user to separately say "use sub-agents", "spawn agents", or "delegate".
+- Treat `Find $reliability-gaps in PACKAGE_OR_FOLDER` or `Find reliability gaps in PACKAGE_OR_FOLDER` as the user's explicit request to delegate reliability review for that scope. Do not require the user to separately say "use sub-agents", "spawn agents", or "delegate".
 - Use sub-agents for Find mode whenever the active runtime provides them and runtime policy/tooling permits delegation. Do not treat sub-agents as optional based on scope size, and do not perform the reliability-gap review locally first.
 - Do not claim that extra delegation wording is needed before launching review agents. The Find mode invocation is the explicit delegation request.
 - If delegation is denied, stop instead of falling back to a local review. If sub-agents are unavailable, say so briefly and perform the review locally for the requested scope.
@@ -66,7 +66,7 @@ These rules remain mandatory:
 - Do not report optional maturity improvements, cloud-architecture preferences, private implementation preferences, or "best practice" checkboxes as findings by themselves. List them only as optional follow-up notes when relevant.
 - If no confirmed reliability gaps are found, report that no reliability gaps were found and do not create `ISSUES.md`.
 - If confirmed reliability gaps are found, write all findings to the scoped `ISSUES.md` before making any fixes.
-- Assign every finding a unique ID for the session in the form `REL-<number>`.
+- Assign every finding a unique ID for the session in the form `REL-N`.
 - Stop after presenting the ledger and plan. Do not fix findings in the same pass.
 
 ## `ISSUES.md` Format
@@ -118,8 +118,8 @@ These rules remain mandatory:
    - `Validation`: the focused and expanded commands intended after refactor.
 - Implement only the agreed finding with the smallest clear reliability change.
 - Use `$reliability-standards` for reliability design, `$change-safety` for public or operational compatibility, `$testing-standards` for failure-path tests, and `$change-validation` for checks. Pair with `$security-audit` when the fix touches auth, secrets, privilege, DoS, logs, supply chain, or incident containment.
-- Report the result for that finding with `Red`, `Green`, `Refactor`, and `Validation` entries. Use `Refactor: none` when no cleanup was needed after green. Then ask the human to verify and explicitly say `REL-<number> is done`.
-- Do not move to the next finding until the human says `REL-<number> is done`.
+- Report the result for that finding with `Red`, `Green`, `Refactor`, and `Validation` entries. Use `Refactor: none` when no cleanup was needed after green. Then ask the human to verify and explicitly say `REL-N is done`.
+- Do not move to the next finding until the human says `REL-N is done`.
 - After the human confirms a finding is done, remove that finding from scoped `ISSUES.md`. If a finding is deemed invalid or not actually a reliability gap, remove it only after explaining why and getting human agreement.
 - Once all findings are resolved and confirmed done by the human, delete the scoped `ISSUES.md`.
 

@@ -1,6 +1,6 @@
 ---
 name: productivity-summary
-description: Produces daily or weekly repository productivity summaries across delivery flow, CI quality, release/deploy activity, and service reliability. Use when the user asks for a productivity summary, delivery health report, weekly or daily engineering metrics, repo health comparison, service health summary, library maintenance summary, or period-over-period view for a specific GitHub repository using local git, GitHub, CircleCI, Kubernetes/DigitalOcean, and UptimeRobot evidence.
+description: Use when the user asks for a productivity summary, delivery health report, weekly or daily engineering metrics, repo health comparison, service health summary, library maintenance summary, or period-over-period view for a specific GitHub repository. Produce daily or weekly summaries across delivery flow, CI quality, release/deploy activity, and service reliability using local git, GitHub, CircleCI, Kubernetes/DigitalOcean, and UptimeRobot evidence.
 ---
 
 # Productivity Summary
@@ -81,7 +81,7 @@ comparison period.
 
 ## References
 
-- Run `scripts/collect.rb --repo <path>` first for report-ready metrics and
+- Run `scripts/collect.rb --repo PATH` first for report-ready metrics and
   source summaries.
 - Read `references/sources.md` for source priority, credential names, and
   collection boundaries.

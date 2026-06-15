@@ -1,6 +1,6 @@
 ---
 name: security-audit
-description: Reviews security-sensitive code, scripts, Makefile glue, Docker helpers, skills, dependencies, and configuration. Use when the user asks for a security audit, vulnerability or secret check, unsafe shell/filesystem/network/auth review, or language-specific security inspection.
+description: Use when the user asks for a security audit, vulnerability or secret check, unsafe shell/filesystem/network/auth review, or language-specific security inspection. Review security-sensitive code, scripts, Makefile glue, Docker helpers, skills, dependencies, and configuration.
 ---
 
 # Security Audit

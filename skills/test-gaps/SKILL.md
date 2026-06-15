@@ -1,14 +1,14 @@
 ---
 name: test-gaps
-description: Finds concrete missing, weak, misleading, flaky, or wrong-layer test coverage in a package or folder, records confirmed gaps in that scope's ISSUES.md, and later proposes and implements explicitly agreed test fixes gap by gap. Use when the user asks to find $test-gaps in a package or folder, find test gaps in a package or folder, find flaky tests in a package or folder, find wrong-layer tests in a package or folder, implement $test-gaps in a package or folder, or implement test gaps in a package or folder.
+description: Use when the user asks to find $test-gaps in a package or folder, find test gaps in a package or folder, find flaky tests in a package or folder, find wrong-layer tests in a package or folder, implement $test-gaps in a package or folder, implement test gaps in a package or folder, asks about test gap IDs such as TEST-1, asks what the fix is for TEST-1, asks to fix or verify TEST-1, or says TEST-1 is done. Find concrete missing, weak, misleading, flaky, or wrong-layer test coverage, record confirmed gaps in scoped ISSUES.md, and later propose and implement agreed test fixes gap by gap.
 ---
 
 # Test Gaps
 
 Use this skill in two distinct modes:
 
-- **Find mode**: `Find $test-gaps in <package/folder>` or `Find test gaps in <package/folder>`.
-- **Implement mode**: `Implement $test-gaps in <package/folder>` or `Implement test gaps in <package/folder>`.
+- **Find mode**: `Find $test-gaps in PACKAGE_OR_FOLDER` or `Find test gaps in PACKAGE_OR_FOLDER`.
+- **Implement mode**: `Implement $test-gaps in PACKAGE_OR_FOLDER` or `Implement test gaps in PACKAGE_OR_FOLDER`.
 
 Do not combine the two modes in one pass.
 
@@ -33,9 +33,9 @@ Follow `references/plan.md#find-mode-plan`.
 These rules remain mandatory:
 
 - If no scope is provided, stop and ask for the package or folder.
-- Use `ISSUES.md` in the requested package or folder as the review ledger, for example `<package/folder>/ISSUES.md`.
+- Use `ISSUES.md` in the requested package or folder as the review ledger, for example `PACKAGE_OR_FOLDER/ISSUES.md`.
 - If `ISSUES.md` already exists in the requested package or folder, stop. Tell the user the existing scoped ledger must be resolved first, or the human must delete that scoped `ISSUES.md` before a new find pass there.
-- Treat `Find $test-gaps in <package/folder>` or `Find test gaps in <package/folder>` as the user's explicit request to delegate test-gap review for that scope. Do not require the user to separately say "use sub-agents", "spawn agents", or "delegate".
+- Treat `Find $test-gaps in PACKAGE_OR_FOLDER` or `Find test gaps in PACKAGE_OR_FOLDER` as the user's explicit request to delegate test-gap review for that scope. Do not require the user to separately say "use sub-agents", "spawn agents", or "delegate".
 - Use sub-agents for Find mode whenever the active runtime provides them and runtime policy/tooling permits delegation. Do not treat sub-agents as optional based on scope size, and do not perform the test-gap review locally first.
 - Do not claim that extra delegation wording is needed before launching review agents. The Find mode invocation is the explicit delegation request.
 - If delegation is denied, stop instead of falling back to a local review. If sub-agents are unavailable, say so briefly and perform the review locally for the requested scope.
@@ -55,7 +55,7 @@ These rules remain mandatory:
 - Do not report optional nice-to-have tests, private implementation coverage, arbitrary coverage percentage improvements, style preferences, or docs-only validation as findings by themselves. List them only as doc gaps or optional follow-up notes when relevant.
 - If no confirmed test gaps are found, report that no test gaps were found and do not create `ISSUES.md`.
 - If confirmed test gaps are found, write all findings to the scoped `ISSUES.md` before making any fixes.
-- Assign every finding a unique ID for the session in the form `TEST-<number>`.
+- Assign every finding a unique ID for the session in the form `TEST-N`.
 - Stop after presenting the ledger and plan. Do not fix findings in the same pass.
 
 ## `ISSUES.md` Format
@@ -100,7 +100,7 @@ These rules remain mandatory:
 - After the human agrees and before editing, state the selected local test pattern, dominant relevant test harness, planned validation command, and any deviation from `AGENTS.md` or selected skills. If a deviation is needed, stop and ask before editing.
 - Implement only the agreed finding with the smallest clear test change, preferring the existing local test shape over new standalone structure.
 - Use `$testing-standards` for test design and pair with the relevant language standard for local idioms. If implementing the test gap requires production behavior to change, prefer the test-first or scenario-first loop from `$testing-standards`.
-- Do not move to the next finding until the human says `TEST-<number> is done`.
+- Do not move to the next finding until the human says `TEST-N is done`.
 - After the human confirms a finding is done, remove that finding from scoped `ISSUES.md`. If a finding is deemed invalid or not actually a test gap, remove it only after explaining why and getting human agreement.
 - Once all findings are resolved and confirmed done by the human, delete the scoped `ISSUES.md`.
 

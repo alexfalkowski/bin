@@ -1,6 +1,6 @@
 ---
 name: style-review
-description: Reviews code, tests, docs-adjacent comments, scripts, and diffs for non-blocking style polish, readability, local consistency, idiom, small simplifications, naming polish, and maintainability cleanup suggestions. Use when the user asks for style nits, polish, readability review, cleanup suggestions, non-blocking review comments, idiomatic cleanup, or a softer pass after code-review; do not use for bugs, security issues, compatibility breaks, or missing test/doc findings.
+description: Use when the user asks for style nits, polish, readability review, cleanup suggestions, non-blocking review comments, idiomatic cleanup, or a softer pass after code-review. Review code, tests, docs-adjacent comments, scripts, and diffs for non-blocking style polish, readability, local consistency, idiom, small simplifications, naming polish, and maintainability cleanup suggestions; do not use for bugs, security issues, compatibility breaks, or missing test/doc findings.
 ---
 
 # Style Review

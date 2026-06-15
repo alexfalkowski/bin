@@ -1,14 +1,14 @@
 ---
 name: code-issues
-description: Finds concrete bugs, security issues, compatibility breaks, and public contract violations in a package or folder, records them in that scope's ISSUES.md, and later proposes and implements explicitly agreed fixes one code issue at a time. Use when the user asks to find $code-issues in a package or folder, find code issues in a package or folder, implement $code-issues in a package or folder, or implement code issues in a package or folder.
+description: Use when the user asks to find $code-issues in a package or folder, find code issues in a package or folder, implement $code-issues in a package or folder, implement code issues in a package or folder, asks about issue IDs such as ISSUE-1, asks what the fix is for ISSUE-1, asks to fix or verify ISSUE-1, or says ISSUE-1 is done. Find concrete bugs, security issues, compatibility breaks, and public contract violations, record them in scoped ISSUES.md, and later propose and implement agreed fixes one code issue at a time.
 ---
 
 # Code Issues
 
 Use this skill in two distinct modes:
 
-- **Find mode**: `Find $code-issues in <package/folder>` or `Find code issues in <package/folder>`.
-- **Implement mode**: `Implement $code-issues in <package/folder>` or `Implement code issues in <package/folder>`.
+- **Find mode**: `Find $code-issues in PACKAGE_OR_FOLDER` or `Find code issues in PACKAGE_OR_FOLDER`.
+- **Implement mode**: `Implement $code-issues in PACKAGE_OR_FOLDER` or `Implement code issues in PACKAGE_OR_FOLDER`.
 
 Do not combine the two modes in one pass.
 
@@ -33,9 +33,9 @@ Follow `references/plan.md#find-mode-plan`.
 These rules remain mandatory:
 
 - If no scope is provided, stop and ask for the package or folder.
-- Use `ISSUES.md` in the requested package or folder as the review ledger, for example `<package/folder>/ISSUES.md`.
+- Use `ISSUES.md` in the requested package or folder as the review ledger, for example `PACKAGE_OR_FOLDER/ISSUES.md`.
 - If `ISSUES.md` already exists in the requested package or folder, stop. Tell the user the existing scoped ledger must be resolved first, or the human must delete that scoped `ISSUES.md` before a new find pass there.
-- Treat `Find $code-issues in <package/folder>` or `Find code issues in <package/folder>` as the user's explicit request to delegate review for that scope. Do not require the user to separately say "use sub-agents", "spawn agents", or "delegate".
+- Treat `Find $code-issues in PACKAGE_OR_FOLDER` or `Find code issues in PACKAGE_OR_FOLDER` as the user's explicit request to delegate review for that scope. Do not require the user to separately say "use sub-agents", "spawn agents", or "delegate".
 - Use sub-agents for Find mode whenever the active runtime provides them and runtime policy/tooling permits delegation. Do not treat sub-agents as optional based on scope size, and do not perform the find review locally first.
 - Do not claim that extra delegation wording is needed before launching review agents. The Find mode invocation is the explicit delegation request.
 - If delegation is denied, stop instead of falling back to a local review. If sub-agents are unavailable, say so briefly and perform the review locally for the requested scope.
@@ -50,7 +50,7 @@ These rules remain mandatory:
 - Do not report optional regression tests, unused convenience aliases, API symmetry, or documentation polish as findings by themselves. List them only as testing gaps, doc gaps, or optional follow-up notes when relevant.
 - If no confirmed code issues are found, report that no code issues were found and do not create `ISSUES.md`.
 - If confirmed code issues are found, write all findings to the scoped `ISSUES.md` before making any fixes.
-- Assign every finding a unique ID for the session in the form `ISSUE-<number>`.
+- Assign every finding a unique ID for the session in the form `ISSUE-N`.
 - Stop after presenting the ledger and plan. Do not fix findings in the same pass.
 
 ## `ISSUES.md` Format
@@ -93,7 +93,7 @@ These rules remain mandatory:
 - After the human agrees and before editing, state the selected local code pattern, dominant relevant test harness, planned validation command, and any deviation from `AGENTS.md` or selected skills. If a deviation is needed, stop and ask before editing.
 - Implement only the agreed issue with the smallest safe change.
 - Use `$testing-standards` when deciding whether to add or update regression tests for the fix, and prefer its test-first or scenario-first loop when a behavior-changing fix has a credible test or BDD layer.
-- Do not move to the next issue until the human says `ISSUE-<number> is done`.
+- Do not move to the next issue until the human says `ISSUE-N is done`.
 - After the human confirms an issue is done, remove that issue from scoped `ISSUES.md`. If an issue is deemed invalid or not actually a code issue, remove it only after explaining why and getting human agreement.
 - Once all findings are resolved and confirmed done by the human, delete the scoped `ISSUES.md`.
 

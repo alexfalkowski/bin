@@ -1,14 +1,14 @@
 ---
 name: doc-gaps
-description: Finds and fixes concrete missing, weak, stale, or misleading documentation in a package or folder in one pass, including README files, user-facing docs, examples, command help, package docs, public API comments, code comments, and docstrings required by $doc-standards and relevant language standards. Uses parallel review agents when the active runtime provides them and permits delegation, applies confirmed documentation fixes, validates the changes, and writes ISSUES.md only for audit-only requests or unresolved gaps. Use when the user asks to run $doc-gaps in a package or folder, find doc gaps in a package or folder, fix doc gaps in a package or folder, review docs for gaps, or audit-only doc gaps.
+description: Use when the user asks to run $doc-gaps in a package or folder, find doc gaps in a package or folder, fix doc gaps in a package or folder, review docs for gaps, audit-only doc gaps, asks about doc gap IDs such as DOC-1, asks what the fix is for DOC-1, asks to fix or verify DOC-1, or says DOC-1 is done. Find and fix concrete missing, weak, stale, or misleading documentation in one pass, including README files, user-facing docs, examples, command help, package docs, public API comments, code comments, and docstrings required by $doc-standards and relevant language standards.
 ---
 
 # Doc Gaps
 
 Use this skill in one-pass mode by default:
 
-- **One-pass mode**: `Run $doc-gaps in <package/folder>`, `Find doc gaps in <package/folder>`, or `Fix doc gaps in <package/folder>`.
-- **Audit-only mode**: `Audit-only $doc-gaps in <package/folder>` or `Find doc gaps in <package/folder> without editing`.
+- **One-pass mode**: `Run $doc-gaps in PACKAGE_OR_FOLDER`, `Find doc gaps in PACKAGE_OR_FOLDER`, or `Fix doc gaps in PACKAGE_OR_FOLDER`.
+- **Audit-only mode**: `Audit-only $doc-gaps in PACKAGE_OR_FOLDER` or `Find doc gaps in PACKAGE_OR_FOLDER without editing`.
 
 Before starting one-pass mode or audit-only mode, read `references/plan.md` and
 use it to maintain the active execution plan. The active plan is runtime state;
@@ -32,7 +32,7 @@ Follow `references/plan.md#one-pass-mode-plan`.
 These rules remain mandatory:
 
 - If no scope is provided, stop and ask for the package or folder.
-- Treat `Run $doc-gaps in <package/folder>`, `Find doc gaps in <package/folder>`, or `Fix doc gaps in <package/folder>` as permission to delegate review, edit documentation in scope, run appropriate validation, and summarize the result in one pass.
+- Treat `Run $doc-gaps in PACKAGE_OR_FOLDER`, `Find doc gaps in PACKAGE_OR_FOLDER`, or `Fix doc gaps in PACKAGE_OR_FOLDER` as permission to delegate review, edit documentation in scope, run appropriate validation, and summarize the result in one pass.
 - Use audit-only mode only when the user explicitly asks not to edit or asks only for an audit or ledger. When a stop gate prevents a correct documentation fix during one-pass mode, record unresolved confirmed findings instead of switching modes.
 - If scoped `ISSUES.md` already exists, read it before reviewing. If it is a doc-gap ledger, include unresolved findings in the candidate set and update or delete the ledger after fixing them. If it is unrelated or ambiguous active work, stop and ask before editing it.
 - Use as many independent review agents as the runtime can safely run when the active runtime provides sub-agents and runtime policy/tooling permits delegation. Do not perform the doc-gap review locally first when delegation is available.
@@ -66,11 +66,11 @@ Follow `references/plan.md#audit-only-mode-plan`.
 These rules remain mandatory:
 
 - If no scope is provided, stop and ask for the package or folder.
-- Use `ISSUES.md` in the requested package or folder as the audit ledger, for example `<package/folder>/ISSUES.md`.
+- Use `ISSUES.md` in the requested package or folder as the audit ledger, for example `PACKAGE_OR_FOLDER/ISSUES.md`.
 - If `ISSUES.md` already exists in the requested package or folder, stop unless the human explicitly asked to refresh or overwrite that scoped ledger.
 - Use the same delegation, surface-routing, candidate confirmation, severity, and out-of-scope rules as one-pass mode.
 - If no confirmed doc gaps are found, report that no doc gaps were found and do not create `ISSUES.md`.
-- If confirmed doc gaps are found, write all findings to the scoped `ISSUES.md` with `DOC-<number>` IDs.
+- If confirmed doc gaps are found, write all findings to the scoped `ISSUES.md` with `DOC-N` IDs.
 - Stop after presenting the audit ledger. Do not make fixes in audit-only mode.
 
 ## Documentation Review Standards
