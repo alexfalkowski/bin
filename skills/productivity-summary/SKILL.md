@@ -33,12 +33,14 @@ comparison period.
 3. Read `references/sources.md` before collecting data.
 4. Read `references/metrics.md` before calculating or naming metrics.
 5. Read `references/output.md` before writing the final summary.
-6. Prefer `scripts/collect.rb` for collection when Ruby is available. It
-   performs the local, GitHub, CircleCI, DigitalOcean/Kubernetes, and
-   UptimeRobot read-only collection in one command and returns JSON.
-7. If the script cannot cover the requested scope, collect the narrowest
-   credible evidence manually. Prefer local repository facts first, then
-   authenticated source APIs or CLIs when available.
+6. Use `scripts/collect.rb` as the default collection path when Ruby is
+   available. It performs the local, GitHub, CircleCI,
+   DigitalOcean/Kubernetes, and UptimeRobot read-only collection in one command
+   and returns report-ready JSON with metrics and source summaries.
+7. Collect evidence manually only for requested scope that `scripts/collect.rb`
+   cannot cover or when Ruby is unavailable. Keep the manual collection as
+   narrow as possible, and state why the collector was insufficient before
+   relying on local repository facts, authenticated source APIs, or CLIs.
 8. Keep missing data explicit. Use `n/a` only when the source is unavailable,
    not when the metric is inconvenient to compute.
 9. Keep collection read-only. API calls, `gh`, `curl`, `git log`, and
@@ -79,7 +81,8 @@ comparison period.
 
 ## References
 
-- Run `scripts/collect.rb --repo <path>` to collect summary evidence in JSON.
+- Run `scripts/collect.rb --repo <path>` first for report-ready metrics and
+  source summaries.
 - Read `references/sources.md` for source priority, credential names, and
   collection boundaries.
 - Read `references/metrics.md` for metric definitions, comparison logic, and
