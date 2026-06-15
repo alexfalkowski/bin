@@ -51,7 +51,7 @@ class ProductivityCollector
       uptimerobot: mode == 'service' ? collect_uptimerobot(owner_repo.split('/').last) : skipped('not a service repo')
     }
 
-    JSON.pretty_generate(result)
+    JSON.pretty_generate(summary_result(result))
   end
 
   private
@@ -142,10 +142,22 @@ class ProductivityCollector
   def collect_github(owner_repo)
     return skipped('gh is not installed') unless command_available?('gh')
 
+    open_prs = gh_json(
+      'pr', 'list', '--repo', owner_repo, '--state', 'open',
+      '--json', 'number,title,createdAt,updatedAt,url'
+    )
+    stale_prs = open_prs.select do |pull_request|
+      updated = pull_request['updatedAt'] && Time.parse(pull_request.fetch('updatedAt'))
+      updated && updated < @current_end - (7 * 24 * 60 * 60)
+    end
+
     {
       current: github_period(owner_repo, @current_start, @current_end),
       previous: github_period(owner_repo, @previous_start, @previous_end),
-      open_pr_count: gh_json('pr', 'list', '--repo', owner_repo, '--state', 'open', '--json', 'number').length
+      open_pr_count: open_prs.length,
+      open_prs: open_prs,
+      stale_pr_count: stale_prs.length,
+      stale_prs: stale_prs
     }
   rescue StandardError => e
     unavailable(e.message)
@@ -397,6 +409,175 @@ class ProductivityCollector
     data.fetch('monitors', []).find do |item|
       [item['friendly_name'], item['url']].compact.any? { |value| value.include?(name) }
     end
+  end
+
+  def summary_result(result)
+    {
+      repository: result[:repository],
+      repo_path: result[:repo_path],
+      branch: result[:branch],
+      mode: result[:mode],
+      timezone: result[:timezone],
+      window: result[:window],
+      comparison_window: result[:comparison_window],
+      sources: source_summary(result),
+      delivery_flow: summary_delivery_flow(result),
+      ci_quality: summary_ci_quality(result),
+      release_and_deploy: summary_release_and_deploy(result),
+      service_reliability: summary_service_reliability(result),
+      notable_work: summary_notable_work(result)
+    }
+  end
+
+  def source_summary(result)
+    %i[local github circleci digitalocean kubernetes uptimerobot].to_h do |name|
+      value = result[name]
+      status = value.is_a?(Hash) && value[:status] ? value[:status] : 'used'
+      notes = value.is_a?(Hash) ? value[:reason] : nil
+      [name, notes ? { status: status, notes: notes } : { status: status }]
+    end
+  end
+
+  def summary_delivery_flow(result)
+    github = result[:github]
+    {
+      current: summary_delivery_period(result.dig(:local, :current), summary_github_period(github, :current)),
+      previous: summary_delivery_period(result.dig(:local, :previous), summary_github_period(github, :previous)),
+      open_pr_count: github_value(github, :open_pr_count),
+      stale_pr_count: github_value(github, :stale_pr_count),
+      stale_prs: github_value(github, :stale_prs)
+    }
+  end
+
+  def summary_delivery_period(local, github)
+    {
+      commit_count: local && local[:commit_count],
+      pr_opened: github && github[:pr_opened],
+      pr_merged: github && github[:pr_merged],
+      pr_closed_unmerged: github && github[:pr_closed_unmerged],
+      median_pr_age_seconds: github && github[:median_pr_age_seconds],
+      median_review_latency_seconds: github && github[:median_review_latency_seconds],
+      prs_with_reviews: github && github[:prs_with_reviews],
+      rollback_or_revert_count: local && local[:rollback_or_revert_count]
+    }
+  end
+
+  def summary_ci_quality(result)
+    circleci = result[:circleci]
+    return circleci if unavailable_source?(circleci)
+
+    {
+      current: summary_ci_period(circleci[:current]),
+      previous: summary_ci_period(circleci[:previous]),
+      flaky_tests: circleci[:flaky_tests],
+      config: circleci[:config],
+      pipelines_collected: circleci[:pipelines_collected],
+      workflows_collected: circleci[:workflows_collected],
+      jobs_collected: circleci[:jobs_collected]
+    }
+  end
+
+  def summary_ci_period(period)
+    return nil unless period
+
+    {
+      workflows_total: period[:workflows_total],
+      workflows_completed: period[:workflows_completed],
+      workflows_successful: period[:workflows_successful],
+      workflows_failed: period[:workflows_failed],
+      workflow_success_rate: period[:workflow_success_rate],
+      median_workflow_duration_seconds: period[:median_workflow_duration_seconds],
+      p95_workflow_duration_seconds: period[:p95_workflow_duration_seconds],
+      failed_workflows: period[:failed_workflows],
+      deploy_job: period.dig(:jobs, 'deploy')
+    }
+  end
+
+  def summary_release_and_deploy(result)
+    {
+      current: summary_release_period(result.dig(:local, :current), result.dig(:circleci, :current)),
+      previous: summary_release_period(result.dig(:local, :previous), result.dig(:circleci, :previous))
+    }
+  end
+
+  def summary_release_period(local, circleci)
+    deploy_job = circleci&.dig(:jobs, 'deploy')
+    {
+      tag_count: local && local[:tag_count],
+      tags: local && local[:tags],
+      rollback_or_revert_count: local && local[:rollback_or_revert_count],
+      rollback_or_revert_subjects: local && local[:rollback_or_revert_subjects],
+      deploy_job: deploy_job
+    }
+  end
+
+  def summary_service_reliability(result)
+    {
+      digitalocean: result[:digitalocean],
+      kubernetes: summary_kubernetes(result[:kubernetes]),
+      uptimerobot: summary_uptimerobot(result[:uptimerobot])
+    }
+  end
+
+  def summary_kubernetes(kubernetes)
+    return kubernetes if unavailable_source?(kubernetes)
+
+    pods = kubernetes.fetch(:pods, [])
+    {
+      status: kubernetes[:status],
+      context: kubernetes[:context],
+      deployments: kubernetes[:deployments],
+      pod_count: pods.length,
+      ready_pod_count: pods.count { |pod| pod[:ready] },
+      pod_restart_count: pods.sum { |pod| pod[:restarts].to_i },
+      pods: pods
+    }
+  end
+
+  def summary_uptimerobot(uptimerobot)
+    return uptimerobot if unavailable_source?(uptimerobot)
+
+    current_uptime, previous_uptime = uptime_ranges(uptimerobot)
+    {
+      status: uptimerobot[:status],
+      monitor: uptimerobot[:monitor],
+      current_uptime: current_uptime,
+      previous_uptime: previous_uptime,
+      logs: uptimerobot[:logs],
+      current_response_time_average_ms: uptimerobot[:current_response_time_average_ms],
+      current_response_time_samples: uptimerobot[:current_response_time_samples],
+      previous_response_time_average_ms: uptimerobot[:previous_response_time_average_ms],
+      previous_response_time_samples: uptimerobot[:previous_response_time_samples]
+    }
+  end
+
+  def summary_notable_work(result)
+    github = result[:github]
+    return github[:current][:merged_prs].first(20) if github.is_a?(Hash) && github.dig(:current, :merged_prs)
+
+    result.dig(:local, :current, :commits)&.map do |commit|
+      pick_symbol(commit, :sha, :authored_at, :subject)
+    end&.first(20)
+  end
+
+  def summary_github_period(github, period)
+    github[period] if github.is_a?(Hash) && !github[:status]
+  end
+
+  def github_value(github, key)
+    github[key] if github.is_a?(Hash) && !github[:status]
+  end
+
+  def unavailable_source?(value)
+    value.is_a?(Hash) && %w[skipped unavailable].include?(value[:status])
+  end
+
+  def uptime_ranges(uptimerobot)
+    uptimerobot.fetch(:uptime_ranges, '').split('-', 2)
+  end
+
+  def pick_symbol(hash, *keys)
+    keys.each_with_object({}) { |key, result| result[key] = hash[key] if hash.key?(key) }
   end
 
   def circleci_pipelines(owner_repo, branch, token)

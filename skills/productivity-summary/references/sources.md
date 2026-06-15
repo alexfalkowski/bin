@@ -18,11 +18,16 @@ Use this reference to choose evidence sources and report missing data clearly.
 
 ## Local Evidence
 
-Prefer the bundled collector when available:
+Use the bundled collector as the default collection path when Ruby is
+available:
 
 ```bash
 ruby <skill-dir>/scripts/collect.rb --repo <repo-path>
 ```
+
+The collector returns report-ready metrics and source summaries. Use the manual
+commands below only for requested scope that the collector cannot cover or when
+Ruby is unavailable; state that collector gap before relying on manual evidence.
 
 Useful local commands include:
 
