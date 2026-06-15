@@ -1,6 +1,6 @@
 ---
 name: reliability-gaps
-description: Finds verified missing or weak reliability, operability, SLO, overload, observability, release-safety, recovery, data-integrity, disaster-readiness, or NALSD design evidence in a package or folder, records confirmed gaps in that scope's ISSUES.md, and later proposes and implements explicitly agreed fixes gap by gap. Use when the user asks to find $reliability-gaps in a package or folder, find reliability gaps in a package or folder, review production readiness for a package or folder, implement $reliability-gaps in a package or folder, implement reliability gaps in a package or folder, asks what the fix is for REL-<number>, asks to fix REL-<number>, asks to verify REL-<number>, or says REL-<number> is done.
+description: Finds verified missing or weak reliability, operability, SLO, overload, observability, release-safety, recovery, data-integrity, disaster-readiness, or NALSD design evidence in a package or folder, records confirmed gaps in that scope's ISSUES.md, and later proposes and implements explicitly agreed fixes gap by gap. Use when the user asks to find $reliability-gaps in a package or folder, find reliability gaps in a package or folder, review production readiness for a package or folder, implement $reliability-gaps in a package or folder, implement reliability gaps in a package or folder, asks what the fix is for REL-, asks to fix REL-, asks to verify REL-, or says REL- is done.
 ---
 
 # Reliability Gaps
@@ -134,3 +134,4 @@ These rules remain mandatory:
 - Use `$change-validation` when selecting validation commands for implemented reliability fixes.
 - Use `$security-audit` when the confirmed problem is primarily security-sensitive.
 - Use `$code-issues`, `$test-gaps`, or `$doc-gaps` when the confirmed problem belongs to those ledgers instead of reliability.
+</number></number></number></number>

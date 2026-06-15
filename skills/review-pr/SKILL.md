@@ -1,6 +1,6 @@
 ---
 name: review-pr
-description: Reviews, validates, commits, force-pushes, and opens a draft pull request with the repository review target. Use only when the user explicitly asks to prepare, open, update, or run a review PR from local changes.
+description: Use when user wants to Reviews, validates, commits, force-pushes, and opens a draft pull request with the repository review target. Use only when the user explicitly asks to prepare, open, update, or run a review PR from local changes.
 ---
 
 # Review PR
