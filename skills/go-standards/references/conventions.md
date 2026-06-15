@@ -4,6 +4,11 @@ Use this reference when working in Go repositories.
 
 ## User-Facing APIs
 
+- Before adding or changing exported Go packages, types, interfaces,
+  constructors, functions, methods, or documented examples, sketch the intended
+  Go caller first. Use that call site to decide package home, public noun,
+  ownership, lifecycle symmetry, and whether callers should construct the value
+  or receive it from an owner.
 - Keep user-facing or documented Go packages, types, functions, and methods consistent with the repository's existing Go style and API shape.
 - Prefer straightforward package and type names over clever aliases or indirection.
 

@@ -4,6 +4,10 @@ Use this reference when working in Ruby repositories.
 
 ## User-Facing APIs
 
+- Before adding or changing documented Ruby modules, classes, methods,
+  commands, tasks, DSL entrypoints, or examples, sketch the intended Ruby call
+  site or command invocation first. Use that caller shape to decide public names,
+  ownership, lifecycle, and documentation before writing tests or implementation.
 - Keep user-facing or documented Ruby modules, classes, and methods consistent with the repository's existing Ruby style and API shape.
 - Prefer straightforward Ruby over clever metaprogramming unless the repository already uses that pattern or the task clearly requires it.
 - Avoid monkey patches unless the repository explicitly relies on them.

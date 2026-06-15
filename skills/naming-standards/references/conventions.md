@@ -49,6 +49,12 @@ cleverness.
 
 ## Public Names
 
+- Before naming a new public API, documented command, module, package,
+  entrypoint, or compatibility surface, sketch the intended caller first. Use
+  that call site to identify the user-visible noun, owner, lifecycle, and home.
+- Do not choose public names from the first implementation shape, test helper,
+  private seam, or temporary abstraction. If a name only makes sense after
+  reading internals, re-check the caller-facing concept.
 - Public API, command, flag, environment variable, metric, event, file format,
   and documentation terms are compatibility surfaces.
 - Rename public names only when the old name is materially misleading, unsafe,
