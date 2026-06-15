@@ -84,6 +84,9 @@ skill instead of one broad default:
   observability, release-safety, recovery, and operability guidance.
 - `reliability-gaps`: find confirmed reliability gaps into `ISSUES.md`, then
   implement agreed reliability fixes gap by gap.
+- `productivity-summary`: daily or weekly repository delivery, CI quality,
+  release/deploy, and service reliability summaries using GitHub, CircleCI,
+  Kubernetes/DigitalOcean, and UptimeRobot evidence.
 - `review-pr`: create a commit, force-push, and open a draft PR with a generated summary.
 - `shell-standards`: Bash scripting, ShellCheck, text processing, directory
   scope, and function documentation conventions.
@@ -133,6 +136,10 @@ Common composition:
   aggregate confirmed `project-workflow` context and SRE, NALSD, operability,
   overload, observability, release-safety, recovery, or data-integrity gaps into
   `ISSUES.md`, then implement agreed reliability fixes gap by gap.
+- `productivity-summary` orchestrates delivery, quality, release/deploy, and
+  service-reliability reporting; pair it with `project-workflow` for repository
+  discovery and `change-validation` only when the summary process changes files
+  or validation commands need to be selected.
 - `code-review` conditionally consults `security-audit` for security-sensitive
   review scope while keeping the review findings format.
 - `style-review` performs an optional non-blocking polish pass when explicitly
