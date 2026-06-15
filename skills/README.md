@@ -33,6 +33,11 @@ specific rule or local pattern, and ask for approval to deviate.
   aggregate `project-workflow` context and verified SRE, NALSD, operability,
   overload, observability, release-safety, recovery, or data-integrity gaps into
   `ISSUES.md`, then implement agreed reliability fixes one gap at a time.
+- `productivity-summary` orchestrates daily or weekly repository health
+  reporting across delivery flow, CI quality, release/deploy activity, and
+  service reliability. It should use `project-workflow` for repository
+  discovery and source boundaries, and keep missing GitHub, CircleCI,
+  Kubernetes/DigitalOcean, or UptimeRobot data explicit.
 - `code-review` performs the review pass and conditionally consults
   `security-audit` for security-sensitive scope.
 - `style-review` performs an optional non-blocking polish pass when explicitly
