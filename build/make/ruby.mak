@@ -57,7 +57,7 @@ clean-reports:
 codecov-upload:
 	@codecovcli --verbose upload-process --fail-on-error -F service -f test/reports/coverage.xml
 
-# Scan the repository with Trivy (CRITICAL severity).
+# Scan the repository with Trivy, excluding .ruby-lsp, bin, vendor, and test/vendor.
 trivy-repo:
 	@$(BIN_ROOT)/build/sec/trivy-repo
 
@@ -68,10 +68,10 @@ sec: trivy-repo
 cost:
 	@scc --no-duplicates --no-min-gen
 
-# Start shared docker environment via the sibling ../docker repo.
+# Start shared docker env, cloning/updating sibling ../docker over SSH as needed.
 start:
 	@$(BIN_ROOT)/build/docker/env start
 
-# Stop shared docker environment via the sibling ../docker repo.
+# Stop shared docker env, cloning/updating sibling ../docker over SSH as needed.
 stop:
 	@$(BIN_ROOT)/build/docker/env stop

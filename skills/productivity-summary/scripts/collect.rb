@@ -768,15 +768,20 @@ options = {
 
 OptionParser.new do |parser|
   parser.banner = 'Usage: collect.rb [options]'
+  parser.separator 'Windows of 24 hours or less are classified as daily; longer windows are weekly.'
   parser.on('--repo PATH', 'Repository path. Defaults to the current directory.') do |value|
     options[:repo_path] = value
   end
   parser.on('--timezone TZ', 'Timezone for default windows. Defaults to TZ or Europe/Berlin.') do |value|
     options[:timezone] = value
   end
-  parser.on('--current-start TIME', 'Current window start.') { |value| options[:current_start] = value }
-  parser.on('--current-end TIME', 'Current window end.') { |value| options[:current_end] = value }
-  parser.on('--previous-start TIME', 'Comparison window start. Defaults to one window before current start.') do |value|
+  parser.on('--current-start TIME', 'Window start parsed by Ruby Time.parse; default is 7 days before end.') do |value|
+    options[:current_start] = value
+  end
+  parser.on('--current-end TIME', 'Window end parsed by Ruby Time.parse; default is local day start.') do |value|
+    options[:current_end] = value
+  end
+  parser.on('--previous-start TIME', 'Comparison start parsed by Time.parse; default is one window earlier.') do |value|
     options[:previous_start] = value
   end
   parser.on('--branch BRANCH', 'CircleCI branch. Defaults to the repository default branch.') do |value|

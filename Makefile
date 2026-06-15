@@ -2,11 +2,11 @@ include build/make/help.mak
 include build/make/ruby.mak
 include build/make/git.mak
 
-# Lint all scripts.
+# Lint Bash scripts under build/, quality/, and lib/ with ShellCheck.
 scripts-lint:
 	@quality/shell/lint
 
-# Lint shared skill policy markers.
+# Lint skill frontmatter, OpenAI metadata, and shared policy markers.
 skills-lint:
 	@quality/skills/lint
 

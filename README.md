@@ -88,8 +88,9 @@ repository Make targets.
 Some helpers intentionally depend on tools or services outside this repository:
 Docker helpers assume the consuming project supplies image names and release
 version files; security helpers assume Trivy is available; shell and Dockerfile
-lint targets depend on `shellcheck` and `hadolint`; `build/docker/env` needs SSH
-access to clone or update the sibling `../docker` repository when it is missing.
+lint targets depend on `shellcheck` and `hadolint`; `build/docker/env` pulls,
+rebases, and updates submodules in an existing sibling `../docker` checkout, or
+uses SSH to clone `git@github.com:alexfalkowski/docker.git` there when missing.
 
 ## 🔗 References
 
