@@ -1,4 +1,4 @@
 interface:
   display_name: "Doc Standards"
-  short_description: "Review docs and canonical README coverage"
-  default_prompt: "Use $doc-standards when reviewing changed docs, examples, README content, public API comments, code comments, docstrings, or behavior changes that may make documentation stale; audit READMEs against the canonical coverage model, audit exported comments for non-obvious repository-owned contracts, avoid duplicating command catalogs or CI config, and reject comments that merely repeat the code."
+  short_description: "Enforce strict documentation adequacy"
+  default_prompt: "Use $doc-standards when reviewing changed docs, examples, README content, public API comments, code comments, docstrings, or behavior changes that may make documentation stale; apply the adequacy gate for public surface, audience, action, owner, example, and non-obvious contract before passing docs; audit READMEs against project-type responsibilities; reject long-but-inadequate docs, wrong-location coverage, and comments that merely repeat code."
