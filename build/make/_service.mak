@@ -26,17 +26,19 @@ tidy:
 vendor:
 	@go mod vendor
 
+# Run fieldalignment; .gofa may list comma-separated packages, default ./...
 field-alignment:
 	@$(BIN_ROOT)/build/go/fa
 
+# Auto-fix fieldalignment; .gofa may list comma-separated packages, default ./...
 fix-field-alignment:
 	@$(BIN_ROOT)/build/go/fa -fix
 
-# Run golangci-lint with build-tags=features. Set package=<path> to lint one package.
+# Run golangci-lint with build-tags=features. Use package=internal/foo, not ./...
 golangci-lint:
 	@$(BIN_ROOT)/build/go/lint run --build-tags features  --timeout 5m
 
-# Auto-fix golangci-lint issues with build-tags=features. Set package=<path> to lint one package.
+# Auto-fix golangci-lint with build-tags=features. Use package=internal/foo.
 fix-golangci-lint:
 	@$(BIN_ROOT)/build/go/lint run --build-tags features --timeout 5m --fix
 
@@ -73,6 +75,7 @@ ruby-outdated-dep:
 # List outdated Go modules and Ruby gems.
 outdated-dep: go-outdated-dep ruby-outdated-dep
 
+# Merge coverage into final.cov using .gocov regex, default test|\.pb|main\.go.
 sanitize-coverage:
 	@$(BIN_ROOT)/quality/go/covmerge
 
@@ -108,7 +111,7 @@ benchmarks: build
 	@make -C test benchmarks
 
 # Run Go tests with gotestsum (race + coverage) and write reports under test/reports/.
-# Set package=<path> to test one package.
+# Set package=internal/foo, not ./internal/foo, to test one package.
 specs:
 	@$(BIN_ROOT)/build/go/test "$(if $(package),,$(COVER_PACKAGES))" $(if $(package),,$(PACKAGES))
 
@@ -168,11 +171,11 @@ clean:
 go-sec:
 	@govulncheck -show verbose -test ./...
 
-# Scan the test image with Trivy (CRITICAL severity); set image_type=production for the versioned image.
+# Scan Docker image for platform=amd64|arm64; production no-ops without a release version file.
 trivy-image:
 	@$(BIN_ROOT)/build/sec/trivy-image "$${NAME}" "$${platform}" "$(or $(image_type),test)"
 
-# Scan the repository with Trivy (CRITICAL severity).
+# Scan the repository with Trivy, excluding .ruby-lsp, bin, vendor, and test/vendor.
 trivy-repo:
 	@$(BIN_ROOT)/build/sec/trivy-repo
 
@@ -187,23 +190,23 @@ build:
 build-test:
 	@go test -vet=off -race -mod vendor -c -tags features -covermode=atomic -coverpkg=$(COVER_PACKAGES) -o "$${NAME}" "$${MODULE}"
 
-# Build a test docker image; set image_type=production for the versioned image.
+# Build Docker image for platform=amd64|arm64; production no-ops without a release version file.
 build-docker:
 	@$(BIN_ROOT)/build/docker/build "$${NAME}" "$${platform}" "$(or $(image_type),test)"
 
 # Build and scan the test docker image.
 test-docker: build-docker trivy-image
 
-# Push the versioned image to docker hub (only if the version file exists).
+# Push production image for platform=amd64|arm64; no-ops without a release version file.
 push-docker: override image_type := production
 push-docker:
 	@$(BIN_ROOT)/build/docker/push "$${NAME}" "$${platform}" "$(or $(image_type),production)"
 
-# Build, scan, and push the versioned docker image.
+# Build, scan, and push production image; no-ops without a release version file.
 release-docker: override image_type := production
 release-docker: build-docker trivy-image push-docker
 
-# Create and push multi-arch manifests (only if the version file exists).
+# Create and push multi-arch manifests; no-ops without a release version file.
 manifest-docker:
 	@$(BIN_ROOT)/build/docker/manifest "$${NAME}"
 
@@ -217,7 +220,7 @@ create-certs:
 	@mkcert -client -key-file test/certs/client-key.pem -cert-file test/certs/client-cert.pem localhost
 	@cp "$$(mkcert -CAROOT)/rootCA.pem" test/certs/rootCA.pem
 
-# Generate a dependency graph PNG for package=$(package), or the module root when unset.
+# Generate assets/<package>.png with goda+dot; package=internal/foo, default assets/diagram.png.
 create-diagram:
 	@$(BIN_ROOT)/quality/go/create-diagram
 
@@ -229,10 +232,10 @@ analyse:
 cost:
 	@scc --no-duplicates --no-min-gen
 
-# Start shared docker environment via the sibling ../docker repo.
+# Start shared docker env, cloning/updating sibling ../docker over SSH as needed.
 start:
 	@$(BIN_ROOT)/build/docker/env start
 
-# Stop shared docker environment via the sibling ../docker repo.
+# Stop shared docker env, cloning/updating sibling ../docker over SSH as needed.
 stop:
 	@$(BIN_ROOT)/build/docker/env stop

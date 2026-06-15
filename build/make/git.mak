@@ -49,38 +49,38 @@ update-submodule:
 branch:
 	@printf "bin: current branch '%s'\n" "$$BRANCH"
 
-# Create and checkout a new branch named $(USER)/$(branch).
+# Create and checkout username-random/$(branch).
 checkout:
 	@git checkout -b "$(USER)/$(branch)"
 
 new-branch: latest checkout
 	@echo "bin: new branch '$(USER)/$(branch)'"
 
-# Start a new feature.
+# Start a new feature branch (name=<branch>, runs latest first).
 new-feature: branch=feat/$(NEW_BRANCH)
 new-feature: new-branch
 
-# Start a new fix.
+# Start a new fix branch (name=<branch>, runs latest first).
 new-fix: branch=fix/$(NEW_BRANCH)
 new-fix: new-branch
 
-# Start a new build.
+# Start a new build branch (name=<branch>, runs latest first).
 new-build: branch=build/$(NEW_BRANCH)
 new-build: new-branch
 
-# Start a new test.
+# Start a new test branch (name=<branch>, runs latest first).
 new-test: branch=test/$(NEW_BRANCH)
 new-test: new-branch
 
-# Start a new docs branch.
+# Start a new docs branch (name=<branch>, runs latest first).
 new-docs: branch=docs/$(NEW_BRANCH)
 new-docs: new-branch
 
-# Start with a refactor.
+# Start a new refactor branch (name=<branch>, runs latest first).
 new-refactor: branch=refactor/$(NEW_BRANCH)
 new-refactor: new-branch
 
-# Start a new release.
+# Start a new release branch (name=<branch>, runs latest first).
 new-release: branch=release/$(NEW_BRANCH)
 new-release: new-branch
 

@@ -54,17 +54,19 @@ clean-lint:
 clean:
 	@$(BIN_ROOT)/build/go/clean
 
+# Run fieldalignment; .gofa may list comma-separated packages, default ./...
 field-alignment:
 	@$(BIN_ROOT)/build/go/fa
 
+# Auto-fix fieldalignment; .gofa may list comma-separated packages, default ./...
 fix-field-alignment:
 	@$(BIN_ROOT)/build/go/fa -fix
 
-# Run golangci-lint. Set package=<path> to lint one package.
+# Run golangci-lint. Set package=internal/foo, not ./internal/foo, for one package.
 golangci-lint:
 	@$(BIN_ROOT)/build/go/lint run --timeout 5m
 
-# Auto-fix golangci-lint issues. Set package=<path> to lint one package.
+# Auto-fix golangci-lint. Set package=internal/foo, not ./internal/foo.
 fix-golangci-lint:
 	@$(BIN_ROOT)/build/go/lint run --timeout 5m --fix
 
@@ -79,11 +81,11 @@ format:
 	@go fmt ./...
 
 # Run tests with gotestsum (race + coverage) and write reports under test/reports/.
-# Set package=<path> to test one package.
+# Set package=internal/foo, not ./internal/foo, to test one package.
 specs:
 	@$(BIN_ROOT)/build/go/test "$(if $(package),,$(COVER_PACKAGES))" $(if $(package),,$(PACKAGES))
 
-# Run benchmarks for package=$(package), or the module root when unset.
+# Run benchmarks for package=internal/foo, or the module root when unset.
 # Set benchtime=<duration-or-count> to pass -benchtime to go test.
 benchmark:
 	@$(BIN_ROOT)/quality/go/benchmark
@@ -92,6 +94,7 @@ benchmark:
 benchmark-pprof:
 	@$(BIN_ROOT)/quality/go/benchmark-pprof
 
+# Filter test/reports/profile.cov into final.cov using .gocov regex, default test.
 remove-generated-coverage:
 	@$(BIN_ROOT)/quality/go/covfilter
 
@@ -118,7 +121,7 @@ clean-reports:
 govulncheck:
 	@govulncheck -show verbose -test ./...
 
-# Scan the repository with Trivy (CRITICAL severity).
+# Scan the repository with Trivy, excluding .ruby-lsp, bin, vendor, and test/vendor.
 trivy-repo:
 	@$(BIN_ROOT)/build/sec/trivy-repo
 
@@ -135,7 +138,7 @@ create-certs:
 	@mkcert -client -key-file test/certs/client-key.pem -cert-file test/certs/client-cert.pem localhost
 	@cp "$$(mkcert -CAROOT)/rootCA.pem" test/certs/rootCA.pem
 
-# Generate a dependency graph PNG for package=$(package), or the module root when unset.
+# Generate assets/<package>.png with goda+dot; package=internal/foo, default assets/diagram.png.
 create-diagram:
 	@$(BIN_ROOT)/quality/go/create-diagram
 
@@ -147,10 +150,10 @@ analyse:
 cost:
 	@scc --no-duplicates --no-min-gen
 
-# Start shared docker environment via the sibling ../docker repo.
+# Start shared docker env, cloning/updating sibling ../docker over SSH as needed.
 start:
 	@$(BIN_ROOT)/build/docker/env start
 
-# Stop shared docker environment via the sibling ../docker repo.
+# Stop shared docker env, cloning/updating sibling ../docker over SSH as needed.
 stop:
 	@$(BIN_ROOT)/build/docker/env stop

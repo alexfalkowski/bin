@@ -20,7 +20,7 @@ update-all-dep:
 generate:
 	@buf generate
 
-# Check whether generated protobuf outputs are stale.
+# Regenerate protobuf outputs, then fail if git diff finds stale generated files.
 stale: generate
 	@git diff --exit-code
 
