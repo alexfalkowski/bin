@@ -65,6 +65,10 @@ For standalone validation reports, use exactly this Markdown structure and do no
 
 ## Helpful Heuristics
 
+- For docs, policy, skills, configuration, metadata, formatting-only changes,
+  generated artifacts, shell scripts, Dockerfiles, and Makefile glue, prefer the
+  repo's lint, schema, dry-run, or closest validation target when no established
+  executable test harness owns the behavior.
 - For shell scripts, Dockerfiles, and Makefile glue, prefer the repo's lint targets when available.
 - For changes in any implementation language, first identify the majority relevant repository-defined test harness for the affected behavior; prefer the matching test entry point before inventing ad hoc commands.
 - If a service behavior is primarily covered by Cucumber, Gherkin, RSpec-style features, acceptance tests, or another cross-language harness, validate through that harness unless the user explicitly asks for lower-level tests.

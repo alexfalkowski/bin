@@ -21,16 +21,20 @@ reduces ambiguity, misuse risk, compatibility risk, or maintenance cost.
    documented command, internal helper, test fixture, local variable, generated
    artifact, or compatibility surface.
 2. Read `references/conventions.md` before proposing or reviewing names.
-3. Prefer names that reveal the domain concept, behavior, or contract over
+3. Before naming a new public API, documented command, module, package,
+   entrypoint, or compatibility surface, sketch the intended caller first. Use
+   the call site to identify the user-visible noun, owner, lifecycle, and home;
+   do not choose names from the first implementation shape.
+4. Prefer names that reveal the domain concept, behavior, or contract over
    implementation detail, cleverness, abbreviation, or generic buckets.
-4. Check nearby names before inventing a new term. Preserve established project
+5. Check nearby names before inventing a new term. Preserve established project
    vocabulary unless it is actively misleading.
-5. Use the relevant language standard for syntax and idiom:
+6. Use the relevant language standard for syntax and idiom:
    `$go-standards`, `$ruby-standards`, or `$shell-standards`.
-6. Use `$change-safety` before renaming public APIs, documented commands, flags,
+7. Use `$change-safety` before renaming public APIs, documented commands, flags,
    environment variables, file formats, generated outputs, or other
    compatibility-sensitive names.
-7. Treat naming findings as actionable only when the current name creates
+8. Treat naming findings as actionable only when the current name creates
    concrete ambiguity, maintenance cost, user confusion, public contract risk,
    likely misuse, or inconsistency with established vocabulary.
 
