@@ -1,6 +1,6 @@
 ---
 name: change-validation
-description: Chooses and reports credible validation commands for tests, linting, CI checks, security checks, benchmarks, and generated outputs. Use when running or selecting validation after code, docs, Makefile, shell, Dockerfile, Go, Ruby, or shared ./bin changes.
+description: Use when running or selecting validation after code, docs, Makefile, shell, Dockerfile, Go, Ruby, generated-output, CI, security, benchmark, or shared ./bin changes. Choose and report credible repository-defined checks.
 ---
 
 # Change Validation

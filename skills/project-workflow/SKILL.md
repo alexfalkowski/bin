@@ -1,6 +1,6 @@
 ---
 name: project-workflow
-description: Discovers project-local workflow, command surfaces, CI expectations, shared ./bin submodule wiring, and reusable build/make/*.mak fragment behavior before work begins. Use when starting in a project, inspecting how to run tasks, deciding trusted entrypoints, or editing/debugging shared Makefile fragments.
+description: Use when starting in a project, inspecting how to run tasks, deciding trusted entrypoints, or editing/debugging shared Makefile fragments. Discover project-local workflow, command surfaces, CI expectations, shared ./bin submodule wiring, and reusable build/make/*.mak fragment behavior before work begins.
 ---
 
 # Project Workflow

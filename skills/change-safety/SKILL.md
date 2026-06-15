@@ -1,6 +1,6 @@
 ---
 name: change-safety
-description: Protects compatibility, documented interfaces, migrations, generated files, dependencies, and user-facing behavior during changes. Use before edits to APIs, commands, flags, environment variables, file formats, Make targets, docs, auth, or shell execution; use code-review for general bug finding.
+description: Use when changes may affect compatibility, documented interfaces, migrations, generated files, dependencies, or user-facing behavior. Protect APIs, commands, flags, environment variables, file formats, Make targets, docs, auth, and shell execution; use code-review for general bug finding.
 ---
 
 # Change Safety

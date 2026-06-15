@@ -1,6 +1,6 @@
 ---
 name: ruby-standards
-description: Applies this repository ecosystem's Ruby coding, API, documentation, naming idiom, style, and test-entrypoint conventions. Use when writing, reviewing, refactoring, documenting, linting, or validating Ruby code in repos that use this shared ./bin tooling; pair with $naming-standards when names or renames are part of the change.
+description: Use when writing, reviewing, refactoring, documenting, linting, or validating Ruby code in repos that use this shared ./bin tooling. Apply this repository ecosystem's Ruby coding, API, documentation, naming idiom, style, and test-entrypoint conventions; pair with $naming-standards when names or renames are part of the change.
 ---
 
 # Ruby Standards

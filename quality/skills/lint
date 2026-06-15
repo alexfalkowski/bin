@@ -138,7 +138,10 @@ require_pattern skills/code-issues/SKILL.md "After the human agrees and before e
 require_pattern skills/test-gaps/SKILL.md "After the human agrees and before editing, state the selected local test pattern"
 require_pattern skills/doc-gaps/SKILL.md "After the human agrees and before editing, state the selected local documentation pattern"
 require_pattern skills/reliability-gaps/SKILL.md "After the human agrees and before editing, state the selected local code/config/docs pattern"
-require_pattern skills/reliability-gaps/SKILL.md "asks what the fix is for REL-<number>"
+require_pattern skills/code-issues/SKILL.md "asks about issue IDs such as ISSUE-1"
+require_pattern skills/test-gaps/SKILL.md "asks about test gap IDs such as TEST-1"
+require_pattern skills/doc-gaps/SKILL.md "asks about doc gap IDs such as DOC-1"
+require_pattern skills/reliability-gaps/SKILL.md "asks about reliability gap IDs such as REL-1"
 require_pattern skills/reliability-gaps/SKILL.md "state the reliability execution checklist before editing"
 require_pattern skills/reliability-gaps/SKILL.md "\`Red\`, \`Green\`, \`Refactor\`, and \`Validation\`"
 
@@ -146,7 +149,10 @@ require_pattern skills/project-workflow/agents/openai.yaml "Treat AGENTS.md and 
 require_pattern skills/testing-standards/agents/openai.yaml "MUST identify the dominant relevant existing test harness before editing"
 require_pattern skills/testing-standards/agents/openai.yaml "stop on unexpected green tests"
 require_pattern skills/go-standards/agents/openai.yaml "MUST NOT invent import aliases for readability, caution, brevity, or personal clarity"
-require_pattern skills/reliability-gaps/agents/openai.yaml "answer REL-N follow-ups"
+require_pattern skills/reliability-gaps/agents/openai.yaml "answer reliability gap ID follow-ups such as REL-1"
+require_pattern skills/code-issues/agents/openai.yaml "answer issue ID follow-ups such as ISSUE-1"
+require_pattern skills/test-gaps/agents/openai.yaml "answer test gap ID follow-ups such as TEST-1"
+require_pattern skills/doc-gaps/agents/openai.yaml "answer doc gap ID follow-ups such as DOC-1"
 require_pattern skills/change-validation/agents/openai.yaml "file changes make prior validation stale"
 
 exit "$missing"
