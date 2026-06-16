@@ -11,6 +11,13 @@ Use this reference when working in Go repositories.
   or receive it from an owner.
 - Keep user-facing or documented Go packages, types, functions, and methods consistent with the repository's existing Go style and API shape.
 - Prefer straightforward package and type names over clever aliases or indirection.
+- Keep implementation contracts as simple as the supported path allows. Do not
+  add defensive state, nil guards, idempotency guards, synchronization, recovery
+  paths, or fallback behavior only because a caller could misuse an API or an
+  impossible state is imaginable. Add that defensiveness only when a supported
+  wiring path, documented public contract, observed bug, concurrency boundary,
+  security boundary, or realistic external input can trigger it. Otherwise make
+  the narrower contract explicit in code or GoDoc and let misuse fail plainly.
 
 ## Documentation
 

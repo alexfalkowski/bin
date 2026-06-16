@@ -6,6 +6,11 @@ Use this reference when the user asks for a review.
 
 - Prioritize bugs, behavioral regressions, risky assumptions, and missing coverage.
 - Flag missing tests, compatibility breaks, unsafe defaults, and missing docs when they materially affect the change.
+- Flag unnecessary defensive complexity when it creates a concrete maintenance,
+  concurrency, compatibility, or readability risk without a supported failure
+  mode. Prefer the simplest contract that matches normal repository wiring, and
+  ask for evidence before accepting guards for impossible nils, repeated calls,
+  unreachable states, or hypothetical misuse.
 - Focus on user-visible impact and maintenance risk. Do not report style nits
   as findings; use `$style-review` when the user asks for non-blocking polish.
 - Prefer concrete findings over broad summaries.
