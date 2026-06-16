@@ -1,0 +1,4 @@
+interface:
+  display_name: "Diagnose Issue"
+  short_description: "Diagnose CI and deployment failures"
+  default_prompt: "Use $diagnose-issue in CI or with deployment to inspect the latest pipeline, a numeric CircleCI pipeline, the latest deployed version, or an explicit version, then identify likely causes and read-only next fixes."

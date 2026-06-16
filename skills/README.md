@@ -49,6 +49,10 @@ already grants permission.
   service reliability. It should use `project-workflow` for repository
   discovery and source boundaries, and keep missing GitHub, CircleCI,
   Kubernetes/DigitalOcean, or UptimeRobot data explicit.
+- `diagnose-issue` orchestrates read-only CI and deployment failure diagnosis
+  for a selected latest pipeline, explicit pipeline ID, latest deployment
+  version, or explicit version. It should use `project-workflow` for repository
+  context and the bundled Ruby collector before suggesting fixes.
 - `code-review` performs the review pass and conditionally consults
   `security-audit` for security-sensitive scope.
 - `style-review` performs an optional non-blocking polish pass when explicitly
