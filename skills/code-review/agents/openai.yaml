@@ -1,4 +1,4 @@
 interface:
   display_name: "Code Review"
   short_description: "Review diffs for bugs and regressions"
-  default_prompt: "Use $code-review for a general bug, regression, missing-coverage, documentation, naming, and language-idiom risk review; pair docs judgment with $doc-standards and security-sensitive scope with $security-audit."
+  default_prompt: "Use $code-review for a general bug, regression, missing-coverage, documentation, naming, and language-idiom risk review; pair docs judgment with $doc-standards and security-sensitive scope with $security-audit. Flag unnecessary defensive complexity when it creates concrete maintenance risk without a supported failure mode."

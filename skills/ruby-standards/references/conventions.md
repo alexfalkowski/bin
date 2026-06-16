@@ -11,6 +11,14 @@ Use this reference when working in Ruby repositories.
 - Keep user-facing or documented Ruby modules, classes, and methods consistent with the repository's existing Ruby style and API shape.
 - Prefer straightforward Ruby over clever metaprogramming unless the repository already uses that pattern or the task clearly requires it.
 - Avoid monkey patches unless the repository explicitly relies on them.
+- Keep implementation contracts as simple as the supported path allows. Do not
+  add defensive state, nil guards, idempotency guards, synchronization, rescue
+  paths, coercions, or fallback behavior only because a caller could misuse an
+  API or an impossible state is imaginable. Add that defensiveness only when a
+  supported command/task path, documented public contract, observed bug,
+  concurrency boundary, security boundary, or realistic external input can
+  trigger it. Otherwise make the narrower contract explicit in code or RDoc and
+  let misuse fail plainly.
 
 ## Documentation
 
