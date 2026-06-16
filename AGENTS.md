@@ -96,6 +96,9 @@ skill instead of one broad default:
 - `productivity-summary`: daily or weekly repository delivery, CI quality,
   release/deploy, and service reliability summaries using GitHub, CircleCI,
   Kubernetes/DigitalOcean, and UptimeRobot evidence.
+- `diagnose-issue`: read-only diagnosis of current branch/PR CI failures,
+  deploy failures, rollout state, Kubernetes/DigitalOcean runtime evidence,
+  UptimeRobot monitor issues, and latest-version problems.
 - `review-pr`: create a commit, force-push, and open a draft PR with a generated summary.
 - `shell-standards`: Bash scripting, ShellCheck, text processing, directory
   scope, and function documentation conventions.
@@ -149,6 +152,10 @@ Common composition:
   service-reliability reporting; pair it with `project-workflow` for repository
   discovery and `change-validation` only when the summary process changes files
   or validation commands need to be selected.
+- `diagnose-issue` orchestrates read-only CI and deployment diagnosis for a
+  selected latest pipeline, explicit pipeline ID, latest deployment version, or
+  explicit version; pair it with `change-validation` when a suggested fix is
+  implemented after diagnosis.
 - `code-review` conditionally consults `security-audit` for security-sensitive
   review scope while keeping the review findings format.
 - `style-review` performs an optional non-blocking polish pass when explicitly
