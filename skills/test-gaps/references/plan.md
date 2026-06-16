@@ -16,12 +16,18 @@ repository root and keep `bin/` as shared guidance.
 - Treat validation as stale when files change after a command ran.
 - Record durable findings only in the scoped `ISSUES.md` ledger defined by the
   skill.
+- Track broad-scope coverage explicitly as reviewed deeply, skimmed, excluded,
+  and deferred. Deferred entries must name runnable follow-up scopes.
 
 ## Goal State Rules
 
 - Bind the active goal to the selected mode and requested scope.
 - In Find mode, the goal is complete when no confirmed test gaps are found and
   reported, or when the scoped `ISSUES.md` ledger is written and presented.
+- For broad scopes, a no-gap result is complete only when the summary states
+  whether all high-risk slices were deeply reviewed. If any relevant slice was
+  skimmed or deferred, completion requires coverage notes and runnable
+  follow-up scopes, not an unqualified all-scope no-gap claim.
 - In Implement mode, the goal is waiting while the human has not approved the
   proposed test-gap solution, or after validation until the human confirms
   `TEST-<number> is done`.
@@ -40,23 +46,35 @@ repository root and keep `bin/` as shared guidance.
 3. Run `$project-workflow` discovery for entrypoints, CI, and `./bin` wiring.
 4. Identify the existing tests, fixtures, helpers, and dominant relevant harness
    for the requested scope.
-5. Build the read-only test-gap delegation plan from the requested root and its
-   first-level subfolders.
-6. Ask for required permission before any agent runs non-read-only, network,
+5. Build a recursive scope inventory for the requested package or folder:
+   relevant file count, first-level subfolders, nested packages, dominant
+   languages, public entrypoints, generated/vendor/build/cache exclusions, and
+   existing test harnesses.
+6. Split the inventory into bounded behavior-owned test-risk slices. Use depth
+   only as a discovery aid; do not assign a broad recursive subtree merely
+   because it is a first-level subfolder.
+7. If the scope is too broad for a credible single pass, select the highest-risk
+   slices first and initialize coverage entries for reviewed deeply, skimmed,
+   excluded, and deferred slices. Deferred entries must be exact follow-up
+   scopes such as `path/to/package` or `path/to/package/subpackage`.
+8. Ask for required permission before any agent runs non-read-only, network,
    auth, remote-write, or otherwise approval-gated commands.
-7. Launch the required review agents when available, or perform the local
+9. Launch the required review agents when available, or perform the local
    fallback only when sub-agents are unavailable.
-8. Wait for all review work to finish.
-9. Deduplicate candidates and directly re-check conflicting or overlapping
-   conclusions against code and tests.
-10. Confirm each gap protects repository-owned behavior and is not duplicate,
+10. Wait for all review work to finish.
+11. Update coverage state for every planned slice before judging the requested
+    scope.
+12. Deduplicate candidates and directly re-check conflicting or overlapping
+    conclusions against code and tests.
+13. Confirm each gap protects repository-owned behavior and is not duplicate,
     private-only, dependency-only, optional, or better handled by another skill.
-11. If no confirmed gaps remain, report that result and do not create
-    `ISSUES.md`.
-12. If confirmed gaps remain, write the scoped `ISSUES.md` with `TEST-<number>`
+14. If no confirmed gaps remain, report that result with the coverage state, do
+    not create `ISSUES.md`, and stop.
+15. If confirmed gaps remain, write the scoped `ISSUES.md` with `TEST-<number>`
     IDs.
-13. Present the scoped ledger and proposed test-fix plan.
-14. Stop before making fixes.
+16. Present the scoped ledger, proposed test-fix plan, coverage state for broad
+    scopes, and runnable follow-up scopes for deferred slices.
+17. Stop before making fixes.
 
 ## Implement Mode Plan
 

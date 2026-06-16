@@ -16,6 +16,8 @@ plan from the consuming repository root and keep `bin/` as shared guidance.
 - Treat validation as stale when files change after a command ran.
 - Record durable findings only in the scoped `ISSUES.md` ledger defined by the
   skill.
+- Track broad-scope coverage explicitly as reviewed deeply, skimmed, excluded,
+  and deferred. Deferred entries must name runnable follow-up scopes.
 
 ## Goal State Rules
 
@@ -23,6 +25,10 @@ plan from the consuming repository root and keep `bin/` as shared guidance.
 - In Find mode, the goal is complete when no confirmed reliability gaps are
   found and reported, or when the scoped `ISSUES.md` ledger is written and
   presented.
+- For broad scopes, a no-gap result is complete only when the summary states
+  whether all high-risk slices were deeply reviewed. If any relevant slice was
+  skimmed or deferred, completion requires coverage notes and runnable
+  follow-up scopes, not an unqualified all-scope no-gap claim.
 - In Implement mode, the goal is waiting while the human has not approved the
   proposed reliability-gap solution, or after validation until the human
   confirms `REL-<number> is done`.
@@ -43,27 +49,39 @@ plan from the consuming repository root and keep `bin/` as shared guidance.
 4. Identify the reliability surface in scope, including services, APIs, CLIs,
    jobs, scripts, deployment/config, observability, release, recovery, and
    operability evidence.
-5. Build the read-only reliability review delegation plan from the requested
-   root and its first-level subfolders.
-6. Ask for required permission before any agent runs non-read-only, network,
+5. Build a recursive scope inventory for the requested package or folder:
+   relevant file count, first-level subfolders, nested packages, dominant
+   languages, tests, public entrypoints, generated/vendor/build/cache
+   exclusions, and reliability-sensitive surfaces.
+6. Split the inventory into bounded reliability-risk or behavior-owned review
+   slices. Use depth only as a discovery aid; do not assign a broad recursive
+   subtree merely because it is a first-level subfolder.
+7. If the scope is too broad for a credible single pass, select the highest-risk
+   slices first and initialize coverage entries for reviewed deeply, skimmed,
+   excluded, and deferred slices. Deferred entries must be exact follow-up
+   scopes such as `path/to/package` or `path/to/package/subpackage`.
+8. Ask for required permission before any agent runs non-read-only, network,
    auth, remote-write, destructive, or otherwise approval-gated commands.
-7. Launch the required review agents when available, or perform the local
+9. Launch the required review agents when available, or perform the local
    fallback only when sub-agents are unavailable.
-8. Wait for all review work to finish.
-9. Deduplicate candidates and directly re-check conflicting or overlapping
-   conclusions against code, config, tests, docs, and CI.
-10. Confirm each gap names a current reliability promise or operational
+10. Wait for all review work to finish.
+11. Update coverage state for every planned slice before judging the requested
+    scope.
+12. Deduplicate candidates and directly re-check conflicting or overlapping
+    conclusions against code, config, tests, docs, and CI.
+13. Confirm each gap names a current reliability promise or operational
     expectation, trigger, failure mode, missing or weak control, and user or
     operator impact.
-11. Reject generic maturity advice, future-scale assumptions, private
+14. Reject generic maturity advice, future-scale assumptions, private
     preferences, and findings that belong in code, security, test, or doc
     ledgers.
-12. If no confirmed gaps remain, report that result and do not create
-    `ISSUES.md`.
-13. If confirmed gaps remain, write the scoped `ISSUES.md` with `REL-<number>`
+15. If no confirmed gaps remain, report that result with the coverage state, do
+    not create `ISSUES.md`, and stop.
+16. If confirmed gaps remain, write the scoped `ISSUES.md` with `REL-<number>`
     IDs.
-14. Present the scoped ledger and proposed reliability-fix plan.
-15. Stop before making fixes.
+17. Present the scoped ledger, proposed reliability-fix plan, coverage state for
+    broad scopes, and runnable follow-up scopes for deferred slices.
+18. Stop before making fixes.
 
 ## Implement Mode Plan
 

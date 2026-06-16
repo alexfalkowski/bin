@@ -44,6 +44,7 @@ These rules remain mandatory:
 - Do not assign broad recursive subtrees merely because they are first-level subfolders. When a subtree contains many independent documentation owners, mixed audiences, or too many relevant files for a credible single pass, split it into smaller documentation-surface or behavior-owned slices before delegation.
 - Prefer slices based on authoritative documentation owner and user risk: README or user docs, command help, examples, public API/package docs, documented workflows, changed or recently touched areas, and code areas with public interfaces. Use depth only as a discovery aid, not as the review boundary.
 - If the requested scope is too broad to review credibly in one pass, review the highest-risk slices first and record explicit coverage: reviewed deeply, skimmed, excluded, and deferred.
+- Do not present a broad requested scope as fully reviewed when any relevant slice was only skimmed or deferred. Name those slices in the final coverage notes and provide runnable follow-up scopes for deferred review.
 - Each assigned agent owns recursive review only within its bounded slice. Each agent must perform a thorough documentation review for that slice, pairing with `$doc-standards`, relevant language standards, `$naming-standards` when terminology is unclear or inconsistent, and `$change-validation` for likely validation commands.
 - Each agent must audit the relevant documentation surfaces before returning candidates: README files, docs, examples, command help, package documentation, exported API comments, code comments, and docstrings. For each candidate, apply `$doc-standards`' adequacy gate by identifying the public surface, intended audience, user action or maintenance decision at risk, existing documentation surface, correct target surface, minimum successful example or command, and missing non-obvious contract.
 - Require each agent to return candidates in the candidate format below, without final IDs unless useful locally.
@@ -60,7 +61,7 @@ These rules remain mandatory:
 - Validate documentation changes with commands appropriate to the changed files.
 - If no confirmed doc gaps are found, report that no doc gaps were found and do not create `ISSUES.md`.
 - If all confirmed doc gaps are fixed, do not leave a new `ISSUES.md` behind. If an existing doc-gap ledger is fully resolved, delete it.
-- Final output must summarize fixed gaps, dismissed or out-of-scope candidates when relevant, unresolved findings written to `ISSUES.md` if any, and validation results.
+- Final output must summarize fixed gaps, dismissed or out-of-scope candidates when relevant, broad-scope coverage notes when the requested scope was too broad for complete deep review, unresolved findings written to `ISSUES.md` if any, and validation results.
 
 ## Audit-Only Mode
 

@@ -16,6 +16,8 @@ repository root and keep `bin/` as shared guidance.
 - Treat validation as stale when files change after a command ran.
 - Use a scoped `ISSUES.md` ledger only for audit-only mode, unresolved confirmed
   gaps, or an existing doc-gap ledger being completed.
+- Track broad-scope coverage explicitly as reviewed deeply, skimmed, excluded,
+  and deferred. Deferred entries must name runnable follow-up scopes.
 
 ## Goal State Rules
 
@@ -25,6 +27,10 @@ repository root and keep `bin/` as shared guidance.
   are recorded because a stop gate prevents a correct fix.
 - In audit-only mode, the goal is complete when no confirmed doc gaps are found
   and reported, or when the scoped `ISSUES.md` ledger is written and presented.
+- For broad scopes, a no-gap result is complete only when the summary states
+  whether all high-risk slices were deeply reviewed. If any relevant slice was
+  skimmed or deferred, completion requires coverage notes and runnable
+  follow-up scopes, not an unqualified all-scope no-gap claim.
 - Record a blocked reason when a required scope is missing, required permission
   is denied, an existing scoped ledger is unrelated or ambiguous, or a selected
   finding cannot be fixed or recorded without human input. Follow runtime rules
@@ -40,39 +46,51 @@ repository root and keep `bin/` as shared guidance.
 4. Identify existing documentation locations, examples, command help, package
    documentation, comments, docstrings, `$doc-standards`, and
    language-specific documentation standards for the requested scope.
-5. Build the read-only documentation review delegation plan from root docs,
-   README files, and first-level subfolders; use as many independent review
-   agents as the runtime can safely run.
-6. Ask for required permission before any agent runs non-read-only, network,
+5. Build a recursive documentation inventory for the requested scope: README
+   files, user docs, examples, command help surfaces, package docs, exported
+   API comments, code-comment/docstring surfaces, first-level subfolders,
+   nested packages, generated/vendor/build/cache exclusions, and validation
+   entrypoints.
+6. Split the inventory into bounded documentation-owner or behavior-owned
+   review slices. Use depth only as a discovery aid; do not assign a broad
+   recursive subtree merely because it is a first-level subfolder.
+7. If the scope is too broad for a credible single pass, select the highest-risk
+   slices first and initialize coverage entries for reviewed deeply, skimmed,
+   excluded, and deferred slices. Deferred entries must be exact follow-up
+   scopes such as `path/to/package` or `path/to/package/subpackage`.
+8. Ask for required permission before any agent runs non-read-only, network,
    auth, remote-write, or otherwise approval-gated commands.
-7. Launch the required review agents when available, or perform the local
+9. Launch the required review agents when available, or perform the local
    fallback only when sub-agents are unavailable.
-8. Wait for all review work to finish.
-9. Deduplicate candidates and directly re-check conflicting or overlapping
-   conclusions against code, docs, examples, command help, package docs, and
-   public interfaces.
-10. Route each candidate through `$doc-standards`' adequacy gate and identify
+10. Wait for all review work to finish.
+11. Update coverage state for every planned slice before judging the requested
+    scope.
+12. Deduplicate candidates and directly re-check conflicting or overlapping
+    conclusions against code, docs, examples, command help, package docs, and
+    public interfaces.
+13. Route each candidate through `$doc-standards`' adequacy gate and identify
     the public surface, intended audience, user action or maintenance decision
     at risk, current documentation surface, target surface, minimum successful
     example or command, adequacy failure, and any missing non-obvious contract.
-11. Confirm each finding is a concrete missing, weak, stale, misleading, or
+14. Confirm each finding is a concrete missing, weak, stale, misleading, or
     wrong-location documentation gap with real user, operator, package
     consumer, or maintainer risk. Documentation length, heading count, lint
     shape, or comment presence is not sufficient evidence of adequacy.
-12. Dismiss candidates already covered by the correct authoritative surface,
+15. Dismiss candidates already covered by the correct authoritative surface,
     candidates below the finding threshold, and candidates that belong to code,
     security, test, or reliability workflows. When dismissing, record why the
     existing surface owns the audience and action at risk.
-13. If no confirmed gaps remain, report that result and do not create
-    `ISSUES.md`.
-14. Implement confirmed doc gaps with the smallest clear documentation changes.
-15. If a confirmed gap cannot be fixed correctly in this pass, write or update
+16. If no confirmed gaps remain, report that result with the coverage state, do
+    not create `ISSUES.md`, and skip edit and validation steps.
+17. Implement confirmed doc gaps with the smallest clear documentation changes.
+18. If a confirmed gap cannot be fixed correctly in this pass, write or update
     the scoped `ISSUES.md` with `DOC-<number>` entries for unresolved gaps.
-16. If an existing doc-gap ledger is fully resolved, delete it.
-17. Validate the documentation change with commands appropriate to the changed
+19. If an existing doc-gap ledger is fully resolved, delete it.
+20. Validate the documentation change with commands appropriate to the changed
     files.
-18. Present fixed gaps, dismissed or out-of-scope candidates when relevant,
-    unresolved ledger entries if any, and validation results.
+21. Present fixed gaps, dismissed or out-of-scope candidates when relevant,
+    coverage state for broad scopes, unresolved ledger entries if any, runnable
+    follow-up scopes for deferred slices, and validation results.
 
 ## Audit-Only Mode Plan
 
@@ -84,12 +102,16 @@ repository root and keep `bin/` as shared guidance.
 4. Identify existing documentation locations, examples, command help, package
    documentation, comments, docstrings, `$doc-standards`, and
    language-specific documentation standards for the requested scope.
-5. Build and launch the same documentation review delegation plan as one-pass
-   mode.
-6. Deduplicate, route, and confirm candidates against code, docs, examples,
+5. Build and launch the same recursive, bounded-slice documentation review
+   delegation plan as one-pass mode.
+6. Update coverage state for every planned slice before judging the requested
+   scope.
+7. Deduplicate, route, and confirm candidates against code, docs, examples,
    command help, package docs, and public interfaces.
-7. If no confirmed gaps remain, report that result and do not create
-   `ISSUES.md`.
-8. If confirmed gaps remain, write the scoped `ISSUES.md` with `DOC-<number>`
+8. If no confirmed gaps remain, report that result with the coverage state, do
+   not create `ISSUES.md`, and stop.
+9. If confirmed gaps remain, write the scoped `ISSUES.md` with `DOC-<number>`
    IDs.
-9. Present the scoped audit ledger and stop before making fixes.
+10. Present the scoped audit ledger, coverage state for broad scopes, and
+    runnable follow-up scopes for deferred slices, then stop before making
+    fixes.
