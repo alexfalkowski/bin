@@ -1,4 +1,0 @@
-interface:
-  display_name: "Productivity Summary"
-  short_description: "Summarize repo delivery and health"
-  default_prompt: "Use $productivity-summary to produce daily or weekly delivery, CI quality, release/deploy, and service-reliability summaries for the requested repository and period, with explicit comparison windows and missing-source boundaries."
