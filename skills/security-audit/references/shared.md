@@ -97,5 +97,11 @@ unsupported candidates. They align with `../../references/finding-severity.md`.
 - Findings must be ordered by severity, with exploitable risks before hardening items.
 - Each finding should state: risk, trigger condition, impact, and remediation.
 - Do not report generic checklist items as findings unless they apply to the audited code.
+- Do not report findings based only on comments, GoDoc, README text, examples,
+  or other prose contradicting implementation. Prose can be stale; prove the
+  actual code or configuration is insecure or wrong with non-prose evidence
+  such as data/control flow, runtime behavior, scanner output, external security
+  standards, generated contracts, tests, or history. If current behavior is
+  supported and the prose is stale, report a documentation gap instead.
 - If no findings are found, say that clearly and list meaningful gaps, such as scanners not installed or dynamic behavior not exercised.
 - When another skill embeds the audit, keep the same factual content and severity meaning but use the caller's required output sections.

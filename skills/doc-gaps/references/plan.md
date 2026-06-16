@@ -68,27 +68,30 @@ repository root and keep `bin/` as shared guidance.
 12. Deduplicate candidates and directly re-check conflicting or overlapping
     conclusions against code, docs, examples, command help, package docs, and
     public interfaces.
-13. Route each candidate through `$doc-standards`' adequacy gate and identify
+13. When prose contradicts implementation, require non-prose evidence before
+    treating code as wrong or routing the candidate to code, security,
+    reliability, or test workflows; otherwise classify stale prose as a doc gap.
+14. Route each candidate through `$doc-standards`' adequacy gate and identify
     the public surface, intended audience, user action or maintenance decision
     at risk, current documentation surface, target surface, minimum successful
     example or command, adequacy failure, and any missing non-obvious contract.
-14. Confirm each finding is a concrete missing, weak, stale, misleading, or
+15. Confirm each finding is a concrete missing, weak, stale, misleading, or
     wrong-location documentation gap with real user, operator, package
     consumer, or maintainer risk. Documentation length, heading count, lint
     shape, or comment presence is not sufficient evidence of adequacy.
-15. Dismiss candidates already covered by the correct authoritative surface,
+16. Dismiss candidates already covered by the correct authoritative surface,
     candidates below the finding threshold, and candidates that belong to code,
     security, test, or reliability workflows. When dismissing, record why the
     existing surface owns the audience and action at risk.
-16. If no confirmed gaps remain, report that result with the coverage state, do
+17. If no confirmed gaps remain, report that result with the coverage state, do
     not create `ISSUES.md`, and skip edit and validation steps.
-17. Implement confirmed doc gaps with the smallest clear documentation changes.
-18. If a confirmed gap cannot be fixed correctly in this pass, write or update
+18. Implement confirmed doc gaps with the smallest clear documentation changes.
+19. If a confirmed gap cannot be fixed correctly in this pass, write or update
     the scoped `ISSUES.md` with `DOC-<number>` entries for unresolved gaps.
-19. If an existing doc-gap ledger is fully resolved, delete it.
-20. Validate the documentation change with commands appropriate to the changed
+20. If an existing doc-gap ledger is fully resolved, delete it.
+21. Validate the documentation change with commands appropriate to the changed
     files.
-21. Present fixed gaps, dismissed or out-of-scope candidates when relevant,
+22. Present fixed gaps, dismissed or out-of-scope candidates when relevant,
     coverage state for broad scopes, unresolved ledger entries if any, runnable
     follow-up scopes for deferred slices, and validation results.
 
@@ -107,7 +110,9 @@ repository root and keep `bin/` as shared guidance.
 6. Update coverage state for every planned slice before judging the requested
    scope.
 7. Deduplicate, route, and confirm candidates against code, docs, examples,
-   command help, package docs, and public interfaces.
+   command help, package docs, and public interfaces. When prose contradicts
+   implementation, require non-prose evidence before treating code as wrong;
+   otherwise classify stale prose as a doc gap.
 8. If no confirmed gaps remain, report that result with the coverage state, do
    not create `ISSUES.md`, and stop.
 9. If confirmed gaps remain, write the scoped `ISSUES.md` with `DOC-<number>`

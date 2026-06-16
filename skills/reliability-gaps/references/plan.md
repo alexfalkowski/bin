@@ -69,19 +69,22 @@ plan from the consuming repository root and keep `bin/` as shared guidance.
     scope.
 12. Deduplicate candidates and directly re-check conflicting or overlapping
     conclusions against code, config, tests, docs, and CI.
-13. Confirm each gap names a current reliability promise or operational
+13. For candidates based on prose contradicting implementation, prove with
+    non-prose evidence that the implementation or repository-owned reliability
+    control is wrong; otherwise classify the mismatch as a documentation gap.
+14. Confirm each gap names a current reliability promise or operational
     expectation, trigger, failure mode, missing or weak control, and user or
     operator impact.
-14. Reject generic maturity advice, future-scale assumptions, private
+15. Reject generic maturity advice, future-scale assumptions, private
     preferences, and findings that belong in code, security, test, or doc
     ledgers.
-15. If no confirmed gaps remain, report that result with the coverage state, do
+16. If no confirmed gaps remain, report that result with the coverage state, do
     not create `ISSUES.md`, and stop.
-16. If confirmed gaps remain, write the scoped `ISSUES.md` with `REL-<number>`
+17. If confirmed gaps remain, write the scoped `ISSUES.md` with `REL-<number>`
     IDs.
-17. Present the scoped ledger, proposed reliability-fix plan, coverage state for
+18. Present the scoped ledger, proposed reliability-fix plan, coverage state for
     broad scopes, and runnable follow-up scopes for deferred slices.
-18. Stop before making fixes.
+19. Stop before making fixes.
 
 ## Implement Mode Plan
 
@@ -91,24 +94,28 @@ plan from the consuming repository root and keep `bin/` as shared guidance.
    commands, operational docs, release/config surfaces, and `./bin` wiring.
 4. Select the next finding by ID unless the human named a specific finding.
 5. Re-check the finding against current code, config, tests, docs, and CI.
-6. Present the finding evidence, affected reliability promise or operational
+6. If the finding depends on prose contradicting implementation, prove the
+   implementation or reliability control is wrong with non-prose evidence
+   before proposing a reliability change; otherwise propose reclassification as
+   a documentation gap.
+7. Present the finding evidence, affected reliability promise or operational
    expectation, proposed solution, tradeoffs, and intended validation.
-7. Stop until the human explicitly agrees to that finding's solution.
-8. After agreement, state the local code/config/docs pattern, dominant relevant
+8. Stop until the human explicitly agrees to that finding's solution.
+9. After agreement, state the local code/config/docs pattern, dominant relevant
    test harness, planned validation, and any needed deviation.
-9. If a deviation is needed, stop and ask before editing.
-10. For behavior-changing fixes, state the reliability execution checklist:
+10. If a deviation is needed, stop and ask before editing.
+11. For behavior-changing fixes, state the reliability execution checklist:
     TDD decision, first test/scenario, expected red, intended green change,
     refactor checkpoint, and validation.
-11. Implement only the agreed reliability gap with the smallest clear change.
-12. Use `$reliability-standards`, `$change-safety`, `$testing-standards`,
+12. Implement only the agreed reliability gap with the smallest clear change.
+13. Use `$reliability-standards`, `$change-safety`, `$testing-standards`,
     `$change-validation`, and `$security-audit` as required by the touched
     surface.
-13. Validate the reliability change through repository Make targets or
+14. Validate the reliability change through repository Make targets or
     documented entrypoints.
-14. Report `Red`, `Green`, `Refactor`, and `Validation`, then ask the human to
+15. Report `Red`, `Green`, `Refactor`, and `Validation`, then ask the human to
     verify with `REL-<number> is done`.
-15. Stop until that confirmation arrives.
-16. After confirmation, remove or revise the finding in scoped `ISSUES.md`.
-17. Continue with the next finding, or delete scoped `ISSUES.md` after all gaps
+16. Stop until that confirmation arrives.
+17. After confirmation, remove or revise the finding in scoped `ISSUES.md`.
+18. Continue with the next finding, or delete scoped `ISSUES.md` after all gaps
     are confirmed resolved.
