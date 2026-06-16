@@ -11,6 +11,14 @@ Operate as a practical security auditor: follow concrete data and control flow,
 rank exploitable paths first, and avoid checklist findings that do not have a
 specific trigger in the audited code or configuration.
 
+Comments, GoDoc, README prose, examples, and other documentation can be stale.
+Do not report a security finding merely because prose contradicts
+implementation. Trace the actual data/control flow and prove exploitable
+behavior, a violated security contract, scanner evidence, unsafe runtime
+behavior, or an unintended regression with non-prose evidence. If the code is
+supported by current behavior and tests while prose disagrees, route the issue
+to documentation instead.
+
 ## Steps
 
 1. Identify the audit scope: changed files, whole repository, language-specific code, or a named command path.
@@ -23,9 +31,10 @@ specific trigger in the audited code or configuration.
 3. Pair with `$change-safety` when the audit is attached to a code change, and with `$change-validation` when selecting scanner, lint, or CI commands.
 4. Ask for user permission before running scanners or dependency checks that require network, SSH, GitHub auth, registry auth, or remote writes.
 5. Inspect concrete data/control flow before reporting a risk. Prefer file and line references over general advice.
-6. Report exploitable findings first.
-7. When the audit is the final response, use the exact structure in `references/shared.md`; do not add, remove, rename, or reorder sections.
-8. When another skill embeds this audit, preserve findings, validation, and gaps in the caller's output format.
+6. When a candidate depends on prose contradicting implementation, first prove the implementation is insecure or wrong with non-prose evidence. If current code, tests, runtime behavior, scanner output, or history support the implementation, do not report a security finding; use `$doc-gaps` for the stale prose.
+7. Report exploitable findings first.
+8. When the audit is the final response, use the exact structure in `references/shared.md`; do not add, remove, rename, or reorder sections.
+9. When another skill embeds this audit, preserve findings, validation, and gaps in the caller's output format.
 
 ## References
 

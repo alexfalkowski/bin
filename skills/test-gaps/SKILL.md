@@ -26,6 +26,14 @@ Operate as a coverage triager: protect repository-owned behavior through the
 narrowest credible established test layer, and reject gaps that only test
 dependency semantics, private implementation detail, or coverage vanity.
 
+Use code, executable behavior, existing tests, schemas, generated contracts,
+runtime evidence, external standards, and history to establish expected
+behavior. Comments, GoDoc, README prose, examples, and other documentation can
+be stale. Do not record a test gap merely to make tests enforce stale prose; if
+prose and implementation disagree, first prove which behavior is wrong with
+non-prose evidence, then route code bugs to `$code-issues` and stale prose to
+`$doc-gaps`.
+
 ## Find Mode
 
 Follow `references/plan.md#find-mode-plan`.
@@ -50,6 +58,7 @@ These rules remain mandatory:
 - Require each agent to return findings in the same shape as the `ISSUES.md` format, without final IDs unless useful locally. Each finding must name the repository-owned behavior being protected; reject findings that only test dependency semantics, aliases, or pass-through wrappers.
 - Use `../references/finding-severity.md` to discard low-confidence candidates before assigning severity.
 - Confirm each candidate gap against the code and existing tests before recording it. Gaps must be concrete missing, weak, misleading, flaky, or wrong-layer coverage with credible risk to changed behavior, public contracts, compatibility, release-sensitive workflows, or documented command/API behavior.
+- For candidates based on documentation or comments contradicting code, require non-prose evidence for the expected behavior before recording a test gap. If current code and tests support the implementation, treat the prose as a doc gap instead of adding tests that would encode stale documentation.
 - For each candidate, explicitly identify the nearby existing test shape and why extending existing tests, fixtures, tables, helpers, or assertions does not already cover the behavior. Do not record a gap when the proposed fix would duplicate coverage already provided by that local shape.
 - Do not record gaps whose only meaningful test would assert pass-through behavior to an upstream library, standard library, or framework. This includes aliases, type aliases, thin wrappers, direct option forwarding, direct global setter/getter calls, dependency injection container behavior, validator tag behavior, encoder/parser behavior, and constructors where the repository adds no branching, validation, transformation, error handling, lifecycle behavior, compatibility policy, or composition contract of its own.
 - Only record a gap around third-party integration when the untested behavior is repository-owned. Examples include local validation/normalization before calling the dependency, local input/output mapping, local error wrapping/classification/recovery, lifecycle ordering or cleanup owned by the repository, documented compatibility behavior promised across dependency versions, or end-to-end behavior through a supported public repo entrypoint where multiple repo-owned pieces are composed.
@@ -100,6 +109,7 @@ These rules remain mandatory:
 - If scoped `ISSUES.md` does not exist, stop and ask whether to run Find mode first for that scope.
 - Work through findings sequentially by ID unless the human explicitly names a different finding.
 - Before proposing a fix for each finding, re-check the current code and nearby tests. Treat the ledger as something that can go stale: dismiss or revise findings that are already covered, would duplicate the local test shape, test only underlying libraries/frameworks, or require validation modes the repository does not run.
+- When re-checking a finding whose evidence depends on documentation or comments contradicting implementation, prove the expected behavior with non-prose evidence before proposing tests. If non-prose evidence supports the implementation, explain that the ledger item is invalid as a test gap and propose reclassifying or fixing documentation instead.
 - Stop after proposing the solution. Do not edit code, update `ISSUES.md`, or start validation until the human explicitly agrees to that finding's solution.
 - Ask questions when behavior, compatibility, test layer, fixture strategy, validation, or user intent is ambiguous. Treat silence or a broad "implement test gaps" request as permission to start the proposal workflow, not as permission to code.
 - After the human agrees and before editing, state the selected local test pattern, dominant relevant test harness, planned validation command, and any deviation from `AGENTS.md` or selected skills. If a deviation is needed, stop and ask before editing.

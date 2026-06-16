@@ -29,6 +29,13 @@ command behavior show how a repository-owned reliability control can fail.
 Reject speculative scalability advice, generic SRE checklists, environment
 preferences, and findings that depend on undocumented future requirements.
 
+Comments, GoDoc, README prose, examples, and operational docs can reveal leads,
+but they are not source of truth when they contradict implementation. Before
+recording a reliability gap from such a mismatch, prove with non-prose evidence
+that the repository-owned reliability behavior or control is wrong. If code,
+tests, runtime behavior, CI, generated contracts, or history support the
+implementation, route the mismatch to `$doc-gaps` instead.
+
 ## Find Mode
 
 Follow `references/plan.md#find-mode-plan`.
@@ -53,6 +60,7 @@ These rules remain mandatory:
 - Require each agent to return findings in the same shape as the `ISSUES.md` format, without final IDs unless useful locally.
 - Use `../references/finding-severity.md` to discard low-confidence candidates before assigning severity.
 - Confirm each candidate gap against current evidence before recording it. Try to disprove the candidate by tracing the current code path, reading the documented workflow, checking the relevant config, inspecting existing tests, or running an allowed local command. A gap must name the affected reliability promise or operational expectation, the trigger condition, the failure mode, the missing or weak control, and the likely user or operator impact.
+- For candidates based on documentation or comments contradicting code, require non-prose proof that the implementation or repository-owned reliability control is wrong before recording a reliability gap. If current code, tests, runtime behavior, CI, or history support the implementation, treat the prose as a doc gap.
 - Record reliability gaps only when they involve repository-owned behavior or documented/implicit operational contracts, such as:
    - missing or weak SLO, SLI, alertability, dashboard, runbook, or operator diagnostic coverage for behavior the repository claims or owns.
    - unbounded or unsafe timeouts, retries, backoff, jitter, concurrency, queues, subprocesses, files, disk, memory, network, or worker resources.
@@ -111,6 +119,7 @@ These rules remain mandatory:
 - If scoped `ISSUES.md` does not exist, stop and ask whether to run Find mode first for that scope.
 - Work through findings sequentially by ID unless the human explicitly names a different finding.
 - Before proposing a fix for each finding, re-check the current code, config, tests, docs, and CI. Treat the ledger as something that can go stale: dismiss or revise findings that are already addressed, no longer have a concrete failure mode, duplicate another issue, or belong in `$code-issues`, `$security-audit`, `$test-gaps`, or `$doc-gaps`.
+- When re-checking a finding whose evidence depends on documentation or comments contradicting implementation, prove the implementation or reliability control is wrong with non-prose evidence before proposing a reliability change. If non-prose evidence supports the implementation, explain that the ledger item is invalid as a reliability gap and propose reclassifying or fixing documentation instead.
 - Stop after proposing the solution. Do not edit files, update `ISSUES.md`, or start validation until the human explicitly agrees to that finding's solution.
 - Ask questions when SLOs, expected failure behavior, operator workflow, compatibility, rollout, validation, or user intent is ambiguous. Treat silence or a broad "implement reliability gaps" request as permission to start the proposal workflow, not as permission to edit.
 - After the human agrees and before editing, state the selected local code/config/docs pattern, dominant relevant test harness, planned validation command, and any deviation from `AGENTS.md` or selected skills. If a deviation is needed, stop and ask before editing.

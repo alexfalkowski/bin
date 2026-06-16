@@ -11,6 +11,7 @@ Use this reference when the user asks for a review.
 - Prefer concrete findings over broad summaries.
 - Ground each finding in the inspected code and describe the consequence, not just the preference.
 - Avoid broad "consider checking" comments. Each finding needs a concrete changed location, behavior at risk, evidence, and a clear place to start fixing.
+- Do not report code findings based only on comments, GoDoc, README text, examples, or other prose contradicting implementation. Prose can be stale; cite non-prose evidence that proves the implementation is wrong, or report the mismatch as a documentation issue instead.
 
 ## Severity
 

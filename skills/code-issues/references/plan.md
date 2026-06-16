@@ -65,7 +65,10 @@ repository root and keep `bin/` as shared guidance.
 11. Deduplicate candidates and directly re-check conflicting or overlapping
     conclusions.
 12. Confirm each finding is a concrete code issue, security issue,
-   compatibility break, or public contract violation.
+    compatibility break, or public contract violation. If the evidence is a
+    documentation/comment mismatch, prove the implementation is wrong with
+    non-prose evidence before treating it as a code issue; otherwise classify it
+    as a documentation gap.
 13. If no confirmed issues remain, report that result with the coverage state,
     do not create `ISSUES.md`, and stop.
 14. If confirmed issues remain, write the scoped `ISSUES.md` with
@@ -82,17 +85,21 @@ repository root and keep `bin/` as shared guidance.
    wiring.
 4. Select the next issue by ID unless the human named a specific issue.
 5. Re-check the issue evidence against current code and tests.
-6. Present the issue evidence, proposed solution, compatibility or behavior
+6. If the issue depends on prose contradicting implementation, prove the code is
+   wrong with non-prose evidence before proposing a code change. If code and
+   tests support the implementation, stop and propose reclassifying or fixing
+   the documentation instead.
+7. Present the issue evidence, proposed solution, compatibility or behavior
    tradeoffs, and intended validation.
-7. Stop until the human explicitly agrees to that issue's solution.
-8. After agreement, state the local code pattern, dominant relevant test
+8. Stop until the human explicitly agrees to that issue's solution.
+9. After agreement, state the local code pattern, dominant relevant test
    harness, planned validation, and any needed deviation.
-9. If a deviation is needed, stop and ask before editing.
-10. Implement only the agreed issue with the smallest safe change.
-11. Use `$testing-standards` for regression coverage decisions.
-12. Validate the fix with commands appropriate to the changed files.
-13. Report the result and ask the human to verify with `ISSUE-<number> is done`.
-14. Stop until that confirmation arrives.
-15. After confirmation, remove or revise the issue in scoped `ISSUES.md`.
-16. Continue with the next issue, or delete scoped `ISSUES.md` after all issues
+10. If a deviation is needed, stop and ask before editing.
+11. Implement only the agreed issue with the smallest safe change.
+12. Use `$testing-standards` for regression coverage decisions.
+13. Validate the fix with commands appropriate to the changed files.
+14. Report the result and ask the human to verify with `ISSUE-<number> is done`.
+15. Stop until that confirmation arrives.
+16. After confirmation, remove or revise the issue in scoped `ISSUES.md`.
+17. Continue with the next issue, or delete scoped `ISSUES.md` after all issues
     are confirmed resolved.

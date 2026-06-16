@@ -14,6 +14,15 @@ cannot be explained from the inspected code, tests, docs, or command behavior.
 Do not classify uncertain or low-confidence candidates as `Low`; `Low` still
 means a real finding with limited impact.
 
+When a candidate depends on comments, GoDoc, README text, examples, or other
+prose contradicting implementation, do not treat the prose as source of truth.
+First prove the implementation is wrong with non-prose evidence such as
+runtime behavior, executable tests, schemas, generated or wire contracts,
+external standards, scanner output, or history showing an unintended code
+regression. If current code and tests support the implementation, classify the
+candidate as a documentation gap or discard it instead of assigning severity to
+a code, test, reliability, or security finding.
+
 ## Severity
 
 - `Critical`: Near-certain severe production breakage, data loss or corruption,

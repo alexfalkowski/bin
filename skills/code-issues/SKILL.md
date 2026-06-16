@@ -26,6 +26,14 @@ Operate as a strict issue triager and ledger owner: separate confirmed code
 defects from test gaps, doc gaps, polish, and speculation; keep the scoped
 `ISSUES.md` actionable, deduplicated, and tied to user-visible or contract risk.
 
+Code is the default source of behavioral truth. Comments, GoDoc, README prose,
+examples, and other documentation can be stale. Do not record or implement a
+code issue merely because prose and implementation disagree. First prove the
+implementation is wrong using non-prose evidence such as executable behavior,
+tests, schemas, wire/API contracts, external standards, runtime failures, or
+history showing an unintended code regression. If implementation and tests agree
+while prose disagrees, treat it as a documentation gap and update the docs.
+
 ## Find Mode
 
 Follow `references/plan.md#find-mode-plan`.
@@ -50,6 +58,7 @@ These rules remain mandatory:
 - Require each agent to return findings in the same shape as the `ISSUES.md` format, without final IDs unless useful locally.
 - Use `../references/finding-severity.md` to discard low-confidence candidates before assigning severity.
 - Confirm each candidate finding against the code before recording it. Findings must be concrete bugs, security issues, compatibility breaks, or violated public contracts with user-visible impact.
+- For candidates based on documentation or comments contradicting code, require non-prose proof that the implementation is wrong before recording a code issue. Existing tests, helper names, runtime behavior, or commit history that support the implementation mean the candidate is a doc gap, not a code issue.
 - Do not record standalone missing, weak, flaky, misleading, or wrong-layer tests as code issues unless they are tied to a confirmed bug, security issue, compatibility break, or violated public contract. Use `$test-gaps` for standalone missing or weak test coverage passes.
 - Do not record standalone missing, weak, stale, misleading, or wrong-location documentation, README, example, comment, or docstring gaps as code issues unless they reveal a confirmed bug, security issue, compatibility break, or violated public contract. Use `$doc-gaps` for standalone documentation review passes.
 - Do not report optional regression tests, unused convenience aliases, API symmetry, or documentation polish as findings by themselves. List them only as testing gaps, doc gaps, or optional follow-up notes when relevant.
@@ -95,6 +104,7 @@ These rules remain mandatory:
 - Work through code issues sequentially by ID unless the human explicitly names a different issue.
 - Stop after proposing the solution. Do not edit code, update `ISSUES.md`, or start validation until the human explicitly agrees to that issue's solution.
 - Ask questions when behavior, compatibility, security, validation, or user intent is ambiguous. Treat silence or a broad "implement code issues" request as permission to start the proposal workflow, not as permission to code.
+- When re-checking an issue whose evidence depends on documentation or comments contradicting implementation, prove the code is wrong before proposing a code change. If non-prose evidence supports the implementation, explain that the ledger item is invalid as a code issue and propose reclassifying or fixing the documentation instead.
 - After the human agrees and before editing, state the selected local code pattern, dominant relevant test harness, planned validation command, and any deviation from `AGENTS.md` or selected skills. If a deviation is needed, stop and ask before editing.
 - Implement only the agreed issue with the smallest safe change.
 - Use `$testing-standards` when deciding whether to add or update regression tests for the fix, and prefer its test-first or scenario-first loop when a behavior-changing fix has a credible test or BDD layer.

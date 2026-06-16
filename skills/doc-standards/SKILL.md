@@ -15,6 +15,13 @@ long, has many headings, follows an established local shape, or satisfies a
 linter. Pass documentation only after verifying that it is accurate, adequate,
 and in the authoritative location for the audience and action at risk.
 
+When documentation contradicts implementation, do not assume documentation is
+the source of truth. Treat code, tests, schemas, generated contracts, runtime
+behavior, and external standards as the evidence for current behavior. Route the
+mismatch to `$code-issues` only when non-prose evidence proves the
+implementation is wrong; otherwise fix the documentation to describe the
+behavior the repository actually implements.
+
 ## Steps
 
 1. Identify the documentation surface in scope: README files, docs, examples,
@@ -25,23 +32,26 @@ and in the authoritative location for the audience and action at risk.
    users need before they can use or maintain the surface safely.
 3. Compare documentation against the changed behavior, requested scope, tests,
    examples, command output, configuration schema, and public interfaces.
-4. Route each concern to the correct documentation owner before deciding whether
+4. If docs and implementation disagree, verify whether non-prose evidence proves
+   the code is wrong. If not, treat the prose as stale and fix the authoritative
+   documentation owner.
+5. Route each concern to the correct documentation owner before deciding whether
    existing documentation is adequate.
-5. For `$code-review` and `$review-pr`, inspect changed documentation and nearby
+6. For `$code-review` and `$review-pr`, inspect changed documentation and nearby
    documentation directly affected by the current change. Do not perform a
    package-wide documentation audit unless the user explicitly asks for
    `$doc-gaps` or a broader docs pass.
-6. For `$doc-gaps`, use these standards as the quality bar for fixing or
+7. For `$doc-gaps`, use these standards as the quality bar for fixing or
    recording confirmed missing, weak, stale, misleading, or wrong-location
    documentation.
-7. Pair with relevant language standards for language-specific public API
+8. Pair with relevant language standards for language-specific public API
    comments and docstrings. Pair with `$naming-standards` when terminology,
    command/API names, examples, or public vocabulary are unclear or
    inconsistent.
-8. Pair with `$change-safety` when documentation changes public contracts,
+9. Pair with `$change-safety` when documentation changes public contracts,
    compatibility expectations, migrations, security guidance, operational
    behavior, or documented support boundaries.
-9. Pair with `$change-validation` when selecting validation for documentation
+10. Pair with `$change-validation` when selecting validation for documentation
    changes, such as docs lint, generated-doc checks, example tests, command
    snapshots, or the repository's normal review target.
 
@@ -98,6 +108,9 @@ Route documentation to the surface that owns the reader's next action:
 - **Correctness**: Documentation must describe the current repository-owned
   behavior, command syntax, configuration shape, examples, defaults, limits,
   errors, compatibility expectations, and operational constraints accurately.
+  If documentation conflicts with code and tests, prove the implementation is
+  wrong with non-prose evidence before changing code; otherwise update the
+  documentation.
 - **Completeness**: Public entrypoints, exported APIs, commands, configuration
   keys, setup paths, migrations, and examples need enough documentation for the
   intended user to use or maintain them without reading private implementation
@@ -348,8 +361,8 @@ discoverable owner:
   configuration examples, generated files, or extension points live.
 - Do not repeat full config schemas, generated API references, or package
   documentation when generated docs, sample config, `.proto` files, command
-  help, or package docs are the source of truth. Include one representative
-  example and link to the owner.
+  help, or package docs are the authoritative documentation owner. Include one
+  representative example and link to the owner.
 - Do not add "development workflow" sections that only name standard lint,
   test, format, security, or benchmark targets. Use the project workflow docs
   or `make help` for command discovery unless a command sequence is required

@@ -66,15 +66,18 @@ repository root and keep `bin/` as shared guidance.
     scope.
 12. Deduplicate candidates and directly re-check conflicting or overlapping
     conclusions against code and tests.
-13. Confirm each gap protects repository-owned behavior and is not duplicate,
+13. For candidates based on prose contradicting implementation, prove the
+    expected behavior with non-prose evidence before treating missing coverage
+    as a test gap; otherwise classify the mismatch as a documentation gap.
+14. Confirm each gap protects repository-owned behavior and is not duplicate,
     private-only, dependency-only, optional, or better handled by another skill.
-14. If no confirmed gaps remain, report that result with the coverage state, do
+15. If no confirmed gaps remain, report that result with the coverage state, do
     not create `ISSUES.md`, and stop.
-15. If confirmed gaps remain, write the scoped `ISSUES.md` with `TEST-<number>`
+16. If confirmed gaps remain, write the scoped `ISSUES.md` with `TEST-<number>`
     IDs.
-16. Present the scoped ledger, proposed test-fix plan, coverage state for broad
+17. Present the scoped ledger, proposed test-fix plan, coverage state for broad
     scopes, and runnable follow-up scopes for deferred slices.
-17. Stop before making fixes.
+18. Stop before making fixes.
 
 ## Implement Mode Plan
 
@@ -84,17 +87,20 @@ repository root and keep `bin/` as shared guidance.
    wiring.
 4. Select the next finding by ID unless the human named a specific finding.
 5. Re-check the finding against current code, tests, fixtures, and harnesses.
-6. Present the finding evidence, proposed test solution, repository-owned
+6. If the finding depends on prose contradicting implementation, prove the
+   expected behavior with non-prose evidence before proposing tests; otherwise
+   propose reclassification as a documentation gap.
+7. Present the finding evidence, proposed test solution, repository-owned
    behavior, existing coverage gap, tradeoffs, and intended validation.
-7. Stop until the human explicitly agrees to that finding's solution.
-8. After agreement, state the local test pattern, dominant relevant test
+8. Stop until the human explicitly agrees to that finding's solution.
+9. After agreement, state the local test pattern, dominant relevant test
    harness, planned validation, and any needed deviation.
-9. If a deviation is needed, stop and ask before editing.
-10. Implement only the agreed test gap with the smallest clear test change.
-11. Use `$testing-standards` and the relevant language standard for test design.
-12. Validate the test change with commands appropriate to the changed tests.
-13. Report the result and ask the human to verify with `TEST-<number> is done`.
-14. Stop until that confirmation arrives.
-15. After confirmation, remove or revise the finding in scoped `ISSUES.md`.
-16. Continue with the next finding, or delete scoped `ISSUES.md` after all gaps
+10. If a deviation is needed, stop and ask before editing.
+11. Implement only the agreed test gap with the smallest clear test change.
+12. Use `$testing-standards` and the relevant language standard for test design.
+13. Validate the test change with commands appropriate to the changed tests.
+14. Report the result and ask the human to verify with `TEST-<number> is done`.
+15. Stop until that confirmation arrives.
+16. After confirmation, remove or revise the finding in scoped `ISSUES.md`.
+17. Continue with the next finding, or delete scoped `ISSUES.md` after all gaps
     are confirmed resolved.
