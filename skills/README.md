@@ -44,7 +44,7 @@ already grants permission.
   aggregate `project-workflow` context and verified SRE, NALSD, operability,
   overload, observability, release-safety, recovery, or data-integrity gaps into
   `ISSUES.md`, then implement agreed reliability fixes one gap at a time.
-- `productivity-summary` orchestrates daily or weekly repository health
+- `repo-health` orchestrates daily or weekly repository health
   reporting across delivery flow, CI quality, release/deploy activity, and
   service reliability. It should use `project-workflow` for repository
   discovery and source boundaries, and keep missing GitHub, CircleCI,

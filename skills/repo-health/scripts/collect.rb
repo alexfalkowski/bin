@@ -11,9 +11,9 @@ require 'time'
 require 'uri'
 require 'yaml'
 
-# Collects read-only repository productivity evidence from local and remote
+# Collects read-only repository health evidence from local and remote
 # sources, then prints a JSON document for the skill to summarize.
-class ProductivityCollector
+class RepoHealthCollector
   HTTP_TIMEOUT_SECONDS = 15
 
   def initialize(options)
@@ -790,6 +790,6 @@ OptionParser.new do |parser|
   parser.on('--include-jobs', 'Collect CircleCI job-level data for library repos.') { options[:include_jobs] = true }
 end.parse!
 
-puts ProductivityCollector.new(options).call
+puts RepoHealthCollector.new(options).call
 
 # rubocop:enable Metrics/ClassLength, Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity

@@ -97,14 +97,14 @@ Interpretation:
 
 ## Anti-Metrics
 
-Do not use these as productivity claims:
+Do not use these as individual performance claims:
 
 - lines added or deleted;
 - number of comments by person;
 - commit count by person;
 - PR size as a standalone good/bad score;
 - individual rankings;
-- a single productivity score.
+- a single repository health score.
 
 These may be mentioned only as context when the user explicitly asks and the
 limitations are stated.

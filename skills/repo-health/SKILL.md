@@ -1,9 +1,9 @@
 ---
-name: productivity-summary
-description: Use when the user asks for a productivity summary, delivery health report, weekly or daily engineering metrics, repo health comparison, service health summary, library maintenance summary, or period-over-period view for a specific GitHub repository. Produce daily or weekly summaries across delivery flow, CI quality, release/deploy activity, and service reliability using local git, GitHub, CircleCI, Kubernetes/DigitalOcean, and UptimeRobot evidence.
+name: repo-health
+description: Use when the user asks for repo health, repository health report, delivery health report, weekly or daily engineering metrics, repo health comparison, service health summary, library maintenance summary, or period-over-period view for a specific GitHub repository. Produce daily or weekly summaries across delivery flow, CI quality, release/deploy activity, and service reliability using local git, GitHub, CircleCI, Kubernetes/DigitalOcean, and UptimeRobot evidence.
 ---
 
-# Productivity Summary
+# Repo Health
 
 Use this skill to turn repository activity and operational evidence into a
 concise daily or weekly engineering-health report. Report what changed, whether
@@ -53,7 +53,7 @@ comparison period.
 
 - Do not rank individual developers, infer effort from lines of code, or call a
   person productive/unproductive from activity metrics.
-- Do not collapse delivery, quality, and reliability into a single productivity
+- Do not collapse delivery, quality, and reliability into a single repository
   score.
 - Do not fabricate missing GitHub, CircleCI, Kubernetes, DigitalOcean, or
   UptimeRobot values. State the missing source, credential, command, or mapping.

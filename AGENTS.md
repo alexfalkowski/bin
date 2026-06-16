@@ -93,7 +93,7 @@ skill instead of one broad default:
   observability, release-safety, recovery, and operability guidance.
 - `reliability-gaps`: find confirmed reliability gaps into `ISSUES.md`, then
   implement agreed reliability fixes gap by gap.
-- `productivity-summary`: daily or weekly repository delivery, CI quality,
+- `repo-health`: daily or weekly repository delivery, CI quality,
   release/deploy, and service reliability summaries using GitHub, CircleCI,
   Kubernetes/DigitalOcean, and UptimeRobot evidence.
 - `diagnose-issue`: read-only diagnosis of current branch/PR CI failures,
@@ -148,7 +148,7 @@ Common composition:
   aggregate confirmed `project-workflow` context and SRE, NALSD, operability,
   overload, observability, release-safety, recovery, or data-integrity gaps into
   `ISSUES.md`, then implement agreed reliability fixes gap by gap.
-- `productivity-summary` orchestrates delivery, quality, release/deploy, and
+- `repo-health` orchestrates delivery, quality, release/deploy, and
   service-reliability reporting; pair it with `project-workflow` for repository
   discovery and `change-validation` only when the summary process changes files
   or validation commands need to be selected.
