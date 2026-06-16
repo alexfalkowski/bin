@@ -16,12 +16,18 @@ repository root and keep `bin/` as shared guidance.
 - Treat validation as stale when files change after a command ran.
 - Record durable findings only in the scoped `ISSUES.md` ledger defined by the
   skill.
+- Track broad-scope coverage explicitly as reviewed deeply, skimmed, excluded,
+  and deferred. Deferred entries must name runnable follow-up scopes.
 
 ## Goal State Rules
 
 - Bind the active goal to the selected mode and requested scope.
 - In Find mode, the goal is complete when no confirmed code issues are found and
   reported, or when the scoped `ISSUES.md` ledger is written and presented.
+- For broad scopes, a no-issue result is complete only when the summary states
+  whether all high-risk slices were deeply reviewed. If any relevant slice was
+  skimmed or deferred, completion requires coverage notes and runnable
+  follow-up scopes, not an unqualified all-scope no-issue claim.
 - In Implement mode, the goal is waiting while the human has not approved the
   proposed issue solution, or after validation until the human confirms
   `ISSUE-<number> is done`.
@@ -38,23 +44,35 @@ repository root and keep `bin/` as shared guidance.
 1. Confirm the requested package or folder scope.
 2. Check whether scoped `ISSUES.md` already exists and stop if it does.
 3. Run `$project-workflow` discovery for entrypoints, CI, and `./bin` wiring.
-4. Build the read-only review delegation plan from the requested root and its
-   first-level subfolders.
-5. Ask for required permission before any agent runs non-read-only, network,
+4. Build a recursive scope inventory for the requested package or folder:
+   relevant file count, first-level subfolders, nested packages, dominant
+   languages, tests, public entrypoints, generated/vendor/build/cache
+   exclusions, and security-sensitive surfaces.
+5. Split the inventory into bounded behavior-owned review slices. Use depth
+   only as a discovery aid; do not assign a broad recursive subtree merely
+   because it is a first-level subfolder.
+6. If the scope is too broad for a credible single pass, select the highest-risk
+   slices first and initialize coverage entries for reviewed deeply, skimmed,
+   excluded, and deferred slices. Deferred entries must be exact follow-up
+   scopes such as `path/to/package` or `path/to/package/subpackage`.
+7. Ask for required permission before any agent runs non-read-only, network,
    auth, remote-write, or otherwise approval-gated commands.
-6. Launch the required review agents when available, or perform the local
+8. Launch the required review agents when available, or perform the local
    fallback only when sub-agents are unavailable.
-7. Wait for all review work to finish.
-8. Deduplicate candidates and directly re-check conflicting or overlapping
-   conclusions.
-9. Confirm each finding is a concrete code issue, security issue,
+9. Wait for all review work to finish.
+10. Update coverage state for every planned slice before judging the requested
+    scope.
+11. Deduplicate candidates and directly re-check conflicting or overlapping
+    conclusions.
+12. Confirm each finding is a concrete code issue, security issue,
    compatibility break, or public contract violation.
-10. If no confirmed issues remain, report that result and do not create
-    `ISSUES.md`.
-11. If confirmed issues remain, write the scoped `ISSUES.md` with
+13. If no confirmed issues remain, report that result with the coverage state,
+    do not create `ISSUES.md`, and stop.
+14. If confirmed issues remain, write the scoped `ISSUES.md` with
     `ISSUE-<number>` IDs.
-12. Present the scoped ledger and proposed fix plan.
-13. Stop before making fixes.
+15. Present the scoped ledger, proposed fix plan, coverage state for broad
+    scopes, and runnable follow-up scopes for deferred slices.
+16. Stop before making fixes.
 
 ## Implement Mode Plan
 

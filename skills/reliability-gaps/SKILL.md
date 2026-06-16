@@ -48,6 +48,7 @@ These rules remain mandatory:
 - Do not assign broad recursive subtrees merely because they are first-level subfolders. When a subtree contains many independent nested packages, mixed operational responsibilities, or too many relevant files for a credible single pass, split it into smaller behavior-owned slices before delegation.
 - Prefer slices based on repository-owned reliability and operational risk: public commands/APIs, changed or recently touched areas, retries/timeouts/backpressure, config/CI/release paths, observability/runbook surfaces, documented workflows, and nearby tests. Use depth only as a discovery aid, not as the review boundary.
 - If the requested scope is too broad to review credibly in one pass, review the highest-risk slices first and record explicit coverage: reviewed deeply, skimmed, excluded, and deferred.
+- Do not present a broad requested scope as fully reviewed when any relevant slice was only skimmed or deferred. Name those slices in the final coverage notes and provide runnable follow-up scopes for deferred review.
 - Each assigned agent owns recursive review only within its bounded slice. Each agent must perform a thorough `$reliability-standards` review for that slice, pairing with `$change-safety`, `$security-audit`, `$testing-standards`, and `$change-validation` as the surface requires.
 - Require each agent to return findings in the same shape as the `ISSUES.md` format, without final IDs unless useful locally.
 - Use `../references/finding-severity.md` to discard low-confidence candidates before assigning severity.
