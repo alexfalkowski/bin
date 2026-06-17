@@ -14,6 +14,7 @@ require 'yaml'
 # Performs read-only CI and deployment diagnosis for one repository target.
 class IssueDiagnosisCollector
   HTTP_TIMEOUT_SECONDS = 15
+  FINDING_CONFIDENCE = 'High (>=80%)'
 
   def initialize(options)
     @mode = options.fetch(:mode)
@@ -464,7 +465,13 @@ class IssueDiagnosisCollector
   end
 
   def finding(severity, area, evidence, suggestion)
-    { severity: severity, area: area, evidence: evidence, suggestion: suggestion }
+    {
+      severity: severity,
+      confidence: FINDING_CONFIDENCE,
+      area: area,
+      evidence: evidence,
+      suggestion: suggestion
+    }
   end
 
   def job_number(job)

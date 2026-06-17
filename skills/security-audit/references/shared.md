@@ -57,6 +57,9 @@ Use this reference for any security audit, then load language-specific reference
 
 Use these security-specific examples after filtering out low-confidence or
 unsupported candidates. They align with `../../references/finding-severity.md`.
+Recorded security findings must include `confidence: High (>=80%)`; if the
+audited evidence cannot support that threshold, gather more evidence or discard
+the candidate.
 
 - Critical: near-certain remote code execution, credential exposure, auth bypass, data loss or corruption, or exploitable critical dependency issue with broad severe impact.
 - High: likely exploitable command injection, arbitrary file write/delete, path traversal to sensitive files, sensitive information disclosure, or other serious security issue with narrower impact.
@@ -71,6 +74,7 @@ unsupported candidates. They align with `../../references/finding-severity.md`.
 ## Findings
 
 - severity: Critical
+  confidence: High (>=80%)
   file: `path/to/file:42`
   risk: Untrusted input reaches shell execution.
   trigger: User-controlled CLI arguments are interpolated into a shell command.
@@ -89,9 +93,10 @@ unsupported candidates. They align with `../../references/finding-severity.md`.
 ```
 
 - Use only these severity values for findings: `Critical`, `High`, `Medium`, `Low`. Use `None` only for the required no-findings entry.
+- Use only `High (>=80%)` for finding confidence. Use `n/a` only for the required no-findings entry.
 - Use only these validation results: `passed`, `failed`, `not run`, `no-op`.
 - Use `file: n/a` only for repository-wide dependency, configuration, or validation findings that do not have a precise source line.
-- If there are no findings, write exactly one finding entry with `severity: None`, `file: n/a`, `risk: No findings.`, `trigger: n/a`, `impact: n/a`, and `remediation: n/a`.
+- If there are no findings, write exactly one finding entry with `severity: None`, `confidence: n/a`, `file: n/a`, `risk: No findings.`, `trigger: n/a`, `impact: n/a`, and `remediation: n/a`.
 - If no validation ran, write one `Validation` entry with `command: none`, `result: not run`, and a concise coverage explanation.
 - If there are no gaps, write exactly `- None.`
 - Findings must be ordered by severity, with exploitable risks before hardening items.
@@ -104,4 +109,4 @@ unsupported candidates. They align with `../../references/finding-severity.md`.
   standards, generated contracts, tests, or history. If current behavior is
   supported and the prose is stale, report a documentation gap instead.
 - If no findings are found, say that clearly and list meaningful gaps, such as scanners not installed or dynamic behavior not exercised.
-- When another skill embeds the audit, keep the same factual content and severity meaning but use the caller's required output sections.
+- When another skill embeds the audit, keep the same factual content, confidence, and severity meaning but use the caller's required output sections.

@@ -21,7 +21,10 @@ Use this reference when the user asks for a review.
 ## Severity
 
 - Use `../../references/finding-severity.md` to filter low-confidence
-  candidates before assigning severity.
+  candidates before assigning severity and confidence.
+- Every finding must include `Confidence: High (>=80%)`. If confidence cannot
+  reach that threshold after reasonable verification, do not report the
+  candidate as a finding.
 - For code-review output, write severity values in lowercase:
   `critical`, `high`, `medium`, or `low`.
 - Do not inflate severity for style preferences, speculative risks, or missing
@@ -37,6 +40,7 @@ Use this reference when the user asks for a review.
 ## Findings
 
 - [severity] path/to/file:line - Finding title
+  Confidence: High (>=80%)
   Impact: Describe the concrete bug, regression, or risk.
   Evidence: Point to the inspected code or behavior.
   Recommendation: Describe the smallest credible fix.
@@ -61,7 +65,7 @@ Brief one- or two-sentence summary.
 - Keep the summary brief and secondary to the findings.
 - When useful, state the condition or scenario that triggers the problem so the risk is easy to verify.
 - If a section has no entries, write exactly `- None.`
-- When another skill embeds the review, keep the same finding severity, evidence, impact, recommendation, open-question, and testing-gap facts but use the caller's required output sections.
+- When another skill embeds the review, keep the same finding severity, confidence, evidence, impact, recommendation, open-question, and testing-gap facts but use the caller's required output sections.
 
 ## If No Findings
 

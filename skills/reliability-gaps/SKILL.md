@@ -58,7 +58,7 @@ These rules remain mandatory:
 - Do not present a broad requested scope as fully reviewed when any relevant slice was only skimmed or deferred. Name those slices in the final coverage notes and provide runnable follow-up scopes for deferred review.
 - Each assigned agent owns recursive review only within its bounded slice. Each agent must perform a thorough `$reliability-standards` review for that slice, pairing with `$change-safety`, `$security-audit`, `$testing-standards`, and `$change-validation` as the surface requires.
 - Require each agent to return findings in the same shape as the `ISSUES.md` format, without final IDs unless useful locally.
-- Use `../references/finding-severity.md` to discard low-confidence candidates before assigning severity.
+- Use `../references/finding-severity.md` to discard low-confidence candidates before assigning severity and confidence.
 - Confirm each candidate gap against current evidence before recording it. Try to disprove the candidate by tracing the current code path, reading the documented workflow, checking the relevant config, inspecting existing tests, or running an allowed local command. A gap must name the affected reliability promise or operational expectation, the trigger condition, the failure mode, the missing or weak control, and the likely user or operator impact.
 - For candidates based on documentation or comments contradicting code, require non-prose proof that the implementation or repository-owned reliability control is wrong before recording a reliability gap. If current code, tests, runtime behavior, CI, or history support the implementation, treat the prose as a doc gap.
 - Record reliability gaps only when they involve repository-owned behavior or documented/implicit operational contracts, such as:
@@ -93,6 +93,7 @@ Use this structure:
 
 - Type: Reliability Gap
 - Severity: Critical|High|Medium|Low
+- Confidence: High (>=80%)
 - Scope: path/to/file-or-folder
 - Impact: User, operator, incident, availability, recovery, data-integrity, or scaling risk.
 - Evidence: Concrete file and line references, command behavior, config, docs, tests, missing control, failure mode, calculation gap, and the verification path used to rule out a guess.
@@ -140,7 +141,7 @@ These rules remain mandatory:
 ## References
 
 - Read `references/plan.md` before starting Find mode or Implement mode.
-- Use `../references/finding-severity.md` for confidence filtering and severity.
+- Use `../references/finding-severity.md` for confidence filtering, confidence labels, and severity.
 - Use `$reliability-standards` for SRE, NALSD, resilience, recovery, overload, observability, release-safety, and production-readiness judgment.
 - Use `$project-workflow` for repository command discovery, CI expectations, documented entrypoints, operational docs, and `./bin` wiring before review planning or validation.
 - Use `$change-safety` when reliability changes affect public contracts, compatibility, migrations, config, deployment, security expectations, or documented operational behavior.

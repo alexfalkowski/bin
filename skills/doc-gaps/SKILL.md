@@ -55,7 +55,7 @@ These rules remain mandatory:
 - Each assigned agent owns recursive review only within its bounded slice. Each agent must perform a thorough documentation review for that slice, pairing with `$doc-standards`, relevant language standards, `$naming-standards` when terminology is unclear or inconsistent, and `$change-validation` for likely validation commands.
 - Each agent must audit the relevant documentation surfaces before returning candidates: README files, docs, examples, command help, package documentation, exported API comments, code comments, and docstrings. For each candidate, apply `$doc-standards`' adequacy gate by identifying the public surface, intended audience, user action or maintenance decision at risk, existing documentation surface, correct target surface, minimum successful example or command, and missing non-obvious contract.
 - Require each agent to return candidates in the candidate format below, without final IDs unless useful locally.
-- Use `../references/finding-severity.md` to discard low-confidence candidates before assigning severity.
+- Use `../references/finding-severity.md` to discard low-confidence candidates before assigning severity and confidence.
 - Confirm each candidate gap against the code, current docs, examples, and documented interfaces before fixing it, using `$doc-standards` as the finding threshold. Do not confirm or dismiss a candidate merely because documentation exists; verify adequacy, ownership, discoverability, example coverage, and the relevant non-obvious contract.
 - When prose and implementation disagree, require non-prose evidence before treating the code as wrong or routing the candidate out to another workflow. If code, tests, runtime behavior, generated contracts, or history support the implementation, fix the stale prose as a doc gap.
 - Before fixing or dismissing a candidate, route it to the correct documentation surface: README, docs, examples, command help, package documentation, exported API comment, code comment, docstring, or no change. Do not treat package GoDoc or code-comment improvements as sufficient when first-use, setup, configuration, operational behavior, security expectations, or service-author workflows would reasonably be expected in README files, user-facing docs, examples, or command help. Do not treat README prose as sufficient when `$doc-standards` and the paired language standard route reusable API contracts to GoDoc, RDoc, docstrings, executable examples, specs, or features.
@@ -106,6 +106,7 @@ entries:
 
 - Type: Doc Gap
 - Severity: Critical|High|Medium|Low
+- Confidence: High (>=80%)
 - Scope: path/to/file-or-folder
 - Public surface: Command|API|package|service|configuration|example|file format|operator behavior.
 - Audience: Service author|Operator|Package consumer|Maintainer
@@ -133,6 +134,6 @@ Keep optional follow-up notes separate from findings:
 
 - Read `references/plan.md` before starting one-pass mode or audit-only mode.
 - Use `$doc-standards` as the documentation quality bar and routing threshold.
-- Use `../references/finding-severity.md` for confidence filtering and severity.
+- Use `../references/finding-severity.md` for confidence filtering, confidence labels, and severity.
 - Use `$project-workflow` for repository command discovery, documented entrypoints, CI expectations, examples, and `./bin` wiring before review planning or validation.
 - Use the paired language, naming, safety, and validation skills through `$doc-standards`.
