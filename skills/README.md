@@ -40,16 +40,20 @@ completion.
   `ISSUES.md`, then implement agreed fixes one code issue at a time.
 - `test-gaps` orchestrates a two-phase test-gap workflow: first aggregate
   `project-workflow` context and confirmed missing or weak test coverage into
-  `ISSUES.md`, then implement agreed test fixes one gap at a time.
+  `TESTS.md`, then implement agreed test fixes one gap at a time.
 - `doc-gaps` orchestrates a one-pass doc-gap workflow: aggregate
   `project-workflow` context and confirmed `$doc-standards` findings for
   README, docs, examples, comments, and docstring gaps, implement confirmed
-  documentation fixes, validate them, and use `ISSUES.md` only for audit-only
+  documentation fixes, validate them, and use `DOCS.md` only for audit-only
   requests or unresolved gaps.
+- `feature-gaps` orchestrates a two-phase feature-opportunity workflow: first
+  aggregate `project-workflow` context, current repository behavior, and
+  comparable product or developer-experience evidence into `FEATURES.md`, then
+  implement agreed feature changes one feature at a time.
 - `reliability-gaps` orchestrates a two-phase reliability-gap workflow: first
   aggregate `project-workflow` context and verified SRE, NALSD, operability,
   overload, observability, release-safety, recovery, or data-integrity gaps into
-  `ISSUES.md`, then implement agreed reliability fixes one gap at a time.
+  `RELIABILITY.md`, then implement agreed reliability fixes one gap at a time.
 - `repo-health` orchestrates daily or weekly repository health
   reporting across delivery flow, CI quality, release/deploy activity, and
   service reliability. It should use `project-workflow` for repository
@@ -109,10 +113,10 @@ condition. Goals are per-session runtime state, like active plans; do not write
 them into the repository unless the human explicitly asks for a durable goal
 artifact.
 
-Goals do not bypass skill steps, stop gates, permission gates, scoped
-`ISSUES.md` ledgers, human confirmation requirements, or validation freshness
-rules. The selected skill still owns the workflow plan; the goal only makes the
-intended outcome and current state explicit.
+Goals do not bypass skill steps, stop gates, permission gates, scoped ledger
+files, human confirmation requirements, or validation freshness rules. The
+selected skill still owns the workflow plan; the goal only makes the intended
+outcome and current state explicit.
 When the runtime has stricter status-transition rules, follow those runtime
 rules and use the skill's goal rules to explain the waiting, blocked, or done
 reason.

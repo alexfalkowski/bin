@@ -14,6 +14,9 @@ repository root and keep `bin/` as shared guidance.
 - Update the active plan when scope, validation, delegation, or ledger state
   changes.
 - Treat validation as stale when files change after a command ran.
+- Before checking, reading, creating, or updating the scoped `ISSUES.md`
+  ledger, ensure the consuming repository root `.gitignore` exists and contains
+  `ISSUES.md` as a standalone pattern. If the pattern is missing, add it.
 - Record durable findings only in the scoped `ISSUES.md` ledger defined by the
   skill.
 - Track broad-scope coverage explicitly as reviewed deeply, skimmed, excluded,

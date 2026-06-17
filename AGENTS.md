@@ -91,11 +91,14 @@ skill instead of one broad default:
   suggestions that should not be reported as code-review findings.
 - `security-audit`: security reviews, vulnerability checks, unsafe shell/filesystem/network/auth inspection, and Go/Ruby/shell audit guidance.
 - `code-issues`: find confirmed code issues into `ISSUES.md`, then implement agreed fixes one code issue at a time.
-- `test-gaps`: find confirmed missing or weak tests into `ISSUES.md`, then implement agreed test fixes gap by gap.
-- `doc-gaps`: find and fix confirmed missing, stale, or misleading docs/comments in one pass, using `ISSUES.md` only for audit-only requests or unresolved gaps.
+- `test-gaps`: find confirmed missing or weak tests into `TESTS.md`, then implement agreed test fixes gap by gap.
+- `doc-gaps`: find and fix confirmed missing, stale, or misleading docs/comments in one pass, using `DOCS.md` only for audit-only requests or unresolved gaps.
+- `feature-gaps`: find concrete product or developer-experience feature
+  opportunities into `FEATURES.md`, then implement agreed feature changes one
+  at a time.
 - `reliability-standards`: SRE, NALSD, production-readiness, SLO, overload,
   observability, release-safety, recovery, and operability guidance.
-- `reliability-gaps`: find confirmed reliability gaps into `ISSUES.md`, then
+- `reliability-gaps`: find confirmed reliability gaps into `RELIABILITY.md`, then
   implement agreed reliability fixes gap by gap.
 - `repo-health`: daily or weekly repository delivery, CI quality,
   release/deploy, and service reliability summaries using GitHub, CircleCI,
@@ -142,16 +145,20 @@ Common composition:
   `ISSUES.md`, then implement agreed fixes one code issue at a time.
 - `test-gaps` orchestrates a two-phase test-gap workflow: aggregate confirmed
   `project-workflow` context and missing or weak test coverage into
-  `ISSUES.md`, then implement agreed test fixes gap by gap.
+  `TESTS.md`, then implement agreed test fixes gap by gap.
 - `doc-gaps` orchestrates a one-pass doc-gap workflow: aggregate confirmed
   `project-workflow` context and `$doc-standards` findings for missing, stale,
   or misleading README, docs, examples, comments, and docstrings, implement
-  confirmed documentation fixes, validate them, and use `ISSUES.md` only for
+  confirmed documentation fixes, validate them, and use `DOCS.md` only for
   audit-only requests or unresolved gaps.
+- `feature-gaps` orchestrates a two-phase feature-opportunity workflow:
+  aggregate confirmed `project-workflow` context, current repository behavior,
+  and comparable product or developer-experience evidence into `FEATURES.md`,
+  then implement agreed feature changes one feature at a time.
 - `reliability-gaps` orchestrates a two-phase reliability-gap workflow:
   aggregate confirmed `project-workflow` context and SRE, NALSD, operability,
   overload, observability, release-safety, recovery, or data-integrity gaps into
-  `ISSUES.md`, then implement agreed reliability fixes gap by gap.
+  `RELIABILITY.md`, then implement agreed reliability fixes gap by gap.
 - `repo-health` orchestrates delivery, quality, release/deploy, and
   service-reliability reporting; pair it with `project-workflow` for repository
   discovery and `change-validation` only when the summary process changes files

@@ -1,4 +1,4 @@
 interface:
   display_name: "Test Gaps"
   short_description: "Find scoped weak, flaky, or wrong-layer tests"
-  default_prompt: "Use $test-gaps with its active goal and plan to find scoped missing, weak, misleading, flaky, or wrong-layer test coverage; reject implementation-only or no-front-door candidates; store confirmed gaps in ISSUES.md; answer test gap ID follow-ups such as TEST-1; or implement agreed test fixes one gap at a time."
+  default_prompt: "Use $test-gaps with its active goal and plan to find scoped missing, weak, misleading, flaky, or wrong-layer test coverage; reject implementation-only or no-front-door candidates; store confirmed gaps in TESTS.md; answer test gap ID follow-ups such as TEST-1; or implement agreed test fixes one gap at a time."

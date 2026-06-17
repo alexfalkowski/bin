@@ -41,6 +41,9 @@ Follow `references/plan.md#find-mode-plan`.
 These rules remain mandatory:
 
 - If no scope is provided, stop and ask for the package or folder.
+- Before checking, reading, creating, or updating the scoped `ISSUES.md`
+  ledger, ensure the consuming repository root `.gitignore` exists and contains
+  `ISSUES.md` as a standalone pattern. If the pattern is missing, add it.
 - Use `ISSUES.md` in the requested package or folder as the review ledger, for example `PACKAGE_OR_FOLDER/ISSUES.md`.
 - If `ISSUES.md` already exists in the requested package or folder, stop. Tell the user the existing scoped ledger must be resolved first, or the human must delete that scoped `ISSUES.md` before a new find pass there.
 - Treat `Find $code-issues in PACKAGE_OR_FOLDER` or `Find code issues in PACKAGE_OR_FOLDER` as the user's explicit request to delegate review for that scope. Do not require the user to separately say "use sub-agents", "spawn agents", or "delegate".
@@ -100,6 +103,9 @@ Follow `references/plan.md#implement-mode-plan`.
 These rules remain mandatory:
 
 - If no scope is provided, stop and ask for the package or folder.
+- Before checking, reading, creating, or updating the scoped `ISSUES.md`
+  ledger, ensure the consuming repository root `.gitignore` exists and contains
+  `ISSUES.md` as a standalone pattern. If the pattern is missing, add it.
 - Read `ISSUES.md` in the requested package or folder first and treat it as the working review ledger.
 - If scoped `ISSUES.md` does not exist, stop and ask whether to run Find mode first for that scope.
 - Work through code issues sequentially by ID unless the human explicitly names a different issue.
