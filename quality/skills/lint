@@ -5,91 +5,6 @@ set -eo pipefail
 
 missing=0
 
-check_skill_yaml() {
-  ruby <<'RUBY'
-require "yaml"
-
-ok = true
-
-Dir["skills/*/SKILL.md"].sort.each do |path|
-  text = File.read(path)
-  match = text.match(/\A---\n(.*?)\n---/m)
-  unless match
-    warn "missing frontmatter: #{path}"
-    ok = false
-    next
-  end
-
-  begin
-    data = YAML.safe_load(match[1])
-  rescue Psych::SyntaxError => e
-    warn "invalid frontmatter YAML in #{path}: #{e.message}"
-    ok = false
-    next
-  end
-
-  unless data.is_a?(Hash)
-    warn "frontmatter must be a mapping: #{path}"
-    ok = false
-    next
-  end
-
-  extra = data.keys - %w[name description]
-  unless extra.empty?
-    warn "unexpected frontmatter keys in #{path}: #{extra.join(", ")}"
-    ok = false
-  end
-
-  %w[name description].each do |key|
-    unless data[key].is_a?(String) && !data[key].strip.empty?
-      warn "missing or empty #{key} in #{path}"
-      ok = false
-    end
-  end
-end
-
-Dir["skills/*/agents/openai.yaml"].sort.each do |path|
-  skill_name = path.split("/")[1]
-
-  begin
-    data = YAML.safe_load(File.read(path))
-  rescue Psych::SyntaxError => e
-    warn "invalid agent YAML in #{path}: #{e.message}"
-    ok = false
-    next
-  end
-
-  interface = data.is_a?(Hash) ? data["interface"] : nil
-  unless interface.is_a?(Hash)
-    warn "missing interface mapping: #{path}"
-    ok = false
-    next
-  end
-
-  %w[display_name short_description default_prompt].each do |key|
-    unless interface[key].is_a?(String) && !interface[key].strip.empty?
-      warn "missing or empty interface.#{key} in #{path}"
-      ok = false
-    end
-  end
-
-  short_description = interface["short_description"]
-  if short_description.is_a?(String) && !(25..64).cover?(short_description.length)
-    warn "interface.short_description must be 25-64 chars in #{path}"
-    ok = false
-  end
-
-  default_prompt = interface["default_prompt"]
-  if default_prompt.is_a?(String) && !default_prompt.include?("$#{skill_name}")
-    warn "interface.default_prompt must mention $#{skill_name} in #{path}"
-    ok = false
-  end
-end
-
-exit(ok ? 0 : 1)
-RUBY
-}
-
 require_pattern() {
   local file="$1"
   local pattern="$2"
@@ -106,7 +21,7 @@ require_pattern() {
   fi
 }
 
-if ! check_skill_yaml; then
+if ! ruby quality/skills/metadata; then
   missing=1
 fi
 
@@ -139,11 +54,14 @@ require_pattern skills/go-standards/references/conventions.md "Being cautious is
 require_pattern skills/code-issues/SKILL.md "After the human agrees and before editing, state the selected local code pattern"
 require_pattern skills/test-gaps/SKILL.md "After the human agrees and before editing, state the selected local test pattern"
 require_pattern skills/doc-gaps/SKILL.md "After the human agrees and before editing, state the selected local documentation pattern"
+require_pattern skills/feature-gaps/SKILL.md "After the human agrees and before editing, state the selected local code/config/docs pattern"
 require_pattern skills/reliability-gaps/SKILL.md "After the human agrees and before editing, state the selected local code/config/docs pattern"
 require_pattern skills/code-issues/SKILL.md "asks about issue IDs such as ISSUE-1"
 require_pattern skills/test-gaps/SKILL.md "asks about test gap IDs such as TEST-1"
 require_pattern skills/doc-gaps/SKILL.md "asks about doc gap IDs such as DOC-1"
+require_pattern skills/feature-gaps/SKILL.md "asks about feature IDs such as FEATURE-1"
 require_pattern skills/reliability-gaps/SKILL.md "asks about reliability gap IDs such as REL-1"
+require_pattern skills/feature-gaps/SKILL.md "state the feature execution checklist before"
 require_pattern skills/reliability-gaps/SKILL.md "state the reliability execution checklist before editing"
 require_pattern skills/reliability-gaps/SKILL.md "\`Red\`, \`Green\`, \`Refactor\`, and \`Validation\`"
 
@@ -155,6 +73,7 @@ require_pattern skills/reliability-gaps/agents/openai.yaml "answer reliability g
 require_pattern skills/code-issues/agents/openai.yaml "answer issue ID follow-ups such as ISSUE-1"
 require_pattern skills/test-gaps/agents/openai.yaml "answer test gap ID follow-ups such as TEST-1"
 require_pattern skills/doc-gaps/agents/openai.yaml "answer doc gap ID follow-ups such as DOC-1"
+require_pattern skills/feature-gaps/agents/openai.yaml "answer feature ID follow-ups such as FEATURE-1"
 require_pattern skills/change-validation/agents/openai.yaml "file changes make prior validation stale"
 
 exit "$missing"

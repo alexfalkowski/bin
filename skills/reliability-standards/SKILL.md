@@ -94,7 +94,7 @@ without concrete evidence.
 ## Boundaries
 
 - Use `$reliability-gaps` when the user asks to find or implement scoped
-  reliability gaps through an `ISSUES.md` ledger.
+  reliability gaps through a `RELIABILITY.md` ledger.
 - Use `$code-review` or `$code-issues` when the finding is a concrete bug,
   violated contract, or broken behavior rather than a missing reliability
   control.

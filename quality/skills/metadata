@@ -1,0 +1,100 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'yaml'
+
+def present_string?(value)
+  value.is_a?(String) && !value.strip.empty?
+end
+
+def report_failure(message)
+  warn message
+  nil
+end
+
+def safe_load_frontmatter(path)
+  text = File.read(path)
+  match = text.match(/\A---\n(.*?)\n---/m)
+  return report_failure("missing frontmatter: #{path}") unless match
+
+  YAML.safe_load(match[1])
+rescue Psych::SyntaxError => e
+  report_failure("invalid frontmatter YAML in #{path}: #{e.message}")
+end
+
+def safe_load_file(path)
+  YAML.safe_load_file(path)
+rescue Psych::SyntaxError => e
+  report_failure("invalid agent YAML in #{path}: #{e.message}")
+end
+
+def mapping?(data, path, message)
+  return true if data.is_a?(Hash)
+
+  report_failure("#{message}: #{path}")
+end
+
+def valid_required_strings?(data, keys, path, prefix: nil)
+  keys.map do |key|
+    name = [prefix, key].compact.join('.')
+    present_string?(data[key]) || report_failure("missing or empty #{name} in #{path}")
+  end.all?
+end
+
+def valid_skill_keys?(data, path)
+  extra = data.keys - %w[name description]
+  return true if extra.empty?
+
+  report_failure("unexpected frontmatter keys in #{path}: #{extra.join(', ')}")
+end
+
+def valid_short_description?(interface, path)
+  short_description = interface['short_description']
+  return true unless short_description.is_a?(String)
+  return true if (25..64).cover?(short_description.length)
+
+  report_failure("interface.short_description must be 25-64 chars in #{path}")
+end
+
+def valid_default_prompt?(interface, path)
+  skill_name = path.split('/')[1]
+  default_prompt = interface['default_prompt']
+  return true unless default_prompt.is_a?(String)
+  return true if default_prompt.include?("$#{skill_name}")
+
+  report_failure("interface.default_prompt must mention $#{skill_name} in #{path}")
+end
+
+def valid_skill?(path)
+  data = safe_load_frontmatter(path)
+  return false unless mapping?(data, path, 'frontmatter must be a mapping')
+
+  [valid_skill_keys?(data, path), valid_required_strings?(data, %w[name description], path)].all?
+end
+
+def agent_interface(path)
+  data = safe_load_file(path)
+  return false unless mapping?(data, path, 'agent YAML must be a mapping')
+
+  interface = data['interface']
+  return interface if interface.is_a?(Hash)
+
+  report_failure("missing interface mapping: #{path}")
+end
+
+def valid_agent?(path)
+  interface = agent_interface(path)
+  return false unless interface
+
+  [
+    valid_required_strings?(interface, %w[display_name short_description default_prompt], path, prefix: 'interface'),
+    valid_short_description?(interface, path),
+    valid_default_prompt?(interface, path)
+  ].all?
+end
+
+ok = true
+Dir['skills/*/SKILL.md'].each { |path| ok = false unless valid_skill?(path) }
+Dir['skills/*/agents/openai.yaml'].each { |path| ok = false unless valid_agent?(path) }
+
+exit(ok ? 0 : 1)

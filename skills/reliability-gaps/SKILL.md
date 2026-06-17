@@ -1,6 +1,6 @@
 ---
 name: reliability-gaps
-description: Use when the user asks to find $reliability-gaps in a package or folder, find reliability gaps in a package or folder, review production readiness for a package or folder, implement $reliability-gaps in a package or folder, implement reliability gaps in a package or folder, asks about reliability gap IDs such as REL-1, asks what the fix is for REL-1, asks to fix or verify REL-1, or says REL-1 is done. Find verified reliability, operability, SLO, overload, observability, release-safety, recovery, data-integrity, disaster-readiness, or NALSD evidence gaps and implement agreed fixes gap by gap.
+description: Use when the user asks to find $reliability-gaps in a package or folder, find reliability gaps in a package or folder, review production readiness for a package or folder, implement $reliability-gaps in a package or folder, implement reliability gaps in a package or folder, asks about reliability gap IDs such as REL-1, asks what the fix is for REL-1, asks to fix or verify REL-1, or says REL-1 is done. Find verified reliability, operability, SLO, overload, observability, release-safety, recovery, data-integrity, disaster-readiness, or NALSD evidence gaps, record confirmed gaps in scoped RELIABILITY.md, and implement agreed fixes gap by gap.
 ---
 
 # Reliability Gaps
@@ -43,8 +43,11 @@ Follow `references/plan.md#find-mode-plan`.
 These rules remain mandatory:
 
 - If no scope is provided, stop and ask for the package or folder.
-- Use `ISSUES.md` in the requested package or folder as the review ledger, for example `PACKAGE_OR_FOLDER/ISSUES.md`.
-- If `ISSUES.md` already exists in the requested package or folder, stop. Tell the user the existing scoped ledger must be resolved first, or the human must delete that scoped `ISSUES.md` before a new find pass there.
+- Before checking, reading, creating, or updating the scoped `RELIABILITY.md`
+  ledger, ensure the consuming repository root `.gitignore` exists and contains
+  `RELIABILITY.md` as a standalone pattern. If the pattern is missing, add it.
+- Use `RELIABILITY.md` in the requested package or folder as the review ledger, for example `PACKAGE_OR_FOLDER/RELIABILITY.md`.
+- If `RELIABILITY.md` already exists in the requested package or folder, stop. Tell the user the existing scoped ledger must be resolved first, or the human must delete that scoped `RELIABILITY.md` before a new find pass there.
 - Treat `Find $reliability-gaps in PACKAGE_OR_FOLDER` or `Find reliability gaps in PACKAGE_OR_FOLDER` as the user's explicit request to delegate reliability review for that scope. Do not require the user to separately say "use sub-agents", "spawn agents", or "delegate".
 - Use sub-agents for Find mode whenever the active runtime provides them and runtime policy/tooling permits delegation. Do not treat sub-agents as optional based on scope size, and do not perform the reliability-gap review locally first.
 - Do not claim that extra delegation wording is needed before launching review agents. The Find mode invocation is the explicit delegation request.
@@ -57,7 +60,7 @@ These rules remain mandatory:
 - If the requested scope is too broad to review credibly in one pass, review the highest-risk slices first and record explicit coverage: reviewed deeply, skimmed, excluded, and deferred.
 - Do not present a broad requested scope as fully reviewed when any relevant slice was only skimmed or deferred. Name those slices in the final coverage notes and provide runnable follow-up scopes for deferred review.
 - Each assigned agent owns recursive review only within its bounded slice. Each agent must perform a thorough `$reliability-standards` review for that slice, pairing with `$change-safety`, `$security-audit`, `$testing-standards`, and `$change-validation` as the surface requires.
-- Require each agent to return findings in the same shape as the `ISSUES.md` format, without final IDs unless useful locally.
+- Require each agent to return findings in the same shape as the `RELIABILITY.md` format, without final IDs unless useful locally.
 - Use `../references/finding-severity.md` to discard low-confidence candidates before assigning severity and confidence.
 - Confirm each candidate gap against current evidence before recording it. Try to disprove the candidate by tracing the current code path, reading the documented workflow, checking the relevant config, inspecting existing tests, or running an allowed local command. A gap must name the affected reliability promise or operational expectation, the trigger condition, the failure mode, the missing or weak control, and the likely user or operator impact.
 - For candidates based on documentation or comments contradicting code, require non-prose proof that the implementation or repository-owned reliability control is wrong before recording a reliability gap. If current code, tests, runtime behavior, CI, or history support the implementation, treat the prose as a doc gap.
@@ -77,17 +80,17 @@ These rules remain mandatory:
 - Do not record standalone missing, weak, flaky, misleading, or wrong-layer tests as reliability gaps. Use `$test-gaps` when missing failure-path coverage is the finding.
 - Do not record standalone missing, weak, stale, misleading, or wrong-location operational docs as reliability gaps. Use `$doc-gaps` when documentation itself is the finding.
 - Do not report optional maturity improvements, cloud-architecture preferences, private implementation preferences, or "best practice" checkboxes as findings by themselves. List them only as optional follow-up notes when relevant.
-- If no confirmed reliability gaps are found, report that no reliability gaps were found and do not create `ISSUES.md`.
-- If confirmed reliability gaps are found, write all findings to the scoped `ISSUES.md` before making any fixes.
+- If no confirmed reliability gaps are found, report that no reliability gaps were found and do not create `RELIABILITY.md`.
+- If confirmed reliability gaps are found, write all findings to the scoped `RELIABILITY.md` before making any fixes.
 - Assign every finding a unique ID for the session in the form `REL-N`.
 - Stop after presenting the ledger and plan. Do not fix findings in the same pass.
 
-## `ISSUES.md` Format
+## `RELIABILITY.md` Format
 
 Use this structure:
 
 ```markdown
-# Issues
+# Reliability
 
 ## REL-1: Short concrete title
 
@@ -116,12 +119,15 @@ Follow `references/plan.md#implement-mode-plan`.
 These rules remain mandatory:
 
 - If no scope is provided, stop and ask for the package or folder.
-- Read `ISSUES.md` in the requested package or folder first and treat it as the working reliability-gap ledger.
-- If scoped `ISSUES.md` does not exist, stop and ask whether to run Find mode first for that scope.
+- Before checking, reading, creating, or updating the scoped `RELIABILITY.md`
+  ledger, ensure the consuming repository root `.gitignore` exists and contains
+  `RELIABILITY.md` as a standalone pattern. If the pattern is missing, add it.
+- Read `RELIABILITY.md` in the requested package or folder first and treat it as the working reliability-gap ledger.
+- If scoped `RELIABILITY.md` does not exist, stop and ask whether to run Find mode first for that scope.
 - Work through findings sequentially by ID unless the human explicitly names a different finding.
 - Before proposing a fix for each finding, re-check the current code, config, tests, docs, and CI. Treat the ledger as something that can go stale: dismiss or revise findings that are already addressed, no longer have a concrete failure mode, duplicate another issue, or belong in `$code-issues`, `$security-audit`, `$test-gaps`, or `$doc-gaps`.
 - When re-checking a finding whose evidence depends on documentation or comments contradicting implementation, prove the implementation or reliability control is wrong with non-prose evidence before proposing a reliability change. If non-prose evidence supports the implementation, explain that the ledger item is invalid as a reliability gap and propose reclassifying or fixing documentation instead.
-- Stop after proposing the solution. Do not edit files, update `ISSUES.md`, or start validation until the human explicitly agrees to that finding's solution.
+- Stop after proposing the solution. Do not edit files, update `RELIABILITY.md`, or start validation until the human explicitly agrees to that finding's solution.
 - Ask questions when SLOs, expected failure behavior, operator workflow, compatibility, rollout, validation, or user intent is ambiguous. Treat silence or a broad "implement reliability gaps" request as permission to start the proposal workflow, not as permission to edit.
 - After the human agrees and before editing, state the selected local code/config/docs pattern, dominant relevant test harness, planned validation command, and any deviation from `AGENTS.md` or selected skills. If a deviation is needed, stop and ask before editing.
 - For behavior-changing fixes, state the reliability execution checklist before editing:
@@ -135,8 +141,8 @@ These rules remain mandatory:
 - Use `$reliability-standards` for reliability design, `$change-safety` for public or operational compatibility, `$testing-standards` for failure-path tests, and `$change-validation` for checks. Pair with `$security-audit` when the fix touches auth, secrets, privilege, DoS, logs, supply chain, or incident containment.
 - Report the result for that finding with `Red`, `Green`, `Refactor`, and `Validation` entries. Use `Refactor: none` when no cleanup was needed after green. Then ask the human to verify and explicitly say `REL-N is done`.
 - Do not move to the next finding until the human says `REL-N is done`.
-- After the human confirms a finding is done, remove that finding from scoped `ISSUES.md`. If a finding is deemed invalid or not actually a reliability gap, remove it only after explaining why and getting human agreement.
-- Once all findings are resolved and confirmed done by the human, delete the scoped `ISSUES.md`.
+- After the human confirms a finding is done, remove that finding from scoped `RELIABILITY.md`. If a finding is deemed invalid or not actually a reliability gap, remove it only after explaining why and getting human agreement.
+- Once all findings are resolved and confirmed done by the human, delete the scoped `RELIABILITY.md`.
 
 ## References
 

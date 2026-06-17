@@ -14,7 +14,10 @@ repository root and keep `bin/` as shared guidance.
 - Update the active plan when scope, documentation location, validation,
   delegation, edits, summary, or unresolved ledger state changes.
 - Treat validation as stale when files change after a command ran.
-- Use a scoped `ISSUES.md` ledger only for audit-only mode, unresolved confirmed
+- Before checking, reading, creating, or updating the scoped `DOCS.md` ledger,
+  ensure the consuming repository root `.gitignore` exists and contains
+  `DOCS.md` as a standalone pattern. If the pattern is missing, add it.
+- Use a scoped `DOCS.md` ledger only for audit-only mode, unresolved confirmed
   gaps, or an existing doc-gap ledger being completed.
 - Track broad-scope coverage explicitly as reviewed deeply, skimmed, excluded,
   and deferred. Deferred entries must name runnable follow-up scopes.
@@ -26,7 +29,7 @@ repository root and keep `bin/` as shared guidance.
   validated, no confirmed gaps are found and reported, or unresolved findings
   are recorded because a stop gate prevents a correct fix.
 - In audit-only mode, the goal is complete when no confirmed doc gaps are found
-  and reported, or when the scoped `ISSUES.md` ledger is written and presented.
+  and reported, or when the scoped `DOCS.md` ledger is written and presented.
 - For broad scopes, a no-gap result is complete only when the summary states
   whether all high-risk slices were deeply reviewed. If any relevant slice was
   skimmed or deferred, completion requires coverage notes and runnable
@@ -39,7 +42,7 @@ repository root and keep `bin/` as shared guidance.
 ## One-Pass Mode Plan
 
 1. Confirm the requested package or folder scope.
-2. If scoped `ISSUES.md` exists, read it. Incorporate doc-gap ledger findings,
+2. If scoped `DOCS.md` exists, read it. Incorporate doc-gap ledger findings,
    or stop if the file is unrelated or ambiguous active work.
 3. Run `$project-workflow` discovery for entrypoints, CI, documented commands,
    public APIs, examples, and `./bin` wiring.
@@ -84,10 +87,10 @@ repository root and keep `bin/` as shared guidance.
     security, test, or reliability workflows. When dismissing, record why the
     existing surface owns the audience and action at risk.
 17. If no confirmed gaps remain, report that result with the coverage state, do
-    not create `ISSUES.md`, and skip edit and validation steps.
+    not create `DOCS.md`, and skip edit and validation steps.
 18. Implement confirmed doc gaps with the smallest clear documentation changes.
 19. If a confirmed gap cannot be fixed correctly in this pass, write or update
-    the scoped `ISSUES.md` with `DOC-<number>` entries for unresolved gaps.
+    the scoped `DOCS.md` with `DOC-<number>` entries for unresolved gaps.
 20. If an existing doc-gap ledger is fully resolved, delete it.
 21. Validate the documentation change with commands appropriate to the changed
     files.
@@ -98,7 +101,7 @@ repository root and keep `bin/` as shared guidance.
 ## Audit-Only Mode Plan
 
 1. Confirm the requested package or folder scope.
-2. Check whether scoped `ISSUES.md` already exists and stop unless the human
+2. Check whether scoped `DOCS.md` already exists and stop unless the human
    explicitly asked to refresh or overwrite that ledger.
 3. Run `$project-workflow` discovery for entrypoints, CI, documented commands,
    public APIs, examples, and `./bin` wiring.
@@ -114,8 +117,8 @@ repository root and keep `bin/` as shared guidance.
    implementation, require non-prose evidence before treating code as wrong;
    otherwise classify stale prose as a doc gap.
 8. If no confirmed gaps remain, report that result with the coverage state, do
-   not create `ISSUES.md`, and stop.
-9. If confirmed gaps remain, write the scoped `ISSUES.md` with `DOC-<number>`
+   not create `DOCS.md`, and stop.
+9. If confirmed gaps remain, write the scoped `DOCS.md` with `DOC-<number>`
    IDs.
 10. Present the scoped audit ledger, coverage state for broad scopes, and
     runnable follow-up scopes for deferred slices, then stop before making

@@ -41,7 +41,10 @@ These rules remain mandatory:
 - If no scope is provided, stop and ask for the package or folder.
 - Treat `Run $doc-gaps in PACKAGE_OR_FOLDER`, `Find doc gaps in PACKAGE_OR_FOLDER`, or `Fix doc gaps in PACKAGE_OR_FOLDER` as permission to delegate review, edit documentation in scope, run appropriate validation, and summarize the result in one pass.
 - Use audit-only mode only when the user explicitly asks not to edit or asks only for an audit or ledger. When a stop gate prevents a correct documentation fix during one-pass mode, record unresolved confirmed findings instead of switching modes.
-- If scoped `ISSUES.md` already exists, read it before reviewing. If it is a doc-gap ledger, include unresolved findings in the candidate set and update or delete the ledger after fixing them. If it is unrelated or ambiguous active work, stop and ask before editing it.
+- Before checking, reading, creating, or updating the scoped `DOCS.md` ledger,
+  ensure the consuming repository root `.gitignore` exists and contains
+  `DOCS.md` as a standalone pattern. If the pattern is missing, add it.
+- If scoped `DOCS.md` already exists, read it before reviewing. If it is a doc-gap ledger, include unresolved findings in the candidate set and update or delete the ledger after fixing them. If it is unrelated or ambiguous active work, stop and ask before editing it.
 - Use as many independent review agents as the runtime can safely run when the active runtime provides sub-agents and runtime policy/tooling permits delegation. Do not perform the doc-gap review locally first when delegation is available.
 - Treat the doc-gap invocation as the user's explicit request to delegate documentation review for that scope. Do not require the user to separately say "use sub-agents", "spawn agents", or "delegate".
 - If delegation is denied, stop instead of falling back to a local review. If sub-agents are unavailable, say so briefly and perform the review locally for the requested scope.
@@ -65,11 +68,11 @@ These rules remain mandatory:
 - For unresolved-ledger fixes or any case where human approval is still required: After the human agrees and before editing, state the selected local documentation pattern, dominant relevant validation path, planned validation command, and any deviation from `AGENTS.md` or selected skills. If a deviation is needed, stop and ask before editing.
 - Implement confirmed doc gaps with the smallest clear documentation change using the established documentation location and style.
 - Stop and ask before editing when behavior, audience, documentation location, public-contract wording, examples, validation, or user intent is ambiguous enough that a correct documentation change cannot be inferred from local context.
-- Write unresolved confirmed findings to the scoped `ISSUES.md` only when they cannot be fixed in the same pass, the user requested audit-only mode, validation or permission is blocked, or the scope is too large to complete.
+- Write unresolved confirmed findings to the scoped `DOCS.md` only when they cannot be fixed in the same pass, the user requested audit-only mode, validation or permission is blocked, or the scope is too large to complete.
 - Validate documentation changes with commands appropriate to the changed files.
-- If no confirmed doc gaps are found, report that no doc gaps were found and do not create `ISSUES.md`.
-- If all confirmed doc gaps are fixed, do not leave a new `ISSUES.md` behind. If an existing doc-gap ledger is fully resolved, delete it.
-- Final output must summarize fixed gaps, dismissed or out-of-scope candidates when relevant, broad-scope coverage notes when the requested scope was too broad for complete deep review, unresolved findings written to `ISSUES.md` if any, and validation results.
+- If no confirmed doc gaps are found, report that no doc gaps were found and do not create `DOCS.md`.
+- If all confirmed doc gaps are fixed, do not leave a new `DOCS.md` behind. If an existing doc-gap ledger is fully resolved, delete it.
+- Final output must summarize fixed gaps, dismissed or out-of-scope candidates when relevant, broad-scope coverage notes when the requested scope was too broad for complete deep review, unresolved findings written to `DOCS.md` if any, and validation results.
 
 ## Audit-Only Mode
 
@@ -78,11 +81,14 @@ Follow `references/plan.md#audit-only-mode-plan`.
 These rules remain mandatory:
 
 - If no scope is provided, stop and ask for the package or folder.
-- Use `ISSUES.md` in the requested package or folder as the audit ledger, for example `PACKAGE_OR_FOLDER/ISSUES.md`.
-- If `ISSUES.md` already exists in the requested package or folder, stop unless the human explicitly asked to refresh or overwrite that scoped ledger.
+- Before checking, reading, creating, or updating the scoped `DOCS.md` ledger,
+  ensure the consuming repository root `.gitignore` exists and contains
+  `DOCS.md` as a standalone pattern. If the pattern is missing, add it.
+- Use `DOCS.md` in the requested package or folder as the audit ledger, for example `PACKAGE_OR_FOLDER/DOCS.md`.
+- If `DOCS.md` already exists in the requested package or folder, stop unless the human explicitly asked to refresh or overwrite that scoped ledger.
 - Use the same delegation, surface-routing, candidate confirmation, severity, and out-of-scope rules as one-pass mode.
-- If no confirmed doc gaps are found, report that no doc gaps were found and do not create `ISSUES.md`.
-- If confirmed doc gaps are found, write all findings to the scoped `ISSUES.md` with `DOC-N` IDs.
+- If no confirmed doc gaps are found, report that no doc gaps were found and do not create `DOCS.md`.
+- If confirmed doc gaps are found, write all findings to the scoped `DOCS.md` with `DOC-N` IDs.
 - Stop after presenting the audit ledger. Do not make fixes in audit-only mode.
 
 ## Documentation Review Standards
@@ -94,13 +100,13 @@ recording findings. Keep GoDoc details in `$go-standards`, RDoc details in
 `$ruby-standards`, and shell script/function comment rules in
 `$shell-standards`.
 
-## Candidate And `ISSUES.md` Format
+## Candidate And `DOCS.md` Format
 
 Use this structure for review candidates and unresolved or audit-only ledger
 entries:
 
 ```markdown
-# Issues
+# Docs
 
 ## DOC-1: Short concrete title
 

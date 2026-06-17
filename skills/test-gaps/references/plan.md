@@ -14,7 +14,10 @@ repository root and keep `bin/` as shared guidance.
 - Update the active plan when scope, dominant test harness, validation,
   delegation, or ledger state changes.
 - Treat validation as stale when files change after a command ran.
-- Record durable findings only in the scoped `ISSUES.md` ledger defined by the
+- Before checking, reading, creating, or updating the scoped `TESTS.md` ledger,
+  ensure the consuming repository root `.gitignore` exists and contains
+  `TESTS.md` as a standalone pattern. If the pattern is missing, add it.
+- Record durable findings only in the scoped `TESTS.md` ledger defined by the
   skill.
 - Track broad-scope coverage explicitly as reviewed deeply, skimmed, excluded,
   and deferred. Deferred entries must name runnable follow-up scopes.
@@ -23,7 +26,7 @@ repository root and keep `bin/` as shared guidance.
 
 - Bind the active goal to the selected mode and requested scope.
 - In Find mode, the goal is complete when no confirmed test gaps are found and
-  reported, or when the scoped `ISSUES.md` ledger is written and presented.
+  reported, or when the scoped `TESTS.md` ledger is written and presented.
 - For broad scopes, a no-gap result is complete only when the summary states
   whether all high-risk slices were deeply reviewed. If any relevant slice was
   skimmed or deferred, completion requires coverage notes and runnable
@@ -42,7 +45,7 @@ repository root and keep `bin/` as shared guidance.
 ## Find Mode Plan
 
 1. Confirm the requested package or folder scope.
-2. Check whether scoped `ISSUES.md` already exists and stop if it does.
+2. Check whether scoped `TESTS.md` already exists and stop if it does.
 3. Run `$project-workflow` discovery for entrypoints, CI, and `./bin` wiring.
 4. Identify the existing tests, fixtures, helpers, and dominant relevant harness
    for the requested scope.
@@ -72,8 +75,8 @@ repository root and keep `bin/` as shared guidance.
 14. Confirm each gap protects repository-owned behavior and is not duplicate,
     private-only, dependency-only, optional, or better handled by another skill.
 15. If no confirmed gaps remain, report that result with the coverage state, do
-    not create `ISSUES.md`, and stop.
-16. If confirmed gaps remain, write the scoped `ISSUES.md` with `TEST-<number>`
+    not create `TESTS.md`, and stop.
+16. If confirmed gaps remain, write the scoped `TESTS.md` with `TEST-<number>`
     IDs.
 17. Present the scoped ledger, proposed test-fix plan, coverage state for broad
     scopes, and runnable follow-up scopes for deferred slices.
@@ -82,7 +85,7 @@ repository root and keep `bin/` as shared guidance.
 ## Implement Mode Plan
 
 1. Confirm the requested package or folder scope.
-2. Read scoped `ISSUES.md`, or stop and ask whether to run Find mode first.
+2. Read scoped `TESTS.md`, or stop and ask whether to run Find mode first.
 3. Run `$project-workflow` discovery for current entrypoints, CI, and `./bin`
    wiring.
 4. Select the next finding by ID unless the human named a specific finding.
@@ -101,6 +104,6 @@ repository root and keep `bin/` as shared guidance.
 13. Validate the test change with commands appropriate to the changed tests.
 14. Report the result and ask the human to verify with `TEST-<number> is done`.
 15. Stop until that confirmation arrives.
-16. After confirmation, remove or revise the finding in scoped `ISSUES.md`.
-17. Continue with the next finding, or delete scoped `ISSUES.md` after all gaps
+16. After confirmation, remove or revise the finding in scoped `TESTS.md`.
+17. Continue with the next finding, or delete scoped `TESTS.md` after all gaps
     are confirmed resolved.
