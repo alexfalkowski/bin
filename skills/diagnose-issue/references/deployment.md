@@ -42,8 +42,8 @@ file exists at the repository root.
 ## Fix Suggestions
 
 Order suggestions by confidence. State a fix as a likely cause only when the
-selected target evidence supports `Confidence: High (>=80%)`; otherwise suggest
-the next evidence to collect.
+selected target evidence supports at least 90% confidence, and state the actual
+percentage; otherwise suggest the next evidence to collect.
 
 1. Failed deploy job or rollout fix supported by collected evidence.
 2. Runtime fix supported by image mismatch, unready deployments, failing pods,

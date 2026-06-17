@@ -22,6 +22,10 @@ Agents MUST:
 - Use sub-agents when the selected skill requires delegation, parallel review,
   or forward-testing. Do not treat required sub-agent use as optional based on
   scope size, convenience, or local confidence.
+- Report an explicit confidence percentage before treating a result, finding,
+  validation conclusion, or task as accepted or complete. Accept or mark work
+  complete only when confidence is at least 90%; below 90%, gather more
+  evidence or state the blocker instead of accepting completion.
 - Follow existing repository patterns over personal judgment.
 - Treat skill workflow steps using "must", "do not", or "stop" language as
   blocking requirements.

@@ -7,10 +7,12 @@ test, doc, reliability, diagnostic, or security findings.
 
 Filter candidates before assigning severity. A finding should have concrete
 evidence, a trigger condition, credible impact, and a plausible fix direction.
-Recorded findings must have `Confidence: High (>=80%)`. Treat this percentage
-as an evidence-calibration threshold, not a statistical claim: after trying to
-disprove the candidate, the inspected evidence should make it at least roughly
-80% likely that the finding is real, repository-owned, and actionable.
+Recorded findings must state the agent's actual confidence percentage, for
+example `Confidence: 93%`, and that percentage must be at least 90%. Treat this
+percentage as an evidence-calibration threshold, not a statistical claim: after
+trying to disprove the candidate, the inspected evidence should make it at
+least roughly 90% likely that the finding is real, repository-owned, and
+actionable.
 
 Discard candidates that are likely false positives, vague suggestions,
 unsupported guesses, style-only preferences, nitpicks, or comments whose impact
@@ -21,7 +23,7 @@ means a real finding with limited impact.
 If confidence is below the high-confidence threshold, gather more evidence
 through code inspection, current tests, command output, generated contracts,
 scanner output, official sources, runtime behavior, or history. If confidence
-still cannot reach `High (>=80%)`, do not record it as a finding. Use the
+still cannot reach 90%, do not record it as a finding. Use the
 workflow's data-gap, open-question, or optional follow-up section only when that
 section is explicitly meant for unresolved evidence; otherwise discard the
 candidate.

@@ -57,9 +57,9 @@ Use this reference for any security audit, then load language-specific reference
 
 Use these security-specific examples after filtering out low-confidence or
 unsupported candidates. They align with `../../references/finding-severity.md`.
-Recorded security findings must include `confidence: High (>=80%)`; if the
-audited evidence cannot support that threshold, gather more evidence or discard
-the candidate.
+Recorded security findings must include the agent's actual confidence
+percentage, for example `confidence: 93%`; if the audited evidence cannot
+support at least 90% confidence, gather more evidence or discard the candidate.
 
 - Critical: near-certain remote code execution, credential exposure, auth bypass, data loss or corruption, or exploitable critical dependency issue with broad severe impact.
 - High: likely exploitable command injection, arbitrary file write/delete, path traversal to sensitive files, sensitive information disclosure, or other serious security issue with narrower impact.
@@ -74,7 +74,7 @@ the candidate.
 ## Findings
 
 - severity: Critical
-  confidence: High (>=80%)
+  confidence: 93%
   file: `path/to/file:42`
   risk: Untrusted input reaches shell execution.
   trigger: User-controlled CLI arguments are interpolated into a shell command.
@@ -93,7 +93,7 @@ the candidate.
 ```
 
 - Use only these severity values for findings: `Critical`, `High`, `Medium`, `Low`. Use `None` only for the required no-findings entry.
-- Use only `High (>=80%)` for finding confidence. Use `n/a` only for the required no-findings entry.
+- Use an actual percentage of at least 90% for finding confidence. Use `n/a` only for the required no-findings entry.
 - Use only these validation results: `passed`, `failed`, `not run`, `no-op`.
 - Use `file: n/a` only for repository-wide dependency, configuration, or validation findings that do not have a precise source line.
 - If there are no findings, write exactly one finding entry with `severity: None`, `confidence: n/a`, `file: n/a`, `risk: No findings.`, `trigger: n/a`, `impact: n/a`, and `remediation: n/a`.
