@@ -24,7 +24,10 @@ or human-confirmation state changes.
 
 Operate as a coverage triager: protect repository-owned behavior through the
 narrowest credible established test layer, and reject gaps that only test
-dependency semantics, private implementation detail, or coverage vanity.
+dependency semantics, private implementation detail, implementation-only
+optimizations, or coverage vanity. A missing test is a gap only when the
+untested behavior belongs to a real caller-facing contract; a public helper,
+exported function, or internal collaborator is not automatically a test boundary.
 
 Use code, executable behavior, existing tests, schemas, generated contracts,
 runtime evidence, external standards, and history to establish expected
@@ -58,11 +61,21 @@ These rules remain mandatory:
 - Require each agent to return findings in the same shape as the `ISSUES.md` format, without final IDs unless useful locally. Each finding must name the repository-owned behavior being protected; reject findings that only test dependency semantics, aliases, or pass-through wrappers.
 - Use `../references/finding-severity.md` to discard low-confidence candidates before assigning severity and confidence.
 - Confirm each candidate gap against the code and existing tests before recording it. Gaps must be concrete missing, weak, misleading, flaky, or wrong-layer coverage with credible risk to changed behavior, public contracts, compatibility, release-sensitive workflows, or documented command/API behavior.
+- For each candidate, identify the real front door: the command, scenario,
+  package/API consumer, service boundary, workflow, or documented entrypoint
+  that would observe the behavior. Do not record a gap merely because an
+  exported function, constructor, interface, or helper lacks direct tests.
 - For candidates based on documentation or comments contradicting code, require non-prose evidence for the expected behavior before recording a test gap. If current code and tests support the implementation, treat the prose as a doc gap instead of adding tests that would encode stale documentation.
 - For each candidate, explicitly identify the nearby existing test shape and why extending existing tests, fixtures, tables, helpers, or assertions does not already cover the behavior. Do not record a gap when the proposed fix would duplicate coverage already provided by that local shape.
 - Do not record gaps whose only meaningful test would assert pass-through behavior to an upstream library, standard library, or framework. This includes aliases, type aliases, thin wrappers, direct option forwarding, direct global setter/getter calls, dependency injection container behavior, validator tag behavior, encoder/parser behavior, and constructors where the repository adds no branching, validation, transformation, error handling, lifecycle behavior, compatibility policy, or composition contract of its own.
 - Only record a gap around third-party integration when the untested behavior is repository-owned. Examples include local validation/normalization before calling the dependency, local input/output mapping, local error wrapping/classification/recovery, lifecycle ordering or cleanup owned by the repository, documented compatibility behavior promised across dependency versions, or end-to-end behavior through a supported public repo entrypoint where multiple repo-owned pieces are composed.
 - When a candidate gap touches a wrapper around a dependency, explicitly ask: "Would the proposed test fail because repository code changed, or only because the dependency's behavior/shape changed?" Record it only when repository code owns the failing behavior.
+- When a candidate gap touches an optimization or refactor, explicitly ask:
+  "Would the proposed test fail because an observable contract changed, or only
+  because the implementation strategy changed?" Record it only for observable
+  repository-owned contracts such as ordering, latency, cancellation,
+  concurrency safety, cleanup, error aggregation, compatibility, or documented
+  lifecycle behavior.
 - Do not record gaps that require build tags, architecture-specific execution, optional services, integration environments, or other validation modes the repository does not normally run, unless the finding is explicitly that CI or the documented validation path must add that mode.
 - Do not record confirmed production bugs, security issues, compatibility breaks, or violated public contracts as test gaps. If such broken behavior is discovered during review, report it as out of scope for the test-gap ledger and recommend `$code-issues`; use this skill when the unprotected or poorly protected behavior is the finding.
 - Do not record standalone missing, weak, stale, misleading, or wrong-location documentation, README, example, comment, or docstring gaps as test gaps. Use `$doc-gaps` when documentation itself is the finding.

@@ -35,6 +35,17 @@ Use this reference when working with shell scripts.
 ## Functions
 
 - Use `$naming-standards` for concept clarity, vocabulary consistency, abstraction level, public terminology, and rename safety. Use this reference for shell-specific script, function, flag, environment variable, and file idioms.
+- Keep shell flow direct until a function earns its name. Do not extract a
+  function only because a command or pipeline can be moved behind a name.
+- A one-line shell function is useful only when it explains a real command
+  concept, centralizes a supported boundary, preserves compatibility, hides
+  non-obvious quoting/path/cleanup semantics, removes repeated tricky command
+  setup, or matches an established local pattern. Otherwise keep the command
+  inline.
+- Do not add wrappers for speculative reuse or to make obvious commands look
+  more abstract.
+- During refactor passes, inline functions that merely restate their only call,
+  especially when the function name is no clearer than the wrapped command.
 - In included or sourced shell library files, typically files ending in `.sh`, add comments for public functions.
 - In included or sourced shell library files, functions starting with `_` are private and do not require comments.
 - In standalone executable scripts, functions do not need a leading `_` just to avoid public API treatment.

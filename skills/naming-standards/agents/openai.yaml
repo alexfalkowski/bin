@@ -1,4 +1,4 @@
 interface:
   display_name: "Naming Standards"
   short_description: "Cross-language naming judgment"
-  default_prompt: "Use $naming-standards when names are part of a code, test, docs, command, configuration, or public API change; for new public names, sketch the intended caller before choosing package/module/type terminology; pair with $go-standards, $ruby-standards, or $shell-standards for language-specific idioms."
+  default_prompt: "Use $naming-standards when names are part of a code, test, docs, command, configuration, or public API change; for new public names, sketch the intended caller before choosing package/module/type terminology; do not name one-line helpers or speculative seams unless the abstraction communicates a real concept, boundary, compatibility promise, non-obvious behavior, or local pattern; pair with $go-standards, $ruby-standards, or $shell-standards for language-specific idioms."

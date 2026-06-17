@@ -20,6 +20,22 @@ Use this reference when working in Ruby repositories.
   trigger it. Otherwise make the narrower contract explicit in code or RDoc and
   let misuse fail plainly.
 
+## Abstractions And Helpers
+
+- Keep code direct until an abstraction earns its name. Do not extract a
+  method, class, module, wrapper, concern, mixin, or block helper only because a
+  statement can be moved behind a name.
+- A one-line helper is useful only when it explains a real domain concept,
+  centralizes a supported boundary, preserves compatibility, hides non-obvious
+  exception/lifecycle semantics, removes repeated tricky logic, or matches an
+  established local pattern. Otherwise keep the call inline.
+- Do not add modules, mixins, service objects, callbacks, DSL layers, option
+  objects, or wrapper methods for speculative flexibility. Add them when a
+  current caller, executable harness, external boundary, or repository pattern
+  needs the extra shape.
+- During refactor passes, inline helpers that merely restate their only call,
+  especially when the helper name is no clearer than the wrapped expression.
+
 ## Documentation
 
 - User-facing or documented Ruby APIs need clear, accurate, and detailed RDoc for modules, classes, methods, and other supported entrypoints.

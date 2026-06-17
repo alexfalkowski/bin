@@ -19,6 +19,21 @@ Use this reference when working in Go repositories.
   security boundary, or realistic external input can trigger it. Otherwise make
   the narrower contract explicit in code or GoDoc and let misuse fail plainly.
 
+## Abstractions And Helpers
+
+- Keep code direct until an abstraction earns its name. Do not extract a
+  function, method, interface, wrapper, or package only because a statement can
+  be moved behind a name.
+- A one-line helper is useful only when it explains a real domain concept,
+  centralizes a supported boundary, preserves compatibility, hides non-obvious
+  error/lifecycle semantics, removes repeated tricky logic, or matches an
+  established local pattern. Otherwise keep the call inline.
+- Do not add interfaces, callback seams, option objects, or wrapper functions
+  for speculative flexibility. Add them when a current caller, test harness,
+  external boundary, or repository pattern needs the extra shape.
+- During refactor passes, inline helpers that merely restate their only call,
+  especially when the helper name is no clearer than the wrapped expression.
+
 ## Documentation
 
 - User-facing or documented Go APIs need clear, accurate, and detailed GoDoc for packages, exported types, functions, methods, constants, variables, and other supported entrypoints.
