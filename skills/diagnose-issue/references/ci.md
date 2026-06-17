@@ -44,7 +44,9 @@ are accepted for compatibility, but do not ask users for UUIDs.
 
 ## Fix Suggestions
 
-Order suggestions by confidence:
+Order suggestions by confidence. State a fix as a likely cause only when the
+selected target evidence supports `Confidence: High (>=80%)`; otherwise suggest
+the next evidence to collect.
 
 1. Direct fix supported by the failing job or error category.
 2. Narrow command to reproduce locally through the repository's documented

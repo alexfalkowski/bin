@@ -56,7 +56,7 @@ These rules remain mandatory:
 - Do not present a broad requested scope as fully reviewed when any relevant slice was only skimmed or deferred. Name those slices in the final coverage notes and provide runnable follow-up scopes for deferred review.
 - Each assigned agent owns recursive review only within its bounded slice. Each agent must perform a thorough and accurate `$code-review` and `$security-audit` for that slice, using `$testing-standards` for concrete missing-coverage or weak-test analysis and `$change-validation` for likely validation commands.
 - Require each agent to return findings in the same shape as the `ISSUES.md` format, without final IDs unless useful locally.
-- Use `../references/finding-severity.md` to discard low-confidence candidates before assigning severity.
+- Use `../references/finding-severity.md` to discard low-confidence candidates before assigning severity and confidence.
 - Confirm each candidate finding against the code before recording it. Findings must be concrete bugs, security issues, compatibility breaks, or violated public contracts with user-visible impact.
 - For candidates based on documentation or comments contradicting code, require non-prose proof that the implementation is wrong before recording a code issue. Existing tests, helper names, runtime behavior, or commit history that support the implementation mean the candidate is a doc gap, not a code issue.
 - Do not record standalone missing, weak, flaky, misleading, or wrong-layer tests as code issues unless they are tied to a confirmed bug, security issue, compatibility break, or violated public contract. Use `$test-gaps` for standalone missing or weak test coverage passes.
@@ -77,6 +77,7 @@ Use this structure:
 ## ISSUE-1: Short concrete title
 
 - Severity: Critical|High|Medium|Low
+- Confidence: High (>=80%)
 - Scope: path/to/file-or-folder
 - Impact: User-visible impact or violated contract.
 - Evidence: Concrete file and line references, command output, or code path.
@@ -115,7 +116,7 @@ These rules remain mandatory:
 ## References
 
 - Read `references/plan.md` before starting Find mode or Implement mode.
-- Use `../references/finding-severity.md` for confidence filtering and severity.
+- Use `../references/finding-severity.md` for confidence filtering, confidence labels, and severity.
 - Use `$code-review` for review rigor and finding quality.
 - Use `$security-audit` for security-sensitive review scope.
 - Use `$testing-standards` when deciding or reviewing regression coverage.

@@ -56,7 +56,7 @@ These rules remain mandatory:
 - Do not present a broad requested scope as fully reviewed when any relevant slice was only skimmed or deferred. Name those slices in the final coverage notes and provide runnable follow-up scopes for deferred review.
 - Each assigned agent owns recursive review only within its bounded slice. Each agent must perform a thorough and accurate `$testing-standards` review for that slice, pairing with relevant language standards and `$change-validation` for likely validation commands.
 - Require each agent to return findings in the same shape as the `ISSUES.md` format, without final IDs unless useful locally. Each finding must name the repository-owned behavior being protected; reject findings that only test dependency semantics, aliases, or pass-through wrappers.
-- Use `../references/finding-severity.md` to discard low-confidence candidates before assigning severity.
+- Use `../references/finding-severity.md` to discard low-confidence candidates before assigning severity and confidence.
 - Confirm each candidate gap against the code and existing tests before recording it. Gaps must be concrete missing, weak, misleading, flaky, or wrong-layer coverage with credible risk to changed behavior, public contracts, compatibility, release-sensitive workflows, or documented command/API behavior.
 - For candidates based on documentation or comments contradicting code, require non-prose evidence for the expected behavior before recording a test gap. If current code and tests support the implementation, treat the prose as a doc gap instead of adding tests that would encode stale documentation.
 - For each candidate, explicitly identify the nearby existing test shape and why extending existing tests, fixtures, tables, helpers, or assertions does not already cover the behavior. Do not record a gap when the proposed fix would duplicate coverage already provided by that local shape.
@@ -83,6 +83,7 @@ Use this structure:
 
 - Type: Test Gap
 - Severity: Critical|High|Medium|Low
+- Confidence: High (>=80%)
 - Scope: path/to/file-or-folder
 - Impact: Risk created by the missing, weak, misleading, flaky, or wrong-layer coverage.
 - Evidence: Concrete file and line references, existing test behavior, command output, or untested code path.
@@ -122,7 +123,7 @@ These rules remain mandatory:
 ## References
 
 - Read `references/plan.md` before starting Find mode or Implement mode.
-- Use `../references/finding-severity.md` for confidence filtering and severity.
+- Use `../references/finding-severity.md` for confidence filtering, confidence labels, and severity.
 - Use `$testing-standards` for cross-language test quality, coverage, fixtures, determinism, and test-layer decisions.
 - Use relevant language standards for local test idioms.
 - Use `$doc-gaps` instead when the user asks for a standalone missing, stale, misleading, or weak documentation, README, example, comment, or docstring pass.

@@ -117,6 +117,11 @@ When a skill is used as the final answer, use that skill's required output
 format. When a skill is embedded by another skill, preserve its concrete facts
 and use the caller's output format.
 
+Findings must include confidence when the selected skill's format has findings
+or ledger entries. Use `skills/references/finding-severity.md`: record only
+`High (>=80%)` findings, gather more evidence for uncertain candidates, and
+discard candidates that cannot reach that threshold.
+
 ## Testing Principle
 
 Use `testing-standards` when adding, reviewing, refactoring, or planning tests.
