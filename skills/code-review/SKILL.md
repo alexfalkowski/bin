@@ -31,10 +31,16 @@ finding to documentation instead of changing code.
 7. Use `$doc-standards` when the review scope includes README files, user-facing docs, examples, command/config docs, public API comments, docstrings, or changed behavior that may make nearby existing documentation stale. Keep review scope to the current change and directly affected nearby docs unless the user explicitly asks for `$doc-gaps` or a broader documentation audit.
 8. Pair with relevant language standards (`$go-standards`, `$ruby-standards`, `$shell-standards`) when reviewing language-specific code, APIs, docs, tests, or tooling behavior. Pair with `$naming-standards` when names create concrete ambiguity, misuse risk, public contract confusion, inconsistent vocabulary, or maintenance cost. Treat idiomatic style concerns as findings only when they create concrete readability, maintenance, correctness, compatibility, or public API risk; use `$style-review` instead for non-blocking polish when the user asks for style nits or a readability pass.
 9. Use `$testing-standards` when judging whether tests are missing, weak, overfit to internals, hard to read, or at the wrong layer.
-10. If the review scope includes security-sensitive code, configuration, dependencies, shell execution, filesystem writes/deletes, network/auth/TLS behavior, secrets/env handling, Docker helpers, or CI/security tooling, consult `$security-audit` and the smallest matching security reference; keep this skill's findings format.
-11. Verify claims against concrete file and line references whenever possible.
-12. When code review is the final response, use the exact structure in `references/findings-format.md`; do not add, remove, rename, or reorder sections.
-13. When another skill embeds this review, preserve findings, open questions, testing gaps, and summary facts in the caller's output format.
+10. Treat unnecessary abstraction as a code-review finding only when it creates
+    concrete maintenance, compatibility, correctness, or public API risk. A
+    one-line helper or wrapper is not a finding by itself; it becomes a finding
+    when it obscures behavior, spreads a misleading concept, freezes a bad API,
+    duplicates an existing local abstraction, or makes future changes riskier
+    without adding domain clarity or boundary ownership.
+11. If the review scope includes security-sensitive code, configuration, dependencies, shell execution, filesystem writes/deletes, network/auth/TLS behavior, secrets/env handling, Docker helpers, or CI/security tooling, consult `$security-audit` and the smallest matching security reference; keep this skill's findings format.
+12. Verify claims against concrete file and line references whenever possible.
+13. When code review is the final response, use the exact structure in `references/findings-format.md`; do not add, remove, rename, or reorder sections.
+14. When another skill embeds this review, preserve findings, open questions, testing gaps, and summary facts in the caller's output format.
 
 ## References
 

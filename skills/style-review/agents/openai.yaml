@@ -1,4 +1,4 @@
 interface:
   display_name: "Style Review"
   short_description: "Review non-blocking code polish"
-  default_prompt: "Use $style-review for non-blocking readability, consistency, idiom, naming-polish, doc-polish, and cleanup suggestions that should not be reported as code-review or doc-gap findings."
+  default_prompt: "Use $style-review for non-blocking readability, consistency, idiom, naming-polish, doc-polish, unnecessary one-line helper cleanup, and other suggestions that should not be reported as code-review or doc-gap findings."

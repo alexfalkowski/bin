@@ -27,14 +27,19 @@ reduces ambiguity, misuse risk, compatibility risk, or maintenance cost.
    do not choose names from the first implementation shape.
 4. Prefer names that reveal the domain concept, behavior, or contract over
    implementation detail, cleverness, abbreviation, or generic buckets.
-5. Check nearby names before inventing a new term. Preserve established project
+5. Before naming a new helper, wrapper, interface, module, function, method, or
+   fixture, verify that the abstraction earns a name. Do not create a name for
+   a one-line delegation, obvious call, or speculative seam unless the name
+   communicates a real domain concept, boundary, compatibility promise,
+   non-obvious lifecycle/error behavior, or established local pattern.
+6. Check nearby names before inventing a new term. Preserve established project
    vocabulary unless it is actively misleading.
-6. Use the relevant language standard for syntax and idiom:
+7. Use the relevant language standard for syntax and idiom:
    `$go-standards`, `$ruby-standards`, or `$shell-standards`.
-7. Use `$change-safety` before renaming public APIs, documented commands, flags,
+8. Use `$change-safety` before renaming public APIs, documented commands, flags,
    environment variables, file formats, generated outputs, or other
    compatibility-sensitive names.
-8. Treat naming findings as actionable only when the current name creates
+9. Treat naming findings as actionable only when the current name creates
    concrete ambiguity, maintenance cost, user confusion, public contract risk,
    likely misuse, or inconsistency with established vocabulary.
 
