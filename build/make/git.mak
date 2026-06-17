@@ -161,9 +161,16 @@ unstash:
 source-key:
 	@git ls-files | grep -v '^bin/' | xargs sha256sum | cut -d" " -f1 | sha256sum | cut -d" " -f1 > .source-key
 
-# Delete all local branches except master.
-purge:
+# Purge local branches (except master).
+purge-local:
 	@git branch | sed 's/^[* ]*//' | grep -vx 'master' | xargs git branch -D
+
+# Purge remote branches.
+purge-remote:
+	@git fetch --prune
+
+# Purge local branches (except master) and remote branches.
+purge: purge-local purge-remote
 
 # Delete remote ref and local tag for version=<tag>.
 delete-version:
