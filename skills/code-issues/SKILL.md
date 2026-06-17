@@ -77,7 +77,7 @@ Use this structure:
 ## ISSUE-1: Short concrete title
 
 - Severity: Critical|High|Medium|Low
-- Confidence: High (>=80%)
+- Confidence: 93%
 - Scope: path/to/file-or-folder
 - Impact: User-visible impact or violated contract.
 - Evidence: Concrete file and line references, command output, or code path.

@@ -106,7 +106,7 @@ entries:
 
 - Type: Doc Gap
 - Severity: Critical|High|Medium|Low
-- Confidence: High (>=80%)
+- Confidence: 93%
 - Scope: path/to/file-or-folder
 - Public surface: Command|API|package|service|configuration|example|file format|operator behavior.
 - Audience: Service author|Operator|Package consumer|Maintainer

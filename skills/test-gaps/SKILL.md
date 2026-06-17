@@ -83,7 +83,7 @@ Use this structure:
 
 - Type: Test Gap
 - Severity: Critical|High|Medium|Low
-- Confidence: High (>=80%)
+- Confidence: 93%
 - Scope: path/to/file-or-folder
 - Impact: Risk created by the missing, weak, misleading, flaky, or wrong-layer coverage.
 - Evidence: Concrete file and line references, existing test behavior, command output, or untested code path.

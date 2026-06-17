@@ -93,7 +93,7 @@ Use this structure:
 
 - Type: Reliability Gap
 - Severity: Critical|High|Medium|Low
-- Confidence: High (>=80%)
+- Confidence: 93%
 - Scope: path/to/file-or-folder
 - Impact: User, operator, incident, availability, recovery, data-integrity, or scaling risk.
 - Evidence: Concrete file and line references, command behavior, config, docs, tests, missing control, failure mode, calculation gap, and the verification path used to rule out a guess.

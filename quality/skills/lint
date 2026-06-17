@@ -114,8 +114,10 @@ require_pattern AGENTS.md "mandatory operating rules, not advisory guidance"
 require_pattern AGENTS.md "## Local pattern binding"
 require_pattern AGENTS.md "Re-read the selected skill and identify the governing instruction"
 require_pattern AGENTS.md "rerun Make targets through the initialized"
+require_pattern AGENTS.md "complete only when confidence is at least 90%"
 
 require_pattern skills/README.md "Skills are mandatory operating rules, not advisory notes."
+require_pattern skills/README.md "accept or mark work complete only when confidence is at least 90%"
 
 require_pattern skills/project-workflow/SKILL.md "Before editing code, tests, docs, config, scripts, or validation paths, identify the local pattern"
 require_pattern skills/project-workflow/references/bin-submodule.md "Treat the consuming repository's \`AGENTS.md\` as binding local policy"

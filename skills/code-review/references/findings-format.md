@@ -22,9 +22,9 @@ Use this reference when the user asks for a review.
 
 - Use `../../references/finding-severity.md` to filter low-confidence
   candidates before assigning severity and confidence.
-- Every finding must include `Confidence: High (>=80%)`. If confidence cannot
-  reach that threshold after reasonable verification, do not report the
-  candidate as a finding.
+- Every finding must include the agent's actual confidence percentage, for
+  example `Confidence: 93%`. If confidence cannot reach 90% after reasonable
+  verification, do not report the candidate as a finding.
 - For code-review output, write severity values in lowercase:
   `critical`, `high`, `medium`, or `low`.
 - Do not inflate severity for style preferences, speculative risks, or missing
@@ -40,7 +40,7 @@ Use this reference when the user asks for a review.
 ## Findings
 
 - [severity] path/to/file:line - Finding title
-  Confidence: High (>=80%)
+  Confidence: 93%
   Impact: Describe the concrete bug, regression, or risk.
   Evidence: Point to the inspected code or behavior.
   Recommendation: Describe the smallest credible fix.

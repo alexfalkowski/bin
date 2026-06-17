@@ -23,6 +23,12 @@ based on scope size, convenience, or local confidence, and do not claim extra
 delegation wording is needed when the selected skill says the user's invocation
 already grants permission.
 
+Agents must report an explicit confidence percentage before treating a result,
+finding, validation conclusion, or task as accepted or complete. They must
+accept or mark work complete only when confidence is at least 90%; below 90%,
+they must gather more evidence or state the blocker instead of accepting
+completion.
+
 ## Common Composition
 
 - `review-pr` orchestrates PR preparation with `project-workflow`,
@@ -118,9 +124,10 @@ format. When a skill is embedded by another skill, preserve its concrete facts
 and use the caller's output format.
 
 Findings must include confidence when the selected skill's format has findings
-or ledger entries. Use `skills/references/finding-severity.md`: record only
-`High (>=80%)` findings, gather more evidence for uncertain candidates, and
-discard candidates that cannot reach that threshold.
+or ledger entries. Use `skills/references/finding-severity.md`: record the
+agent's actual confidence percentage, record only findings at 90% confidence or
+higher, gather more evidence for uncertain candidates, and discard candidates
+that cannot reach that threshold.
 
 ## Testing Principle
 
