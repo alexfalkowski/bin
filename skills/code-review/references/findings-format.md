@@ -23,8 +23,9 @@ Use this reference when the user asks for a review.
 - Use `../../references/finding-severity.md` to filter low-confidence
   candidates before assigning severity and confidence.
 - Every finding must include the agent's actual confidence percentage, for
-  example `Confidence: 93%`. If confidence cannot reach 90% after reasonable
-  verification, do not report the candidate as a finding.
+  example `Confidence: 93%`. If confidence cannot reach the applicable
+  threshold after reasonable verification, do not report the candidate as a
+  finding.
 - For code-review output, write severity values in lowercase:
   `critical`, `high`, `medium`, or `low`.
 - Do not inflate severity for style preferences, speculative risks, or missing

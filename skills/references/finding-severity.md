@@ -8,11 +8,14 @@ test, doc, reliability, diagnostic, or security findings.
 Filter candidates before assigning severity. A finding should have concrete
 evidence, a trigger condition, credible impact, and a plausible fix direction.
 Recorded findings must state the agent's actual confidence percentage, for
-example `Confidence: 93%`, and that percentage must be at least 90%. Treat this
-percentage as an evidence-calibration threshold, not a statistical claim: after
-trying to disprove the candidate, the inspected evidence should make it at
-least roughly 90% likely that the finding is real, repository-owned, and
-actionable.
+example `Confidence: 93%`. Use 90% as the default minimum threshold. Use 95%
+for high-risk findings and acceptance, including security findings, destructive
+actions, public interface or compatibility conclusions, release or PR readiness,
+CI/deployment root-cause conclusions, broad no-findings claims, and claims that
+a problem is definitely fixed. Treat this percentage as an evidence-calibration
+threshold, not a statistical claim: after trying to disprove the candidate, the
+inspected evidence should make it at least roughly as likely as the required
+threshold that the finding is real, repository-owned, and actionable.
 
 Discard candidates that are likely false positives, vague suggestions,
 unsupported guesses, style-only preferences, nitpicks, or comments whose impact
@@ -20,12 +23,12 @@ cannot be explained from the inspected code, tests, docs, or command behavior.
 Do not classify uncertain or low-confidence candidates as `Low`; `Low` still
 means a real finding with limited impact.
 
-If confidence is below the high-confidence threshold, gather more evidence
+If confidence is below the applicable confidence threshold, gather more evidence
 through code inspection, current tests, command output, generated contracts,
 scanner output, official sources, runtime behavior, or history. If confidence
-still cannot reach 90%, do not record it as a finding. Use the
-workflow's data-gap, open-question, or optional follow-up section only when that
-section is explicitly meant for unresolved evidence; otherwise discard the
+still cannot reach the applicable threshold, do not record it as a finding. Use
+the workflow's data-gap, open-question, or optional follow-up section only when
+that section is explicitly meant for unresolved evidence; otherwise discard the
 candidate.
 
 When a candidate depends on comments, GoDoc, README text, examples, or other

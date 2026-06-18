@@ -23,9 +23,15 @@ Agents MUST:
   or forward-testing. Do not treat required sub-agent use as optional based on
   scope size, convenience, or local confidence.
 - Report an explicit confidence percentage before treating a result, finding,
-  validation conclusion, or task as accepted or complete. Accept or mark work
-  complete only when confidence is at least 90%; below 90%, gather more
-  evidence or state the blocker instead of accepting completion.
+  validation conclusion, or task as accepted or complete. Use 90% as the
+  default minimum threshold. Use 95% for high-risk acceptance, including
+  security findings, destructive actions, public interface or compatibility
+  conclusions, release or PR readiness, CI/deployment root-cause conclusions,
+  broad no-findings claims, and claims that a problem is definitely fixed.
+  Confidence must be backed by concrete evidence such as source inspection,
+  tests, logs, scanner output, official documentation, runtime behavior, or
+  repository history. Below the required threshold, gather more evidence or
+  state the blocker instead of accepting completion.
 - Follow existing repository patterns over personal judgment.
 - Treat skill workflow steps using "must", "do not", or "stop" language as
   blocking requirements.

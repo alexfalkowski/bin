@@ -25,9 +25,14 @@ already grants permission.
 
 Agents must report an explicit confidence percentage before treating a result,
 finding, validation conclusion, or task as accepted or complete. They must
-accept or mark work complete only when confidence is at least 90%; below 90%,
-they must gather more evidence or state the blocker instead of accepting
-completion.
+use 90% as the default minimum threshold. They must use 95% for high-risk
+acceptance, including security findings, destructive actions, public interface
+or compatibility conclusions, release or PR readiness, CI/deployment root-cause
+conclusions, broad no-findings claims, and claims that a problem is definitely
+fixed. Confidence must be backed by concrete evidence such as source
+inspection, tests, logs, scanner output, official documentation, runtime
+behavior, or repository history. Below the required threshold, they must gather
+more evidence or state the blocker instead of accepting completion.
 
 ## Command Environment Prerequisite
 
@@ -158,9 +163,9 @@ and use the caller's output format.
 
 Findings must include confidence when the selected skill's format has findings
 or ledger entries. Use `skills/references/finding-severity.md`: record the
-agent's actual confidence percentage, record only findings at 90% confidence or
-higher, gather more evidence for uncertain candidates, and discard candidates
-that cannot reach that threshold.
+agent's actual confidence percentage, record only findings that meet the
+applicable confidence threshold, gather more evidence for uncertain candidates,
+and discard candidates that cannot reach that threshold.
 
 ## Testing Principle
 
