@@ -113,9 +113,9 @@ coverage: html-coverage func-coverage
 codecov-upload:
 	@codecovcli --verbose upload-process --fail-on-error -F service -f test/reports/final.cov
 
-# Remove generated report artifacts under test/reports/.
+# Remove generated report artifacts while preserving report placeholders.
 clean-reports:
-	@rm -rf test/reports/*.*
+	@$(BIN_ROOT)/build/shell/clean-reports test/reports
 
 # Run govulncheck on the module (including tests).
 govulncheck:

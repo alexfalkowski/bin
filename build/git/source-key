@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Generate a source cache key from tracked files, excluding the bin submodule.
+
+set -eo pipefail
+
+files="$(mktemp)"
+hashes="$(mktemp)"
+trap 'rm -f "$files" "$hashes"' EXIT
+
+if command -v sha256sum >/dev/null; then
+  hash_command=(sha256sum)
+elif command -v shasum >/dev/null; then
+  hash_command=(shasum -a 256)
+else
+  printf 'source-key: missing sha256sum or shasum\n' >&2
+  exit 1
+fi
+
+git ls-files -z . ':!:bin' ':!:bin/**' > "$files"
+xargs -0 "${hash_command[@]}" < "$files" > "$hashes"
+
+key="$(cut -d" " -f1 "$hashes" | "${hash_command[@]}")"
+printf '%s\n' "${key%% *}" > .source-key
