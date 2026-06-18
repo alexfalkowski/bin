@@ -66,6 +66,13 @@ candidate instead of recording it as low priority.
 - **Current limitation**: State the existing workflow limitation, missing
   capability, or friction. The limitation must exist today and must not already
   be solved by current code, docs, examples, or command behavior.
+- **Negative capability proof**: If the proposal depends on a capability being
+  absent, verify that absence across every layer that could already provide it:
+  local code, generated code, framework wrappers, shared helpers, vendored
+  dependencies, configuration defaults, command behavior, docs, examples, and
+  tests. If the behavior is delegated to a framework, shared helper, generated
+  surface, or vendored dependency, inspect that delegated implementation before
+  assigning 90% or higher confidence.
 - **Benefit**: Explain why this matters to the named audience and the concrete
   outcome they gain, such as saved time, fewer mistakes, clearer decisions,
   unlocked use cases, safer operation, or reduced support burden. Reject the
@@ -178,12 +185,14 @@ These rules remain mandatory:
   `FEATURES.md` before returning feature proposals.
 - Require each agent to return proposals in the same shape as the `FEATURES.md`
   format, without final IDs unless useful locally.
-- Confirm each candidate feature against the acceptance gate, code, docs,
-  tests, examples, command behavior, current architecture, and available
-  comparable-tool evidence before recording it. Try to disprove the candidate
-  by asking whether the workflow is already supported, whether the repository
-  owns the behavior, whether the likely audience exists, and whether the
-  feature can be added incrementally using local patterns.
+- Confirm each candidate feature against the acceptance gate, code, generated
+  surfaces, framework wrappers, shared helpers, vendored dependency behavior
+  when delegated, docs, tests, examples, command behavior, current
+  architecture, and available comparable-tool evidence before recording it. Try
+  to disprove the candidate by asking whether the workflow is already
+  supported, whether the repository owns the behavior, whether the likely
+  audience exists, and whether the feature can be added incrementally using
+  local patterns.
 - Record feature gaps only when the proposal names the audience, current
   product workflow limitation, practical audience benefit, repository-owned
   product surface, evidence of user, operator, service-author, package-consumer,
@@ -257,6 +266,12 @@ Confidence means the inspected evidence makes it very likely that the feature
 is repository-owned, not already supported, valuable to the named audience, and
 implementable without violating local patterns.
 
+Do not assign 90% or higher confidence to a missing-feature proposal when the
+current behavior may be provided by an included framework, shared helper,
+generated surface, vendored dependency, or default configuration that has not
+been inspected. Keep the candidate below threshold, gather that evidence, or
+discard it.
+
 Do not add a separate percentage for idea quality, strength, value, impact, or
 priority. Use `Priority` to express the strength of the audience benefit and
 use `Confidence` only for evidence-backed actionability.
@@ -292,10 +307,11 @@ These rules remain mandatory:
 - Work through feature proposals sequentially by ID unless the human explicitly
   names a different proposal.
 - Before proposing an implementation for each feature, re-check the current
-  code, docs, tests, examples, command behavior, and comparable-tool evidence.
-  Treat the ledger as something that can go stale: dismiss or revise proposals
-  that are already supported, duplicate another feature, no longer fit the
-  repository, or belong in another workflow.
+  code, generated surfaces, framework wrappers, shared helpers, vendored
+  dependency behavior when delegated, docs, tests, examples, command behavior,
+  and comparable-tool evidence. Treat the ledger as something that can go
+  stale: dismiss or revise proposals that are already supported, duplicate
+  another feature, no longer fit the repository, or belong in another workflow.
 - Stop after proposing the solution. Do not edit files, update `FEATURES.md`,
   or start validation until the human explicitly agrees to that feature's
   solution.
