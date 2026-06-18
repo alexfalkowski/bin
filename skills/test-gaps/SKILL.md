@@ -1,6 +1,6 @@
 ---
 name: test-gaps
-description: Use when the user asks to find $test-gaps in a package or folder, find test gaps in a package or folder, find flaky tests in a package or folder, find wrong-layer tests in a package or folder, implement $test-gaps in a package or folder, implement test gaps in a package or folder, asks about test gap IDs such as TEST-1, asks what the fix is for TEST-1, asks to fix or verify TEST-1, or says TEST-1 is done. Find concrete missing, weak, misleading, flaky, or wrong-layer test coverage, record confirmed gaps in scoped TESTS.md, and later propose and implement agreed test fixes gap by gap.
+description: Use when the user asks to find $test-gaps in a package or folder, find test gaps in a package or folder, find flaky tests in a package or folder, find wrong-layer tests in a package or folder, find weak test harness or test-support-code gaps, implement $test-gaps in a package or folder, implement test gaps in a package or folder, asks about test gap IDs such as TEST-1, asks what the fix is for TEST-1, asks to fix or verify TEST-1, or says TEST-1 is done. Find concrete missing, weak, misleading, flaky, wrong-layer, or poorly supported test coverage, including test harness issues that make coverage brittle or misleading; record confirmed gaps in scoped TESTS.md; and later propose and implement agreed test fixes gap by gap.
 ---
 
 # Test Gaps
@@ -37,6 +37,15 @@ prose and implementation disagree, first prove which behavior is wrong with
 non-prose evidence, then route code bugs to `$code-issues` and stale prose to
 `$doc-gaps`.
 
+Treat test harnesses, test fixtures, feature helpers, test-support scripts,
+cross-language acceptance layers, and test-only Ruby, shell, Go, or other code
+as test surfaces when the proposed improvement primarily makes tests more
+correct, representative, deterministic, maintainable, configurable, or
+appropriately layered. Do not mistake test-support code for product code merely
+because it has executable logic. Route pure build, CI, Makefile, release,
+validation-preflight, command-discovery, setup, or repository workflow
+improvements to `$project-gaps`.
+
 ## Find Mode
 
 Follow `references/plan.md#find-mode-plan`.
@@ -70,6 +79,10 @@ These rules remain mandatory:
   exported function, constructor, interface, or helper lacks direct tests.
 - For candidates based on documentation or comments contradicting code, require non-prose evidence for the expected behavior before recording a test gap. If current code and tests support the implementation, treat the prose as a doc gap instead of adding tests that would encode stale documentation.
 - For each candidate, explicitly identify the nearby existing test shape and why extending existing tests, fixtures, tables, helpers, or assertions does not already cover the behavior. Do not record a gap when the proposed fix would duplicate coverage already provided by that local shape.
+- For each candidate involving test harness or test-support code, identify how
+  the harness weakness can make tests brittle, misleading, wrong-layer,
+  duplicated, non-deterministic, environment-bound, or unable to cover the
+  repository-owned behavior through the dominant relevant harness.
 - Do not record gaps whose only meaningful test would assert pass-through behavior to an upstream library, standard library, or framework. This includes aliases, type aliases, thin wrappers, direct option forwarding, direct global setter/getter calls, dependency injection container behavior, validator tag behavior, encoder/parser behavior, and constructors where the repository adds no branching, validation, transformation, error handling, lifecycle behavior, compatibility policy, or composition contract of its own.
 - Only record a gap around third-party integration when the untested behavior is repository-owned. Examples include local validation/normalization before calling the dependency, local input/output mapping, local error wrapping/classification/recovery, lifecycle ordering or cleanup owned by the repository, documented compatibility behavior promised across dependency versions, or end-to-end behavior through a supported public repo entrypoint where multiple repo-owned pieces are composed.
 - When a candidate gap touches a wrapper around a dependency, explicitly ask: "Would the proposed test fail because repository code changed, or only because the dependency's behavior/shape changed?" Record it only when repository code owns the failing behavior.
@@ -80,6 +93,11 @@ These rules remain mandatory:
   concurrency safety, cleanup, error aggregation, compatibility, or documented
   lifecycle behavior.
 - Do not record gaps that require build tags, architecture-specific execution, optional services, integration environments, or other validation modes the repository does not normally run, unless the finding is explicitly that CI or the documented validation path must add that mode.
+- Do not record standalone build, CI, Makefile, release, validation-preflight,
+  command-discovery, setup, or repository workflow improvements as test gaps.
+  Use `$project-gaps` when the improvement is about how the project discovers,
+  runs, aggregates, or gates validation rather than about the correctness,
+  representativeness, maintainability, or layer of the tests themselves.
 - Do not record confirmed production bugs, security issues, compatibility breaks, or violated public contracts as test gaps. If such broken behavior is discovered during review, report it as out of scope for the test-gap ledger and recommend `$code-issues`; use this skill when the unprotected or poorly protected behavior is the finding.
 - Do not record standalone missing, weak, stale, misleading, or wrong-location documentation, README, example, comment, or docstring gaps as test gaps. Use `$doc-gaps` when documentation itself is the finding.
 - Do not report optional nice-to-have tests, private implementation coverage, arbitrary coverage percentage improvements, style preferences, or docs-only validation as findings by themselves. List them only as doc gaps or optional follow-up notes when relevant.
@@ -103,7 +121,7 @@ Use this structure:
 - Scope: path/to/file-or-folder
 - Impact: Risk created by the missing, weak, misleading, flaky, or wrong-layer coverage.
 - Evidence: Concrete file and line references, existing test behavior, command output, or untested code path.
-- Proposed fix: Brief test direction using the narrowest credible established test layer.
+- Proposed fix: Brief test or test-harness direction using the narrowest credible established test layer.
 - Validation: Suggested checks for the test change.
 ```
 
@@ -146,5 +164,8 @@ These rules remain mandatory:
 - Use `$testing-standards` for cross-language test quality, coverage, fixtures, determinism, and test-layer decisions.
 - Use relevant language standards for local test idioms.
 - Use `$doc-gaps` instead when the user asks for a standalone missing, stale, misleading, or weak documentation, README, example, comment, or docstring pass.
+- Use `$project-gaps` instead when the concern is build, CI, Makefile, release,
+  setup, validation preflight, command discovery, or repository workflow rather
+  than test correctness or harness quality.
 - Use `$project-workflow` for repository command discovery, CI expectations, and `./bin` wiring before review planning or validation.
 - Use `$change-validation` when selecting validation commands for implemented test fixes.

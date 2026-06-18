@@ -48,15 +48,19 @@ plan from the consuming repository root and keep `bin/` as shared guidance.
 1. Confirm the requested package or folder scope.
 2. Check whether scoped `FEATURES.md` already exists and stop if it does.
 3. Run `$project-workflow` discovery for entrypoints, CI, documented commands,
-   docs, examples, public APIs, developer workflows, and `./bin` wiring.
-4. Identify the feature surface in scope, including CLIs, APIs, libraries,
-   Make targets, scripts, examples, docs, integrations, extension points,
-   setup flows, validation flows, release flows, and maintainer workflows.
+   docs, examples, public APIs, product-owned workflows, and `./bin` wiring.
+4. Identify the product feature surface in scope, including CLIs, APIs,
+   libraries, service/operator behavior, package-consumer or service-author
+   workflows, shipped templates, examples, docs, integrations, product
+   extension points, and product-owned setup or onboarding flows. Route
+   standalone test-harness, CI, build, Makefile, release, validation, command
+   discovery, setup, and repository workflow concerns to `$test-gaps` or
+   `$project-gaps`.
 5. Build a recursive scope inventory for the requested package or folder:
    relevant file count, first-level subfolders, nested packages, dominant
    languages, tests, public entrypoints, generated/vendor/build/cache
-   exclusions, user-facing surfaces, developer-facing surfaces, and likely
-   extension points.
+   exclusions, user-facing product surfaces, package-consumer or service-author
+   surfaces, operator-facing surfaces, and likely product extension points.
 6. Split the inventory into bounded feature-surface, workflow-owned, or
    audience-owned review slices. Use depth only as a discovery aid; do not
    assign a broad recursive subtree merely because it is a first-level
@@ -78,14 +82,14 @@ plan from the consuming repository root and keep `bin/` as shared guidance.
     conclusions against code, docs, tests, examples, command behavior, current
     architecture, and comparable-tool evidence.
 13. Apply `SKILL.md#acceptance-gate` to each candidate and confirm the feature
-    gap names the audience, current limitation, repository-owned surface,
-    evidence of value, repository fit, smallest plausible implementation path,
-    compatibility and maintenance tradeoffs, validation path, and correct
-    workflow routing.
+    gap names the audience, current product limitation, repository-owned
+    product surface, evidence of value, repository fit, smallest plausible
+    implementation path, compatibility and maintenance tradeoffs, validation
+    path, and correct workflow routing.
 14. Reject novelty, competitor checklists, trend-following, broad rewrites,
     new-framework preferences, future-roadmap assumptions, optional polish, and
-    findings that belong in code, security, reliability, test, doc, or naming
-    workflows.
+    findings that belong in project, code, security, reliability, test, doc, or
+    naming workflows.
 15. If no confirmed feature gaps remain, report that result with the coverage
     state, do not create `FEATURES.md`, and stop.
 16. If confirmed feature gaps remain, write the scoped `FEATURES.md` with

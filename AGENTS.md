@@ -93,9 +93,12 @@ skill instead of one broad default:
 - `code-issues`: find confirmed code issues into `ISSUES.md`, then implement agreed fixes one code issue at a time.
 - `test-gaps`: find confirmed missing or weak tests into `TESTS.md`, then implement agreed test fixes gap by gap.
 - `doc-gaps`: find and fix confirmed missing, stale, or misleading docs/comments in one pass, using `DOCS.md` only for audit-only requests or unresolved gaps.
-- `feature-gaps`: find concrete product or developer-experience feature
+- `feature-gaps`: find concrete product-facing feature
   opportunities into `FEATURES.md`, then implement agreed feature changes one
   at a time.
+- `project-gaps`: find concrete build, CI, Makefile, release, setup,
+  validation, command discovery, and repository workflow opportunities into
+  `PROJECTS.md`, then implement agreed project workflow changes one at a time.
 - `reliability-standards`: SRE, NALSD, production-readiness, SLO, overload,
   observability, release-safety, recovery, and operability guidance.
 - `reliability-gaps`: find confirmed reliability gaps into `RELIABILITY.md`, then
@@ -153,8 +156,14 @@ Common composition:
   audit-only requests or unresolved gaps.
 - `feature-gaps` orchestrates a two-phase feature-opportunity workflow:
   aggregate confirmed `project-workflow` context, current repository behavior,
-  and comparable product or developer-experience evidence into `FEATURES.md`,
-  then implement agreed feature changes one feature at a time.
+  and comparable product evidence into `FEATURES.md`, then implement agreed
+  main product feature changes one feature at a time. Route standalone test,
+  CI, build, Makefile, release, validation, command discovery, and repository
+  workflow concerns to `test-gaps` or `project-gaps`.
+- `project-gaps` orchestrates a two-phase project workflow: aggregate
+  confirmed `project-workflow` context and build, CI, Makefile, release, setup,
+  validation, command discovery, and repository workflow opportunities into
+  `PROJECTS.md`, then implement agreed project workflow changes one at a time.
 - `reliability-gaps` orchestrates a two-phase reliability-gap workflow:
   aggregate confirmed `project-workflow` context and SRE, NALSD, operability,
   overload, observability, release-safety, recovery, or data-integrity gaps into
@@ -175,7 +184,9 @@ Common composition:
 - `security-audit` pairs with `change-safety` for code changes and
   `change-validation` for scanner, lint, or CI command selection.
 - `testing-standards` pairs with language standards for test idioms and
-  `change-validation` for command selection.
+  `change-validation` for command selection, and owns test-harness/support-code
+  improvements when they primarily affect test correctness, maintainability,
+  determinism, configurability, or layering.
 - `doc-standards` pairs with language standards for API comments and docstrings,
   `naming-standards` for terminology, `change-safety` for documented contract
   changes, and `change-validation` for docs-related validation.
@@ -188,6 +199,9 @@ Common composition:
   documentation terms.
 - `project-workflow` covers command discovery, CI expectations, downstream
   `./bin` wiring, and shared Makefile fragment behavior.
+- `project-gaps` owns missing or weak project workflow capabilities for build,
+  CI, Makefile, release, setup, validation, command discovery, and repository
+  workflow surfaces.
 - `change-validation` should use `project-workflow` context before selecting
   validation commands for orchestrated workflows.
 

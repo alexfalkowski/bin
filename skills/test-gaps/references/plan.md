@@ -11,8 +11,8 @@ repository root and keep `bin/` as shared guidance.
 - Keep exactly one active phase in progress at a time.
 - Preserve stop gates as plan boundaries; do not continue past a stop gate based
   on silence or a broad request.
-- Update the active plan when scope, dominant test harness, validation,
-  delegation, or ledger state changes.
+- Update the active plan when scope, dominant test harness, test-support
+  surface, validation, delegation, or ledger state changes.
 - Treat validation as stale when files change after a command ran.
 - Before checking, reading, creating, or updating the scoped `TESTS.md` ledger,
   ensure the consuming repository root `.gitignore` exists and contains
@@ -47,12 +47,12 @@ repository root and keep `bin/` as shared guidance.
 1. Confirm the requested package or folder scope.
 2. Check whether scoped `TESTS.md` already exists and stop if it does.
 3. Run `$project-workflow` discovery for entrypoints, CI, and `./bin` wiring.
-4. Identify the existing tests, fixtures, helpers, and dominant relevant harness
-   for the requested scope.
+4. Identify the existing tests, fixtures, helpers, test-support code, and
+   dominant relevant harness for the requested scope.
 5. Build a recursive scope inventory for the requested package or folder:
    relevant file count, first-level subfolders, nested packages, dominant
-   languages, public entrypoints, generated/vendor/build/cache exclusions, and
-   existing test harnesses.
+   languages, public entrypoints, generated/vendor/build/cache exclusions,
+   existing test harnesses, and test-support surfaces.
 6. Split the inventory into bounded behavior-owned test-risk slices. Use depth
    only as a discovery aid; do not assign a broad recursive subtree merely
    because it is a first-level subfolder.
@@ -72,8 +72,12 @@ repository root and keep `bin/` as shared guidance.
 13. For candidates based on prose contradicting implementation, prove the
     expected behavior with non-prose evidence before treating missing coverage
     as a test gap; otherwise classify the mismatch as a documentation gap.
-14. Confirm each gap protects repository-owned behavior and is not duplicate,
-    private-only, dependency-only, optional, or better handled by another skill.
+14. Confirm each gap protects repository-owned behavior or removes a concrete
+    test-harness weakness that makes such coverage brittle, misleading,
+    wrong-layer, duplicated, non-deterministic, environment-bound, or
+    unavailable. Reject candidates that are duplicate, private-only,
+    dependency-only, optional, or better handled by another skill such as
+    `$project-gaps`.
 15. If no confirmed gaps remain, report that result with the coverage state, do
     not create `TESTS.md`, and stop.
 16. If confirmed gaps remain, write the scoped `TESTS.md` with `TEST-<number>`
@@ -89,7 +93,8 @@ repository root and keep `bin/` as shared guidance.
 3. Run `$project-workflow` discovery for current entrypoints, CI, and `./bin`
    wiring.
 4. Select the next finding by ID unless the human named a specific finding.
-5. Re-check the finding against current code, tests, fixtures, and harnesses.
+5. Re-check the finding against current code, tests, fixtures, harnesses, and
+   test-support surfaces.
 6. If the finding depends on prose contradicting implementation, prove the
    expected behavior with non-prose evidence before proposing tests; otherwise
    propose reclassification as a documentation gap.
