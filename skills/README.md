@@ -29,6 +29,23 @@ accept or mark work complete only when confidence is at least 90%; below 90%,
 they must gather more evidence or state the blocker instead of accepting
 completion.
 
+## Command Environment Prerequisite
+
+Before any skill runs, retries, replaces, or recommends a command, establish the
+repository command surface and execution environment. Treat the repository
+Makefile, documented entrypoints, and CI configuration as the source of truth;
+on developer machines, especially macOS, assume required tools may come from
+Homebrew or another user-shell setup rather than the OS defaults.
+
+Run repository commands through the user's initialized shell when tool
+resolution matters, for example `zsh -lic 'make lint'`, and compare `make`,
+`ruby`, or other required tool paths against the initialized shell before
+calling a tool failure real. Do not invent direct commands, bypass Make targets,
+install alternate tools, or keep retrying variants merely to get something to
+run in the agent environment. Report shell, `PATH`, Homebrew, missing-tool, and
+version mismatches as environment or validation gaps while preserving the
+repository-defined command as the intended path.
+
 ## Common Composition
 
 - `review-pr` orchestrates PR preparation with `project-workflow`,

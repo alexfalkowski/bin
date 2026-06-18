@@ -28,18 +28,25 @@ fi
 require_pattern AGENTS.md "mandatory operating rules, not advisory guidance"
 require_pattern AGENTS.md "## Local pattern binding"
 require_pattern AGENTS.md "Re-read the selected skill and identify the governing instruction"
+require_pattern AGENTS.md "Before any selected skill runs, retries, replaces, or recommends a command"
 require_pattern AGENTS.md "rerun Make targets through the initialized"
 require_pattern AGENTS.md "complete only when confidence is at least 90%"
 
 require_pattern skills/README.md "Skills are mandatory operating rules, not advisory notes."
+require_pattern skills/README.md "## Command Environment Prerequisite"
+require_pattern skills/README.md "Do not invent direct commands"
 require_pattern skills/README.md "accept or mark work complete only when confidence is at least 90%"
 
 require_pattern skills/project-workflow/SKILL.md "Before editing code, tests, docs, config, scripts, or validation paths, identify the local pattern"
+require_pattern skills/project-workflow/SKILL.md "macOS/Homebrew tool-path assumptions"
 require_pattern skills/project-workflow/references/bin-submodule.md "Treat the consuming repository's \`AGENTS.md\` as binding local policy"
+require_pattern skills/project-workflow/references/bin-submodule.md "On developer machines, especially macOS"
 
 require_pattern skills/change-validation/references/check-selection.md "Before selecting tests, identify the dominant relevant test harness"
 require_pattern skills/change-validation/references/check-selection.md "Do not add or select an ad hoc language-native test command"
+require_pattern skills/change-validation/references/check-selection.md "Do not invent direct commands, replace a Makefile target, install alternate tools"
 require_pattern skills/change-validation/SKILL.md "Treat validation as valid only for the file state it tested"
+require_pattern skills/change-validation/SKILL.md "macOS/Homebrew tool-path assumptions"
 
 require_pattern skills/testing-standards/SKILL.md "## Mandatory Stop Gates"
 require_pattern skills/testing-standards/SKILL.md "MUST NOT add language-native tests"
@@ -69,6 +76,7 @@ require_pattern skills/reliability-gaps/SKILL.md "state the reliability executio
 require_pattern skills/reliability-gaps/SKILL.md "\`Red\`, \`Green\`, \`Refactor\`, and \`Validation\`"
 
 require_pattern skills/project-workflow/agents/openai.yaml "Treat AGENTS.md and selected skills as mandatory rules."
+require_pattern skills/project-workflow/agents/openai.yaml "initialized user-shell command environment"
 require_pattern skills/testing-standards/agents/openai.yaml "MUST identify the dominant relevant existing test harness before editing"
 require_pattern skills/testing-standards/agents/openai.yaml "stop on unexpected green tests"
 require_pattern skills/go-standards/agents/openai.yaml "MUST NOT invent import aliases for readability, caution, brevity, or personal clarity"
@@ -79,5 +87,6 @@ require_pattern skills/doc-gaps/agents/openai.yaml "answer doc gap ID follow-ups
 require_pattern skills/feature-gaps/agents/openai.yaml "answer feature ID follow-ups such as FEATURE-1"
 require_pattern skills/project-gaps/agents/openai.yaml "answer project gap ID follow-ups such as PROJECT-1"
 require_pattern skills/change-validation/agents/openai.yaml "file changes make prior validation stale"
+require_pattern skills/change-validation/agents/openai.yaml "initialized user shell"
 
 exit "$missing"

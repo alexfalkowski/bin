@@ -248,6 +248,10 @@ CI runs (CircleCI): `make dep`, `make clean-dep`, `make scripts-lint`, `make ski
 - Treat this repository's Makefile, reusable make fragments, and CI
   configuration as the source of truth for setup, lint, test, security,
   benchmark, and review commands.
+- Before any selected skill runs, retries, replaces, or recommends a command,
+  establish the repository command surface and execution environment. On
+  developer machines, especially macOS, assume required tools may come from
+  Homebrew or another user-shell setup rather than the OS defaults.
 - Prefer `make` targets and documented repository entry points over direct tool
   invocations, even when a direct command appears equivalent.
 - Run commands from the repository root unless the Makefile, script, or task
@@ -257,6 +261,9 @@ CI runs (CircleCI): `make dep`, `make clean-dep`, `make scripts-lint`, `make ski
   differs from the user's normal terminal, treat that as an environment
   mismatch or validation gap, not as evidence that the repository command is
   wrong.
+- Do not invent direct commands, bypass Make targets, install alternate tools,
+  or keep retrying variants merely to get something to run in the agent
+  environment.
 - In Codex/tool shells, verify `ruby` and `make` resolution against the
   initialized user shell before reporting repository command failures. Compare
   the default tool shell with `zsh -lic 'command -v ruby; command -v make'`; if
