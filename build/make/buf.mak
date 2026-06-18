@@ -1,8 +1,12 @@
 NAME:=$(shell basename $(shell dirname $(CURDIR)))
 
 # Lint protobuf definitions with buf.
-lint:
+lint: format-check
 	@buf lint
+
+# Check protobuf formatting without rewriting files.
+format-check:
+	@buf format --diff --exit-code
 
 # Fix protobuf formatting by rewriting files in place (buf format -w).
 fix-lint:
