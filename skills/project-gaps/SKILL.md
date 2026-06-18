@@ -56,6 +56,9 @@ candidate instead of recording it as low priority.
   Make target or fragment, CI job, setup path, release/versioning flow,
   validation/preflight entrypoint, script, generated-artifact check, local
   developer command, or shared `./bin` wiring.
+- **Implementation home**: Identify where the smallest useful fix should live:
+  current repo, shared `bin`, external repo, or mixed. Confirm the requested
+  scope owns that home before recording a normal project gap.
 - **Evidence**: Cite concrete local evidence such as Makefiles, CI config,
   scripts, docs, command behavior, recurring maintainer workflow, or comparable
   mature project workflow behavior. Comparable evidence is supporting evidence,
@@ -122,6 +125,12 @@ These rules remain mandatory:
   guidance needed as evidence. Route upstream-only shared-tooling findings to a
   separate `bin`-scoped run instead of writing them into the consuming
   repository's `PROJECTS.md`.
+- Classify every candidate's implementation home before recording it. Use:
+  `current repo` when the requested scope owns the fix; `shared bin` when
+  reusable `bin` tooling owns the fix; `external repo` when another repository
+  or image owns the invoked command, script, CI job, or release behavior; and
+  `mixed` only when a small local adapter plus an owning upstream change are
+  both necessary.
 - Before assigning review agents, build a recursive scope inventory for the
   requested package or folder: relevant file count, first-level subfolders,
   nested packages, dominant languages, Makefiles, CI config, scripts,
@@ -169,6 +178,11 @@ These rules remain mandatory:
   package consumers, service authors, or operators, route it to
   `$feature-gaps`.
 - If a candidate mostly documents existing behavior, route it to `$doc-gaps`.
+- If a candidate's implementation home is outside the requested scope, do not
+  record it as a normal `PROJECT-N` for that scope. Record it under
+  `Routed Project Follow-Ups` with the owning home and local evidence, or route
+  it to a separate project-gaps run in the owning repository or shared tooling
+  scope.
 - If no confirmed project gaps are found, report that no project gaps were
   found and do not create `PROJECTS.md`.
 - If confirmed project gaps are found, write all proposals to the scoped
@@ -191,6 +205,7 @@ Use this structure:
 - Confidence: 93%
 - Scope: path/to/file-or-folder
 - Audience: Developer|Maintainer|Operator|Package consumer|Service author
+- Implementation home: current repo|shared bin|external repo|mixed
 - Current limitation: The project workflow friction or missing project capability.
 - Project surface: Make target|CI job|script|setup flow|validation flow|release flow|command discovery|shared ./bin wiring.
 - Evidence: Concrete file and line references, command behavior, CI config, docs, examples, comparable workflow evidence, or maintainer workflow evidence.
@@ -203,6 +218,13 @@ Use this structure:
 Keep optional follow-up notes separate from proposals:
 
 ```markdown
+## Routed Project Follow-Ups
+
+- Owning home: shared bin|external repo|mixed
+  Evidence: Local evidence that exposed the gap.
+  Follow-up scope: The repository, package, or shared tooling scope where the
+  project-gaps run or implementation belongs.
+
 ## Optional Project Follow-Ups
 
 - Optional or non-blocking idea.
@@ -248,8 +270,10 @@ These rules remain mandatory:
   Makefiles, CI config, scripts, docs, tests, examples, command behavior, and
   comparable workflow evidence. Treat the ledger as something that can go
   stale: dismiss or revise proposals that are already supported, duplicate
-  another project workflow, no longer fit the repository, or belong in another
-  workflow.
+  another project workflow, no longer fit the repository, belong in another
+  workflow, or have an implementation home outside the requested scope.
+- If the proposal's implementation home is outside the requested scope, stop
+  and propose moving or reclassifying it instead of implementing it locally.
 - Stop after proposing the solution. Do not edit files, update `PROJECTS.md`,
   or start validation until the human explicitly agrees to that project-gap
   solution.

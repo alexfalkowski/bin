@@ -63,6 +63,8 @@ require_pattern skills/test-gaps/SKILL.md "After the human agrees and before edi
 require_pattern skills/doc-gaps/SKILL.md "After the human agrees and before editing, state the selected local documentation pattern"
 require_pattern skills/feature-gaps/SKILL.md "After the human agrees and before editing, state the selected local code/config/docs pattern"
 require_pattern skills/project-gaps/SKILL.md "After the human agrees and before editing, state the selected local project workflow pattern"
+require_pattern skills/project-gaps/SKILL.md "Implementation home: current repo|shared bin|external repo|mixed"
+require_pattern skills/project-gaps/SKILL.md "If a candidate's implementation home is outside the requested scope"
 require_pattern skills/reliability-gaps/SKILL.md "After the human agrees and before editing, state the selected local code/config/docs pattern"
 require_pattern skills/code-issues/SKILL.md "asks about issue IDs such as ISSUE-1"
 require_pattern skills/test-gaps/SKILL.md "asks about test gap IDs such as TEST-1"
@@ -86,6 +88,7 @@ require_pattern skills/test-gaps/agents/openai.yaml "answer test gap ID follow-u
 require_pattern skills/doc-gaps/agents/openai.yaml "answer doc gap ID follow-ups such as DOC-1"
 require_pattern skills/feature-gaps/agents/openai.yaml "answer feature ID follow-ups such as FEATURE-1"
 require_pattern skills/project-gaps/agents/openai.yaml "answer project gap ID follow-ups such as PROJECT-1"
+require_pattern skills/project-gaps/agents/openai.yaml "implementation home as current repo, shared bin, external repo, or mixed"
 require_pattern skills/change-validation/agents/openai.yaml "file changes make prior validation stale"
 require_pattern skills/change-validation/agents/openai.yaml "initialized user shell"
 
