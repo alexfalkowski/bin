@@ -49,9 +49,9 @@ features:
 benchmarks:
 	@$(BIN_ROOT)/quality/ruby/benchmark $(feature)
 
-# Remove generated report artifacts under test/reports/.
+# Remove generated report artifacts while preserving report placeholders.
 clean-reports:
-	@rm -rf test/reports/*.*
+	@$(BIN_ROOT)/build/shell/clean-reports "$(if $(wildcard reports/.),reports,test/reports)"
 
 # Upload test/reports/coverage.xml to Codecov (codecovcli upload-process).
 codecov-upload:

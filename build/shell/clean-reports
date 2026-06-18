@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Remove generated report artifacts while preserving placeholder files.
+
+set -eo pipefail
+
+readonly reports="${1:?usage: clean-reports REPORTS_PATH}"
+
+if [[ $(basename "$reports") != "reports" ]]; then
+  printf 'clean-reports: path must end with reports: %s\n' "$reports" >&2
+  exit 1
+fi
+
+if [[ ! -d $reports ]]; then
+  exit 0
+fi
+
+find "$reports" -mindepth 1 -maxdepth 1 ! -name .keep -exec rm -rf {} +
