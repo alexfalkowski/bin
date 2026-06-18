@@ -45,7 +45,7 @@ are accepted for compatibility, but do not ask users for UUIDs.
 ## Fix Suggestions
 
 Order suggestions by confidence. State a fix as a likely cause only when the
-selected target evidence supports at least 90% confidence, and state the actual
+selected target evidence supports at least 95% confidence, and state the actual
 percentage; otherwise suggest the next evidence to collect.
 
 1. Direct fix supported by the failing job or error category.
