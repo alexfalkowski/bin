@@ -19,6 +19,11 @@ repository root and keep `bin/` as shared guidance.
   `DOCS.md` as a standalone pattern. If the pattern is missing, add it.
 - Use a scoped `DOCS.md` ledger only for audit-only mode, unresolved confirmed
   gaps, or an existing doc-gap ledger being completed.
+- In downstream repositories that vendor this project as `./bin`, exclude
+  `bin/**` from recursive inventory, review slices, edits, and durable findings
+  unless the requested scope is explicitly about shared `bin` tooling. Inspect
+  only included shared fragments or selected skill guidance needed as evidence,
+  and route upstream-only findings to a separate `bin`-scoped run.
 - Track broad-scope coverage explicitly as reviewed deeply, skimmed, excluded,
   and deferred. Deferred entries must name runnable follow-up scopes.
 

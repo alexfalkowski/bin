@@ -54,6 +54,14 @@ These rules remain mandatory:
 - If delegation is denied, stop instead of falling back to a local review. If sub-agents are unavailable, say so briefly and perform the review locally for the requested scope.
 - Ask for human permission before agents run commands that require approval, such as network, SSH, GitHub auth, registry auth, remote writes, destructive operations, or non-read-only validation.
 - Exclude generated files and folders, vendored dependencies, caches, build output, generated API docs, and generated lockfile churn unless the requested scope is explicitly about them.
+- In downstream repositories that vendor this project as `./bin`, treat
+  `bin/**` as vendored shared tooling unless the requested scope is explicitly
+  about shared `bin` tooling, Makefile includes, skills, or submodule wiring.
+  Exclude `bin/**` from recursive review and inventory by default; inspect only
+  included `bin/build/make/*.mak` fragments or selected `bin/skills/**`
+  guidance needed as evidence. Route upstream-only shared-tooling findings to a
+  separate `bin`-scoped run instead of writing them into the consuming
+  repository's `RELIABILITY.md`.
 - Before assigning review agents, build a recursive scope inventory for the requested package or folder: relevant file count, first-level subfolders, nested packages, dominant languages, tests, public entrypoints, generated/vendor/build/cache exclusions, and reliability-sensitive surfaces.
 - Do not assign broad recursive subtrees merely because they are first-level subfolders. When a subtree contains many independent nested packages, mixed operational responsibilities, or too many relevant files for a credible single pass, split it into smaller behavior-owned slices before delegation.
 - Prefer slices based on repository-owned reliability and operational risk: public commands/APIs, changed or recently touched areas, retries/timeouts/backpressure, config/CI/release paths, observability/runbook surfaces, documented workflows, and nearby tests. Use depth only as a discovery aid, not as the review boundary.
