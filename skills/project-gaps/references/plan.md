@@ -12,7 +12,7 @@ plan from the consuming repository root and keep `bin/` as shared guidance.
 - Preserve stop gates as plan boundaries; do not continue past a stop gate
   based on silence or a broad request.
 - Update the active plan when scope, audience, project workflow surface,
-  validation, delegation, or ledger state changes.
+  implementation home, validation, delegation, or ledger state changes.
 - Treat validation as stale when files change after a command ran.
 - Before checking, reading, creating, or updating the scoped `PROJECTS.md`
   ledger, ensure the consuming repository root `.gitignore` exists and contains
@@ -87,20 +87,24 @@ plan from the consuming repository root and keep `bin/` as shared guidance.
     command behavior, and current architecture.
 13. Apply `SKILL.md#acceptance-gate` to each candidate and confirm the project
     gap names the audience, current limitation, repository-owned project
-    surface, evidence of value, repository fit, smallest plausible
-    implementation path, compatibility and maintenance tradeoffs, validation
-    path, and correct workflow routing.
+    surface, implementation home, evidence of value, repository fit, smallest
+    plausible implementation path, compatibility and maintenance tradeoffs,
+    validation path, and correct workflow routing.
 14. Reject novelty, competitor checklists, trend-following, broad rewrites,
     new-framework preferences, future-roadmap assumptions, optional polish, and
     findings that belong in feature, code, security, reliability, test, doc, or
     naming workflows.
-15. If no confirmed project gaps remain, report that result with the coverage
+15. Route candidates whose implementation home is outside the requested scope to
+    `Routed Project Follow-Ups` or to a separate project-gaps run in the owning
+    repository or shared tooling scope; do not record them as normal
+    `PROJECT-<number>` entries for the current scope.
+16. If no confirmed project gaps remain, report that result with the coverage
     state, do not create `PROJECTS.md`, and stop.
-16. If confirmed project gaps remain, write the scoped `PROJECTS.md` with
+17. If confirmed project gaps remain, write the scoped `PROJECTS.md` with
     `PROJECT-<number>` IDs.
-17. Present the scoped ledger, proposed implementation plan, coverage state for
+18. Present the scoped ledger, proposed implementation plan, coverage state for
     broad scopes, and runnable follow-up scopes for deferred slices.
-18. Stop before implementing project changes.
+19. Stop before implementing project changes.
 
 ## Implement Mode Plan
 
@@ -115,10 +119,12 @@ plan from the consuming repository root and keep `bin/` as shared guidance.
    tests, examples, command behavior, architecture, and comparable workflow
    evidence.
 6. If the proposal is already supported, no longer fits, duplicates another
-   proposal, or belongs in another workflow, explain that and propose removing
-   or reclassifying it.
-7. Present the project workflow evidence, audience, repository fit, proposed
-   solution, compatibility and maintenance tradeoffs, and intended validation.
+   proposal, belongs in another workflow, or has an implementation home outside
+   the requested scope, explain that and propose removing, moving, or
+   reclassifying it before any local implementation.
+7. Present the project workflow evidence, audience, implementation home,
+   repository fit, proposed solution, compatibility and maintenance tradeoffs,
+   and intended validation.
 8. Stop until the human explicitly agrees to that project-gap solution.
 9. After agreement, state the local project workflow pattern, dominant relevant
    validation path, planned validation, and any needed deviation.
