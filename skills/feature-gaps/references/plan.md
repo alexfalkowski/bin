@@ -82,14 +82,15 @@ plan from the consuming repository root and keep `bin/` as shared guidance.
     conclusions against code, docs, tests, examples, command behavior, current
     architecture, and comparable-tool evidence.
 13. Apply `SKILL.md#acceptance-gate` to each candidate and confirm the feature
-    gap names the audience, current product limitation, repository-owned
-    product surface, evidence of value, repository fit, smallest plausible
-    implementation path, compatibility and maintenance tradeoffs, validation
-    path, and correct workflow routing.
+    gap names the audience, current product limitation, practical audience
+    benefit, repository-owned product surface, evidence of value, repository
+    fit, smallest plausible implementation path, compatibility and maintenance
+    tradeoffs, validation path, and correct workflow routing.
 14. Reject novelty, competitor checklists, trend-following, broad rewrites,
-    new-framework preferences, future-roadmap assumptions, optional polish, and
-    findings that belong in project, code, security, reliability, test, doc, or
-    naming workflows.
+    new-framework preferences, future-roadmap assumptions, optional polish,
+    vague benefits without a concrete audience outcome, and findings that
+    belong in project, code, security, reliability, test, doc, or naming
+    workflows.
 15. If no confirmed feature gaps remain, report that result with the coverage
     state, do not create `FEATURES.md`, and stop.
 16. If confirmed feature gaps remain, write the scoped `FEATURES.md` with
@@ -111,8 +112,8 @@ plan from the consuming repository root and keep `bin/` as shared guidance.
 6. If the proposal is already supported, no longer fits, duplicates another
    proposal, or belongs in another workflow, explain that and propose removing
    or reclassifying it.
-7. Present the feature evidence, audience, repository fit, proposed solution,
-   compatibility and maintenance tradeoffs, and intended validation.
+7. Present the feature evidence, audience benefit, repository fit, proposed
+   solution, compatibility and maintenance tradeoffs, and intended validation.
 8. Stop until the human explicitly agrees to that feature's solution.
 9. After agreement, state the local code/config/docs pattern, dominant relevant
    test harness, planned validation, and any needed deviation.

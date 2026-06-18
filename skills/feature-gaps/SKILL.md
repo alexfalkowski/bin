@@ -1,6 +1,6 @@
 ---
 name: feature-gaps
-description: Use when the user asks to find $feature-gaps in a package or folder, find feature gaps in a package or folder, find main product capability gaps, find product-owned user, operator, service-author, package-consumer, CLI, API, or library feature opportunities, implement $feature-gaps in a package or folder, implement feature gaps in a package or folder, asks about feature IDs such as FEATURE-1, asks what the proposal is for FEATURE-1, asks to fix or verify FEATURE-1, or says FEATURE-1 is done. Find concrete repository-fit product feature opportunities, record confirmed proposals in scoped FEATURES.md, and later propose and implement agreed feature changes one at a time. Do not use for standalone test, CI, build, Makefile, release, validation, or repository workflow gaps.
+description: Use when the user asks to find $feature-gaps in a package or folder, find feature gaps in a package or folder, find main product capability gaps, find product-owned user, operator, service-author, package-consumer, CLI, API, or library feature opportunities, implement $feature-gaps in a package or folder, implement feature gaps in a package or folder, asks about feature IDs such as FEATURE-1, asks what the proposal is for FEATURE-1, asks to fix or verify FEATURE-1, or says FEATURE-1 is done. Find concrete repository-fit product feature opportunities with explicit audience benefit, record confirmed proposals in scoped FEATURES.md, and later propose and implement agreed feature changes one at a time. Do not use for standalone test, CI, build, Makefile, release, validation, or repository workflow gaps.
 ---
 
 # Feature Gaps
@@ -66,6 +66,11 @@ candidate instead of recording it as low priority.
 - **Current limitation**: State the existing workflow limitation, missing
   capability, or friction. The limitation must exist today and must not already
   be solved by current code, docs, examples, or command behavior.
+- **Benefit**: Explain why this matters to the named audience and the concrete
+  outcome they gain, such as saved time, fewer mistakes, clearer decisions,
+  unlocked use cases, safer operation, or reduced support burden. Reject the
+  candidate if the benefit cannot be stated as a specific improvement to the
+  named audience's workflow.
 - **Repository ownership**: Show that this repository owns the behavior,
   interface, workflow, helper, or documentation surface where the feature
   belongs.
@@ -95,7 +100,9 @@ candidate instead of recording it as low priority.
 
 Reject ideas whose support is only novelty, taste, competitor parity, a trend,
 an imagined future user, framework preference, private implementation
-preference, or generic "nice to have" polish.
+preference, generic "nice to have" polish, or a vague benefit such as "more
+flexible", "better", "cleaner", or "more powerful" without a concrete audience
+outcome.
 
 ## Find Mode
 
@@ -170,10 +177,10 @@ These rules remain mandatory:
   owns the behavior, whether the likely audience exists, and whether the
   feature can be added incrementally using local patterns.
 - Record feature gaps only when the proposal names the audience, current
-  product workflow limitation, repository-owned product surface, evidence of
-  user, operator, service-author, package-consumer, CLI, API, or library value,
-  fit with existing patterns, smallest plausible implementation path,
-  compatibility risk, and validation path.
+  product workflow limitation, practical audience benefit, repository-owned
+  product surface, evidence of user, operator, service-author, package-consumer,
+  CLI, API, or library value, fit with existing patterns, smallest plausible
+  implementation path, compatibility risk, and validation path.
 - Do not record confirmed bugs, security issues, compatibility breaks,
   reliability gaps, missing tests, test-harness quality issues, stale docs,
   project workflow gaps, or unclear naming as feature gaps. Route them to
@@ -217,6 +224,7 @@ Use this structure:
 - Scope: path/to/file-or-folder
 - Audience: User|Developer|Maintainer|Operator|Package consumer|Service author
 - Current limitation: The workflow limitation, missing capability, or friction.
+- Benefit: Why this matters to the named audience and how their workflow becomes better.
 - Evidence: Concrete file and line references, command behavior, docs, examples, comparable-tool evidence, or user/developer workflow evidence.
 - Repository fit: Why this belongs in the current repository and matches existing patterns.
 - Product surface: Public command|API|library behavior|service/operator behavior|package-consumer workflow|integration|template|extension point.
@@ -241,6 +249,10 @@ Confidence means the inspected evidence makes it very likely that the feature
 is repository-owned, not already supported, valuable to the named audience, and
 implementable without violating local patterns.
 
+Do not add a separate percentage for idea quality, strength, value, impact, or
+priority. Use `Priority` to express the strength of the audience benefit and
+use `Confidence` only for evidence-backed actionability.
+
 Assign priority by user value and fit, not implementation ease:
 
 - `High`: Improves a primary workflow, unlocks a documented use case, removes
@@ -251,8 +263,9 @@ Assign priority by user value and fit, not implementation ease:
 - `Low`: Useful but narrow improvement with limited audience, limited urgency,
   or meaningful tradeoffs that still fit the repository.
 
-Do not use `Low` for vague ideas. Low-priority proposals still need concrete
-evidence, audience, fit, and a plausible implementation path.
+Do not use `Low` for vague ideas. Reject vague-benefit candidates instead.
+Low-priority proposals still need concrete benefit, evidence, audience, fit,
+and a plausible implementation path.
 
 ## Implement Mode
 
