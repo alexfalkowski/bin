@@ -50,6 +50,14 @@ These rules remain mandatory:
 - If delegation is denied, stop instead of falling back to a local review. If sub-agents are unavailable, say so briefly and perform the review locally for the requested scope.
 - Ask for human permission before agents run commands that require approval, such as network, SSH, GitHub auth, registry auth, remote writes, or other non-read-only validation.
 - Exclude generated files and folders, vendored dependencies, caches, build output, generated API docs, and generated lockfile churn unless the requested scope is explicitly about them.
+- In downstream repositories that vendor this project as `./bin`, treat
+  `bin/**` as vendored shared tooling unless the requested scope is explicitly
+  about shared `bin` tooling, Makefile includes, skills, or submodule wiring.
+  Exclude `bin/**` from recursive review and inventory by default; inspect only
+  included `bin/build/make/*.mak` fragments or selected `bin/skills/**`
+  guidance needed as evidence. Route upstream-only shared-tooling findings to a
+  separate `bin`-scoped run instead of writing them into the consuming
+  repository's `DOCS.md`.
 - Before assigning review agents, build a recursive documentation inventory for the requested package or folder: README files, docs, examples, command help surfaces, package docs, public API comments, code-comment/docstring surfaces, first-level subfolders, nested packages, generated/vendor/build/cache exclusions, and relevant validation entrypoints.
 - Do not assign broad recursive subtrees merely because they are first-level subfolders. When a subtree contains many independent documentation owners, mixed audiences, or too many relevant files for a credible single pass, split it into smaller documentation-surface or behavior-owned slices before delegation.
 - Prefer slices based on authoritative documentation owner and user risk: README or user docs, command help, examples, public API/package docs, documented workflows, changed or recently touched areas, and code areas with public interfaces. Use depth only as a discovery aid, not as the review boundary.

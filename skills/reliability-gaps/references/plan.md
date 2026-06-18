@@ -19,6 +19,11 @@ plan from the consuming repository root and keep `bin/` as shared guidance.
   `RELIABILITY.md` as a standalone pattern. If the pattern is missing, add it.
 - Record durable findings only in the scoped `RELIABILITY.md` ledger defined by
   the skill.
+- In downstream repositories that vendor this project as `./bin`, exclude
+  `bin/**` from recursive inventory, review slices, and durable findings unless
+  the requested scope is explicitly about shared `bin` tooling. Inspect only
+  included shared fragments or selected skill guidance needed as evidence, and
+  route upstream-only findings to a separate `bin`-scoped run.
 - Track broad-scope coverage explicitly as reviewed deeply, skimmed, excluded,
   and deferred. Deferred entries must name runnable follow-up scopes.
 

@@ -1,4 +1,4 @@
 interface:
   display_name: "Project Gaps"
   short_description: "Find scoped project workflow gaps"
-  default_prompt: "Use $project-gaps to find scoped build, CI, Makefile, release, setup, validation, command discovery, and repository workflow gaps; store confirmed proposals in PROJECTS.md; answer project gap ID follow-ups such as PROJECT-1; or implement agreed project workflow fixes one gap at a time."
+  default_prompt: "Use $project-gaps to find scoped build, CI, Makefile, release, setup, validation, command discovery, and repository workflow gaps; exclude downstream bin/** unless explicitly scoped to shared tooling; store confirmed proposals in PROJECTS.md; answer project gap ID follow-ups such as PROJECT-1; or implement agreed project workflow fixes one gap at a time."

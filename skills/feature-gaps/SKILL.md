@@ -138,6 +138,14 @@ These rules remain mandatory:
 - Exclude generated files and folders, vendored dependencies, caches, build
   output, generated API docs, and generated lockfile churn unless the requested
   scope is explicitly about them.
+- In downstream repositories that vendor this project as `./bin`, treat
+  `bin/**` as vendored shared tooling unless the requested scope is explicitly
+  about shared `bin` tooling, Makefile includes, skills, or submodule wiring.
+  Exclude `bin/**` from recursive review and inventory by default; inspect only
+  included `bin/build/make/*.mak` fragments or selected `bin/skills/**`
+  guidance needed as evidence. Route upstream-only shared-tooling findings to a
+  separate `bin`-scoped run instead of writing them into the consuming
+  repository's `FEATURES.md`.
 - Before assigning review agents, build a recursive scope inventory for the
   requested package or folder: relevant file count, first-level subfolders,
   nested packages, dominant languages, tests, public entrypoints, generated,

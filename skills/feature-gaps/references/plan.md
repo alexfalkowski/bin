@@ -19,6 +19,11 @@ plan from the consuming repository root and keep `bin/` as shared guidance.
   `FEATURES.md` as a standalone pattern. If the pattern is missing, add it.
 - Record durable feature proposals only in the scoped `FEATURES.md` ledger
   defined by the skill.
+- In downstream repositories that vendor this project as `./bin`, exclude
+  `bin/**` from recursive inventory, review slices, and durable proposals unless
+  the requested scope is explicitly about shared `bin` tooling. Inspect only
+  included shared fragments or selected skill guidance needed as evidence, and
+  route upstream-only proposals to a separate `bin`-scoped run.
 - Track broad-scope coverage explicitly as reviewed deeply, skimmed, excluded,
   and deferred. Deferred entries must name runnable follow-up scopes.
 
