@@ -84,8 +84,9 @@ plan from the consuming repository root and keep `bin/` as shared guidance.
 11. Update coverage state for every planned slice before judging the requested
     scope.
 12. Deduplicate candidates and directly re-check conflicting or overlapping
-    conclusions against code, docs, tests, examples, command behavior, current
-    architecture, and comparable-tool evidence.
+    conclusions against code, generated surfaces, framework wrappers, shared
+    helpers, vendored dependency behavior when delegated, docs, tests, examples,
+    command behavior, current architecture, and comparable-tool evidence.
 13. Apply `SKILL.md#acceptance-gate` to each candidate and confirm the feature
     gap names the audience, current product limitation, practical audience
     benefit, repository-owned product surface, evidence of value, repository
@@ -112,8 +113,10 @@ plan from the consuming repository root and keep `bin/` as shared guidance.
    commands, docs, examples, public APIs, developer workflows, and `./bin`
    wiring.
 4. Select the next proposal by ID unless the human named a specific feature.
-5. Re-check the proposal against current code, docs, tests, examples, command
-   behavior, architecture, and comparable-tool evidence.
+5. Re-check the proposal against current code, generated surfaces, framework
+   wrappers, shared helpers, vendored dependency behavior when delegated, docs,
+   tests, examples, command behavior, architecture, and comparable-tool
+   evidence.
 6. If the proposal is already supported, no longer fits, duplicates another
    proposal, or belongs in another workflow, explain that and propose removing
    or reclassifying it.
