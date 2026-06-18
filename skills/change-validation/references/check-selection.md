@@ -8,6 +8,7 @@ Use this reference when choosing which checks to run.
 - Run the narrowest check that gives credible confidence for the change.
 - Prefer repository-defined commands because they encode project conventions.
 - Use direct commands when they are clearly narrower or better aligned with the task than a broader repo wrapper.
+- Before running, retrying, replacing, or recommending commands, establish the repository root, documented entrypoint, CI analogue, initialized user shell, and any macOS/Homebrew tool-path assumptions.
 - Before selecting tests, identify the dominant relevant test harness and repository-defined entry point for the affected behavior.
 - Do not add or select an ad hoc language-native test command when the repository's established harness owns the behavior, unless the user explicitly asked for that layer or the behavior cannot be covered through the established harness.
 - If bypassing the dominant harness is necessary, stop before editing or validating and state why the established harness cannot cover the behavior.
@@ -22,10 +23,12 @@ Use this reference when choosing which checks to run.
 ## Command Execution Environment
 
 - Treat the repository Makefile and CI configuration as the source of truth for setup, lint, test, security, benchmark, and review commands.
+- On developer machines, especially macOS, assume required tools may come from Homebrew or another user-shell setup rather than the OS defaults.
 - Prefer `make` targets and documented repository entry points over direct tool invocations, even when a direct command appears equivalent.
 - Run commands from the repository root unless the Makefile, script, or task explicitly requires another working directory.
 - Use the user's configured shell environment for command execution. If a command fails because a tool is missing, an old version is found, or `PATH` differs from the user's normal terminal, treat that as an environment mismatch or validation gap, not as evidence that the repository command is wrong.
-- Do not replace a Makefile target with guessed direct commands just because the agent environment cannot find the same tools as the user's shell.
+- Run repository commands through the user's initialized shell when tool resolution matters, for example `zsh -lic 'make lint'`.
+- Do not invent direct commands, replace a Makefile target, install alternate tools, or keep retrying variants merely to get something to run in the agent environment.
 - When diagnosing command-environment mismatches, check the command surface first, then inspect `command -v <tool>`, `<tool> --version`, `SHELL`, and `PATH` as diagnostics only.
 - In this shared `bin` repo and downstream repos that vendor it as `./bin`, `make` targets are the preferred validation interface. If `make` reports an unexpected tool or version problem in the agent environment but works in the user's shell, report the mismatch and keep the Makefile target as the intended command.
 

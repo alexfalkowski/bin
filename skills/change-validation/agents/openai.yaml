@@ -1,4 +1,4 @@
 interface:
   display_name: "Change Validation"
   short_description: "Choose tests, lint, and CI checks"
-  default_prompt: "Use $change-validation to choose and report validation for this change. Prefer repository-defined commands, run narrow checks before broad ones, detect no-op wrappers, and rerun checks when file changes make prior validation stale."
+  default_prompt: "Use $change-validation to choose and report validation for this change. Prefer repository-defined commands through the initialized user shell, run narrow checks before broad ones, detect no-op wrappers, report tool/PATH mismatches as gaps, and rerun checks when file changes make prior validation stale."

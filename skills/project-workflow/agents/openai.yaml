@@ -1,4 +1,4 @@
 interface:
   display_name: "Project Workflow"
   short_description: "Discover commands, CI, bin wiring, and local patterns"
-  default_prompt: "Use $project-workflow to discover project entrypoints, CI expectations, ./bin wiring, shared Makefile fragment behavior, and local code/test/config/validation patterns before work begins. Treat AGENTS.md and selected skills as mandatory rules."
+  default_prompt: "Use $project-workflow to discover project entrypoints, CI expectations, ./bin wiring, shared Makefile fragment behavior, local code/test/config/validation patterns, and the initialized user-shell command environment before work begins. Treat AGENTS.md and selected skills as mandatory rules."
