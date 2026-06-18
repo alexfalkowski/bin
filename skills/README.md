@@ -48,8 +48,15 @@ completion.
   requests or unresolved gaps.
 - `feature-gaps` orchestrates a two-phase feature-opportunity workflow: first
   aggregate `project-workflow` context, current repository behavior, and
-  comparable product or developer-experience evidence into `FEATURES.md`, then
-  implement agreed feature changes one feature at a time.
+  comparable product evidence into `FEATURES.md`, then implement agreed main
+  product feature changes one feature at a time. Route standalone test, CI,
+  build, Makefile, release, validation, command discovery, and repository
+  workflow concerns to `test-gaps` or `project-gaps`.
+- `project-gaps` orchestrates a two-phase project workflow: first
+  aggregate `project-workflow` context and confirmed build, CI, Makefile,
+  release, setup, validation, command discovery, and repository workflow
+  opportunities into `PROJECTS.md`, then implement agreed project workflow
+  changes one gap at a time.
 - `reliability-gaps` orchestrates a two-phase reliability-gap workflow: first
   aggregate `project-workflow` context and verified SRE, NALSD, operability,
   overload, observability, release-safety, recovery, or data-integrity gaps into
@@ -72,7 +79,9 @@ completion.
   `change-validation` for scanner, lint, or CI command selection.
 - `testing-standards` covers language-agnostic test design and coverage
   decisions; pair it with language standards for idioms and
-  `change-validation` for command selection.
+  `change-validation` for command selection. It also owns test-harness and
+  test-support-code quality when that quality affects test correctness,
+  maintainability, determinism, configurability, or layering.
 - `doc-standards` covers README, docs, examples, command/config docs, public
   API comments, docstrings, and stale-doc review; pair it with language
   standards for API comments and docstrings, `naming-standards` for terminology,
@@ -87,6 +96,9 @@ completion.
   rename safety; pair it with language standards for language-specific idioms.
 - `project-workflow` covers command discovery, CI expectations, downstream
   `./bin` wiring, and shared Makefile fragment behavior.
+- `project-gaps` covers missing or weak project workflow capabilities for
+  build, CI, Makefile, release, setup, validation, command discovery, and
+  repository workflow surfaces.
 - `change-validation` should use `project-workflow` context before selecting
   validation commands for orchestrated workflows.
 - Language standards pair with `change-validation` for check selection and
