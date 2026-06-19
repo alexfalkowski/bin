@@ -86,16 +86,24 @@ plan from the consuming repository root and keep `bin/` as shared guidance.
 14. Confirm each gap names a current reliability promise or operational
     expectation, trigger, failure mode, missing or weak control, and user or
     operator impact.
-15. Reject generic maturity advice, future-scale assumptions, private
+15. Run a final finding calibration pass:
+    - Does the trigger exist in current supported operation?
+    - Is the missing control repository-owned rather than normal review, CI, or
+      deployment discipline?
+    - Are existing controls insufficient for this repository's workflow?
+    - Would a skeptical maintainer likely agree this is more than optional
+      hardening?
+    If any answer is no, discard the candidate or move it to optional follow-up.
+16. Reject generic maturity advice, future-scale assumptions, private
     preferences, and findings that belong in code, security, test, or doc
     ledgers.
-16. If no confirmed gaps remain, report that result with the coverage state, do
+17. If no confirmed gaps remain, report that result with the coverage state, do
     not create `RELIABILITY.md`, and stop.
-17. If confirmed gaps remain, write the scoped `RELIABILITY.md` with
+18. If confirmed gaps remain, write the scoped `RELIABILITY.md` with
     `REL-<number>` IDs.
-18. Present the scoped ledger, proposed reliability-fix plan, coverage state for
+19. Present the scoped ledger, proposed reliability-fix plan, coverage state for
     broad scopes, and runnable follow-up scopes for deferred slices.
-19. Stop before making fixes.
+20. Stop before making fixes.
 
 ## Implement Mode Plan
 

@@ -16,6 +16,12 @@ a problem is definitely fixed. Treat this percentage as an evidence-calibration
 threshold, not a statistical claim: after trying to disprove the candidate, the
 inspected evidence should make it at least roughly as likely as the required
 threshold that the finding is real, repository-owned, and actionable.
+Confidence must account for both the concrete failure path and the likelihood
+that supported current operation admits the trigger. A technically real failure
+path that depends on an unusual future bad commit, missed review, deliberately
+invalid fixture, or unsupported manual construction is a lead, not a >=90%
+finding, unless repository evidence shows that path is plausibly exercised
+today.
 
 Discard candidates that are likely false positives, vague suggestions,
 unsupported guesses, style-only preferences, nitpicks, or comments whose impact
