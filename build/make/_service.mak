@@ -96,7 +96,7 @@ leave-coverage:
 
 # Upload test/reports/final.cov to Codecov (codecovcli upload-process).
 codecov-upload:
-	@codecovcli --verbose upload-process --fail-on-error -F service -f test/reports/final.cov
+	@codecovcli --verbose upload-process -F service -f test/reports/final.cov
 
 # Remove generated report artifacts while preserving report placeholders.
 clean-reports:
