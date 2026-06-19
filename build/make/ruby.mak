@@ -55,7 +55,7 @@ clean-reports:
 
 # Upload test/reports/coverage.xml to Codecov (codecovcli upload-process).
 codecov-upload:
-	@codecovcli --verbose upload-process --fail-on-error -F service -f test/reports/coverage.xml
+	@codecovcli --verbose upload-process -F service -f test/reports/coverage.xml
 
 # Scan the repository with Trivy, excluding .ruby-lsp, bin, vendor, and test/vendor.
 trivy-repo:
