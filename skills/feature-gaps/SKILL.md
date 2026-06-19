@@ -315,6 +315,12 @@ These rules remain mandatory:
 - Stop after proposing the solution. Do not edit files, update `FEATURES.md`,
   or start validation until the human explicitly agrees to that feature's
   solution.
+- Treat a request that names a feature and asks to fix, implement, or verify it
+  as permission to select that feature, re-check current evidence, and present
+  or refresh the proposal. It is not approval to edit unless the request also
+  explicitly agrees to the proposed solution. If the proposal was already
+  presented and remains unchanged after re-checking, state only the concise
+  approval gate instead of repeating the full proposal.
 - Ask questions when audience, product direction, compatibility, dependency
   policy, UX/DX behavior, test layer, validation, or user intent is ambiguous.
   Treat silence or a broad "implement feature gaps" request as permission to
@@ -342,6 +348,9 @@ These rules remain mandatory:
 - Report the result for that feature with `Red`, `Green`, `Refactor`, and
   `Validation` entries. Use `Refactor: none` when no cleanup was needed after
   green. Then ask the human to verify and explicitly say `FEATURE-N is done`.
+- During automatic continuations while waiting for approval or `FEATURE-N is
+  done`, do not repeat the full proposal or result. State the current waiting
+  gate once, concisely.
 - Do not move to the next proposal until the human says `FEATURE-N is done`.
 - After the human confirms a proposal is done, remove that proposal from scoped
   `FEATURES.md`. If a proposal is deemed invalid or not actually a feature gap,

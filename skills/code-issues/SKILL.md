@@ -117,12 +117,22 @@ These rules remain mandatory:
 - Read `ISSUES.md` in the requested package or folder first and treat it as the working review ledger.
 - If scoped `ISSUES.md` does not exist, stop and ask whether to run Find mode first for that scope.
 - Work through code issues sequentially by ID unless the human explicitly names a different issue.
-- Stop after proposing the solution. Do not edit code, update `ISSUES.md`, or start validation until the human explicitly agrees to that issue's solution.
+- Stop after proposing the solution. Do not edit code, update `ISSUES.md`, or
+  start validation until the human explicitly agrees to that issue's solution.
+- Treat a request that names an issue and asks to fix, implement, or verify it
+  as permission to select that issue, re-check current evidence, and present or
+  refresh the proposal. It is not approval to edit unless the request also
+  explicitly agrees to the proposed solution. If the proposal was already
+  presented and remains unchanged after re-checking, state only the concise
+  approval gate instead of repeating the full proposal.
 - Ask questions when behavior, compatibility, security, validation, or user intent is ambiguous. Treat silence or a broad "implement code issues" request as permission to start the proposal workflow, not as permission to code.
 - When re-checking an issue whose evidence depends on documentation or comments contradicting implementation, prove the code is wrong before proposing a code change. If non-prose evidence supports the implementation, explain that the ledger item is invalid as a code issue and propose reclassifying or fixing the documentation instead.
 - After the human agrees and before editing, state the selected local code pattern, dominant relevant test harness, planned validation command, and any deviation from `AGENTS.md` or selected skills. If a deviation is needed, stop and ask before editing.
 - Implement only the agreed issue with the smallest safe change.
 - Use `$testing-standards` when deciding whether to add or update regression tests for the fix, and prefer its test-first or scenario-first loop when a behavior-changing fix has a credible test or BDD layer.
+- During automatic continuations while waiting for approval or `ISSUE-N is
+  done`, do not repeat the full proposal or result. State the current waiting
+  gate once, concisely.
 - Do not move to the next issue until the human says `ISSUE-N is done`.
 - After the human confirms an issue is done, remove that issue from scoped `ISSUES.md`. If an issue is deemed invalid or not actually a code issue, remove it only after explaining why and getting human agreement.
 - Once all findings are resolved and confirmed done by the human, delete the scoped `ISSUES.md`.

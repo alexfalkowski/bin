@@ -40,6 +40,9 @@ plan from the consuming repository root and keep `bin/` as shared guidance.
 - In Implement mode, the goal is waiting while the human has not approved the
   proposed reliability-gap solution, or after validation until the human
   confirms `REL-<number> is done`.
+- During automatic continuations while waiting for approval or done
+  confirmation, state the waiting gate once and do not repeat the full
+  proposal or result.
 - In Implement mode, the goal is complete for a finding only after the human
   confirms it is done and the scoped ledger is updated accordingly.
 - Record a blocked reason when a required scope is missing, the scoped ledger
@@ -108,7 +111,12 @@ plan from the consuming repository root and keep `bin/` as shared guidance.
    a documentation gap.
 7. Present the finding evidence, affected reliability promise or operational
    expectation, proposed solution, tradeoffs, and intended validation.
-8. Stop until the human explicitly agrees to that finding's solution.
+8. Stop until the human explicitly agrees to that finding's solution. A named
+   fix, implement, or verify request selects the finding and permits re-checking
+   evidence and refreshing the proposal, but it is not approval to edit unless
+   the request also explicitly agrees to the proposed solution. If the proposal
+   was already presented and remains unchanged after re-checking, state only
+   the concise approval gate instead of repeating the full proposal.
 9. After agreement, state the local code/config/docs pattern, dominant relevant
    test harness, planned validation, and any needed deviation.
 10. If a deviation is needed, stop and ask before editing.

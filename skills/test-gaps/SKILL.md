@@ -156,11 +156,21 @@ These rules remain mandatory:
 - Work through findings sequentially by ID unless the human explicitly names a different finding.
 - Before proposing a fix for each finding, re-check the current code and nearby tests. Treat the ledger as something that can go stale: dismiss or revise findings that are already covered, would duplicate the local test shape, test only underlying libraries/frameworks, or require validation modes the repository does not run.
 - When re-checking a finding whose evidence depends on documentation or comments contradicting implementation, prove the expected behavior with non-prose evidence before proposing tests. If non-prose evidence supports the implementation, explain that the ledger item is invalid as a test gap and propose reclassifying or fixing documentation instead.
-- Stop after proposing the solution. Do not edit code, update `TESTS.md`, or start validation until the human explicitly agrees to that finding's solution.
+- Stop after proposing the solution. Do not edit code, update `TESTS.md`, or
+  start validation until the human explicitly agrees to that finding's solution.
+- Treat a request that names a finding and asks to fix, implement, or verify it
+  as permission to select that finding, re-check current evidence, and present
+  or refresh the proposal. It is not approval to edit unless the request also
+  explicitly agrees to the proposed solution. If the proposal was already
+  presented and remains unchanged after re-checking, state only the concise
+  approval gate instead of repeating the full proposal.
 - Ask questions when behavior, compatibility, test layer, fixture strategy, validation, or user intent is ambiguous. Treat silence or a broad "implement test gaps" request as permission to start the proposal workflow, not as permission to code.
 - After the human agrees and before editing, state the selected local test pattern, dominant relevant test harness, planned validation command, and any deviation from `AGENTS.md` or selected skills. If a deviation is needed, stop and ask before editing.
 - Implement only the agreed finding with the smallest clear test change, preferring the existing local test shape over new standalone structure.
 - Use `$testing-standards` for test design and pair with the relevant language standard for local idioms. If implementing the test gap requires production behavior to change, prefer the test-first or scenario-first loop from `$testing-standards`.
+- During automatic continuations while waiting for approval or `TEST-N is done`,
+  do not repeat the full proposal or result. State the current waiting gate
+  once, concisely.
 - Do not move to the next finding until the human says `TEST-N is done`.
 - After the human confirms a finding is done, remove that finding from scoped `TESTS.md`. If a finding is deemed invalid or not actually a test gap, remove it only after explaining why and getting human agreement.
 - Once all findings are resolved and confirmed done by the human, delete the scoped `TESTS.md`.

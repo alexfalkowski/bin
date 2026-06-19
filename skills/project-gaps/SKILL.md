@@ -277,6 +277,12 @@ These rules remain mandatory:
 - Stop after proposing the solution. Do not edit files, update `PROJECTS.md`,
   or start validation until the human explicitly agrees to that project-gap
   solution.
+- Treat a request that names a project gap and asks to fix, implement, or verify
+  it as permission to select that project gap, re-check current evidence, and
+  present or refresh the proposal. It is not approval to edit unless the request
+  also explicitly agrees to the proposed solution. If the proposal was already
+  presented and remains unchanged after re-checking, state only the concise
+  approval gate instead of repeating the full proposal.
 - Ask questions when audience, workflow ownership, compatibility, dependency
   policy, validation, or user intent is ambiguous. Treat silence or a broad
   "implement project gaps" request as permission to start the proposal
@@ -306,6 +312,9 @@ These rules remain mandatory:
 - Report the result for that project gap with `Red`, `Green`, `Refactor`, and
   `Validation` entries. Use `Refactor: none` when no cleanup was needed after
   green. Then ask the human to verify and explicitly say `PROJECT-N is done`.
+- During automatic continuations while waiting for approval or `PROJECT-N is
+  done`, do not repeat the full proposal or result. State the current waiting
+  gate once, concisely.
 - Do not move to the next proposal until the human says `PROJECT-N is done`.
 - After the human confirms a proposal is done, remove that proposal from scoped
   `PROJECTS.md`. If a proposal is deemed invalid or not actually a project gap,
