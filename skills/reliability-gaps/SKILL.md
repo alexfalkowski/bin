@@ -28,6 +28,13 @@ Treat a candidate as unconfirmed until the current code, config, docs, tests, or
 command behavior show how a repository-owned reliability control can fail.
 Reject speculative scalability advice, generic SRE checklists, environment
 preferences, and findings that depend on undocumented future requirements.
+Do not record a reliability gap whose trigger is primarily a future bad code,
+config, data, or asset change that would need to be committed, reviewed, and
+deployed first, unless current repository evidence shows that such changes are
+automated, frequent, externally supplied, weakly reviewed, already failing, or
+otherwise reasonably admitted by a supported workflow. Treat normal code review,
+CI, typed or generated contracts, and documented manual update procedures as
+real controls when calibrating likelihood.
 
 Comments, GoDoc, README prose, examples, and operational docs can reveal leads,
 but they are not source of truth when they contradict implementation. Before
@@ -90,6 +97,10 @@ These rules remain mandatory:
 - Do not record findings whose evidence is only a repository preference, transport choice, hosting choice, cloud architecture preference, or environment setup assumption. For example, an SSH Git remote or submodule URL is not a reliability gap unless a documented repository-owned workflow currently fails for intended operators and the repository owns the fix.
 - For release or supply-chain findings involving Docker/image scans, first trace the exact artifacts through CI, Make targets, scripts, Dockerfiles, tags, build arguments, and push commands. Do not record a pre-publish scan or release-gate gap merely because CI scans a test image or runs scan jobs on non-release branches. Record the gap only when the scanned artifact and published artifact can materially differ, the release build bypasses a repository-owned required scan, or a documented release contract is violated.
 - Do not record reliability gaps whose only support is an undocumented future scale target, hypothetical product direction, architecture preference, or a conclusion reached from briefly noticing a pattern without verifying a concrete failure path.
+- Do not record future bad commits, invalid future fixtures, or missed-review
+  scenarios as reliability gaps unless the repository currently admits that
+  trigger through automation, external input, frequent operational data changes,
+  or another supported path that existing controls do not cover.
 - Do not record confirmed production bugs, security issues, compatibility breaks, or violated public contracts as reliability gaps. If broken behavior is discovered during review, report it as out of scope for the reliability-gap ledger and recommend `$code-issues`, `$security-audit`, or `$change-safety` as appropriate.
 - Do not record standalone missing, weak, flaky, misleading, or wrong-layer tests as reliability gaps. Use `$test-gaps` when missing failure-path coverage is the finding.
 - Do not record standalone missing, weak, stale, misleading, or wrong-location operational docs as reliability gaps. Use `$doc-gaps` when documentation itself is the finding.
