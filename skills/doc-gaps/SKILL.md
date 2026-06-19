@@ -68,6 +68,12 @@ These rules remain mandatory:
 - Require each agent to return candidates in the candidate format below, without final IDs unless useful locally.
 - Use `../references/finding-severity.md` to discard low-confidence candidates before assigning severity and confidence.
 - Confirm each candidate gap against the code, current docs, examples, and documented interfaces before fixing it, using `$doc-standards` as the finding threshold. Do not confirm or dismiss a candidate merely because documentation exists; verify adequacy, ownership, discoverability, example coverage, and the relevant non-obvious contract.
+- For reusable library, helper, or shared-tooling scopes, inspect supported
+  usage evidence before treating a documentation gap as high confidence: a real
+  consumer, executable example, integration test, module wiring path,
+  documented contract, CI workflow, or comparable usage path showing the
+  audience and action at risk. Treat package-local fakes, synthetic tests,
+  manual construction, and unsupported downstream patterns as leads only.
 - When prose and implementation disagree, require non-prose evidence before treating the code as wrong or routing the candidate out to another workflow. If code, tests, runtime behavior, generated contracts, or history support the implementation, fix the stale prose as a doc gap.
 - Before fixing or dismissing a candidate, route it to the correct documentation surface: README, docs, examples, command help, package documentation, exported API comment, code comment, docstring, or no change. Do not treat package GoDoc or code-comment improvements as sufficient when first-use, setup, configuration, operational behavior, security expectations, or service-author workflows would reasonably be expected in README files, user-facing docs, examples, or command help. Do not treat README prose as sufficient when `$doc-standards` and the paired language standard route reusable API contracts to GoDoc, RDoc, docstrings, executable examples, specs, or features.
 - When dismissing a candidate because existing documentation is sufficient, identify the existing surface that covers the audience and action at risk in the final summary, and state why that surface is the authoritative owner under `$doc-standards`.

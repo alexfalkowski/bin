@@ -193,6 +193,12 @@ These rules remain mandatory:
   supported, whether the repository owns the behavior, whether the likely
   audience exists, and whether the feature can be added incrementally using
   local patterns.
+- For reusable library, helper, or shared-tooling scopes, inspect supported
+  usage evidence before recording a high-confidence feature gap: a real
+  consumer, executable example, integration test, module wiring path,
+  documented contract, CI workflow, or comparable usage path that shows the
+  current limitation and audience benefit. Treat package-local fakes, synthetic
+  tests, manual construction, and unsupported downstream patterns as leads only.
 - Record feature gaps only when the proposal names the audience, current
   product workflow limitation, practical audience benefit, repository-owned
   product surface, evidence of user, operator, service-author, package-consumer,
@@ -271,6 +277,11 @@ current behavior may be provided by an included framework, shared helper,
 generated surface, vendored dependency, or default configuration that has not
 been inspected. Keep the candidate below threshold, gather that evidence, or
 discard it.
+
+Do not assign 90% or higher confidence to a reusable-library or shared-tooling
+proposal whose support is limited to package-local possibility, synthetic
+fakes, manual construction, or unsupported downstream usage. Inspect supported
+usage evidence first.
 
 Do not add a separate percentage for idea quality, strength, value, impact, or
 priority. Use `Priority` to express the strength of the audience benefit and

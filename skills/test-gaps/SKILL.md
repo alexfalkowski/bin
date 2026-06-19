@@ -81,6 +81,12 @@ These rules remain mandatory:
 - Require each agent to return findings in the same shape as the `TESTS.md` format, without final IDs unless useful locally. Each finding must name the repository-owned behavior being protected; reject findings that only test dependency semantics, aliases, or pass-through wrappers.
 - Use `../references/finding-severity.md` to discard low-confidence candidates before assigning severity and confidence.
 - Confirm each candidate gap against the code and existing tests before recording it. Gaps must be concrete missing, weak, misleading, flaky, or wrong-layer coverage with credible risk to changed behavior, public contracts, compatibility, release-sensitive workflows, or documented command/API behavior.
+- For reusable library, helper, or shared-tooling scopes, inspect supported
+  usage evidence before recording a high-confidence test gap: a real consumer,
+  executable example, integration test, module wiring path, documented
+  contract, CI workflow, or comparable usage path that can observe the
+  unprotected behavior. Treat package-local fakes, synthetic tests, manual
+  construction, and unsupported downstream patterns as leads only.
 - For each candidate, identify the real front door: the command, scenario,
   package/API consumer, service boundary, workflow, or documented entrypoint
   that would observe the behavior. Do not record a gap merely because an
