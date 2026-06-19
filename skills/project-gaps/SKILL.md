@@ -165,6 +165,12 @@ These rules remain mandatory:
   whether the workflow is already supported, whether the repository owns the
   surface, whether the likely audience exists, and whether the project change
   can be added incrementally using local patterns.
+- For reusable library, helper, or shared-tooling scopes, inspect supported
+  usage evidence before recording a high-confidence project gap: a real
+  consumer, executable example, integration test, module wiring path,
+  documented contract, CI workflow, or comparable usage path that shows the
+  workflow friction. Treat package-local fakes, synthetic tests, manual
+  construction, and unsupported downstream patterns as leads only.
 - Do not record confirmed bugs, security issues, compatibility breaks,
   reliability gaps, missing tests, stale docs, unclear naming, or main product
   feature ideas as project gaps. Route them to `$code-issues`,
@@ -237,6 +243,11 @@ confidence or higher. Below 90%, gather more evidence or discard the candidate.
 Confidence means the inspected evidence makes it very likely that the project
 workflow is repository-owned, not already supported, valuable to the named
 audience, and implementable without violating local patterns.
+
+Do not assign 90% or higher confidence to a reusable-library or shared-tooling
+proposal whose support is limited to package-local possibility, synthetic
+fakes, manual construction, or unsupported downstream usage. Inspect supported
+usage evidence first.
 
 Assign priority by workflow value and fit, not implementation ease:
 

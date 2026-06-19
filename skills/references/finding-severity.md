@@ -31,6 +31,17 @@ the workflow's data-gap, open-question, or optional follow-up section only when
 that section is explicitly meant for unresolved evidence; otherwise discard the
 candidate.
 
+For reusable libraries, helpers, and shared tooling, calibrate confidence
+against supported usage evidence, not package-local possibility alone. Synthetic
+tests, fakes, manual construction, unsupported downstream patterns, or private
+implementation reachability are useful leads, but they do not justify a >=90%
+durable finding unless a supported consumer, executable example, integration
+test, module wiring path, documented contract, CI workflow, or comparable real
+usage path can trigger the candidate. If that evidence is missing, gather it,
+lower confidence below the recording threshold, route the concern to a better
+workflow, or record only the evidence gap when the selected workflow has a
+place for unresolved questions.
+
 When a candidate depends on comments, GoDoc, README text, examples, or other
 prose contradicting implementation, do not treat the prose as source of truth.
 First prove the implementation is wrong with non-prose evidence such as

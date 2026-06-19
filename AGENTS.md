@@ -32,6 +32,15 @@ Agents MUST:
   tests, logs, scanner output, official documentation, runtime behavior, or
   repository history. Below the required threshold, gather more evidence or
   state the blocker instead of accepting completion.
+- Calibrate durable findings against supported usage evidence. In reusable
+  libraries, helpers, or shared tooling, package-local synthetic tests, fakes,
+  manual construction, and unsupported downstream patterns are leads, not enough
+  evidence for a >=90% finding by themselves. Before recording a high-confidence
+  issue, inspect a supported consumer, executable example, integration test,
+  module wiring path, documented contract, CI workflow, or comparable real usage
+  path that can trigger the candidate. If supported usage evidence cannot be
+  found, lower confidence below the recording threshold, route the concern to
+  the correct workflow, or state the evidence gap instead of recording it.
 - Follow existing repository patterns over personal judgment.
 - Treat skill workflow steps using "must", "do not", or "stop" language as
   blocking requirements.

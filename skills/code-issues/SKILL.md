@@ -69,6 +69,12 @@ These rules remain mandatory:
 - Require each agent to return findings in the same shape as the `ISSUES.md` format, without final IDs unless useful locally.
 - Use `../references/finding-severity.md` to discard low-confidence candidates before assigning severity and confidence.
 - Confirm each candidate finding against the code before recording it. Findings must be concrete bugs, security issues, compatibility breaks, or violated public contracts with user-visible impact.
+- For reusable library, helper, or shared-tooling scopes, inspect supported
+  usage evidence before recording a high-confidence issue: a real consumer,
+  executable example, integration test, module wiring path, documented
+  contract, CI workflow, or comparable usage path that can trigger the
+  candidate. Treat package-local fakes, synthetic tests, manual construction,
+  and unsupported downstream patterns as leads only.
 - For candidates based on documentation or comments contradicting code, require non-prose proof that the implementation is wrong before recording a code issue. Existing tests, helper names, runtime behavior, or commit history that support the implementation mean the candidate is a doc gap, not a code issue.
 - Do not record standalone missing, weak, flaky, misleading, or wrong-layer tests as code issues unless they are tied to a confirmed bug, security issue, compatibility break, or violated public contract. Use `$test-gaps` for standalone missing or weak test coverage passes.
 - Do not record standalone missing, weak, stale, misleading, or wrong-location documentation, README, example, comment, or docstring gaps as code issues unless they reveal a confirmed bug, security issue, compatibility break, or violated public contract. Use `$doc-gaps` for standalone documentation review passes.
