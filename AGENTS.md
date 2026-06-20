@@ -148,6 +148,150 @@ as vendored shared tooling:
   through `BIN_ROOT`; reason about target behavior from the consuming
   repository root without exploring unrelated files inside `bin/`.
 
+## Downstream repository defaults
+
+These defaults apply when a consuming repository has matching local evidence
+such as `.gitmodules`, a root `Makefile`, `.circleci/config.yml`, `test/`, or
+`test/nonnative.yml`. The consuming repository's own `AGENTS.md` remains higher
+precedence when it gives more specific guidance.
+
+### Shared skill discovery
+
+- Consuming repositories that mount this repository at `./bin` use the shared
+  skills from `bin/skills/`.
+- Read `bin/AGENTS.md` for the canonical shared skill list and use the smallest
+  matching skill for the task.
+- A consuming repository's root `AGENTS.md` only needs enough local guidance to
+  make this shared file discoverable; keep the canonical shared skill list and
+  cross-repository defaults here.
+
+### Bin submodule bootstrap
+
+- Consuming repositories usually mount this repository at `./bin` using the SSH
+  URL `git@github.com:alexfalkowski/bin.git`.
+- The raw bootstrap command is:
+
+  ```sh
+  git submodule sync && git submodule update --init
+  ```
+
+- `make submodule` is provided by `bin/build/make/git.mak` after the submodule
+  exists. A fresh checkout may need the raw `git submodule ...` command before
+  any Makefile-provided targets can load.
+- Root `Makefile`s that include `bin/build/make/*.mak` directly are
+  intentionally thin wrappers around shared tooling. Do not flag the lack of a
+  root-owned no-submodule bootstrap shim or `make submodule` fallback as a
+  project workflow gap by default.
+- The checked-in SSH submodule URL is intentional. Read-only users may override
+  it in local Git configuration, but agents should not flag the SSH default as a
+  setup, reliability, or project workflow gap unless the repository has
+  explicitly decided to make HTTPS the default.
+
+### Shared Make ownership
+
+- Consuming repositories use shared Make targets from `bin/` as their preferred
+  command surface. Prefer root `make` targets over guessed direct tool
+  invocations.
+- If a one-command local CI preflight target is needed, add it to the shared
+  `bin` Make fragments rather than as a service-local target by default.
+- Do not flag the absence of a root `verify` or `ci-checks` target as a project
+  or feature gap unless the consuming repository explicitly owns such a target
+  or current workflow evidence shows the missing target is breaking users.
+- Be careful with `make start` and `make stop`: shared helpers may call
+  `bin/build/docker/env`, which clones or updates a sibling `../docker`
+  repository over SSH and then delegates there.
+
+### Common downstream targets
+
+Check the consuming repository's root `Makefile` before relying on any target;
+the included `bin/build/make/*.mak` fragments determine which targets exist.
+Common shared targets include:
+
+- `make` or `make help`: show available targets when `help.mak` is included.
+- `make submodule`: sync and initialize git submodules when `git.mak` is
+  included and `bin/` is already present.
+- `make dep`: install or refresh dependencies. In Go service fragments this
+  commonly combines Go dependency download/tidy/vendor with Ruby harness
+  dependencies; in Go-only or Ruby-only fragments it is narrower.
+- `make lint`, `make fix-lint`, and `make format`: run the repository's shared
+  linting and formatting path for the included language/tool fragments.
+- `make sec`: run the shared security checks for the included fragments, often
+  `govulncheck`, Trivy, or both.
+- `make specs`, `make features`, `make benchmarks`, and `make coverage`: run
+  the repository's shared test, behavior, benchmark, and coverage targets when
+  exposed. Prefer the root targets over direct harness commands unless the
+  consuming repository says otherwise.
+- `make build`, `make build-test`, `make dev`, `make start`, and `make stop`:
+  common service or tool targets when exposed by the included fragments or root
+  `Makefile`; inspect local config and helper requirements before running them.
+- `make proto-lint`, `make proto-format`, `make proto-generate`,
+  `make proto-stale`, `make proto-breaking`, and `make proto-push`: common Buf
+  targets when `grpc.mak` or `buf.mak` is included. `proto-push` updates remote
+  state and requires explicit current-request permission.
+- `make proto-breaking` uses the shared `bin/build/make/buf.mak` convention
+  that derives the GitHub repository name from the checkout directory basename.
+  For repositories checked out under their canonical repository name, do not
+  flag the lack of a local `NAME := <repo>` override in `api/Makefile` as a
+  project workflow gap by default.
+
+### Release and deployment workflow
+
+- When CircleCI `version` jobs use the external `package` command from
+  `alexfalkowski/release` or `alexfalkowski/docker/release`, treat GoReleaser
+  config validation as owned by that release image. Do not flag the absence of a
+  separate repository-local GoReleaser validation job unless there is concrete
+  evidence that the release image no longer validates `.goreleaser.yml`, or the
+  repository explicitly decides to own a pre-release check locally.
+- When Docker image validation jobs run on non-`master` branches, they are not
+  required again before the master `version` or `package` release step by
+  default. Do not flag the lack of master-branch `test-docker-*` gating before
+  release writes without concrete evidence of current release breakage or an
+  explicit repository decision to own that gate locally.
+- When a `manifest-docker` workflow job is serialized to avoid overlapping
+  master pipelines moving the `latest` manifest out of order, treat versioned
+  image tags as the deployment contract by default. Only raise Docker release
+  ordering risk when the task explicitly concerns `latest` consumers, unpinned
+  image deployment, versioned tag overwrite, partial versioned artifact
+  publication, or changing the release/deploy contract.
+- In service repositories deployed through the downstream `infraops` app flow,
+  deployment ordering and desired state may be owned by
+  `alexfalkowski/infraops/area/apps`. Do not flag the lack of a CircleCI
+  deploy-job `serial-group` as a project workflow gap unless the task concerns
+  deployment ordering, there is concrete evidence of current deploy races, or
+  the repository has decided to own deployment serialization locally.
+
+### Ruby feature and benchmark harnesses
+
+- Ruby code under `test/` is usually a local feature or benchmark harness, not
+  production service code.
+- Ruby runtime selection for that harness is normally owned by the shared CI
+  image and shared Ruby Make wiring. Do not flag the absence of a
+  repository-local `.ruby-version`, `.tool-versions`, `mise.toml`, or Gemfile
+  `ruby` directive as a project gap unless there is concrete evidence that the
+  current workflow no longer supplies the expected runtime, or the repository
+  explicitly decides to own Ruby version selection locally for the harness.
+- Fixed localhost endpoints in `test/lib/**`, `test/nonnative.yml`,
+  `test/.config/**`, and related feature helpers are intentional local harness
+  assumptions unless there is concrete evidence of current workflow breakage.
+  Do not flag the lack of environment-configurable local harness endpoints as a
+  feature or project gap by default.
+- The supported integration and benchmark entrypoints are the root
+  `make features` and `make benchmarks` targets when they exist. They may build
+  the correct binary before delegating into `test/`; direct `make -C test ...`
+  targets are not the default workflow unless the consuming repository says so.
+- Feature and benchmark Cucumber runs may intentionally share the configured
+  HTML report path in `test/.config/cucumber.yml`. Treat JUnit XML reports and
+  coverage files as the durable CI artifacts; do not flag the lack of separate
+  feature and benchmark HTML report paths as a project workflow gap by default.
+
+### Shared service health defaults
+
+- Services using the shared health wiring may intentionally connect `healthz`
+  to an `online` check that verifies external connectivity. Do not flag that as
+  a reliability gap unless the task concerns changing the health contract,
+  environments that must run without public egress, or a documented operator
+  workflow where `healthz` must mean local-process-only health.
+
 When changing a skill's trigger, scope, workflow, or user-facing behavior,
 check the matching `skills/<name>/agents/openai.yaml` and update it if the
 display name, short description, or default prompt became stale.
