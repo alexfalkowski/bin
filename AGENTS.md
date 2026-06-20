@@ -192,6 +192,16 @@ precedence when it gives more specific guidance.
 - Consuming repositories use shared Make targets from `bin/` as their preferred
   command surface. Prefer root `make` targets over guessed direct tool
   invocations.
+- Consuming repository `AGENTS.md` files should document Makefile targets as the
+  recommended command surface, not standalone language, tool, or helper
+  commands that bypass the repository Makefile.
+- Agents may run direct commands for narrow diagnosis, local inspection, or a
+  one-off gap, but direct commands should stay ad hoc unless the consuming
+  repository has an explicit local reason to own them outside Make.
+- When a useful repeated command is missing from the Makefile surface, treat
+  that as a shared tooling gap by default. Add or improve the relevant `bin`
+  Make target before copying the direct command into multiple consuming
+  repositories.
 - If a one-command local CI preflight target is needed, add it to the shared
   `bin` Make fragments rather than as a service-local target by default.
 - Do not flag the absence of a root `verify` or `ci-checks` target as a project
