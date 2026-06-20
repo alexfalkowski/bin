@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Run a service in dev mode with air using the test config as the working context.
+
+set -eo pipefail
+
+name="${1:?name is required}"
+
+air -c /dev/null --build.cmd "make dep build" --build.full_bin "cd test && ../$name server -config file:.config/server.yml" --build.exclude_dir "assets,bin,vendor,test"

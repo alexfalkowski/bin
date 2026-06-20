@@ -18,4 +18,4 @@ update-all-dep: go-update-all-dep go-dep ruby-update-all-dep ruby-dep
 
 # Run in dev mode with air; builds and runs "$(NAME) server" using test config.
 dev:
-	@air -c /dev/null --build.cmd "make dep build" --build.entrypoint "$(CURDIR)/$(NAME)" --build.args_bin "server,-config,file:test/.config/server.yml" --build.exclude_dir "assets,bin,vendor,test"
+	@$(BIN_ROOT)/build/go/dev "$${NAME}"

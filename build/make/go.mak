@@ -134,9 +134,7 @@ encode-config:
 
 # Create server and client TLS certs under test/certs/ using mkcert.
 create-certs:
-	@mkcert -key-file test/certs/key.pem -cert-file test/certs/cert.pem localhost
-	@mkcert -client -key-file test/certs/client-key.pem -cert-file test/certs/client-cert.pem localhost
-	@cp "$$(mkcert -CAROOT)/rootCA.pem" test/certs/rootCA.pem
+	@$(BIN_ROOT)/build/sec/certs
 
 # Generate assets/<package>.png with goda+dot; package=internal/foo, default assets/diagram.png.
 create-diagram:
