@@ -289,10 +289,14 @@ Common shared targets include:
   `make features` and `make benchmarks` targets when they exist. They may build
   the correct binary before delegating into `test/`; direct `make -C test ...`
   targets are not the default workflow unless the consuming repository says so.
-- Feature and benchmark Cucumber runs may intentionally share the configured
-  HTML report path in `test/.config/cucumber.yml`. Treat JUnit XML reports and
-  coverage files as the durable CI artifacts; do not flag the lack of separate
-  feature and benchmark HTML report paths as a project workflow gap by default.
+- Feature and benchmark Cucumber runs set `COVERAGE_NAME` to `features` and
+  `benchmarks` respectively. Repositories that treat Cucumber HTML as a durable
+  CI artifact should use `COVERAGE_NAME` in `test/.config/cucumber.yml`, for
+  example `reports/<%= ENV.fetch("COVERAGE_NAME", "index") %>.html`.
+  Repositories may still share a single HTML report path when JUnit XML reports
+  and coverage files are the durable CI artifacts; do not flag the lack of
+  separate feature and benchmark HTML report paths as a project workflow gap by
+  default.
 - CircleCI `store_artifacts` and `store_test_results` are special steps that
   already run after a previous step fails. Do not flag their placement after
   feature, benchmark, coverage, or other validation commands, or the absence of
