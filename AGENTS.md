@@ -164,6 +164,13 @@ precedence when it gives more specific guidance.
 - A consuming repository's root `AGENTS.md` only needs enough local guidance to
   make this shared file discoverable; keep the canonical shared skill list and
   cross-repository defaults here.
+- Some template or legacy consuming repositories may not have a root
+  `AGENTS.md`, or may have only a short pointer to this file. Do not flag the
+  absence of copied skill lists, copied shared defaults, or expanded local agent
+  onboarding as a project workflow gap by default. Raise an agent-guidance gap
+  only when repository-specific workflow policy is missing and cannot be
+  inferred from `Makefile`, CI, README, and this shared file, or when the task
+  explicitly concerns repository agent onboarding.
 
 ### Bin submodule bootstrap
 
@@ -207,6 +214,10 @@ precedence when it gives more specific guidance.
 - Do not flag the absence of a root `verify` or `ci-checks` target as a project
   or feature gap unless the consuming repository explicitly owns such a target
   or current workflow evidence shows the missing target is breaking users.
+- The shared Make fragments target GNU Make 4+ semantics. On macOS, use `gmake`
+  when `/usr/bin/make` cannot parse included fragments. Do not flag GNU Make
+  3.81 parsing failures as a consuming-repository project gap unless the task is
+  explicitly about adding legacy make compatibility to shared `bin` tooling.
 - Be careful with `make start` and `make stop`: shared helpers may call
   `bin/build/docker/env`, which clones or updates a sibling `../docker`
   repository over SSH and then delegates there.
@@ -225,6 +236,12 @@ Common shared targets include:
   dependencies; in Go-only or Ruby-only fragments it is narrower.
 - `make lint`, `make fix-lint`, and `make format`: run the repository's shared
   linting and formatting path for the included language/tool fragments.
+- The shared Go lint wrapper only runs `golangci-lint` when the binary is
+  installed in `PATH`; CI images normally own required tool availability. Do
+  not flag the local no-op behavior as a consuming-repository project gap unless
+  CI lacks the expected tool, the task is explicitly about strict local lint
+  parity, or a repository has decided that missing local `golangci-lint` should
+  fail.
 - `make sec`: run the shared security checks for the included fragments, often
   `govulncheck`, Trivy, or both.
 - `make specs`, `make features`, `make benchmarks`, and `make coverage`: run
@@ -243,6 +260,20 @@ Common shared targets include:
   For repositories checked out under their canonical repository name, do not
   flag the lack of a local `NAME := <repo>` override in `api/Makefile` as a
   project workflow gap by default.
+- `make proto-breaking` compares against the remote GitHub `master` baseline,
+  and Buf generation may use remote plugins or a warm plugin cache. Do not flag
+  the network requirement or lack of an offline protobuf validation path as a
+  project workflow gap by default unless the repository documents offline
+  validation as a supported workflow or current CI/developer workflows are
+  broken by that dependency.
+- Shared `git.mak` targets expose branch, commit, PR, push, reset, purge, and
+  stash helpers in `make help` for maintainer workflows. Do not flag their
+  presence, discoverability, destructive potential, or remote-write capability
+  as a project workflow gap by default; agent policy already requires explicit
+  current-request permission before destructive or remote-writing commands.
+  Only raise a git-helper workflow gap when there is concrete evidence of
+  accidental use, broken guarded push behavior, or an explicit request to change
+  the shared git workflow.
 
 ### Release and deployment workflow
 
@@ -269,6 +300,53 @@ Common shared targets include:
   deploy-job `serial-group` as a project workflow gap unless the task concerns
   deployment ordering, there is concrete evidence of current deploy races, or
   the repository has decided to own deployment serialization locally.
+- For services that already run repository-owned Docker image validation and
+  deploy through the external release/deployment path, do not flag the absence
+  of an additional repository-local pre-publish container startup smoke test by
+  default. Raise it only with concrete release breakage, a missing deployment
+  startup/readiness gate, or an explicit repository decision to own that smoke
+  check locally.
+
+### CircleCI workflow conventions
+
+- CircleCI is the primary CI source of truth for these repositories unless a
+  repository-specific `AGENTS.md` or task states otherwise. Do not flag the
+  absence of equivalent GitHub Actions validation workflows when `.circleci/`
+  defines the build, test, security, release, or deploy path.
+- The common `wait-all` fan-in job may list jobs that are filtered out on a
+  branch, such as non-`master` `sync` jobs or `master` `version` jobs. CircleCI
+  ignores filtered-out required jobs, so do not flag this pattern or propose
+  split branch-specific wait jobs without evidence that required checks are
+  missing or blocked.
+- Non-`master` `sync` jobs intentionally run `make sync push` through the shared
+  git helpers after the validation jobs for that branch. Do not flag the lack
+  of a `serial-group` on `sync`, or the presence of guarded force-push behavior,
+  as a project workflow gap unless there is concrete evidence of branch update
+  races, lease failures caused by the workflow design, or a repository decision
+  to stop CI-managed branch synchronization.
+- `.source-key` is a generated, ignored cache input produced by `make
+  source-key`; it should not be committed. Build and lint caches commonly use
+  it to invalidate source-dependent outputs. Dependency caches may be keyed only
+  by dependency lockfiles and language/tool versions, so do not flag the absence
+  of `.source-key` in dependency-cache keys by default.
+- `make codecov-upload` is CI upload behavior, not a read-only local validation
+  step. Do not flag its external-service dependency, credential needs, or lack
+  of a local dry-run wrapper as a project workflow gap unless the task concerns
+  coverage publication or there is concrete upload failure evidence.
+- Repeated `make clean` calls around dependency restore, dependency install,
+  lint, specs, and coverage are intentional cache hygiene for shared Go
+  workflows. Do not flag them as redundant project workflow churn unless there
+  is measured CI cost evidence or a concrete cache corruption failure.
+- When `.github/dependabot.yml` contains a `gitsubmodule` update for dependency
+  name `bin`, treat shared submodule update discovery as already owned. Do not
+  flag the lack of a separate local submodule update scheduler, workflow, or
+  Make wrapper without concrete evidence that Dependabot is not opening the
+  expected updates.
+- For larger path-filtered repositories such as `docker` and `infraops`, the
+  CircleCI setup workflow plus `.circleci/continue_config.yml` owns area-specific
+  validation. Do not flag the lack of one all-repository build job for every
+  change when path filtering maps changed paths to the relevant image, area, or
+  Pulumi workflow.
 
 ### Ruby feature and benchmark harnesses
 
@@ -304,6 +382,10 @@ Common shared targets include:
   report/artifact upload gap with concrete evidence that the repository's
   configured upload steps, paths, job timeouts, cancellations, or documented CI
   artifact contract fail to preserve required diagnostics.
+- Do not flag generated files under `test/reports` merely because `features`,
+  `benchmarks`, `specs`, or `coverage` do not automatically run `make
+  clean-reports`. CI jobs use fresh workspaces for report publication, and local
+  users have an explicit `make clean-reports` target when cleanup is needed.
 
 ### Shared service health defaults
 
