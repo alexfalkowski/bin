@@ -293,6 +293,13 @@ Common shared targets include:
   HTML report path in `test/.config/cucumber.yml`. Treat JUnit XML reports and
   coverage files as the durable CI artifacts; do not flag the lack of separate
   feature and benchmark HTML report paths as a project workflow gap by default.
+- CircleCI `store_artifacts` and `store_test_results` are special steps that
+  already run after a previous step fails. Do not flag their placement after
+  feature, benchmark, coverage, or other validation commands, or the absence of
+  `when: always` around them, as a project workflow gap by default. Only raise a
+  report/artifact upload gap with concrete evidence that the repository's
+  configured upload steps, paths, job timeouts, cancellations, or documented CI
+  artifact contract fail to preserve required diagnostics.
 
 ### Shared service health defaults
 
