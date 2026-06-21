@@ -2,7 +2,9 @@
 
 ## Repository purpose
 
-This repository is a collection of shared **executables** and **Makefile includes** intended to be reused across projects (typically as a Git submodule mounted at `./bin`). See `README.md`.
+This repository is a collection of shared **executables** and **Makefile
+includes** reused across projects as a Git submodule mounted at `./bin`. See
+`README.md`.
 
 Most of the code here is small Bash/Ruby utilities plus reusable make fragments under `build/make/`.
 
@@ -86,385 +88,320 @@ existing style appears unsafe or insufficient, stop and ask before changing it.
 
 ## Shared skills
 
-This repository ships focused skills under `skills/`. Use the smallest matching
-skill instead of one broad default:
+Use the smallest matching skill in `skills/`; do not use a broad default when a
+focused skill applies.
 
 - `project-workflow`: project discovery, command surfaces, CI, and `./bin`
-  submodule wiring.
+  wiring.
 - `change-safety`: compatibility, documented interfaces, migrations, generated
-  files, and security-sensitive edits.
-- `change-validation`: test, lint, CI, security, benchmark, and validation selection.
-- `testing-standards`: language-agnostic test design, coverage, fixtures,
-  determinism, and test-layer guidance.
-- `doc-standards`: documentation quality standards for README files, docs,
-  examples, command/config docs, public API comments, docstrings, and stale-doc
-  review.
-- `naming-standards`: cross-language naming judgment for domain clarity,
-  consistency, abstraction level, public terminology, and rename safety.
-- `code-review`: review findings, risk assessment, and missing coverage.
-- `style-review`: non-blocking readability, consistency, idiom, and polish
-  suggestions that should not be reported as code-review findings.
-- `security-audit`: security reviews, vulnerability checks, unsafe shell/filesystem/network/auth inspection, and Go/Ruby/shell audit guidance.
-- `code-issues`: find confirmed code issues into `ISSUES.md`, then implement agreed fixes one code issue at a time.
-- `test-gaps`: find confirmed missing or weak tests into `TESTS.md`, then implement agreed test fixes gap by gap.
-- `doc-gaps`: find and fix confirmed missing, stale, or misleading docs/comments in one pass, using `DOCS.md` only for audit-only requests or unresolved gaps.
-- `feature-gaps`: find concrete product-facing feature
-  opportunities into `FEATURES.md`, then implement agreed feature changes one
-  at a time.
-- `project-gaps`: find concrete build, CI, Makefile, release, setup,
-  validation, command discovery, and repository workflow opportunities into
-  `PROJECTS.md`, then implement agreed project workflow changes one at a time.
-- `reliability-standards`: SRE, NALSD, production-readiness, SLO, overload,
-  observability, release-safety, recovery, and operability guidance.
-- `reliability-gaps`: find confirmed reliability gaps into `RELIABILITY.md`, then
-  implement agreed reliability fixes gap by gap.
-- `repo-health`: daily or weekly repository delivery, CI quality,
-  release/deploy, and service reliability summaries using GitHub, CircleCI,
-  Kubernetes/DigitalOcean, and UptimeRobot evidence.
-- `diagnose-issue`: read-only diagnosis of current branch/PR CI failures,
-  deploy failures, rollout state, Kubernetes/DigitalOcean runtime evidence,
-  UptimeRobot monitor issues, and latest-version problems.
-- `review-pr`: create a commit, force-push, and open a draft PR with a generated summary.
+  files, dependencies, and security-sensitive edits.
+- `change-validation`: test, lint, CI, security, benchmark, and validation
+  selection.
+- `testing-standards`: test design, coverage, fixtures, determinism, and
+  test-layer guidance.
+- `doc-standards`: README, docs, examples, command/config docs, public API
+  comments, docstrings, and stale-doc review.
+- `naming-standards`: domain clarity, public terminology, abstraction level,
+  consistency, and rename safety.
+- `code-review`: bug, regression, risk, and missing-coverage findings.
+- `style-review`: optional non-blocking readability, consistency, idiom, and
+  polish suggestions.
+- `security-audit`: vulnerability checks plus unsafe shell, filesystem,
+  network, auth, Go, Ruby, and shell inspection.
+- `code-issues`: confirmed code issues in `ISSUES.md`; fix one agreed issue at a
+  time.
+- `test-gaps`: confirmed test gaps in `TESTS.md`; fix one agreed gap at a time.
+- `doc-gaps`: one-pass documentation gap finding and fixing; use `DOCS.md` only
+  for audit-only requests or unresolved gaps.
+- `feature-gaps`: concrete product-facing opportunities in `FEATURES.md`; fix
+  one agreed feature at a time.
+- `project-gaps`: build, CI, Makefile, release, setup, validation, command
+  discovery, and workflow opportunities in `PROJECTS.md`; fix one agreed gap at
+  a time.
+- `reliability-standards`: SRE, NALSD, production readiness, SLOs, overload,
+  observability, release safety, recovery, and operability.
+- `reliability-gaps`: confirmed reliability gaps in `RELIABILITY.md`; fix one
+  agreed gap at a time.
+- `repo-health`: delivery, CI quality, release/deploy, and service reliability
+  summaries from GitHub, CircleCI, Kubernetes/DigitalOcean, and UptimeRobot.
+- `diagnose-issue`: read-only diagnosis of selected CI, deploy, rollout,
+  runtime, monitor, or latest-version failures.
+- `review-pr`: commit, force-push, and open a draft PR with a generated summary.
 - `shell-standards`: Bash scripting, ShellCheck, text processing, directory
-  scope, and function documentation conventions.
-- `go-standards`: Go API, documentation, import, naming idiom, and testing
+  scope, and function documentation.
+- `go-standards`: Go API, documentation, import, naming, and testing
   conventions for repos using this tooling.
-- `ruby-standards`: Ruby API, documentation, naming idiom, style, and validation
+- `ruby-standards`: Ruby API, documentation, naming, style, and validation
   conventions for repos using this tooling.
 
 Treat this `AGENTS.md` as the repo-specific companion to those skills.
 
-When this repository is read from a downstream repo as `./bin`, treat `bin/`
-as vendored shared tooling:
+When a downstream repo reads this repository as `./bin`, treat `bin/` as
+vendored shared tooling:
 
 - Read `bin/AGENTS.md` and the relevant `bin/skills/**` files when shared
   guidance is needed.
 - Do not search, read, edit, or review other files under `bin/**` unless the
   task is explicitly about shared `bin` tooling, Makefile includes, skills, or
   submodule wiring.
-- Prefer searches from the consuming repo that exclude unrelated submodule
-  contents, for example `rg --glob '!bin/**' ...`.
-- Make fragments derive shared helper paths from their own include location
-  through `BIN_ROOT`; reason about target behavior from the consuming
-  repository root without exploring unrelated files inside `bin/`.
+- Search consuming repositories with unrelated submodule content excluded, for
+  example `rg --glob '!bin/**' ...`.
+- Reason about shared Make behavior from the consuming repository root.
+- Remember that make fragments derive helper paths from their include location
+  through `BIN_ROOT`.
 
 ## Downstream repository defaults
 
-These defaults apply when a consuming repository has matching local evidence
-such as `.gitmodules`, a root `Makefile`, `.circleci/config.yml`, `test/`, or
-`test/nonnative.yml`. The consuming repository's own `AGENTS.md` remains higher
-precedence when it gives more specific guidance.
+Apply these defaults only when a consuming repository has matching local
+evidence such as `.gitmodules`, a root `Makefile`, `.circleci/config.yml`,
+`test/`, or `test/nonnative.yml`. The consuming repository's own `AGENTS.md`
+remains higher precedence when it gives more specific guidance.
 
 ### Shared skill discovery
 
-- Consuming repositories that mount this repository at `./bin` use the shared
-  skills from `bin/skills/`.
-- Read `bin/AGENTS.md` for the canonical shared skill list and use the smallest
-  matching skill for the task.
-- A consuming repository's root `AGENTS.md` only needs enough local guidance to
-  make this shared file discoverable; keep the canonical shared skill list and
-  cross-repository defaults here.
-- Some template or legacy consuming repositories may not have a root
-  `AGENTS.md`, or may have only a short pointer to this file. Do not flag the
-  absence of copied skill lists, copied shared defaults, or expanded local agent
-  onboarding as a project workflow gap by default. Raise an agent-guidance gap
-  only when repository-specific workflow policy is missing and cannot be
-  inferred from `Makefile`, CI, README, and this shared file, or when the task
-  explicitly concerns repository agent onboarding.
+- Repositories mounted at `./bin` use shared skills from `bin/skills/`.
+- Read `bin/AGENTS.md` for the canonical shared skill list.
+- Use the smallest matching skill for the task.
+- A consuming root `AGENTS.md` only needs to make this shared file
+  discoverable; keep the canonical skill list and shared defaults here.
+- Do not flag absent, thin, or pointer-only consuming `AGENTS.md` files as
+  project workflow gaps unless the gap rule below applies.
+- Raise an agent-guidance gap only when repository-specific workflow policy is
+  missing and cannot be inferred from `Makefile`, CI, README, and this file, or
+  when the task explicitly concerns repository agent onboarding.
 
 ### Bin submodule bootstrap
 
-- Consuming repositories usually mount this repository at `./bin` using the SSH
-  URL `git@github.com:alexfalkowski/bin.git`.
-- The raw bootstrap command is:
+- Treat `path = bin` with URL `git@github.com:alexfalkowski/bin.git` as the
+  intentional default.
+- Use this raw bootstrap command before Makefile-provided targets can load:
 
   ```sh
   git submodule sync && git submodule update --init
   ```
 
-- `make submodule` is provided by `bin/build/make/git.mak` after the submodule
-  exists. A fresh checkout may need the raw `git submodule ...` command before
-  any Makefile-provided targets can load.
-- Root `Makefile`s that include `bin/build/make/*.mak` directly are
-  intentionally thin wrappers around shared tooling. Do not flag the lack of a
-  root-owned no-submodule bootstrap shim or `make submodule` fallback as a
-  project workflow gap by default.
-- The checked-in SSH submodule URL is intentional. Read-only users may override
-  it in local Git configuration, but agents should not flag the SSH default as a
-  setup, reliability, or project workflow gap unless the repository has
-  explicitly decided to make HTTPS the default.
+- Use `make submodule` only after the shared `bin/` checkout is present; it is
+  provided by `bin/build/make/git.mak`.
+- Treat root `Makefile`s that directly include `bin/build/make/*.mak` as
+  intentional thin wrappers.
+- Do not flag missing root-owned bootstrap shims, no-submodule `make submodule`
+  fallbacks, or the SSH submodule URL unless the repository has explicitly
+  decided to own those contracts differently.
 
 ### Shared Make ownership
 
-- Consuming repositories use shared Make targets from `bin/` as their preferred
-  command surface. Prefer root `make` targets over guessed direct tool
-  invocations.
-- Consuming repository `AGENTS.md` files should document Makefile targets as the
-  recommended command surface, not standalone language, tool, or helper
-  commands that bypass the repository Makefile.
-- Agents may run direct commands for narrow diagnosis, local inspection, or a
-  one-off gap, but direct commands should stay ad hoc unless the consuming
-  repository has an explicit local reason to own them outside Make.
-- When a useful repeated command is missing from the Makefile surface, treat
-  that as a shared tooling gap by default. Add or improve the relevant `bin`
-  Make target before copying the direct command into multiple consuming
-  repositories.
-- If a one-command local CI preflight target is needed, add it to the shared
-  `bin` Make fragments rather than as a service-local target by default.
-- Do not flag the absence of a root `verify` or `ci-checks` target as a project
-  or feature gap unless the consuming repository explicitly owns such a target
-  or current workflow evidence shows the missing target is breaking users.
-- The shared Make fragments target GNU Make 4+ semantics. On macOS, use `gmake`
-  when `/usr/bin/make` cannot parse included fragments. Do not flag GNU Make
-  3.81 parsing failures as a consuming-repository project gap unless the task is
-  explicitly about adding legacy make compatibility to shared `bin` tooling.
-- Be careful with `make start` and `make stop`: shared helpers may call
-  `bin/build/docker/env`, which clones or updates a sibling `../docker`
-  repository over SSH and then delegates there.
+- Use root `make` targets as the preferred command surface.
+- Document Makefile targets in consuming `AGENTS.md` files; do not recommend
+  repeatable standalone language, tool, or helper commands that bypass Make.
+- Use direct commands only for narrow diagnosis, local inspection, or a one-off
+  gap unless the consuming repository explicitly owns them outside Make.
+- Treat a useful repeated command missing from the Makefile surface as a shared
+  tooling gap; add or improve the relevant `bin` Make target before copying the
+  command into multiple consuming repositories.
+- Add one-command local CI preflight targets to shared `bin` Make fragments, not
+  service-local Makefiles.
+- Do not flag the absence of a root `verify` or `ci-checks` target unless the
+  consuming repository explicitly owns one or current workflow evidence shows
+  the missing target breaks users.
+- Treat shared Make fragments as GNU Make 4+; use `gmake` on macOS when
+  `/usr/bin/make` cannot parse them.
+- Do not flag GNU Make 3.81 parsing failures unless the task is explicitly
+  about legacy make compatibility in shared `bin` tooling.
+- Treat `make start` and `make stop` as potentially network/SSH-affecting:
+  shared helpers can call `bin/build/docker/env`, which clones or updates
+  sibling `../docker` over SSH and delegates there.
 
 ### Common downstream targets
 
-Check the consuming repository's root `Makefile` before relying on any target;
-the included `bin/build/make/*.mak` fragments determine which targets exist.
-Common shared targets include:
+Always inspect the consuming root `Makefile`; included fragments determine
+which targets exist. Common names are:
 
-- `make` or `make help`: show available targets when `help.mak` is included.
-- `make submodule`: sync and initialize git submodules when `git.mak` is
-  included and `bin/` is already present.
-- `make dep`: install or refresh dependencies. In Go service fragments this
-  commonly combines Go dependency download/tidy/vendor with Ruby harness
-  dependencies; in Go-only or Ruby-only fragments it is narrower.
-- `make lint`, `make fix-lint`, and `make format`: run the repository's shared
-  linting and formatting path for the included language/tool fragments.
-- The shared Go lint wrapper only runs `golangci-lint` when the binary is
-  installed in `PATH`; CI images normally own required tool availability. Do
-  not flag the local no-op behavior as a consuming-repository project gap unless
-  CI lacks the expected tool, the task is explicitly about strict local lint
-  parity, or a repository has decided that missing local `golangci-lint` should
-  fail.
-- `make sec`: run the shared security checks for the included fragments, often
-  `govulncheck`, Trivy, or both.
-- `make specs`, `make features`, `make benchmarks`, and `make coverage`: run
-  the repository's shared test, behavior, benchmark, and coverage targets when
-  exposed. Prefer the root targets over direct harness commands unless the
-  consuming repository says otherwise.
-- `make build`, `make build-test`, `make dev`, `make start`, and `make stop`:
-  common service or tool targets when exposed by the included fragments or root
-  `Makefile`; inspect local config and helper requirements before running them.
-- `make proto-lint`, `make proto-format`, `make proto-generate`,
-  `make proto-stale`, `make proto-breaking`, and `make proto-push`: common Buf
-  targets when `grpc.mak` or `buf.mak` is included. `proto-push` updates remote
-  state and requires explicit current-request permission.
-- `make proto-breaking` uses the shared `bin/build/make/buf.mak` convention
-  that derives the GitHub repository name from the checkout directory basename.
-  For repositories checked out under their canonical repository name, do not
-  flag the lack of a local `NAME := <repo>` override in `api/Makefile` as a
-  project workflow gap by default.
-- `make proto-breaking` compares against the remote GitHub `master` baseline,
-  and Buf generation may use remote plugins or a warm plugin cache. Do not flag
-  the network requirement or lack of an offline protobuf validation path as a
-  project workflow gap by default unless the repository documents offline
-  validation as a supported workflow or current CI/developer workflows are
-  broken by that dependency.
+- Discovery/bootstrap: `make`, `make help`, `make submodule`.
+- Dependencies and quality: `make dep`, `make lint`, `make fix-lint`,
+  `make format`, `make sec`.
+- Tests and reports: `make specs`, `make features`, `make benchmarks`,
+  `make coverage`.
+- Service/tool workflow: `make build`, `make build-test`, `make dev`,
+  `make start`, `make stop`.
+- Protobuf/Buf workflow: `make proto-lint`, `make proto-format`,
+  `make proto-generate`, `make proto-stale`, `make proto-breaking`,
+  `make proto-push`.
+
+Do not assume a common target exists until the consuming Makefile exposes it.
+Prefer exposed root targets over direct harness commands unless the consuming
+repository says otherwise.
+
+Target-specific rules:
+
+- The shared Go lint wrapper runs `golangci-lint` only when the binary is in
+  `PATH`; do not flag the local no-op unless CI lacks the tool, the task is
+  about strict local lint parity, or the repository decided missing local
+  `golangci-lint` must fail.
+- `proto-push` updates remote state and requires explicit current-request
+  permission.
+- `proto-breaking` derives the GitHub repository name from the checkout
+  directory basename. Do not require a local `NAME := <repo>` override for
+  canonical checkouts.
+- `proto-breaking` compares against remote GitHub `master`, and Buf generation
+  can require remote plugins or a warm plugin cache. Do not flag the network
+  requirement or lack of offline protobuf validation unless offline validation
+  is documented as supported or current CI/developer workflows are broken.
 - Shared `git.mak` targets expose branch, commit, PR, push, reset, purge, and
-  stash helpers in `make help` for maintainer workflows. Do not flag their
-  presence, discoverability, destructive potential, or remote-write capability
-  as a project workflow gap by default; agent policy already requires explicit
-  current-request permission before destructive or remote-writing commands.
-  Only raise a git-helper workflow gap when there is concrete evidence of
-  accidental use, broken guarded push behavior, or an explicit request to change
-  the shared git workflow.
+  stash helpers for maintainers. Do not flag their presence, discoverability,
+  destructive potential, or remote-write capability unless there is concrete
+  accidental-use evidence, broken guarded push behavior, or an explicit request
+  to change the shared git workflow.
 
 ### Release and deployment workflow
 
-- When CircleCI `version` jobs use the external `package` command from
-  `alexfalkowski/release` or `alexfalkowski/docker/release`, treat GoReleaser
-  config validation as owned by that release image. Do not flag the absence of a
-  separate repository-local GoReleaser validation job unless there is concrete
-  evidence that the release image no longer validates `.goreleaser.yml`, or the
-  repository explicitly decides to own a pre-release check locally.
-- When Docker image validation jobs run on non-`master` branches, they are not
-  required again before the master `version` or `package` release step by
-  default. Do not flag the lack of master-branch `test-docker-*` gating before
-  release writes without concrete evidence of current release breakage or an
-  explicit repository decision to own that gate locally.
-- When a `manifest-docker` workflow job is serialized to avoid overlapping
-  master pipelines moving the `latest` manifest out of order, treat versioned
-  image tags as the deployment contract by default. Only raise Docker release
-  ordering risk when the task explicitly concerns `latest` consumers, unpinned
-  image deployment, versioned tag overwrite, partial versioned artifact
-  publication, or changing the release/deploy contract.
-- In service repositories deployed through the downstream `infraops` app flow,
-  deployment ordering and desired state may be owned by
-  `alexfalkowski/infraops/area/apps`. Do not flag the lack of a CircleCI
-  deploy-job `serial-group` as a project workflow gap unless the task concerns
-  deployment ordering, there is concrete evidence of current deploy races, or
-  the repository has decided to own deployment serialization locally.
-- For services that already run repository-owned Docker image validation and
-  deploy through the external release/deployment path, do not flag the absence
-  of an additional repository-local pre-publish container startup smoke test by
-  default. Raise it only with concrete release breakage, a missing deployment
-  startup/readiness gate, or an explicit repository decision to own that smoke
-  check locally.
+- Treat CircleCI `version` jobs that run external `package` from
+  `alexfalkowski/release` or `alexfalkowski/docker/release` as owning
+  GoReleaser config validation. Do not require a separate local GoReleaser
+  validation job without evidence that the release image stopped validating
+  `.goreleaser.yml` or an explicit repository decision to own pre-release
+  checks locally.
+- Treat non-`master` Docker image validation as sufficient before the master
+  `version` or `package` release step. Do not require master-branch
+  `test-docker-*` gating without current release breakage or an explicit local
+  gate decision.
+- When `manifest-docker` is serialized to prevent overlapping `latest` updates,
+  treat versioned image tags as the deployment contract. Raise ordering risk
+  only for `latest` consumers, unpinned image deployment, versioned tag
+  overwrite, partial versioned artifact publication, or release/deploy contract
+  changes.
+- For services deployed through `alexfalkowski/infraops/area/apps`, treat
+  deployment ordering and desired state as owned there. Do not require a
+  CircleCI deploy-job `serial-group` unless the task concerns deployment
+  ordering, current deploy races exist, or the repository chose local deploy
+  serialization.
+- Do not require an extra repository-local pre-publish container startup smoke
+  test when the service already runs repository-owned Docker image validation
+  and deploys through the external release/deployment path. Raise that gap only
+  with concrete release breakage, a missing deployment startup/readiness gate,
+  or an explicit local smoke-check decision.
 
 ### CircleCI workflow conventions
 
-- CircleCI is the primary CI source of truth for these repositories unless a
-  repository-specific `AGENTS.md` or task states otherwise. Do not flag the
-  absence of equivalent GitHub Actions validation workflows when `.circleci/`
-  defines the build, test, security, release, or deploy path.
-- The common `wait-all` fan-in job may list jobs that are filtered out on a
-  branch, such as non-`master` `sync` jobs or `master` `version` jobs. CircleCI
-  ignores filtered-out required jobs, so do not flag this pattern or propose
-  split branch-specific wait jobs without evidence that required checks are
-  missing or blocked.
-- Non-`master` `sync` jobs intentionally run `make sync push` through the shared
-  git helpers after the validation jobs for that branch. Do not flag the lack
-  of a `serial-group` on `sync`, or the presence of guarded force-push behavior,
-  as a project workflow gap unless there is concrete evidence of branch update
-  races, lease failures caused by the workflow design, or a repository decision
-  to stop CI-managed branch synchronization.
-- `.source-key` is a generated, ignored cache input produced by `make
-  source-key`; it should not be committed. Build and lint caches commonly use
-  it to invalidate source-dependent outputs. Dependency caches may be keyed only
-  by dependency lockfiles and language/tool versions, so do not flag the absence
-  of `.source-key` in dependency-cache keys by default.
-- `make codecov-upload` is CI upload behavior, not a read-only local validation
-  step. Do not flag its external-service dependency, credential needs, or lack
-  of a local dry-run wrapper as a project workflow gap unless the task concerns
-  coverage publication or there is concrete upload failure evidence.
-- Repeated `make clean` calls around dependency restore, dependency install,
-  lint, specs, and coverage are intentional cache hygiene for shared Go
-  workflows. Do not flag them as redundant project workflow churn unless there
-  is measured CI cost evidence or a concrete cache corruption failure.
-- When `.github/dependabot.yml` contains a `gitsubmodule` update for dependency
-  name `bin`, treat shared submodule update discovery as already owned. Do not
-  flag the lack of a separate local submodule update scheduler, workflow, or
-  Make wrapper without concrete evidence that Dependabot is not opening the
+- Treat CircleCI as the primary CI source of truth unless the consuming
+  `AGENTS.md` or task states otherwise.
+- Do not require equivalent GitHub Actions validation when `.circleci/` defines
+  the build, test, security, release, or deploy path.
+- Do not flag `wait-all` fan-in jobs that list branch-filtered jobs such as
+  non-`master` `sync` or master-only `version`; CircleCI ignores filtered-out
+  required jobs.
+- Do not propose split branch-specific wait jobs without evidence that required
+  checks are missing or blocked.
+- Treat non-`master` `make sync push` jobs as intentional CI-managed branch
+  synchronization after validation. Do not flag missing `serial-group` on
+  `sync` or guarded force-push behavior without branch update races, workflow
+  design lease failures, or a repository decision to stop CI-managed sync.
+- Treat `.source-key` as a generated, ignored cache input from `make
+  source-key`; do not commit it. Do not require `.source-key` in dependency
+  cache keys when dependency lockfiles and language/tool versions key the cache.
+- Treat `make codecov-upload` as CI upload behavior, not read-only local
+  validation. Do not require local dry-run wrappers unless the task concerns
+  coverage publication or concrete upload failures.
+- Treat repeated `make clean` around dependency restore/install, lint, specs,
+  and coverage as intentional shared Go cache hygiene unless measured CI cost or
+  concrete cache corruption proves otherwise.
+- When Dependabot has a `gitsubmodule` update for dependency `bin`, treat shared
+  submodule update discovery as owned. Do not require another scheduler,
+  workflow, or Make wrapper without evidence that Dependabot is not opening
   expected updates.
-- For larger path-filtered repositories such as `docker` and `infraops`, the
-  CircleCI setup workflow plus `.circleci/continue_config.yml` owns area-specific
-  validation. Do not flag the lack of one all-repository build job for every
-  change when path filtering maps changed paths to the relevant image, area, or
-  Pulumi workflow.
+- For path-filtered repositories such as `docker` and `infraops`, treat the
+  CircleCI setup workflow plus `.circleci/continue_config.yml` as owning
+  area-specific validation. Do not require one all-repository build job when
+  path filtering maps changes to the relevant image, area, or Pulumi workflow.
 
 ### Ruby feature and benchmark harnesses
 
-- Ruby code under `test/` is usually a local feature or benchmark harness, not
-  production service code.
-- Ruby runtime selection for that harness is normally owned by the shared CI
-  image and shared Ruby Make wiring. Do not flag the absence of a
-  repository-local `.ruby-version`, `.tool-versions`, `mise.toml`, or Gemfile
-  `ruby` directive as a project gap unless there is concrete evidence that the
-  current workflow no longer supplies the expected runtime, or the repository
-  explicitly decides to own Ruby version selection locally for the harness.
-- Fixed localhost endpoints in `test/lib/**`, `test/nonnative.yml`,
-  `test/.config/**`, and related feature helpers are intentional local harness
-  assumptions unless there is concrete evidence of current workflow breakage.
-  Do not flag the lack of environment-configurable local harness endpoints as a
-  feature or project gap by default.
-- The supported integration and benchmark entrypoints are the root
-  `make features` and `make benchmarks` targets when they exist. They may build
-  the correct binary before delegating into `test/`; direct `make -C test ...`
-  targets are not the default workflow unless the consuming repository says so.
-- Feature and benchmark Cucumber runs set `COVERAGE_NAME` to `features` and
-  `benchmarks` respectively. Repositories that treat Cucumber HTML as a durable
-  CI artifact should use `COVERAGE_NAME` in `test/.config/cucumber.yml`, for
-  example `reports/<%= ENV.fetch("COVERAGE_NAME", "index") %>.html`.
-  Repositories may still share a single HTML report path when JUnit XML reports
-  and coverage files are the durable CI artifacts; do not flag the lack of
-  separate feature and benchmark HTML report paths as a project workflow gap by
-  default.
-- CircleCI `store_artifacts` and `store_test_results` are special steps that
-  already run after a previous step fails. Do not flag their placement after
-  feature, benchmark, coverage, or other validation commands, or the absence of
-  `when: always` around them, as a project workflow gap by default. Only raise a
-  report/artifact upload gap with concrete evidence that the repository's
-  configured upload steps, paths, job timeouts, cancellations, or documented CI
-  artifact contract fail to preserve required diagnostics.
-- Do not flag generated files under `test/reports` merely because `features`,
-  `benchmarks`, `specs`, or `coverage` do not automatically run `make
-  clean-reports`. CI jobs use fresh workspaces for report publication, and local
-  users have an explicit `make clean-reports` target when cleanup is needed.
+- Treat Ruby code under `test/` as a local feature or benchmark harness unless
+  repository evidence says it is production code.
+- Treat Ruby runtime selection for that harness as owned by the shared CI image
+  and shared Ruby Make wiring. Do not require repository-local `.ruby-version`,
+  `.tool-versions`, `mise.toml`, or Gemfile `ruby` directives without workflow
+  breakage or an explicit local runtime-ownership decision.
+- Treat fixed localhost endpoints in `test/lib/**`, `test/nonnative.yml`,
+  `test/.config/**`, and related feature helpers as intentional local harness
+  assumptions unless current workflow breakage proves otherwise.
+- Use root `make features` and `make benchmarks` as supported integration and
+  benchmark entrypoints when they exist; they can build the correct binary
+  before delegating into `test/`.
+- Do not treat direct `make -C test ...` targets as default workflow unless the
+  consuming repository says so.
+- Cucumber feature and benchmark runs set `COVERAGE_NAME` to `features` and
+  `benchmarks`. Use that in `test/.config/cucumber.yml` only when Cucumber HTML
+  is a durable CI artifact.
+- Do not flag a single shared HTML report path when JUnit XML reports and
+  coverage files are the durable CI artifacts.
+- Treat CircleCI `store_artifacts` and `store_test_results` as special steps
+  that already run after prior step failure. Do not require `when: always`
+  around them or move them merely because they follow validation commands.
+- Raise report/artifact upload gaps only with evidence that configured upload
+  steps, paths, job timeouts, cancellations, or documented CI artifact contracts
+  fail to preserve required diagnostics.
+- Do not flag generated files under `test/reports` merely because validation
+  targets do not automatically run `make clean-reports`; CI uses fresh
+  workspaces and local users have an explicit cleanup target.
 
 ### Shared service health defaults
 
-- Services using the shared health wiring may intentionally connect `healthz`
+- Services using the shared health wiring can intentionally connect `healthz`
   to an `online` check that verifies external connectivity. Do not flag that as
   a reliability gap unless the task concerns changing the health contract,
   environments that must run without public egress, or a documented operator
   workflow where `healthz` must mean local-process-only health.
 
-When changing a skill's trigger, scope, workflow, or user-facing behavior,
-check the matching `skills/<name>/agents/openai.yaml` and update it if the
-display name, short description, or default prompt became stale.
+## Skill composition
 
-Common composition:
-
-- `review-pr` orchestrates PR preparation with `project-workflow`,
-  `change-validation`, relevant language standards, `doc-standards`,
-  `code-review`, summary drafting, optional explicit `style-review`, and the
-  review target.
-- `code-issues` orchestrates a two-phase code-issue workflow: aggregate confirmed
-  `project-workflow`, `code-review`, and `security-audit` findings into
-  `ISSUES.md`, then implement agreed fixes one code issue at a time.
-- `test-gaps` orchestrates a two-phase test-gap workflow: aggregate confirmed
-  `project-workflow` context and missing or weak test coverage into
-  `TESTS.md`, then implement agreed test fixes gap by gap.
-- `doc-gaps` orchestrates a one-pass doc-gap workflow: aggregate confirmed
-  `project-workflow` context and `$doc-standards` findings for missing, stale,
-  or misleading README, docs, examples, comments, and docstrings, implement
-  confirmed documentation fixes, validate them, and use `DOCS.md` only for
-  audit-only requests or unresolved gaps.
-- `feature-gaps` orchestrates a two-phase feature-opportunity workflow:
-  aggregate confirmed `project-workflow` context, current repository behavior,
-  and comparable product evidence into `FEATURES.md`, then implement agreed
-  main product feature changes one feature at a time. Route standalone test,
-  CI, build, Makefile, release, validation, command discovery, and repository
-  workflow concerns to `test-gaps` or `project-gaps`.
-- `project-gaps` orchestrates a two-phase project workflow: aggregate
-  confirmed `project-workflow` context and build, CI, Makefile, release, setup,
-  validation, command discovery, and repository workflow opportunities into
-  `PROJECTS.md`, then implement agreed project workflow changes one at a time.
-- `reliability-gaps` orchestrates a two-phase reliability-gap workflow:
-  aggregate confirmed `project-workflow` context and SRE, NALSD, operability,
-  overload, observability, release-safety, recovery, or data-integrity gaps into
-  `RELIABILITY.md`, then implement agreed reliability fixes gap by gap.
-- `repo-health` orchestrates delivery, quality, release/deploy, and
-  service-reliability reporting; pair it with `project-workflow` for repository
-  discovery and `change-validation` only when the summary process changes files
-  or validation commands need to be selected.
-- `diagnose-issue` orchestrates read-only CI and deployment diagnosis for a
-  selected latest pipeline, explicit pipeline ID, latest deployment version, or
-  explicit version; pair it with `change-validation` when a suggested fix is
-  implemented after diagnosis.
-- `code-review` conditionally consults `security-audit` for security-sensitive
-  review scope while keeping the review findings format.
-- `style-review` performs an optional non-blocking polish pass when explicitly
-  requested, after or separate from `code-review`; it must not replace bug,
-  security, compatibility, test-gap, or doc-gap review.
-- `security-audit` pairs with `change-safety` for code changes and
+- `review-pr`: compose `project-workflow`, `change-validation`, relevant
+  language standards, `doc-standards`, `code-review`, summary drafting,
+  optional explicit `style-review`, and the review target.
+- `code-issues`: aggregate confirmed `project-workflow`, `code-review`, and
+  `security-audit` findings into `ISSUES.md`; fix one agreed code issue at a
+  time.
+- `test-gaps`: aggregate confirmed `project-workflow` context and missing or
+  weak coverage into `TESTS.md`; fix one agreed test gap at a time.
+- `doc-gaps`: combine `project-workflow` context with `doc-standards`; fix
+  confirmed doc gaps in one pass, and use `DOCS.md` only for audit-only
+  requests or unresolved gaps.
+- `feature-gaps`: aggregate product-facing opportunities into `FEATURES.md`;
+  route standalone test, CI, build, Makefile, release, validation, command
+  discovery, and workflow concerns to `test-gaps` or `project-gaps`.
+- `project-gaps`: aggregate build, CI, Makefile, release, setup, validation,
+  command discovery, and workflow opportunities into `PROJECTS.md`; fix one
+  agreed project gap at a time.
+- `reliability-gaps`: aggregate SRE, NALSD, operability, overload,
+  observability, release-safety, recovery, or data-integrity gaps into
+  `RELIABILITY.md`; fix one agreed reliability gap at a time.
+- `repo-health`: pair with `project-workflow`; add `change-validation` only when
+  the summary process changes files or validation commands need selection.
+- `diagnose-issue`: keep diagnosis read-only; pair with `change-validation`
+  only when implementing a suggested fix.
+- `code-review`: consult `security-audit` for security-sensitive scope while
+  keeping the review findings format.
+- `style-review`: run only when explicitly requested; do not use it instead of
+  bug, security, compatibility, test-gap, or doc-gap review.
+- `security-audit`: pair with `change-safety` for code changes and
   `change-validation` for scanner, lint, or CI command selection.
-- `testing-standards` pairs with language standards for test idioms and
-  `change-validation` for command selection, and owns test-harness/support-code
-  improvements when they primarily affect test correctness, maintainability,
+- `testing-standards`: pair with language standards for test idioms and
+  `change-validation` for command selection; own test-harness/support-code
+  improvements that primarily affect test correctness, maintainability,
   determinism, configurability, or layering.
-- `doc-standards` pairs with language standards for API comments and docstrings,
+- `doc-standards`: pair with language standards for API comments and docstrings,
   `naming-standards` for terminology, `change-safety` for documented contract
   changes, and `change-validation` for docs-related validation.
-- `reliability-standards` pairs with `change-safety`, `security-audit`,
-  `testing-standards`, and `change-validation` when changes affect production
-  readiness, SLOs, overload, observability, release safety, recovery, or
-  operability.
-- `naming-standards` pairs with language standards when a change creates,
-  reviews, or renames identifiers, commands, flags, files, tests, fixtures, or
+- `reliability-standards`: pair with `change-safety`, `security-audit`,
+  `testing-standards`, and `change-validation` for production-readiness, SLO,
+  overload, observability, release-safety, recovery, or operability changes.
+- `naming-standards`: pair with language standards when creating, reviewing, or
+  renaming identifiers, commands, flags, files, tests, fixtures, or
   documentation terms.
-- `project-workflow` covers command discovery, CI expectations, downstream
+- `project-workflow`: own command discovery, CI expectations, downstream
   `./bin` wiring, and shared Makefile fragment behavior.
-- `project-gaps` owns missing or weak project workflow capabilities for build,
-  CI, Makefile, release, setup, validation, command discovery, and repository
-  workflow surfaces.
-- `change-validation` should use `project-workflow` context before selecting
+- `project-gaps`: own build, CI, Makefile, release, setup, validation, command
+  discovery, and repository workflow gaps.
+- `change-validation`: use `project-workflow` context before selecting
   validation commands for orchestrated workflows.
 
 ## Test harness selection
@@ -483,192 +420,88 @@ Common composition:
   majority relevant pattern, use the repository-defined Make/CI entrypoint that
   owns the behavior and state the uncertainty.
 
-## Quick commands (this repo)
-
-From this repository root:
-
-- Show available Make targets:
-  - `make` (defaults to `help`, via `build/make/help.mak`)
-  - `make help`
-- Install Ruby dev deps (Bundler):
-  - `make dep`
-- Ruby linting:
-  - `make lint`
-  - `make fix-lint`
-  - `make format`
-- Script / skill / Dockerfile linting:
-  - `make scripts-lint` (runs `shellcheck` over various scripts)
-  - `make skills-lint` (checks required shared skill policy markers)
-  - `make docker-lint` (runs `hadolint` on `build/docker/go/Dockerfile`)
-- Security scanning:
-  - `make sec` (runs Trivy over the repository)
-
-CI runs (CircleCI): `make dep`, `make clean-dep`, `make scripts-lint`, `make skills-lint`, `make docker-lint`, `make lint`, `make sec` (see `.circleci/config.yml`).
-
 ## Command execution policy
 
-- Treat this repository's Makefile, reusable make fragments, and CI
-  configuration as the source of truth for setup, lint, test, security,
-  benchmark, and review commands.
-- Before any selected skill runs, retries, replaces, or recommends a command,
-  establish the repository command surface and execution environment. On
-  developer machines, especially macOS, assume required tools may come from
-  Homebrew or another user-shell setup rather than the OS defaults.
-- Prefer `make` targets and documented repository entry points over direct tool
-  invocations, even when a direct command appears equivalent.
+- Treat this repository's Makefile, reusable make fragments, and CircleCI config
+  as the source of truth for setup, lint, test, security, benchmark, and review
+  commands.
 - Run commands from the repository root unless the Makefile, script, or task
   explicitly requires another working directory.
-- Use the user's configured shell environment for command execution. If a
-  command fails because a tool is missing, an old version is found, or `PATH`
-  differs from the user's normal terminal, treat that as an environment
-  mismatch or validation gap, not as evidence that the repository command is
-  wrong.
+- Prefer `make` targets and documented entrypoints over direct tool
+  invocations, even when a direct command appears equivalent.
+- Show command discovery with `make` or `make help`.
+- Use `make dep` for Ruby dependency setup before checks that need installed
+  gems or vendor state.
+- Use CI-equivalent validation from `.circleci/config.yml`: `make dep`, `make
+  clean-dep`, `make scripts-lint`, `make skills-lint`, `make docker-lint`,
+  `make lint`, and `make sec`.
+- Use `make scripts-lint` for shell script changes, `make skills-lint` for
+  skill or agent-policy changes, `make docker-lint` for Dockerfile changes,
+  `make lint` for Ruby linting, and `make sec` for security-sensitive changes.
+- Use `make fix-lint` or `make format` only when applying supported local
+  formatting or lint fixes.
+- Only rely on external CLIs when the relevant `.mak` file or script invokes
+  them.
+- Before any selected skill runs, retries, replaces, or recommends a command,
+  establish the repository command surface and execution environment.
+
+### Tool shell environment
+
+- Before reporting repository command failure, establish the command surface and
+  execution environment: repository root, documented entrypoint, CI analogue,
+  initialized user shell, and macOS/Homebrew tool-path assumptions.
+- Use the user's configured shell environment. If a command fails because a tool
+  is missing, an old version is found, or `PATH` differs from the user's normal
+  terminal, report an environment mismatch or validation gap, not a repository
+  failure.
+- In Codex/tool shells, compare `ruby` and `make` resolution with
+  `zsh -lic 'command -v ruby; command -v make'` before reporting repository
+  command failures.
+- If resolution differs, rerun Make targets through the initialized shell before
+  treating the failure as real.
 - Do not invent direct commands, bypass Make targets, install alternate tools,
-  or keep retrying variants merely to get something to run in the agent
-  environment.
-- In Codex/tool shells, verify `ruby` and `make` resolution against the
-  initialized user shell before reporting repository command failures. Compare
-  the default tool shell with `zsh -lic 'command -v ruby; command -v make'`; if
-  they differ, rerun Make targets through the initialized shell, for example
-  `zsh -lic 'make lint'`, before treating the failure as real.
-- Do not replace a Makefile target with guessed direct commands just because the
-  agent environment cannot find the same tools as the user's shell.
-- When diagnosing command-environment mismatches, check the command surface
-  first, then inspect `command -v <tool>`, `<tool> --version`, `SHELL`, and
-  `PATH` as diagnostics only.
-- In this repository and downstream repos that vendor it as `./bin`, `make`
-  targets are the preferred validation interface. If `make` reports an
-  unexpected tool or version problem in the agent environment but works in the
-  user's shell, report the mismatch and keep the Makefile target as the intended
-  command.
+  replace a Makefile target, or keep retrying variants merely to get something
+  to run in the agent environment.
+- When diagnosing environment mismatches, check the command surface first, then
+  inspect `command -v <tool>`, `<tool> --version`, `SHELL`, and `PATH`.
+- In this repository and downstream repos that vendor it as `./bin`, keep
+  `make` targets as the intended validation interface when the agent
+  environment differs from the user's normal shell.
 
-## Tooling dependencies (observed)
+## Local contracts
 
-Ruby tooling (declared in `Gemfile`):
-
-- Ruby
-- Bundler (`bundler` gem)
-- RuboCop (`rubocop` gem)
-
-External CLIs referenced by Make targets / scripts in this repo:
-
-- `shellcheck` (used by `make scripts-lint`)
-- `hadolint` (used by `make docker-lint`)
-
-Other CLIs referenced in reusable scripts/make fragments (used by downstream repos that include these files):
-
-- Go toolchain (`go`), `gotestsum`, `golangci-lint`, `govulncheck`, `fieldalignment`
-- `buf`
-- `docker` (including `docker buildx`/manifest)
-- `trivy`
-- `mkcert`, `goda`, `dot`, `scc`, `codecovcli`, `gsa`, `air`
-
-Only rely on a command if you can find it being invoked in the relevant `.mak`/script you’re touching.
-
-## Layout
-
-- `build/make/*.mak`
-  - Reusable Makefile fragments for other repositories to `include`.
-  - Examples:
-    - `build/make/ruby.mak`: bundler/rubocop tasks + cucumber wrappers.
-    - `build/make/git.mak`: branch/workflow helpers and conventional-ish commit prefixing.
-    - `build/make/go.mak`: go deps, lint, tests, coverage, security.
-    - `build/make/{http,grpc,client}.mak`: project templates combining Go + Ruby test harness.
-    - `build/make/buf.mak`: buf lint/generate/stale/push/breaking.
-- `build/docker/`
-  - `go/Dockerfile`: multi-stage Go build into distroless runtime.
-  - `env`: helper that clones/updates a sibling `../docker` repo and runs `make …` there.
-  - `push`, `manifest`: docker publishing helpers gated by last commit subject.
-- `build/go/`
-  - `lint`: wrapper that only runs `golangci-lint` if it exists in `$PATH`.
-  - `clean`: helper that may trigger dependency cleanup if `go.sum` differs from `master`.
-  - `fa`: wrapper around `fieldalignment` with optional `.gofa` package filtering.
-- `build/git/`
-  - `commit`: helper used by `build/make/git.mak` to build the conventional-ish
-    commit message from `PREFIX`, `msg`, `desc`, or `desc_file`.
-  - `optimise`: helper used by `build/make/git.mak` to enable git performance
-    settings and run `git gc`.
-- `build/sec/`
-  - `trivy-repo`, `trivy-image`: Trivy scanning helpers.
-- `quality/`
-  - `quality/go/covfilter`: removes excluded packages from `test/reports/profile.cov` into `final.cov`.
-  - `quality/go/covmerge`: filters and merges multiple coverage files into `test/reports/final.cov`.
-  - `quality/ruby/feature`, `quality/ruby/benchmark`: cucumber wrappers.
-
-## Conventions & patterns (observed)
-
-### Shell scripts
-
-- Scripts generally use:
-  - `#!/usr/bin/env bash`
-  - `set -eo pipefail`
-- Some scripts intentionally disable specific ShellCheck rules (e.g. `SC2086`) when passing through user-provided args.
-
-### Ruby scripts
-
-- Ruby scripts use `# frozen_string_literal: true`.
-- Simple file-system / process helpers; no framework.
-
-### Formatting
-
-- `.editorconfig` enforces:
-  - default: 2-space indentation, LF line endings
-  - `Makefile`/`*.mak`: tabs
-  - `*.go`: tabs
-
-### RuboCop
-
-- `.rubocop.yml` defines the Ruby parser/target settings.
-- Excludes `vendor/**/*` and also `bin/**/*` (important in downstream repos that vendor this as `./bin`).
-
-## Gotchas
-
-- **Shared helper path expectations**: make fragments derive `BIN_ROOT` from the
-  included make fragment's location, then invoke tools through that root.
-  - This supports the usual downstream `./bin` checkout and this repository
-    root, where the root `Makefile` includes `build/make/ruby.mak` directly.
-  - For changes that affect these targets, validate the path logic against both
-    direct repository usage and the downstream include model when feasible.
-
-- **`build/docker/env` clones via SSH**: it uses `git clone git@github.com:alexfalkowski/docker.git` into `../docker` if missing (`build/docker/env:14`). Agents without SSH keys/permissions won’t be able to run `make start/stop` paths that depend on it.
-
-- **Coverage helpers assume downstream test layout**:
-  - `quality/go/*` reads/writes under `test/reports/`.
-
-- **`build/go/lint` is a no-op if `golangci-lint` isn’t installed** (`build/go/lint:5-7`). Don’t assume lint ran unless the binary exists.
-
-## Intentional design choices
-
-- **`master` is the canonical branch in this repo and its shared fragments**.
-  - Hardcoded `master` references in `build/go/clean`, `build/make/git.mak`, `build/make/buf.mak`, and `.circleci/config.yml` are intentional.
-  - Do not flag them as bugs unless the task is specifically about making the shared tooling branch-name configurable.
-
-- **`build/make/git.mak` intentionally adds a random suffix to `USER` for branch creation**.
-  - This is deliberate to reduce local branch-name collisions.
-  - Do not flag it as a bug unless the task is specifically about changing branch naming semantics.
-
-- **Ruby/tooling version skew may be intentional here**.
-  - Treat differences between the CI image, local Ruby configuration, and RuboCop target settings as deliberate unless the task is specifically about modernizing CI or Ruby tooling.
-
-## CI signals
-
-`.circleci/config.yml` is the authoritative “what must pass” for this repo:
-
-- Bundler deps are cached under `vendor/`.
-- The required checks in CI are:
-  - `make scripts-lint`
-  - `make skills-lint`
-  - `make docker-lint`
-  - `make lint`
-  - `make sec`
+- Public shared surfaces live in `build/make/`, `build/docker/`, `build/go/`,
+  `build/git/`, `build/sec/`, `quality/`, and `skills/`; inspect the relevant
+  files before editing.
+- Preserve formatting from `.editorconfig`, Ruby settings from `.rubocop.yml`,
+  and nearby Bash/Ruby style. Do not duplicate those config files here.
+- Make fragments derive `BIN_ROOT` from their include location. For path-related
+  changes, validate direct use in this repository and downstream `./bin`
+  include behavior when feasible.
+- `build/docker/env` clones or updates `git@github.com:alexfalkowski/docker.git`
+  in sibling `../docker`; `make start` and `make stop` paths can require SSH and
+  network access.
+- `quality/go/*` helpers read and write under `test/reports/`; preserve that
+  downstream test-report contract.
+- `build/go/lint` is a no-op unless `golangci-lint` exists in `PATH`; do not
+  report full lint coverage unless the binary ran.
+- `master` is the canonical branch in this repo and shared fragments. Hardcoded
+  `master` references in `build/go/clean`, `build/make/git.mak`,
+  `build/make/buf.mak`, and `.circleci/config.yml` are intentional.
+- `build/make/git.mak` intentionally adds a random suffix to `USER` for branch
+  creation to reduce local branch-name collisions.
+- Treat Ruby/tooling version skew as intentional, including differences between
+  the CI image, local Ruby configuration, and RuboCop target settings, unless
+  the task explicitly modernizes CI or Ruby tooling.
+- Do not flag the intentional contracts above as bugs unless the task is
+  specifically about changing that contract.
 
 ## When changing this repo
 
-- Prefer the smallest change; these scripts are reused across projects.
-- After edits, re-run at least:
-  - `make dep`
-  - `make lint`
-  - `make sec`
-  - `make scripts-lint` (if `shellcheck` is available)
-  - `make skills-lint`
-  - `make docker-lint` (if `hadolint` is available)
+- Prefer the smallest compatible change; these scripts are reused across
+  projects.
+- Update `skills/<name>/agents/openai.yaml` when a skill's trigger, scope,
+  workflow, display name, short description, default prompt, or user-facing
+  behavior changes.
+- After edits, run the narrowest repository-defined checks that cover the
+  changed files, then expand to CI-equivalent targets when risk justifies it.
