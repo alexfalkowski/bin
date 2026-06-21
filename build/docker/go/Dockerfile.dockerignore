@@ -1,0 +1,33 @@
+# Shared context exclusions for services built with this Dockerfile.
+#
+# Keep files required by:
+# - COPY go.mod go.sum ./
+# - RUN go mod download
+# - COPY . ./
+# - RUN go build -buildvcs=false -tags netgo -a -o service .
+
+# Version control, CI, and local tool state.
+.git
+.git/**
+.github/**
+.circleci/**
+.bundle/**
+.crush/**
+.ruby-lsp/**
+
+# Shared tooling, local test harnesses, and dependency mirrors not used by the
+# Dockerfile's module-download build path.
+bin/**
+test/**
+vendor/**
+
+# Local build, report, and profiling outputs.
+dist/**
+reports/**
+tmp/**
+*.cov
+*.out
+*.prof
+*.test
+coverage.*
+.source-key

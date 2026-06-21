@@ -1,7 +1,12 @@
 .bundle/
+.crush/
+.ruby-lsp/
+.source-key
 ISSUES.md
 TESTS.md
 DOCS.md
 RELIABILITY.md
 FEATURES.md
-vendor
+test/reports/*
+!test/reports/.keep
+vendor/

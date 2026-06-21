@@ -85,16 +85,21 @@ repository Make targets.
 
 Some helpers intentionally depend on tools or services outside this repository:
 Docker helpers assume the consuming project supplies image names and release
-version files; security helpers assume Trivy is available; shell and Dockerfile
-lint targets depend on `shellcheck` and `hadolint`; `build/docker/env` pulls,
-rebases, and updates submodules in an existing sibling `../docker` checkout, or
-uses SSH to clone `git@github.com:alexfalkowski/docker.git` there when missing.
+version files; the shared Go Dockerfile uses `Dockerfile.dockerignore` next to
+the Dockerfile, which takes precedence over a consuming repository's root
+`.dockerignore`; security helpers assume Trivy is available; shell and
+Dockerfile lint targets depend on `shellcheck` and `hadolint`;
+`build/docker/env` pulls, rebases, and updates submodules in an existing sibling
+`../docker` checkout, or uses SSH to clone
+`git@github.com:alexfalkowski/docker.git` there when missing.
 
 ## 🔗 References
 
 - `make` or `make help`: current command catalog for this repository.
 - `build/make/*.mak`: reusable Makefile fragments for downstream projects.
 - `build/docker/go/Dockerfile`: shared Go service Dockerfile template.
+- `build/docker/go/Dockerfile.dockerignore`: shared Docker build-context
+  exclusions for the Go service Dockerfile.
 - `quality/`: shared lint, feature, benchmark, and coverage helpers.
 - `skills/README.md`: shared skill composition and lifecycle guidance.
 - `AGENTS.md`: repository instructions and shared agent operating rules.
