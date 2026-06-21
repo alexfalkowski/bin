@@ -75,6 +75,16 @@ These rules remain mandatory:
   contract, CI workflow, or comparable usage path that can trigger the
   candidate. Treat package-local fakes, synthetic tests, manual construction,
   and unsupported downstream patterns as leads only.
+- Treat provider-to-public-contract adapters, lookup tables, data enrichment,
+  normalization maps, embedded assets, vendored static data, and generated
+  schema/value translations as high-risk review slices when they affect API
+  output, routing, auth, billing, persistence, or user-visible behavior.
+- When reviewing code that maps provider, asset, generated, embedded, or
+  vendored data values into repository-owned public values, inspect the actual
+  emitted data set or representative fixtures. Do not assume names in a mapping
+  table match provider output. Check for unmapped provider values, stale
+  fixtures, fallback-to-empty behavior, and public contract violations caused
+  by normalization drift.
 - For candidates based on documentation or comments contradicting code, require non-prose proof that the implementation is wrong before recording a code issue. Existing tests, helper names, runtime behavior, or commit history that support the implementation mean the candidate is a doc gap, not a code issue.
 - Do not record standalone missing, weak, flaky, misleading, or wrong-layer tests as code issues unless they are tied to a confirmed bug, security issue, compatibility break, or violated public contract. Use `$test-gaps` for standalone missing or weak test coverage passes.
 - Do not record standalone missing, weak, stale, misleading, or wrong-location documentation, README, example, comment, or docstring gaps as code issues unless they reveal a confirmed bug, security issue, compatibility break, or violated public contract. Use `$doc-gaps` for standalone documentation review passes.

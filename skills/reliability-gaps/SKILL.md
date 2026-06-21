@@ -102,6 +102,11 @@ These rules remain mandatory:
   trigger through automation, external input, frequent operational data changes,
   or another supported path that existing controls do not cover.
 - Do not record confirmed production bugs, security issues, compatibility breaks, or violated public contracts as reliability gaps. If broken behavior is discovered during review, report it as out of scope for the reliability-gap ledger and recommend `$code-issues`, `$security-audit`, or `$change-safety` as appropriate.
+- If investigation finds current valid user input producing the wrong API
+  response, error, status code, persisted value, generated artifact, or public
+  contract output, stop treating it as a reliability gap. Route it to
+  `$code-issues` unless the primary missing control is operational rather than
+  behavioral.
 - Do not record standalone missing, weak, flaky, misleading, or wrong-layer tests as reliability gaps. Use `$test-gaps` when missing failure-path coverage is the finding.
 - Do not record standalone missing, weak, stale, misleading, or wrong-location operational docs as reliability gaps. Use `$doc-gaps` when documentation itself is the finding.
 - Do not report optional maturity improvements, cloud-architecture preferences, private implementation preferences, or "best practice" checkboxes as findings by themselves. List them only as optional follow-up notes when relevant.
