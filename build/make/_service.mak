@@ -50,11 +50,11 @@ go-fix-lint: fix-field-alignment fix-golangci-lint
 
 # Lint Ruby code in test/ with RuboCop.
 ruby-lint:
-	@make -C test lint
+	@$(MAKE) -C test lint
 
 # Auto-correct RuboCop offenses in test/ (best effort).
 ruby-fix-lint:
-	@make -C test fix-lint
+	@$(MAKE) -C test fix-lint
 
 # Format Go packages (go fmt ./...).
 go-format:
@@ -62,7 +62,7 @@ go-format:
 
 # Format Ruby in test/ (delegates to test/ Makefile).
 ruby-format:
-	@make -C test format
+	@$(MAKE) -C test format
 
 # List available updates for direct (non-indirect) Go modules.
 go-outdated-dep:
@@ -70,7 +70,7 @@ go-outdated-dep:
 
 # List outdated explicit gems in test/.
 ruby-outdated-dep:
-	@make -C test outdated-dep
+	@$(MAKE) -C test outdated-dep
 
 # List outdated Go modules and Ruby gems.
 outdated-dep: go-outdated-dep ruby-outdated-dep
@@ -104,11 +104,11 @@ clean-reports:
 
 # Run cucumber features in test/ (builds the test binary first).
 features: build-test
-	@make -C test features
+	@$(MAKE) -C test features
 
 # Run cucumber benchmarks in test/ (builds the release binary first).
 benchmarks: build
-	@make -C test benchmarks
+	@$(MAKE) -C test benchmarks
 
 # Run Go tests with gotestsum (race + coverage) and write reports under test/reports/.
 # Set package=internal/foo, not ./internal/foo, to test one package.
@@ -131,26 +131,26 @@ go-dep: download tidy vendor
 
 # Update a single gem in test/ (set gem=<name>).
 ruby-update-dep:
-	@make -C test gem="$${gem}" update-dep
+	@$(MAKE) -C test gem="$${gem}" update-dep
 
 # Install gem dependencies in test/.
 ruby-dep:
-	@make -C test dep
+	@$(MAKE) -C test dep
 
 # Update all gems in test/.
 ruby-update-all-dep:
-	@make -C test update-all-dep
+	@$(MAKE) -C test update-all-dep
 
 # Update bundler in test/.
 ruby-update-bundler:
-	@make -C test update-bundler
+	@$(MAKE) -C test update-bundler
 
 # Install Go deps and test/ Ruby deps.
 dep: go-dep ruby-dep
 
 # Remove unused gems from test/ (bundler clean).
 ruby-clean-dep:
-	@make -C test clean-dep
+	@$(MAKE) -C test clean-dep
 
 # Clear Go build/test/fuzz/module caches.
 go-clean-dep:
