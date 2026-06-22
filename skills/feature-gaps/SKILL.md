@@ -12,13 +12,10 @@ Use this skill in two distinct modes:
 
 Do not combine the two modes in one pass.
 
-Before starting Find mode or Implement mode, read `references/plan.md` and use
-it to maintain the active execution plan. The active plan is runtime state; do
-not write it into the repository unless the human explicitly asks for a durable
-plan file.
-When the runtime supports goals, bind the selected mode and requested scope to
-one active goal and update that goal as ledger, proposal, approval, validation,
-or human-confirmation state changes.
+Before starting Find mode or Implement mode, read `references/plan.md` and
+`../references/gap-workflow.md`. The plan owns active runtime state; the shared
+gap workflow owns ledger, delegation, scope, coverage, confidence, and approval
+gates.
 
 ## Operating Stance
 
@@ -113,68 +110,25 @@ outcome.
 
 ## Find Mode
 
-Follow `references/plan.md#find-mode-plan`.
+Follow `references/plan.md#find-mode-plan` and the find/audit rules in
+`../references/gap-workflow.md`.
 
-These rules remain mandatory:
+These feature-gap rules remain mandatory:
 
-- If no scope is provided, stop and ask for the package or folder.
-- Before checking, reading, creating, or updating the scoped `FEATURES.md`
-  ledger, ensure the consuming repository root `.gitignore` exists and contains
-  `FEATURES.md` as a standalone pattern. If the pattern is missing, add it.
 - Use `FEATURES.md` in the requested package or folder as the proposal ledger,
   for example `PACKAGE_OR_FOLDER/FEATURES.md`.
-- If `FEATURES.md` already exists in the requested package or folder, stop.
-  Tell the user the existing scoped feature ledger must be resolved first, or
-  the human must delete that scoped `FEATURES.md` before a new find pass there.
-- Treat `Find $feature-gaps in PACKAGE_OR_FOLDER` or `Find feature gaps in
-  PACKAGE_OR_FOLDER` as the user's explicit request to delegate feature-gap
-  discovery for that scope. Do not require the user to separately say "use
-  sub-agents", "spawn agents", or "delegate".
-- Use sub-agents for Find mode whenever the active runtime provides them and
-  runtime policy/tooling permits delegation. Do not treat sub-agents as
-  optional based on scope size, and do not perform the feature-gap review
-  locally first.
-- Do not claim that extra delegation wording is needed before launching review
-  agents. The Find mode invocation is the explicit delegation request.
-- If delegation is denied, stop instead of falling back to a local review. If
-  sub-agents are unavailable, say so briefly and perform the review locally for
-  the requested scope.
-- Ask for human permission before agents run commands that require approval,
-  such as network, SSH, GitHub auth, registry auth, remote writes, cloning,
-  destructive operations, or non-read-only validation.
-- Exclude generated files and folders, vendored dependencies, caches, build
-  output, generated API docs, and generated lockfile churn unless the requested
-  scope is explicitly about them.
-- In downstream repositories that vendor this project as `./bin`, treat
-  `bin/**` as vendored shared tooling unless the requested scope is explicitly
-  about shared `bin` tooling, Makefile includes, skills, or submodule wiring.
-  Exclude `bin/**` from recursive review and inventory by default; inspect only
-  included `bin/build/make/*.mak` fragments or selected `bin/skills/**`
-  guidance needed as evidence. Route upstream-only shared-tooling findings to a
-  separate `bin`-scoped run instead of writing them into the consuming
-  repository's `FEATURES.md`.
 - Before assigning review agents, build a recursive scope inventory for the
   requested package or folder: relevant file count, first-level subfolders,
   nested packages, dominant languages, tests, public entrypoints, generated,
   vendor, build, and cache exclusions, user-facing product surfaces,
   package-consumer or service-author surfaces, operator-facing surfaces, docs,
   examples, command help, and likely product extension points.
-- Do not assign broad recursive subtrees merely because they are first-level
-  subfolders. When a subtree contains many independent products, packages,
-  workflows, or audiences, split it into smaller behavior-owned or
-  audience-owned slices before delegation.
 - Prefer slices based on repository-owned feature surface and user value:
   public commands/APIs, library or service behavior, package-consumer and
   service-author workflows, documented product examples, product onboarding
   paths, integrations, extension points, changed or recently touched product
   areas, and nearby tests. Use depth only as a discovery aid, not as the review
   boundary.
-- If the requested scope is too broad to review credibly in one pass, review
-  the highest-value slices first and record explicit coverage: reviewed deeply,
-  skimmed, excluded, and deferred.
-- Do not present a broad requested scope as fully reviewed when any relevant
-  slice was only skimmed or deferred. Name those slices in the final coverage
-  notes and provide runnable follow-up scopes for deferred review.
 - Each assigned agent owns recursive review only within its bounded slice. Each
   agent must perform feature-gap discovery for that slice, pairing with
   `$project-workflow`, `$doc-standards`, `$naming-standards`, relevant language
@@ -183,8 +137,6 @@ These rules remain mandatory:
   and `$project-workflow` to route test-harness, build, CI, Makefile, release,
   validation, command-discovery, or repository-workflow candidates away from
   `FEATURES.md` before returning feature proposals.
-- Require each agent to return proposals in the same shape as the `FEATURES.md`
-  format, without final IDs unless useful locally.
 - Confirm each candidate feature against the acceptance gate, code, generated
   surfaces, framework wrappers, shared helpers, vendored dependency behavior
   when delegated, docs, tests, examples, command behavior, current
@@ -193,12 +145,6 @@ These rules remain mandatory:
   supported, whether the repository owns the behavior, whether the likely
   audience exists, and whether the feature can be added incrementally using
   local patterns.
-- For reusable library, helper, or shared-tooling scopes, inspect supported
-  usage evidence before recording a high-confidence feature gap: a real
-  consumer, executable example, integration test, module wiring path,
-  documented contract, CI workflow, or comparable usage path that shows the
-  current limitation and audience benefit. Treat package-local fakes, synthetic
-  tests, manual construction, and unsupported downstream patterns as leads only.
 - Record feature gaps only when the proposal names the audience, current
   product workflow limitation, practical audience benefit, repository-owned
   product surface, evidence of user, operator, service-author, package-consumer,
@@ -224,13 +170,6 @@ These rules remain mandatory:
 - If a candidate would mostly require CI, build, Makefile, release, validation
   preflight, command discovery, setup, or repository workflow changes, route it
   to `$project-gaps` instead of recording it here.
-- If no confirmed feature gaps are found, report that no feature gaps were
-  found and do not create `FEATURES.md`.
-- If confirmed feature gaps are found, write all proposals to the scoped
-  `FEATURES.md` before making any changes.
-- Assign every proposal a unique ID for the session in the form `FEATURE-N`.
-- Stop after presenting the ledger and plan. Do not implement proposals in the
-  same pass.
 
 ## `FEATURES.md` Format
 
@@ -303,35 +242,17 @@ and a plausible implementation path.
 
 ## Implement Mode
 
-Follow `references/plan.md#implement-mode-plan`.
+Follow `references/plan.md#implement-mode-plan` and the implementation rules in
+`../references/gap-workflow.md`.
 
-These rules remain mandatory:
+These feature implementation rules remain mandatory:
 
-- If no scope is provided, stop and ask for the package or folder.
-- Before checking, reading, creating, or updating the scoped `FEATURES.md`
-  ledger, ensure the consuming repository root `.gitignore` exists and contains
-  `FEATURES.md` as a standalone pattern. If the pattern is missing, add it.
-- Read `FEATURES.md` in the requested package or folder first and treat it as
-  the working feature ledger.
-- If scoped `FEATURES.md` does not exist, stop and ask whether to run Find mode
-  first for that scope.
-- Work through feature proposals sequentially by ID unless the human explicitly
-  names a different proposal.
 - Before proposing an implementation for each feature, re-check the current
   code, generated surfaces, framework wrappers, shared helpers, vendored
   dependency behavior when delegated, docs, tests, examples, command behavior,
   and comparable-tool evidence. Treat the ledger as something that can go
   stale: dismiss or revise proposals that are already supported, duplicate
   another feature, no longer fit the repository, or belong in another workflow.
-- Stop after proposing the solution. Do not edit files, update `FEATURES.md`,
-  or start validation until the human explicitly agrees to that feature's
-  solution.
-- Treat a request that names a feature and asks to fix, implement, or verify it
-  as permission to select that feature, re-check current evidence, and present
-  or refresh the proposal. It is not approval to edit unless the request also
-  explicitly agrees to the proposed solution. If the proposal was already
-  presented and remains unchanged after re-checking, state only the concise
-  approval gate instead of repeating the full proposal.
 - Ask questions when audience, product direction, compatibility, dependency
   policy, UX/DX behavior, test layer, validation, or user intent is ambiguous.
   Treat silence or a broad "implement feature gaps" request as permission to
@@ -359,19 +280,11 @@ These rules remain mandatory:
 - Report the result for that feature with `Red`, `Green`, `Refactor`, and
   `Validation` entries. Use `Refactor: none` when no cleanup was needed after
   green. Then ask the human to verify and explicitly say `FEATURE-N is done`.
-- During automatic continuations while waiting for approval or `FEATURE-N is
-  done`, do not repeat the full proposal or result. State the current waiting
-  gate once, concisely.
-- Do not move to the next proposal until the human says `FEATURE-N is done`.
-- After the human confirms a proposal is done, remove that proposal from scoped
-  `FEATURES.md`. If a proposal is deemed invalid or not actually a feature gap,
-  remove it only after explaining why and getting human agreement.
-- Once all proposals are resolved and confirmed done by the human, delete the
-  scoped `FEATURES.md`.
 
 ## References
 
 - Read `references/plan.md` before starting Find mode or Implement mode.
+- Read `../references/gap-workflow.md` for shared scoped-ledger, delegation, coverage, confidence, and approval gates.
 - Use `$project-workflow` for repository command discovery, documented
   entrypoints, CI expectations, examples, and `./bin` wiring before review
   planning or validation, and route standalone project workflow gaps to

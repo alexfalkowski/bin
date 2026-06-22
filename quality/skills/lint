@@ -21,9 +21,31 @@ require_pattern() {
   fi
 }
 
+require_gitignore_pattern() {
+  local pattern="$1"
+
+  if [[ ! -f .gitignore ]]; then
+    printf 'missing file: .gitignore\n' >&2
+    missing=1
+    return
+  fi
+
+  if ! grep -Fxq -- "$pattern" .gitignore; then
+    printf 'missing .gitignore pattern: %s\n' "$pattern" >&2
+    missing=1
+  fi
+}
+
 if ! ruby quality/skills/metadata; then
   missing=1
 fi
+
+require_gitignore_pattern "ISSUES.md"
+require_gitignore_pattern "TESTS.md"
+require_gitignore_pattern "DOCS.md"
+require_gitignore_pattern "FEATURES.md"
+require_gitignore_pattern "PROJECTS.md"
+require_gitignore_pattern "RELIABILITY.md"
 
 require_pattern AGENTS.md "mandatory operating rules, not advisory guidance"
 require_pattern AGENTS.md "## Local pattern binding"

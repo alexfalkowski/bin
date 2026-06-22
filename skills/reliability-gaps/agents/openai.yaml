@@ -1,4 +1,4 @@
 interface:
   display_name: "Reliability Gaps"
   short_description: "Find scoped SRE readiness gaps"
-  default_prompt: "Use $reliability-gaps with its active goal and plan to find scoped reliability gaps, exclude downstream bin/** unless explicitly scoped to shared tooling, store confirmed gaps in RELIABILITY.md, answer reliability gap ID follow-ups such as REL-1, and implement agreed fixes. For behavior-changing fixes, report the TDD decision plus Red, Green, Refactor, and Validation; otherwise use the appropriate docs/config validation path."
+  default_prompt: "Use $reliability-gaps with its active goal, plan, and shared gap workflow to find scoped reliability gaps, exclude downstream bin/** unless explicitly scoped to shared tooling, store confirmed gaps in RELIABILITY.md, answer reliability gap ID follow-ups such as REL-1, and implement agreed fixes. For behavior-changing fixes, report the TDD decision plus Red, Green, Refactor, and Validation; otherwise use the appropriate docs/config validation path."

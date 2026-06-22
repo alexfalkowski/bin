@@ -1,48 +1,13 @@
 # Doc Gaps Plan
 
-Use this reference to instantiate the active execution plan for `$doc-gaps`.
-The active plan is runtime state. Do not write it into the repository unless the
-human explicitly asks for a durable plan file. In downstream repositories that
-vendor this project as `./bin`, instantiate the plan from the consuming
-repository root and keep `bin/` as shared guidance.
+Use this reference to instantiate the doc-gap-specific active plan for
+`$doc-gaps`. Read it with the shared gap workflow named in `SKILL.md`; that
+workflow owns common plan state, goal state, scoped-ledger, delegation,
+coverage, and implementation gates.
 
-## Plan State Rules
-
-- Keep exactly one active phase in progress at a time.
-- Preserve stop gates as plan boundaries; do not continue past a stop gate based
-  on silence or a broad request.
-- Update the active plan when scope, documentation location, validation,
-  delegation, edits, summary, or unresolved ledger state changes.
-- Treat validation as stale when files change after a command ran.
-- Before checking, reading, creating, or updating the scoped `DOCS.md` ledger,
-  ensure the consuming repository root `.gitignore` exists and contains
-  `DOCS.md` as a standalone pattern. If the pattern is missing, add it.
-- Use a scoped `DOCS.md` ledger only for audit-only mode, unresolved confirmed
-  gaps, or an existing doc-gap ledger being completed.
-- In downstream repositories that vendor this project as `./bin`, exclude
-  `bin/**` from recursive inventory, review slices, edits, and durable findings
-  unless the requested scope is explicitly about shared `bin` tooling. Inspect
-  only included shared fragments or selected skill guidance needed as evidence,
-  and route upstream-only findings to a separate `bin`-scoped run.
-- Track broad-scope coverage explicitly as reviewed deeply, skimmed, excluded,
-  and deferred. Deferred entries must name runnable follow-up scopes.
-
-## Goal State Rules
-
-- Bind the active goal to the selected mode and requested scope.
-- In one-pass mode, the goal is complete when confirmed gaps are fixed and
-  validated, no confirmed gaps are found and reported, or unresolved findings
-  are recorded because a stop gate prevents a correct fix.
-- In audit-only mode, the goal is complete when no confirmed doc gaps are found
-  and reported, or when the scoped `DOCS.md` ledger is written and presented.
-- For broad scopes, a no-gap result is complete only when the summary states
-  whether all high-risk slices were deeply reviewed. If any relevant slice was
-  skimmed or deferred, completion requires coverage notes and runnable
-  follow-up scopes, not an unqualified all-scope no-gap claim.
-- Record a blocked reason when a required scope is missing, required permission
-  is denied, an existing scoped ledger is unrelated or ambiguous, or a selected
-  finding cannot be fixed or recorded without human input. Follow runtime rules
-  for when that reason changes goal status.
+Track doc-gap-specific state for scope, documentation location, validation,
+delegation, edits, summary, unresolved ledger state, audience, and public
+documentation surface.
 
 ## One-Pass Mode Plan
 

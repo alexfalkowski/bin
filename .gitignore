@@ -5,8 +5,9 @@
 ISSUES.md
 TESTS.md
 DOCS.md
-RELIABILITY.md
 FEATURES.md
+PROJECTS.md
+RELIABILITY.md
 test/reports/*
 !test/reports/.keep
 vendor/

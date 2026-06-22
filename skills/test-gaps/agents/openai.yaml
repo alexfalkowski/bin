@@ -1,4 +1,4 @@
 interface:
   display_name: "Test Gaps"
   short_description: "Find weak tests and harness gaps"
-  default_prompt: "Use $test-gaps with its active goal and plan to find scoped missing, weak, misleading, flaky, wrong-layer, or test-harness coverage gaps; exclude downstream bin/** unless explicitly scoped to shared tooling; reject implementation-only or no-front-door candidates; store confirmed gaps in TESTS.md; answer test gap ID follow-ups such as TEST-1; or implement agreed test fixes one gap at a time."
+  default_prompt: "Use $test-gaps with its active goal, plan, and shared gap workflow to find scoped missing, weak, misleading, flaky, wrong-layer, or test-harness coverage gaps; exclude downstream bin/** unless explicitly scoped to shared tooling; reject implementation-only or no-front-door candidates; store confirmed gaps in TESTS.md; answer test gap ID follow-ups such as TEST-1; or implement agreed test fixes one gap at a time."
