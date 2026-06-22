@@ -1,55 +1,12 @@
 # Feature Gaps Plan
 
-Use this reference to instantiate the active execution plan for
-`$feature-gaps`. The active plan is runtime state. Do not write it into the
-repository unless the human explicitly asks for a durable plan file. In
-downstream repositories that vendor this project as `./bin`, instantiate the
-plan from the consuming repository root and keep `bin/` as shared guidance.
+Use this reference to instantiate the feature-gap-specific active plan for
+`$feature-gaps`. Read it with the shared gap workflow named in `SKILL.md`; that
+workflow owns common plan state, goal state, scoped-ledger, delegation,
+coverage, and implementation gates.
 
-## Plan State Rules
-
-- Keep exactly one active phase in progress at a time.
-- Preserve stop gates as plan boundaries; do not continue past a stop gate
-  based on silence or a broad request.
-- Update the active plan when scope, audience, product surface, validation,
-  delegation, external research, or ledger state changes.
-- Treat validation as stale when files change after a command ran.
-- Before checking, reading, creating, or updating the scoped `FEATURES.md`
-  ledger, ensure the consuming repository root `.gitignore` exists and contains
-  `FEATURES.md` as a standalone pattern. If the pattern is missing, add it.
-- Record durable feature proposals only in the scoped `FEATURES.md` ledger
-  defined by the skill.
-- In downstream repositories that vendor this project as `./bin`, exclude
-  `bin/**` from recursive inventory, review slices, and durable proposals unless
-  the requested scope is explicitly about shared `bin` tooling. Inspect only
-  included shared fragments or selected skill guidance needed as evidence, and
-  route upstream-only proposals to a separate `bin`-scoped run.
-- Track broad-scope coverage explicitly as reviewed deeply, skimmed, excluded,
-  and deferred. Deferred entries must name runnable follow-up scopes.
-
-## Goal State Rules
-
-- Bind the active goal to the selected mode and requested scope.
-- In Find mode, the goal is complete when no confirmed feature gaps are found
-  and reported, or when the scoped `FEATURES.md` ledger is written and
-  presented.
-- For broad scopes, a no-gap result is complete only when the summary states
-  whether all high-value slices were deeply reviewed. If any relevant slice was
-  skimmed or deferred, completion requires coverage notes and runnable
-  follow-up scopes, not an unqualified all-scope no-gap claim.
-- In Implement mode, the goal is waiting while the human has not approved the
-  proposed feature solution, or after validation until the human confirms
-  `FEATURE-<number> is done`.
-- During automatic continuations while waiting for approval or done
-  confirmation, state the waiting gate once and do not repeat the full
-  proposal or result.
-- In Implement mode, the goal is complete for a proposal only after the human
-  confirms it is done and the scoped ledger is updated accordingly.
-- Record a blocked reason when a required scope is missing, the scoped ledger
-  required by the mode is absent or already exists in a conflicting state,
-  required permission is denied, or the selected feature cannot be re-checked
-  without human input. Follow runtime rules for when that reason changes goal
-  status.
+Track feature-gap-specific state for scope, audience, product surface,
+validation, delegation, external research, ledger state, and workflow routing.
 
 ## Find Mode Plan
 

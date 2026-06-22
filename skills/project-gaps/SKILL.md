@@ -12,13 +12,10 @@ Use this skill in two distinct modes:
 
 Do not combine the two modes in one pass.
 
-Before starting Find mode or Implement mode, read `references/plan.md` and use
-it to maintain the active execution plan. The active plan is runtime state; do
-not write it into the repository unless the human explicitly asks for a durable
-plan file.
-When the runtime supports goals, bind the selected mode and requested scope to
-one active goal and update that goal as ledger, proposal, approval, validation,
-or human-confirmation state changes.
+Before starting Find mode or Implement mode, read `references/plan.md` and
+`../references/gap-workflow.md`. The plan owns active runtime state; the shared
+gap workflow owns ledger, delegation, scope, coverage, confidence, and approval
+gates.
 
 ## Operating Stance
 
@@ -85,46 +82,13 @@ an imagined future workflow, private implementation preference, or generic
 
 ## Find Mode
 
-Follow `references/plan.md#find-mode-plan`.
+Follow `references/plan.md#find-mode-plan` and the find/audit rules in
+`../references/gap-workflow.md`.
 
-These rules remain mandatory:
+These project-gap rules remain mandatory:
 
-- If no scope is provided, stop and ask for the package or folder.
-- Before checking, reading, creating, or updating the scoped `PROJECTS.md`
-  ledger, ensure the consuming repository root `.gitignore` exists and contains
-  `PROJECTS.md` as a standalone pattern. If the pattern is missing, add it.
 - Use `PROJECTS.md` in the requested package or folder as the proposal ledger,
   for example `PACKAGE_OR_FOLDER/PROJECTS.md`.
-- If `PROJECTS.md` already exists in the requested package or folder, stop.
-  Tell the user the existing scoped project ledger must be resolved first, or
-  the human must delete that scoped `PROJECTS.md` before a new find pass there.
-- Treat `Find $project-gaps in PACKAGE_OR_FOLDER` or `Find project gaps in
-  PACKAGE_OR_FOLDER` as the user's explicit request to delegate project-gap
-  discovery for that scope. Do not require the user to separately say "use
-  sub-agents", "spawn agents", or "delegate".
-- Use sub-agents for Find mode whenever the active runtime provides them and
-  runtime policy/tooling permits delegation. Do not treat sub-agents as
-  optional based on scope size, and do not perform the project-gap review
-  locally first.
-- Do not claim that extra delegation wording is needed before launching review
-  agents. The Find mode invocation is the explicit delegation request.
-- If delegation is denied, stop instead of falling back to a local review. If
-  sub-agents are unavailable, say so briefly and perform the review locally for
-  the requested scope.
-- Ask for human permission before agents run commands that require approval,
-  such as network, SSH, GitHub auth, registry auth, remote writes, cloning,
-  destructive operations, or non-read-only validation.
-- Exclude generated files and folders, vendored dependencies, caches, build
-  output, generated API docs, and generated lockfile churn unless the requested
-  scope is explicitly about them.
-- In downstream repositories that vendor this project as `./bin`, treat
-  `bin/**` as vendored shared tooling unless the requested scope is explicitly
-  about shared `bin` tooling, Makefile includes, skills, or submodule wiring.
-  Exclude `bin/**` from recursive review and inventory by default; inspect only
-  included `bin/build/make/*.mak` fragments or selected `bin/skills/**`
-  guidance needed as evidence. Route upstream-only shared-tooling findings to a
-  separate `bin`-scoped run instead of writing them into the consuming
-  repository's `PROJECTS.md`.
 - Classify every candidate's implementation home before recording it. Use:
   `current repo` when the requested scope owns the fix; `shared bin` when
   reusable `bin` tooling owns the fix; `external repo` when another repository
@@ -137,40 +101,22 @@ These rules remain mandatory:
   validation entrypoints, release/deploy/versioning surfaces, setup flows,
   command discovery surfaces, generated/vendor/build/cache exclusions, tests,
   docs, examples, and likely project workflow extension points.
-- Do not assign broad recursive subtrees merely because they are first-level
-  subfolders. When a subtree contains many independent workflows or audiences,
-  split it into smaller workflow-owned or audience-owned slices before
-  delegation.
 - Prefer slices based on repository-owned project workflow value: Make targets
   and fragments, CI jobs, setup and dependency installation, validation and
   local preflight, release/versioning/publishing paths, reusable scripts,
   command discovery/help entrypoints, downstream `./bin` wiring, and changed or
   recently touched project tooling.
-- If the requested scope is too broad to review credibly in one pass, review
-  the highest-value slices first and record explicit coverage: reviewed deeply,
-  skimmed, excluded, and deferred.
-- Do not present a broad requested scope as fully reviewed when any relevant
-  slice was only skimmed or deferred. Name those slices in the final coverage
-  notes and provide runnable follow-up scopes for deferred review.
 - Each assigned agent owns recursive review only within its bounded slice. Each
   agent must perform project-gap discovery for that slice, pairing with
   `$project-workflow`, `$change-safety`, `$change-validation`, relevant
   language standards, and `$testing-standards` only when needed to route
   test-surface concerns correctly.
-- Require each agent to return proposals in the same shape as the `PROJECTS.md`
-  format, without final IDs unless useful locally.
 - Confirm each candidate project gap against the acceptance gate, repository
   commands, CI config, Makefiles, scripts, docs, tests, examples, and current
   architecture before recording it. Try to disprove the candidate by asking
   whether the workflow is already supported, whether the repository owns the
   surface, whether the likely audience exists, and whether the project change
   can be added incrementally using local patterns.
-- For reusable library, helper, or shared-tooling scopes, inspect supported
-  usage evidence before recording a high-confidence project gap: a real
-  consumer, executable example, integration test, module wiring path,
-  documented contract, CI workflow, or comparable usage path that shows the
-  workflow friction. Treat package-local fakes, synthetic tests, manual
-  construction, and unsupported downstream patterns as leads only.
 - Do not record confirmed bugs, security issues, compatibility breaks,
   reliability gaps, missing tests, stale docs, unclear naming, or main product
   feature ideas as project gaps. Route them to `$code-issues`,
@@ -189,13 +135,6 @@ These rules remain mandatory:
   `Routed Project Follow-Ups` with the owning home and local evidence, or route
   it to a separate project-gaps run in the owning repository or shared tooling
   scope.
-- If no confirmed project gaps are found, report that no project gaps were
-  found and do not create `PROJECTS.md`.
-- If confirmed project gaps are found, write all proposals to the scoped
-  `PROJECTS.md` before making any changes.
-- Assign every proposal a unique ID for the session in the form `PROJECT-N`.
-- Stop after presenting the ledger and plan. Do not implement proposals in the
-  same pass.
 
 ## `PROJECTS.md` Format
 
@@ -263,20 +202,11 @@ evidence, audience, fit, and a plausible implementation path.
 
 ## Implement Mode
 
-Follow `references/plan.md#implement-mode-plan`.
+Follow `references/plan.md#implement-mode-plan` and the implementation rules in
+`../references/gap-workflow.md`.
 
-These rules remain mandatory:
+These project-gap implementation rules remain mandatory:
 
-- If no scope is provided, stop and ask for the package or folder.
-- Before checking, reading, creating, or updating the scoped `PROJECTS.md`
-  ledger, ensure the consuming repository root `.gitignore` exists and contains
-  `PROJECTS.md` as a standalone pattern. If the pattern is missing, add it.
-- Read `PROJECTS.md` in the requested package or folder first and treat it as
-  the working project-gap ledger.
-- If scoped `PROJECTS.md` does not exist, stop and ask whether to run Find mode
-  first for that scope.
-- Work through project proposals sequentially by ID unless the human explicitly
-  names a different proposal.
 - Before proposing an implementation for each project gap, re-check current
   Makefiles, CI config, scripts, docs, tests, examples, command behavior, and
   comparable workflow evidence. Treat the ledger as something that can go
@@ -285,15 +215,6 @@ These rules remain mandatory:
   workflow, or have an implementation home outside the requested scope.
 - If the proposal's implementation home is outside the requested scope, stop
   and propose moving or reclassifying it instead of implementing it locally.
-- Stop after proposing the solution. Do not edit files, update `PROJECTS.md`,
-  or start validation until the human explicitly agrees to that project-gap
-  solution.
-- Treat a request that names a project gap and asks to fix, implement, or verify
-  it as permission to select that project gap, re-check current evidence, and
-  present or refresh the proposal. It is not approval to edit unless the request
-  also explicitly agrees to the proposed solution. If the proposal was already
-  presented and remains unchanged after re-checking, state only the concise
-  approval gate instead of repeating the full proposal.
 - Ask questions when audience, workflow ownership, compatibility, dependency
   policy, validation, or user intent is ambiguous. Treat silence or a broad
   "implement project gaps" request as permission to start the proposal
@@ -323,19 +244,11 @@ These rules remain mandatory:
 - Report the result for that project gap with `Red`, `Green`, `Refactor`, and
   `Validation` entries. Use `Refactor: none` when no cleanup was needed after
   green. Then ask the human to verify and explicitly say `PROJECT-N is done`.
-- During automatic continuations while waiting for approval or `PROJECT-N is
-  done`, do not repeat the full proposal or result. State the current waiting
-  gate once, concisely.
-- Do not move to the next proposal until the human says `PROJECT-N is done`.
-- After the human confirms a proposal is done, remove that proposal from scoped
-  `PROJECTS.md`. If a proposal is deemed invalid or not actually a project gap,
-  remove it only after explaining why and getting human agreement.
-- Once all proposals are resolved and confirmed done by the human, delete the
-  scoped `PROJECTS.md`.
 
 ## References
 
 - Read `references/plan.md` before starting Find mode or Implement mode.
+- Read `../references/gap-workflow.md` for shared scoped-ledger, delegation, coverage, confidence, and approval gates.
 - Use `$project-workflow` for repository command discovery, documented
   entrypoints, CI expectations, examples, and `./bin` wiring before review
   planning or validation.

@@ -1,4 +1,4 @@
 interface:
   display_name: "Feature Gaps"
   short_description: "Find product feature opportunities"
-  default_prompt: "Use $feature-gaps to find scoped main product capability gaps with explicit audience benefit, exclude downstream bin/** unless explicitly scoped to shared tooling, store confirmed proposals in FEATURES.md, answer feature ID follow-ups such as FEATURE-1, or propose and implement explicitly agreed product feature changes one at a time; route test and project workflow gaps to their own skills."
+  default_prompt: "Use $feature-gaps with its shared gap workflow to find scoped main product capability gaps with explicit audience benefit, exclude downstream bin/** unless explicitly scoped to shared tooling, store confirmed proposals in FEATURES.md, answer feature ID follow-ups such as FEATURE-1, or propose and implement explicitly agreed product feature changes one at a time; route test and project workflow gaps to their own skills."

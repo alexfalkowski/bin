@@ -12,13 +12,10 @@ Use this skill in two distinct modes:
 
 Do not combine the two modes in one pass.
 
-Before starting Find mode or Implement mode, read `references/plan.md` and use
-it to maintain the active execution plan. The active plan is runtime state; do
-not write it into the repository unless the human explicitly asks for a durable
-plan file.
-When the runtime supports goals, bind the selected mode and requested scope to
-one active goal and update that goal as ledger, proposal, approval, validation,
-or human-confirmation state changes.
+Before starting Find mode or Implement mode, read `references/plan.md` and
+`../references/gap-workflow.md`. The plan owns active runtime state; the shared
+gap workflow owns ledger, delegation, scope, coverage, confidence, and approval
+gates.
 
 ## Operating Stance
 
@@ -48,45 +45,17 @@ improvements to `$project-gaps`.
 
 ## Find Mode
 
-Follow `references/plan.md#find-mode-plan`.
+Follow `references/plan.md#find-mode-plan` and the find/audit rules in
+`../references/gap-workflow.md`.
 
-These rules remain mandatory:
+These test-gap rules remain mandatory:
 
-- If no scope is provided, stop and ask for the package or folder.
-- Before checking, reading, creating, or updating the scoped `TESTS.md` ledger,
-  ensure the consuming repository root `.gitignore` exists and contains
-  `TESTS.md` as a standalone pattern. If the pattern is missing, add it.
-- Use `TESTS.md` in the requested package or folder as the review ledger, for example `PACKAGE_OR_FOLDER/TESTS.md`.
-- If `TESTS.md` already exists in the requested package or folder, stop. Tell the user the existing scoped ledger must be resolved first, or the human must delete that scoped `TESTS.md` before a new find pass there.
-- Treat `Find $test-gaps in PACKAGE_OR_FOLDER` or `Find test gaps in PACKAGE_OR_FOLDER` as the user's explicit request to delegate test-gap review for that scope. Do not require the user to separately say "use sub-agents", "spawn agents", or "delegate".
-- Use sub-agents for Find mode whenever the active runtime provides them and runtime policy/tooling permits delegation. Do not treat sub-agents as optional based on scope size, and do not perform the test-gap review locally first.
-- Do not claim that extra delegation wording is needed before launching review agents. The Find mode invocation is the explicit delegation request.
-- If delegation is denied, stop instead of falling back to a local review. If sub-agents are unavailable, say so briefly and perform the review locally for the requested scope.
-- Ask for human permission before agents run commands that require approval, such as network, SSH, GitHub auth, registry auth, remote writes, or other non-read-only validation.
-- Exclude generated files and folders, vendored dependencies, caches, build output, and generated lockfile churn unless the requested scope is explicitly about them.
-- In downstream repositories that vendor this project as `./bin`, treat
-  `bin/**` as vendored shared tooling unless the requested scope is explicitly
-  about shared `bin` tooling, Makefile includes, skills, or submodule wiring.
-  Exclude `bin/**` from recursive review and inventory by default; inspect only
-  included `bin/build/make/*.mak` fragments or selected `bin/skills/**`
-  guidance needed as evidence. Route upstream-only shared-tooling findings to a
-  separate `bin`-scoped run instead of writing them into the consuming
-  repository's `TESTS.md`.
-- Before assigning review agents, build a recursive scope inventory for the requested package or folder: relevant file count, first-level subfolders, nested packages, dominant languages, tests, public entrypoints, generated/vendor/build/cache exclusions, and existing test harnesses.
-- Do not assign broad recursive subtrees merely because they are first-level subfolders. When a subtree contains many independent nested packages, mixed responsibilities, or too many relevant files for a credible single pass, split it into smaller behavior-owned slices before delegation.
+- Use `TESTS.md` in the requested package or folder as the review ledger, for
+  example `PACKAGE_OR_FOLDER/TESTS.md`.
 - Prefer slices based on repository-owned behavior and test risk: public commands/APIs, changed or recently touched areas, documented workflows, compatibility-sensitive behavior, release paths, and nearby existing tests. Use depth only as a discovery aid, not as the review boundary.
-- If the requested scope is too broad to review credibly in one pass, review the highest-risk slices first and record explicit coverage: reviewed deeply, skimmed, excluded, and deferred.
-- Do not present a broad requested scope as fully reviewed when any relevant slice was only skimmed or deferred. Name those slices in the final coverage notes and provide runnable follow-up scopes for deferred review.
 - Each assigned agent owns recursive review only within its bounded slice. Each agent must perform a thorough and accurate `$testing-standards` review for that slice, pairing with relevant language standards and `$change-validation` for likely validation commands.
 - Require each agent to return findings in the same shape as the `TESTS.md` format, without final IDs unless useful locally. Each finding must name the repository-owned behavior being protected; reject findings that only test dependency semantics, aliases, or pass-through wrappers.
-- Use `../references/finding-severity.md` to discard low-confidence candidates before assigning severity and confidence.
 - Confirm each candidate gap against the code and existing tests before recording it. Gaps must be concrete missing, weak, misleading, flaky, or wrong-layer coverage with credible risk to changed behavior, public contracts, compatibility, release-sensitive workflows, or documented command/API behavior.
-- For reusable library, helper, or shared-tooling scopes, inspect supported
-  usage evidence before recording a high-confidence test gap: a real consumer,
-  executable example, integration test, module wiring path, documented
-  contract, CI workflow, or comparable usage path that can observe the
-  unprotected behavior. Treat package-local fakes, synthetic tests, manual
-  construction, and unsupported downstream patterns as leads only.
 - For each candidate, identify the real front door: the command, scenario,
   package/API consumer, service boundary, workflow, or documented entrypoint
   that would observe the behavior. Do not record a gap merely because an
@@ -115,10 +84,6 @@ These rules remain mandatory:
 - Do not record confirmed production bugs, security issues, compatibility breaks, or violated public contracts as test gaps. If such broken behavior is discovered during review, report it as out of scope for the test-gap ledger and recommend `$code-issues`; use this skill when the unprotected or poorly protected behavior is the finding.
 - Do not record standalone missing, weak, stale, misleading, or wrong-location documentation, README, example, comment, or docstring gaps as test gaps. Use `$doc-gaps` when documentation itself is the finding.
 - Do not report optional nice-to-have tests, private implementation coverage, arbitrary coverage percentage improvements, style preferences, or docs-only validation as findings by themselves. List them only as doc gaps or optional follow-up notes when relevant.
-- If no confirmed test gaps are found, report that no test gaps were found and do not create `TESTS.md`.
-- If confirmed test gaps are found, write all findings to the scoped `TESTS.md` before making any fixes.
-- Assign every finding a unique ID for the session in the form `TEST-N`.
-- Stop after presenting the ledger and plan. Do not fix findings in the same pass.
 
 ## `TESTS.md` Format
 
@@ -149,41 +114,22 @@ Keep optional follow-up notes separate from findings:
 
 ## Implement Mode
 
-Follow `references/plan.md#implement-mode-plan`.
+Follow `references/plan.md#implement-mode-plan` and the implementation rules in
+`../references/gap-workflow.md`.
 
-These rules remain mandatory:
+These test-gap implementation rules remain mandatory:
 
-- If no scope is provided, stop and ask for the package or folder.
-- Before checking, reading, creating, or updating the scoped `TESTS.md` ledger,
-  ensure the consuming repository root `.gitignore` exists and contains
-  `TESTS.md` as a standalone pattern. If the pattern is missing, add it.
-- Read `TESTS.md` in the requested package or folder first and treat it as the working test-gap ledger.
-- If scoped `TESTS.md` does not exist, stop and ask whether to run Find mode first for that scope.
-- Work through findings sequentially by ID unless the human explicitly names a different finding.
 - Before proposing a fix for each finding, re-check the current code and nearby tests. Treat the ledger as something that can go stale: dismiss or revise findings that are already covered, would duplicate the local test shape, test only underlying libraries/frameworks, or require validation modes the repository does not run.
 - When re-checking a finding whose evidence depends on documentation or comments contradicting implementation, prove the expected behavior with non-prose evidence before proposing tests. If non-prose evidence supports the implementation, explain that the ledger item is invalid as a test gap and propose reclassifying or fixing documentation instead.
-- Stop after proposing the solution. Do not edit code, update `TESTS.md`, or
-  start validation until the human explicitly agrees to that finding's solution.
-- Treat a request that names a finding and asks to fix, implement, or verify it
-  as permission to select that finding, re-check current evidence, and present
-  or refresh the proposal. It is not approval to edit unless the request also
-  explicitly agrees to the proposed solution. If the proposal was already
-  presented and remains unchanged after re-checking, state only the concise
-  approval gate instead of repeating the full proposal.
 - Ask questions when behavior, compatibility, test layer, fixture strategy, validation, or user intent is ambiguous. Treat silence or a broad "implement test gaps" request as permission to start the proposal workflow, not as permission to code.
 - After the human agrees and before editing, state the selected local test pattern, dominant relevant test harness, planned validation command, and any deviation from `AGENTS.md` or selected skills. If a deviation is needed, stop and ask before editing.
 - Implement only the agreed finding with the smallest clear test change, preferring the existing local test shape over new standalone structure.
 - Use `$testing-standards` for test design and pair with the relevant language standard for local idioms. If implementing the test gap requires production behavior to change, prefer the test-first or scenario-first loop from `$testing-standards`.
-- During automatic continuations while waiting for approval or `TEST-N is done`,
-  do not repeat the full proposal or result. State the current waiting gate
-  once, concisely.
-- Do not move to the next finding until the human says `TEST-N is done`.
-- After the human confirms a finding is done, remove that finding from scoped `TESTS.md`. If a finding is deemed invalid or not actually a test gap, remove it only after explaining why and getting human agreement.
-- Once all findings are resolved and confirmed done by the human, delete the scoped `TESTS.md`.
 
 ## References
 
 - Read `references/plan.md` before starting Find mode or Implement mode.
+- Read `../references/gap-workflow.md` for shared scoped-ledger, delegation, coverage, confidence, and approval gates.
 - Use `../references/finding-severity.md` for confidence filtering, confidence labels, and severity.
 - Use `$testing-standards` for cross-language test quality, coverage, fixtures, determinism, and test-layer decisions.
 - Use relevant language standards for local test idioms.
