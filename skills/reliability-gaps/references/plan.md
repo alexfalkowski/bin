@@ -55,13 +55,20 @@ evidence.
 16. Reject generic maturity advice, future-scale assumptions, private
     preferences, and findings that belong in code, security, test, or doc
     ledgers.
-17. If no confirmed gaps remain, report that result with the coverage state, do
-    not create `RELIABILITY.md`, and stop.
-18. If confirmed gaps remain, write the scoped `RELIABILITY.md` with
+17. Before concluding there are no reliability gaps, run a final reliability
+    closeout check. Name the cancellation/context handling, deadlines, timeouts,
+    retries, backoff, bounded memory/network/file/process behavior, lifecycle
+    cleanup, shutdown/drain/health/readiness behavior, observability or operator
+    impact, and CI/sidecar/runtime controls that were checked. If any of these
+    were not applicable, say why.
+18. If no confirmed gaps remain, report that result with the no-finding closeout
+    required by the shared gap workflow, do not create `RELIABILITY.md`, and
+    stop.
+19. If confirmed gaps remain, write the scoped `RELIABILITY.md` with
     `REL-<number>` IDs.
-19. Present the scoped ledger, proposed reliability-fix plan, coverage state for
+20. Present the scoped ledger, proposed reliability-fix plan, coverage state for
     broad scopes, and runnable follow-up scopes for deferred slices.
-20. Stop before making fixes.
+21. Stop before making fixes.
 
 ## Implement Mode Plan
 
