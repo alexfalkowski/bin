@@ -15,12 +15,14 @@ selected skill before applying personal judgment. If a rule or local pattern
 cannot work for the task, stop before editing, quote the governing instruction,
 and ask for approval to deviate.
 
-Use sub-agents only when the human explicitly authorizes delegation,
-sub-agents, or parallel agent work, or when the active runtime or
-higher-priority policy permits implicit delegation for the selected workflow.
-If sub-agents are unavailable or not permitted, perform the work locally unless
-the selected skill explicitly requires delegation and the request cannot be
-completed safely without it.
+When the active runtime provides and permits sub-agents, treat a user invocation
+of a selected skill that defines delegated review, parallel review, or
+forward-testing as authorization to use sub-agents for that workflow. Do not
+require the user to separately say "use sub-agents" unless higher-priority
+runtime policy requires explicit delegation wording. If sub-agents are
+unavailable or forbidden by higher-priority policy, perform the work locally
+unless the selected skill explicitly requires delegation and the request cannot
+be completed safely without it.
 
 Agents must report confidence before accepting findings, validation conclusions,
 or completion. They must use 90% as the default minimum threshold. They must
@@ -40,7 +42,11 @@ or the user's initialized shell. Compare important tool resolution such as
 `make` or `ruby` against that environment before treating a failure as real. Do
 not report shell resolution as a repository failure until that check is done. Do
 not bypass Make targets. Do not invent direct commands, install alternate tools,
-or retry variants merely to get something to run in the agent environment.
+or retry variants merely to get something to run in the agent environment. After
+a repository-defined command, Make target, dominant test harness, or
+skill-required workflow fails, classify the failure using the repository's
+validation categories before retrying; retry only through the initialized-shell
+or approved escalation path, or report the blocker.
 
 ## Composition
 

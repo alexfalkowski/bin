@@ -43,14 +43,18 @@ These shared rules own workflow mechanics.
 
 ## Delegation And Permissions
 
-- Use sub-agents only when the human explicitly authorizes delegation,
-  sub-agents, or parallel agent work, or when the active runtime or
-  higher-priority policy permits implicit delegation for this workflow.
-- If sub-agents are unavailable or not permitted, perform the review locally
-  unless the selected skill explicitly requires delegation and the requested
-  review cannot proceed safely without it.
-- If delegation would materially improve coverage but is not currently
-  authorized or permitted, ask the human for permission instead of assuming it.
+- When the active runtime provides and permits sub-agents, treat a user
+  invocation of a selected skill that defines delegated review, parallel review,
+  or forward-testing as authorization to use sub-agents for that workflow. Do
+  not require the user to separately say "use sub-agents" unless
+  higher-priority runtime policy requires explicit delegation wording.
+- If higher-priority runtime policy requires explicit delegation authorization
+  and the current request does not provide it, ask the human for permission when
+  delegation would materially improve coverage or is required by the selected
+  skill.
+- If sub-agents are unavailable or forbidden by higher-priority policy, perform
+  the review locally unless the selected skill explicitly requires delegation
+  and the requested review cannot proceed safely without it.
 - If required delegation is denied or cannot be used, stop and state the
   blocked delegation requirement instead of presenting a lower-confidence local
   review as complete.
@@ -111,6 +115,12 @@ These shared rules own workflow mechanics.
   localhost listener, network, credential, service-dependency, or user-shell
   environment related, retry only through the runtime's approved escalation or
   initialized-shell path.
+- After a repository-defined command, Make target, dominant test harness, or
+  skill-required workflow fails, do not switch to an ad hoc command, different
+  validation layer, or alternate workflow merely to make progress. First
+  classify the failure using the validation categories below; then retry only
+  through the initialized-shell or approved escalation path, or report the
+  blocker.
 - Classify every failed or skipped validation command as exactly one of:
   repository finding, local environment issue, missing tool, or inconclusive.
   Do not treat a target failure in the sandbox as a repository finding unless

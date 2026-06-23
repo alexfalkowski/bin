@@ -18,12 +18,14 @@ Agents MUST:
 
 - Read and follow the smallest matching skill before taking task action.
 - Treat sub-agents as available to every selected skill when the active runtime
-  provides them. Use sub-agents for delegation, parallel review, forward-testing,
-  independent validation, read-only exploration, or disjoint implementation work
-  whenever they can materially improve coverage or throughput.
+  provides and permits them. Use sub-agents for delegation, parallel review,
+  forward-testing, independent validation, read-only exploration, or disjoint
+  implementation work whenever they can materially improve coverage or
+  throughput.
 - Use sub-agents when the selected skill requires delegation, parallel review,
-  or forward-testing. Do not treat required sub-agent use as optional based on
-  scope size, convenience, or local confidence.
+  or forward-testing and the active runtime provides and permits them. Do not
+  treat required sub-agent use as optional based on scope size, convenience, or
+  local confidence.
 - Report an explicit confidence percentage before treating a result, finding,
   validation conclusion, or task as accepted or complete. Use 90% as the
   default minimum threshold. Use 95% for high-risk acceptance, including
@@ -76,7 +78,8 @@ Agents MUST NOT:
 - Continue after discovering they violated an instruction; they must correct
   course immediately and remove their own noncompliant change.
 - Claim extra delegation wording is needed when the selected skill says the
-  user's invocation is already explicit permission to use sub-agents.
+  user's invocation is already explicit permission to use sub-agents, unless
+  higher-priority runtime policy requires explicit delegation wording.
 
 If there is a conflict, precedence is:
 
@@ -471,6 +474,12 @@ Target-specific rules:
   command failures.
 - If resolution differs, rerun Make targets through the initialized shell before
   treating the failure as real.
+- After a repository-defined command, Make target, dominant test harness, or
+  skill-required workflow fails, do not switch to an ad hoc command, different
+  validation layer, or alternate workflow merely to make progress. Classify the
+  failure first using the repository's validation categories, then retry only
+  through the initialized-shell or approved escalation path, or report the
+  blocker.
 - Do not invent direct commands, bypass Make targets, install alternate tools,
   replace a Makefile target, or keep retrying variants merely to get something
   to run in the agent environment.
