@@ -10,14 +10,15 @@ description: Use when starting in a project, inspecting how to run tasks, decidi
 1. Read project-local instructions first, such as `AGENTS.md`, `README.md`, the root `Makefile`, and CI configuration.
 2. Identify the project's real command surface before choosing tools. Prefer exposed entrypoints over guessed direct invocations.
 3. Before running, retrying, replacing, or recommending commands, establish the execution environment: repository root, documented entrypoint, CI analogue, initialized user shell, and any macOS/Homebrew tool-path assumptions. Do not invent direct commands or bypass Make targets just because the agent shell cannot find the right tool.
-4. If the repository uses this shared project as `./bin`, read `references/bin-submodule.md` before reasoning about path-sensitive behavior.
-5. Inspect only the files, scripts, and make fragments relevant to the user's task.
-6. Read `references/make-fragments.md` when you need to interpret included `bin/build/make/*.mak` fragments, edit reusable make fragments, or reason about likely target behavior.
-7. Identify commands that require network, SSH, GitHub auth, registry auth, cloning, pushing, publishing, opening PRs, or updating remote state before running or recommending them.
-8. Before editing code, tests, docs, config, scripts, or validation paths, identify the local pattern for the changed surface: import style, naming style, file layout, dominant test harness, documented config keys, and repository validation target. Agents MUST preserve those patterns unless the user explicitly asks to change them.
-9. If an edit would deviate from the discovered local pattern, stop and ask before editing. State the exact pattern, why it cannot work, and the proposed deviation.
-10. When workflow discovery is the final response, use the exact structure in `references/bin-submodule.md`; do not add, remove, rename, or reorder sections.
-11. When another skill embeds this discovery, preserve the discovered commands, CI expectations, bin wiring, constraints, and local-pattern facts in the caller's output format.
+4. After a repository-defined command, Make target, dominant test harness, or skill-required workflow fails, do not switch to an ad hoc command, different validation layer, or alternate workflow merely to make progress. First classify the failure using the repository's validation categories; then retry only through the initialized-shell or approved escalation path, or report the blocker.
+5. If the repository uses this shared project as `./bin`, read `references/bin-submodule.md` before reasoning about path-sensitive behavior.
+6. Inspect only the files, scripts, and make fragments relevant to the user's task.
+7. Read `references/make-fragments.md` when you need to interpret included `bin/build/make/*.mak` fragments, edit reusable make fragments, or reason about likely target behavior.
+8. Identify commands that require network, SSH, GitHub auth, registry auth, cloning, pushing, publishing, opening PRs, or updating remote state before running or recommending them.
+9. Before editing code, tests, docs, config, scripts, or validation paths, identify the local pattern for the changed surface: import style, naming style, file layout, dominant test harness, documented config keys, and repository validation target. Agents MUST preserve those patterns unless the user explicitly asks to change them.
+10. If an edit would deviate from the discovered local pattern, stop and ask before editing. State the exact pattern, why it cannot work, and the proposed deviation.
+11. When workflow discovery is the final response, use the exact structure in `references/bin-submodule.md`; do not add, remove, rename, or reorder sections.
+12. When another skill embeds this discovery, preserve the discovered commands, CI expectations, bin wiring, constraints, and local-pattern facts in the caller's output format.
 
 ## References
 

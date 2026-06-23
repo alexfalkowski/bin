@@ -19,6 +19,7 @@ Use this reference when choosing which checks to run.
 - Never imply a check ran if the wrapper no-op'd because a dependency was missing.
 - Report network, credential, shell environment, `PATH`, or tool-version failures as environment or validation gaps rather than code failures.
 - Keep the repository-defined command as the intended validation command when the agent environment differs from the user's normal shell.
+- After a repository-defined command, Make target, dominant test harness, or skill-required workflow fails, do not switch to an ad hoc command, different validation layer, or alternate workflow merely to make progress. First classify the failure using the repository's validation categories; then retry only through the initialized-shell or approved escalation path, or report the blocker.
 
 ## Command Execution Environment
 

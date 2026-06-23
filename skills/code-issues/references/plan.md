@@ -31,11 +31,12 @@ state, code/security/compatibility evidence, and public contract evidence.
 8. Ask for required permission before any local reviewer or authorized agent
    runs non-read-only, network, auth, remote-write, or otherwise approval-gated
    commands.
-9. Use review agents only when the human explicitly authorizes delegation or
-   higher-priority runtime policy permits it. If sub-agents are unavailable or
-   not permitted, perform the review locally unless credible completion depends
-   on delegation; in that case ask for permission or stop at the delegation
-   gate.
+9. Use review agents when this skill authorizes delegated review and the active
+   runtime provides and permits sub-agents. Do not require separate delegation
+   wording unless higher-priority runtime policy requires it. If sub-agents are
+   unavailable or forbidden, perform the review locally unless credible
+   completion depends on delegation; in that case ask for permission or stop at
+   the delegation gate.
 10. Wait for all review work to finish.
 11. Update coverage state for every planned slice before judging the requested
     scope.
