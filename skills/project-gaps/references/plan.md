@@ -49,7 +49,8 @@ implementation home, validation, delegation, ledger state, and workflow routing.
     gap names the audience, current limitation, repository-owned project
     surface, implementation home, evidence of value, repository fit, smallest
     plausible implementation path, compatibility and maintenance tradeoffs,
-    validation path, and correct workflow routing.
+    validation path, upstream or third-party ownership when relevant, and
+    correct workflow routing.
 14. Reject novelty, competitor checklists, trend-following, broad rewrites,
     new-framework preferences, future-roadmap assumptions, optional polish, and
     findings that belong in feature, code, security, reliability, test, doc, or
@@ -57,7 +58,11 @@ implementation home, validation, delegation, ledger state, and workflow routing.
 15. Route candidates whose implementation home is outside the requested scope to
     `Routed Project Follow-Ups` or to a separate project-gaps run in the owning
     repository or shared tooling scope; do not record them as normal
-    `PROJECT-<number>` entries for the current scope.
+    `PROJECT-<number>` entries for the current scope. For third-party
+    dependency, tool, image, or project-owned upstream-library defects, record a
+    normal project gap only for the current scope's dependency/workflow response
+    such as upgrade, pin, workaround, replacement, validation, or upstream issue
+    tracking.
 16. If no confirmed project gaps remain, report that result with the coverage
     state, do not create `PROJECTS.md`, and stop.
 17. If confirmed project gaps remain, write the scoped `PROJECTS.md` with

@@ -100,6 +100,14 @@ These shared rules own workflow mechanics.
   trigger the candidate or show the audience/action at risk. Treat package-local
   fakes, synthetic tests, manual construction, and unsupported downstream
   patterns as leads only.
+- When a candidate points to a third-party dependency, framework, tool, image,
+  or project-owned upstream library defect, separate the defect from the
+  repository-owned response before recording it. Record a scoped finding or
+  proposal only when the selected scope owns the adapter behavior, dependency
+  upgrade, pin, replacement, workaround, validation coverage, upstream issue
+  tracking, or other project workflow response. If another project-owned
+  library owns the broken behavior, route the candidate to that library's agent
+  or ledger and keep the current scope only as supported usage evidence.
 - When prose, comments, examples, or docs contradict implementation, require
   non-prose evidence before treating implementation as wrong or routing the
   candidate to code, security, reliability, or test workflows. If current code,

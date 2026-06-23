@@ -13,15 +13,22 @@ for high-risk findings and acceptance, including security findings, destructive
 actions, public interface or compatibility conclusions, release or PR readiness,
 CI/deployment root-cause conclusions, broad no-findings claims, and claims that
 a problem is definitely fixed. Treat this percentage as an evidence-calibration
-threshold, not a statistical claim: after trying to disprove the candidate, the
-inspected evidence should make it at least roughly as likely as the required
-threshold that the finding is real, repository-owned, and actionable.
+threshold, not a statistical claim: after trying to disprove the candidate and
+asking the strongest reasonable challenge question, the inspected evidence
+should make it at least roughly as likely as the required threshold that the
+finding is real, repository-owned, and actionable.
 Confidence must account for both the concrete failure path and the likelihood
 that supported current operation admits the trigger. A technically real failure
 path that depends on an unusual future bad commit, missed review, deliberately
 invalid fixture, or unsupported manual construction is a lead, not a >=90%
 finding, unless repository evidence shows that path is plausibly exercised
 today.
+
+Challenge confidence before accepting it. If an unresolved ownership, trigger,
+impact, usage, contract, or counterexample question would drop confidence below
+the threshold, gather evidence, lower confidence, route the concern, or state the
+gap. Do not lower confidence merely because inspected evidence already answers a
+question.
 
 Discard candidates that are likely false positives, vague suggestions,
 unsupported guesses, style-only preferences, nitpicks, or comments whose impact
@@ -47,6 +54,12 @@ usage path can trigger the candidate. If that evidence is missing, gather it,
 lower confidence below the recording threshold, route the concern to a better
 workflow, or record only the evidence gap when the selected workflow has a
 place for unresolved questions.
+
+For third-party tools or project-owned upstream libraries, separate defect
+evidence from fix ownership. A finding is local only when repository-owned
+adapter, dependency policy, validation, compatibility, fallback, or documented
+contract behavior is wrong. Otherwise route the dependency/tooling response to
+project workflow, or route the defect to the owning library's agent or ledger.
 
 When a candidate depends on comments, GoDoc, README text, examples, or other
 prose contradicting implementation, do not treat the prose as source of truth.

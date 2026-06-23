@@ -9,7 +9,8 @@ description: Use when the user asks for a general code review, diff review, PR c
 
 Operate as a skeptical reviewer: prioritize confirmed behavioral risk over
 style, and report only findings grounded in changed code, concrete evidence,
-and credible user, compatibility, security, maintenance, or test impact.
+and credible user, compatibility, security, maintenance, or test impact. Use
+the shared confidence and ownership gates before accepting findings.
 
 Treat running code and executable behavior as the default source of truth.
 Comments, GoDoc, README text, examples, and other prose can be stale. A mismatch
@@ -26,21 +27,23 @@ finding to documentation instead of changing code.
 2. Read `references/findings-format.md` before producing review output.
 3. Inspect behavior, tests, compatibility, security, docs, and maintenance risk before style preferences.
 4. First identify high-risk review leads, especially deletions, cross-boundary drift, silent behavior changes, changed contracts, unhandled sibling cases, and error-path changes. Then verify concrete findings instead of reviewing every line uniformly.
-5. Prefer precision over recall. Do not report plausible concerns unless they survive attempts to disprove them and are grounded in changed code, concrete evidence, and credible user, compatibility, security, maintenance, or test risk.
+5. Prefer precision over recall. Do not report plausible concerns unless they survive attempts to disprove them and are grounded in changed code, concrete evidence, supported usage, correct ownership, and credible user, compatibility, security, maintenance, or test risk.
 6. When a candidate depends on prose contradicting code, first disprove the implementation with non-prose evidence. If the code, tests, helper names, commit history, or runtime behavior support the implementation, do not report a code finding; use `$doc-standards` or `$doc-gaps` for the stale prose.
 7. Use `$doc-standards` when the review scope includes README files, user-facing docs, examples, command/config docs, public API comments, docstrings, or changed behavior that may make nearby existing documentation stale. Keep review scope to the current change and directly affected nearby docs unless the user explicitly asks for `$doc-gaps` or a broader documentation audit.
 8. Pair with relevant language standards (`$go-standards`, `$ruby-standards`, `$shell-standards`) when reviewing language-specific code, APIs, docs, tests, or tooling behavior. Pair with `$naming-standards` when names create concrete ambiguity, misuse risk, public contract confusion, inconsistent vocabulary, or maintenance cost. Treat idiomatic style concerns as findings only when they create concrete readability, maintenance, correctness, compatibility, or public API risk; use `$style-review` instead for non-blocking polish when the user asks for style nits or a readability pass.
-9. Use `$testing-standards` when judging whether tests are missing, weak, overfit to internals, hard to read, or at the wrong layer.
-10. Treat unnecessary abstraction as a code-review finding only when it creates
+9. Use `$testing-standards` when judging whether tests are missing, weak, overfit to internals, hard to read, cryptic, or at the wrong layer.
+10. Route dependency, tool, framework, and upstream-library defects to the owner
+    of the fix before recording a local finding.
+11. Treat unnecessary abstraction as a code-review finding only when it creates
     concrete maintenance, compatibility, correctness, or public API risk. A
     one-line helper or wrapper is not a finding by itself; it becomes a finding
     when it obscures behavior, spreads a misleading concept, freezes a bad API,
     duplicates an existing local abstraction, or makes future changes riskier
     without adding domain clarity or boundary ownership.
-11. If the review scope includes security-sensitive code, configuration, dependencies, shell execution, filesystem writes/deletes, network/auth/TLS behavior, secrets/env handling, Docker helpers, or CI/security tooling, consult `$security-audit` and the smallest matching security reference; keep this skill's findings format.
-12. Verify claims against concrete file and line references whenever possible.
-13. When code review is the final response, use the exact structure in `references/findings-format.md`; do not add, remove, rename, or reorder sections.
-14. When another skill embeds this review, preserve findings, open questions, testing gaps, and summary facts in the caller's output format.
+12. If the review scope includes security-sensitive code, configuration, dependencies, shell execution, filesystem writes/deletes, network/auth/TLS behavior, secrets/env handling, Docker helpers, or CI/security tooling, consult `$security-audit` and the smallest matching security reference; keep this skill's findings format.
+13. Verify claims against concrete file and line references whenever possible.
+14. When code review is the final response, use the exact structure in `references/findings-format.md`; do not add, remove, rename, or reorder sections.
+15. When another skill embeds this review, preserve findings, open questions, testing gaps, and summary facts in the caller's output format.
 
 ## References
 

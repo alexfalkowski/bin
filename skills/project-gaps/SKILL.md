@@ -75,6 +75,10 @@ candidate instead of recording it as low priority.
 - **Correct workflow**: Confirm the candidate is not primarily a product
   feature, code bug, security issue, reliability gap, test gap, doc gap, naming
   issue, style preference, or unsupported roadmap decision.
+- **Upstream ownership**: When the evidence points to a third-party library,
+  framework, tool, image, or another project-owned library, confirm whether the
+  requested scope owns a dependency/workflow response or should route the
+  candidate to the owning project.
 
 Reject ideas whose support is only novelty, taste, competitor parity, a trend,
 an imagined future workflow, private implementation preference, or generic
@@ -91,10 +95,14 @@ These project-gap rules remain mandatory:
   for example `PACKAGE_OR_FOLDER/PROJECTS.md`.
 - Classify every candidate's implementation home before recording it. Use:
   `current repo` when the requested scope owns the fix; `shared bin` when
-  reusable `bin` tooling owns the fix; `external repo` when another repository
-  or image owns the invoked command, script, CI job, or release behavior; and
-  `mixed` only when a small local adapter plus an owning upstream change are
+  reusable `bin` tooling owns the fix; `external repo` when another repository,
+  image, third-party dependency, tool, or project-owned upstream library owns
+  the invoked command, script, CI job, release behavior, or underlying defect;
+  and `mixed` only when a small local adapter plus an owning upstream change are
   both necessary.
+- Treat third-party library, framework, tool, and image defects as project
+  workflow candidates only for the repository-owned response. The upstream
+  defect itself is not a normal `PROJECT-N` for the current scope.
 - Before assigning review agents, build a recursive scope inventory for the
   requested package or folder: relevant file count, first-level subfolders,
   nested packages, dominant languages, Makefiles, CI config, scripts,
@@ -154,6 +162,8 @@ Use this structure:
 - Current limitation: The project workflow friction or missing project capability.
 - Project surface: Make target|CI job|script|setup flow|validation flow|release flow|command discovery|shared ./bin wiring.
 - Evidence: Concrete file and line references, command behavior, CI config, docs, examples, comparable workflow evidence, or maintainer workflow evidence.
+- Ownership: Why this scope owns the fix, or why the issue is routed to a
+  third-party, external repo, shared tooling, or upstream project-owned library.
 - Repository fit: Why this belongs in the current repository and matches existing project patterns.
 - Proposed change: Smallest useful project workflow improvement.
 - Compatibility and maintenance: Public target behavior, dependency, migration, support, CI runtime, or maintenance tradeoffs.
@@ -167,6 +177,7 @@ Keep optional follow-up notes separate from proposals:
 
 - Owning home: shared bin|external repo|mixed
   Evidence: Local evidence that exposed the gap.
+  Ownership reason: Why the fix belongs outside the current scope.
   Follow-up scope: The repository, package, or shared tooling scope where the
   project-gaps run or implementation belongs.
 
