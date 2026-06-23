@@ -13,44 +13,51 @@ state, code/security/compatibility evidence, and public contract evidence.
 1. Confirm the requested package or folder scope.
 2. Check whether scoped `ISSUES.md` already exists and stop if it does.
 3. Run `$project-workflow` discovery for entrypoints, CI, and `./bin` wiring.
-4. Build a recursive scope inventory for the requested package or folder:
+4. Run the shared audit preflight from `../../references/gap-workflow.md`,
+   including applicable tool availability, service dependencies, validation
+   ladder, and command-failure classification.
+5. Build a recursive scope inventory for the requested package or folder:
    relevant file count, first-level subfolders, nested packages, dominant
    languages, tests, public entrypoints, generated/vendor/build/cache
-   exclusions, and security-sensitive surfaces.
-5. Split the inventory into bounded behavior-owned review slices. Use depth
+   exclusions, security-sensitive surfaces, inventory count when applicable,
+   and the coverage accounting required by the shared workflow.
+6. Split the inventory into bounded behavior-owned review slices. Use depth
    only as a discovery aid; do not assign a broad recursive subtree merely
    because it is a first-level subfolder.
-6. If the scope is too broad for a credible single pass, select the highest-risk
+7. If the scope is too broad for a credible single pass, select the highest-risk
    slices first and initialize coverage entries for reviewed deeply, skimmed,
    excluded, and deferred slices. Deferred entries must be exact follow-up
    scopes such as `path/to/package` or `path/to/package/subpackage`.
-7. Ask for required permission before any agent runs non-read-only, network,
+8. Ask for required permission before any agent runs non-read-only, network,
    auth, remote-write, or otherwise approval-gated commands.
-8. Launch the required review agents when available, or perform the local
+9. Launch the required review agents when available, or perform the local
    fallback only when sub-agents are unavailable.
-9. Wait for all review work to finish.
-10. Update coverage state for every planned slice before judging the requested
+10. Wait for all review work to finish.
+11. Update coverage state for every planned slice before judging the requested
     scope.
-11. Deduplicate candidates and directly re-check conflicting or overlapping
+12. Deduplicate candidates and directly re-check conflicting or overlapping
     conclusions.
-12. Confirm each finding is a concrete code issue, security issue,
+13. Confirm each finding is a concrete code issue, security issue,
     compatibility break, or public contract violation. If the evidence is a
     documentation/comment mismatch, prove the implementation is wrong with
     non-prose evidence before treating it as a code issue; otherwise classify it
     as a documentation gap.
-13. Before concluding there are no issues, run a final code-issue closeout
+14. Classify validation outcomes as repository finding, local environment
+    issue, missing tool, or inconclusive; apply the confidence evidence rubric
+    from `../../references/finding-severity.md`.
+15. Before concluding there are no issues, run a final code-issue closeout
     check. Name the public APIs, constructors, exported helpers, supported DI or
     documented usage paths, real call sites, nil/error/edge behavior, tests or
     CI evidence, and repository policy exclusions that were checked. If any of
     these were not applicable, say why.
-14. If no confirmed issues remain, report that result with the no-finding
+16. If no confirmed issues remain, report that result with the no-finding
     closeout required by the shared gap workflow, do not create `ISSUES.md`, and
     stop.
-15. If confirmed issues remain, write the scoped `ISSUES.md` with
+17. If confirmed issues remain, write the scoped `ISSUES.md` with
     `ISSUE-<number>` IDs.
-16. Present the scoped ledger, proposed fix plan, coverage state for broad
+18. Present the scoped ledger, proposed fix plan, coverage state for broad
     scopes, and runnable follow-up scopes for deferred slices.
-17. Stop before making fixes.
+19. Stop before making fixes.
 
 ## Implement Mode Plan
 
