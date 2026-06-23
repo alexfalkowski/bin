@@ -16,10 +16,13 @@ repository root and keep `bin/` as shared guidance.
 - Do not run `make review`, `make push`, or any equivalent remote-write command
   unless the current request explicitly asked for that PR flow.
 
-## Goal State Rules
+## Optional Goal State Rules
 
-- Bind the active goal to opening or updating the review PR for the current
-  change.
+- Use runtime goals only when the human explicitly requests them or
+  higher-priority runtime instructions allow goal creation for this workflow.
+  Otherwise maintain the review PR outcome in this active plan.
+- When runtime goals are authorized, bind the active goal to opening or updating
+  the review PR for the current change.
 - Record a waiting reason when explicit PR-flow permission, obsolete PR text
   direction, remote-write permission, or unresolved-finding approval is needed.
 - Record a blocked reason only when a required permission is denied, validation

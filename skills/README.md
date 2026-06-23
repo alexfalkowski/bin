@@ -15,8 +15,12 @@ selected skill before applying personal judgment. If a rule or local pattern
 cannot work for the task, stop before editing, quote the governing instruction,
 and ask for approval to deviate.
 
-Use sub-agents when the selected skill requires delegation, parallel review, or
-forward-testing, and when the active runtime provides them.
+Use sub-agents only when the human explicitly authorizes delegation,
+sub-agents, or parallel agent work, or when the active runtime or
+higher-priority policy permits implicit delegation for the selected workflow.
+If sub-agents are unavailable or not permitted, perform the work locally unless
+the selected skill explicitly requires delegation and the request cannot be
+completed safely without it.
 
 Agents must report confidence before accepting findings, validation conclusions,
 or completion. They must use 90% as the default minimum threshold. They must
@@ -86,10 +90,11 @@ Stateful gap and review workflows may include `references/plan.md`; those files
 are templates for runtime execution state, not durable project artifacts. Shared
 workflow mechanics live in `skills/references/gap-workflow.md`.
 
-When the runtime supports goals, stateful workflows may bind one active goal to
-the selected mode and scope. Goals do not bypass skill steps, stop gates,
-permission gates, scoped ledgers, human confirmation requirements, or validation
-freshness rules.
+Use runtime goals only when the human explicitly requests them or
+higher-priority runtime instructions allow goal creation for the selected
+workflow. Otherwise maintain stateful workflow progress in the conversation or
+tool plan. Goals do not bypass skill steps, stop gates, permission gates,
+scoped ledgers, human confirmation requirements, or validation freshness rules.
 
 ## Output And Validation
 

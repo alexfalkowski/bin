@@ -41,7 +41,7 @@ These code-issue rules remain mandatory:
 - Use `ISSUES.md` in the requested package or folder as the review ledger, for
   example `PACKAGE_OR_FOLDER/ISSUES.md`.
 - Prefer slices based on repository-owned behavior and risk: public commands/APIs, changed or recently touched areas, auth/network/filesystem/process boundaries, config/CI/release paths, documented workflows, and nearby tests. Use depth only as a discovery aid, not as the review boundary.
-- Each assigned agent owns recursive review only within its bounded slice. Each agent must perform a thorough and accurate `$code-review` and `$security-audit` for that slice, using `$testing-standards` for concrete missing-coverage or weak-test analysis and `$change-validation` for likely validation commands.
+- For delegated review, each assigned agent owns recursive review only within its bounded slice. Each agent must perform a thorough and accurate `$code-review` and `$security-audit` for that slice, using `$testing-standards` for concrete missing-coverage or weak-test analysis and `$change-validation` for likely validation commands.
 - Confirm each candidate finding against the code before recording it. Findings must be concrete bugs, security issues, compatibility breaks, or violated public contracts with user-visible impact.
 - Treat provider-to-public-contract adapters, lookup tables, data enrichment,
   normalization maps, embedded assets, vendored static data, and generated

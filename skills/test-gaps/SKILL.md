@@ -53,8 +53,8 @@ These test-gap rules remain mandatory:
 - Use `TESTS.md` in the requested package or folder as the review ledger, for
   example `PACKAGE_OR_FOLDER/TESTS.md`.
 - Prefer slices based on repository-owned behavior and test risk: public commands/APIs, changed or recently touched areas, documented workflows, compatibility-sensitive behavior, release paths, and nearby existing tests. Use depth only as a discovery aid, not as the review boundary.
-- Each assigned agent owns recursive review only within its bounded slice. Each agent must perform a thorough and accurate `$testing-standards` review for that slice, pairing with relevant language standards and `$change-validation` for likely validation commands.
-- Require each agent to return findings in the same shape as the `TESTS.md` format, without final IDs unless useful locally. Each finding must name the repository-owned behavior being protected; reject findings that only test dependency semantics, aliases, or pass-through wrappers.
+- For delegated review, each assigned agent owns recursive review only within its bounded slice. Each agent must perform a thorough and accurate `$testing-standards` review for that slice, pairing with relevant language standards and `$change-validation` for likely validation commands.
+- For delegated review, require each agent to return findings in the same shape as the `TESTS.md` format, without final IDs unless useful locally. Each finding must name the repository-owned behavior being protected; reject findings that only test dependency semantics, aliases, or pass-through wrappers.
 - Confirm each candidate gap against the code and existing tests before recording it. Gaps must be concrete missing, weak, misleading, flaky, or wrong-layer coverage with credible risk to changed behavior, public contracts, compatibility, release-sensitive workflows, or documented command/API behavior.
 - For each candidate, identify the real front door: the command, scenario,
   package/API consumer, service boundary, workflow, or documented entrypoint

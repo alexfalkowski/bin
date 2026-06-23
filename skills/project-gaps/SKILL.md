@@ -103,19 +103,21 @@ These project-gap rules remain mandatory:
 - Treat third-party library, framework, tool, and image defects as project
   workflow candidates only for the repository-owned response. The upstream
   defect itself is not a normal `PROJECT-N` for the current scope.
-- Before assigning review agents, build a recursive scope inventory for the
-  requested package or folder: relevant file count, first-level subfolders,
-  nested packages, dominant languages, Makefiles, CI config, scripts,
-  validation entrypoints, release/deploy/versioning surfaces, setup flows,
-  command discovery surfaces, generated/vendor/build/cache exclusions, tests,
-  docs, examples, and likely project workflow extension points.
+- Before assigning review agents or starting local review, build a recursive
+  scope inventory for the requested package or folder: relevant file count,
+  first-level subfolders, nested packages, dominant languages, Makefiles, CI
+  config, scripts, validation entrypoints, release/deploy/versioning surfaces,
+  setup flows, command discovery surfaces, generated/vendor/build/cache
+  exclusions, tests, docs, examples, and likely project workflow extension
+  points.
 - Prefer slices based on repository-owned project workflow value: Make targets
   and fragments, CI jobs, setup and dependency installation, validation and
   local preflight, release/versioning/publishing paths, reusable scripts,
   command discovery/help entrypoints, downstream `./bin` wiring, and changed or
   recently touched project tooling.
-- Each assigned agent owns recursive review only within its bounded slice. Each
-  agent must perform project-gap discovery for that slice, pairing with
+- For delegated review, each assigned agent owns recursive review only within
+  its bounded slice. Each agent must perform project-gap discovery for that
+  slice, pairing with
   `$project-workflow`, `$change-safety`, `$change-validation`, relevant
   language standards, and `$testing-standards` only when needed to route
   test-surface concerns correctly.

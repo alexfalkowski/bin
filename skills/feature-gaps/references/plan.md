@@ -2,8 +2,8 @@
 
 Use this reference to instantiate the feature-gap-specific active plan for
 `$feature-gaps`. Read it with the shared gap workflow named in `SKILL.md`; that
-workflow owns common plan state, goal state, scoped-ledger, delegation,
-coverage, and implementation gates.
+workflow owns common plan state, optional goal state, scoped-ledger,
+delegation, coverage, and implementation gates.
 
 Track feature-gap-specific state for scope, audience, product surface,
 validation, delegation, external research, ledger state, and workflow routing.
@@ -38,8 +38,11 @@ validation, delegation, external research, ledger state, and workflow routing.
    needed. Use allowed research tools when they materially improve proposal
    quality; ask permission before approval-gated network, auth, clone, or
    remote-write commands.
-9. Launch the required review agents when available, or perform the local
-   fallback only when sub-agents are unavailable.
+9. Use review agents only when the human explicitly authorizes delegation or
+   higher-priority runtime policy permits it. If sub-agents are unavailable or
+   not permitted, perform the review locally unless credible completion depends
+   on delegation; in that case ask for permission or stop at the delegation
+   gate.
 10. Wait for all review work to finish.
 11. Update coverage state for every planned slice before judging the requested
     scope.
