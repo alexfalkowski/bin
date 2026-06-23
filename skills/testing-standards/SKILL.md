@@ -18,7 +18,11 @@ repository-defined validation. Treat public functions, exported symbols, helper
 APIs, and collaborator calls as possible implementation details until the
 intended caller or scenario proves they are the behavior boundary. Prefer
 established local test shapes and keep coverage useful, deterministic, and
-readable rather than mechanically broad.
+readable rather than mechanically broad. Prefer simple tests that make the
+behavior obvious; when no observable repository-owned behavior changes and the
+only possible test would encode internal order, provider wiring, dependency call
+shape, or timing, use repository validation and a clarifying code comment when
+the fix would otherwise look unnecessary.
 
 ## Mandatory Stop Gates
 
@@ -59,6 +63,14 @@ These are mandatory gates, not guidance.
   helper extraction unless that choice changes an observable contract such as
   ordering, latency, cancellation, concurrency safety, resource cleanup, error
   aggregation, compatibility, or documented behavior.
+- Tests MUST NOT encode internal call order, provider registration order,
+  callback timing, pointer projection, dependency invocation shape, or other
+  implementation sequencing merely to prove a behavior-preserving fix. If the
+  sequencing is an observable contract, test that contract through the
+  caller-facing boundary. If it is not observable and a test would be cryptic,
+  skip the test, keep the fix small, add a short intent comment only when the
+  code would otherwise look removable or wrong, and validate through the
+  repository-defined command.
 - Tests MUST NOT inspect source code, ASTs, generated files, strings, imports,
   or dependency call sites to prove an implementation detail is absent unless
   the repository explicitly owns that rule as lint, static analysis, or a code
@@ -92,7 +104,7 @@ These are mandatory gates, not guidance.
    public or documented API, sketch the intended caller or scenario first so the
    first test exercises the caller-facing contract rather than an implementation
    seam.
-11. Before editing behavior-changing production code, make an explicit test-first decision. State either `TDD: yes` with the first test/scenario you will add or update, or `TDD: no` with the concrete reason test-first is not practical. Do this before production edits, not retroactively after implementation. For docs, policy, configuration, metadata, formatting-only changes, generated artifacts, or shell/Make/Docker glue without an established executable test harness, use `TDD: no` and validate with `$change-validation` instead.
+11. Before editing behavior-changing production code, make an explicit test-first decision. State either `TDD: yes` with the first test/scenario you will add or update, or `TDD: no` with the concrete reason test-first is not practical. Do this before production edits, not retroactively after implementation. For docs, policy, configuration, metadata, formatting-only changes, generated artifacts, or shell/Make/Docker glue without an established executable test harness, use `TDD: no` and validate with `$change-validation` instead. For behavior-preserving fixes where the only plausible test would be cryptic implementation-order coverage, state `TDD: no` with that reason and use validation plus an intent comment when warranted.
 12. For behavior-changing code with an established test harness, prefer a test-first loop. In TDD-style projects, write or update the narrowest credible test first; in BDD-style projects, write or update the narrowest credible scenario, feature, or spec first. Run it and confirm it fails for the expected reason when practical. If the test passes unexpectedly, stop before production edits and re-check whether the behavior is already covered, whether the assertion is too weak, or whether a different test layer is needed. Implement the smallest code change to pass it, then perform a refactor pass while keeping tests green.
 13. If behavior-changing production code was edited before the test-first decision, and the change has an established test harness, stop and correct course: add or update the narrowest credible test immediately, run it against the current state when practical, and explicitly report that the red step was missed before continuing.
 14. Choose the narrowest established test layer that credibly covers the changed behavior.
@@ -123,6 +135,11 @@ These are mandatory gates, not guidance.
   same contract. Add tests only when the optimization creates observable risk,
   such as concurrency ordering, cleanup, cancellation, timing, error handling,
   compatibility, or documented lifecycle behavior.
+- Do not turn a straightforward behavior-preserving fix into cryptic test code
+  only to show that internal operations happen in the right order. If the order
+  matters to users, document and test the observable contract. If it only matters
+  as implementation intent, prefer the fix, a small explanatory comment where
+  future maintainers might remove it, and normal validation.
 - Do not write source-inspection tests to enforce implementation absence, such
   as parsing ASTs to assert that a function is not called. If the absence of a
   construct is truly a repository rule, encode it as lint or static analysis;

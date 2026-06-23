@@ -34,6 +34,10 @@ Agents MUST:
   tests, logs, scanner output, official documentation, runtime behavior, or
   repository history. Below the required threshold, gather more evidence or
   state the blocker instead of accepting completion.
+- Before accepting confidence at or above the required threshold, perform a
+  challenge pass. Material unresolved questions, alternate owners, unsupported
+  paths, or counterexamples must lower confidence; questions already answered by
+  inspected evidence must not.
 - Calibrate durable findings against supported usage evidence. In reusable
   libraries, helpers, or shared tooling, package-local synthetic tests, fakes,
   manual construction, and unsupported downstream patterns are leads, not enough
@@ -43,6 +47,11 @@ Agents MUST:
   path that can trigger the candidate. If supported usage evidence cannot be
   found, lower confidence below the recording threshold, route the concern to
   the correct workflow, or state the evidence gap instead of recording it.
+- Route findings about third-party libraries, frameworks, tools, or project-owned
+  upstream libraries to the owner of the fix. Use `project-gaps` only for the
+  repository-owned dependency/tooling response; route project-owned upstream
+  library bugs to that library's agent or ledger unless local adapter behavior is
+  independently wrong.
 - Follow existing repository patterns over personal judgment.
 - Treat skill workflow steps using "must", "do not", or "stop" language as
   blocking requirements.
@@ -58,6 +67,9 @@ Agents MUST NOT:
 
 - Add tests in a different layer after the selected skill says to inspect and
   follow the dominant relevant harness.
+- Add cryptic tests that only prove internal call order, implementation timing,
+  provider wiring, or third-party behavior when no observable repository-owned
+  contract changes.
 - Introduce import aliases, abstractions, helpers, files, or validation paths
   for personal clarity when local patterns already exist.
 - Treat `AGENTS.md` or `SKILL.md` instructions as optional.

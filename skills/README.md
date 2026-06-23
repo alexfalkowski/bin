@@ -1,246 +1,121 @@
 # Skills
 
-Use the smallest skill that matches the task. Compose skills by letting the
-outer workflow own the final response format and embedded skills provide facts,
-checks, and findings.
+Use the smallest skill that matches the task. Skills are maintained operating
+rules for agents that work in this repository and in downstream repositories
+that vendor it as `./bin`.
+
+This README is an orientation guide. The authoritative rules live in
+`AGENTS.md`, each `skills/<name>/SKILL.md`, and shared references under
+`skills/references/`.
 
 ## Mandatory Rule
 
-Skills are mandatory operating rules, not advisory notes. When a selected skill
-or repository `AGENTS.md` says to read, inspect, preserve, stop, ask, or avoid a
-pattern, agents must do that before applying personal judgment. If an agent
-believes a rule cannot work for the task, it must stop before editing, quote the
-specific rule or local pattern, and ask for approval to deviate.
+Skills are mandatory operating rules, not advisory notes. Agents must follow the
+selected skill before applying personal judgment. If a rule or local pattern
+cannot work for the task, stop before editing, quote the governing instruction,
+and ask for approval to deviate.
 
-All skills may use sub-agents when the active runtime provides them. Use
-sub-agents for delegation, parallel review, forward-testing, independent
-validation, read-only exploration, or disjoint implementation work whenever they
-can materially improve coverage or throughput.
+Use sub-agents when the selected skill requires delegation, parallel review, or
+forward-testing, and when the active runtime provides them.
 
-When a selected skill requires delegation, parallel review, or forward-testing,
-agents must use sub-agents. Do not treat required sub-agent use as optional
-based on scope size, convenience, or local confidence, and do not claim extra
-delegation wording is needed when the selected skill says the user's invocation
-already grants permission.
-
-Agents must report an explicit confidence percentage before treating a result,
-finding, validation conclusion, or task as accepted or complete. They must
-use 90% as the default minimum threshold. They must use 95% for high-risk
-acceptance, including security findings, destructive actions, public interface
-or compatibility conclusions, release or PR readiness, CI/deployment root-cause
-conclusions, broad no-findings claims, and claims that a problem is definitely
-fixed. Confidence must be backed by concrete evidence such as source
-inspection, tests, logs, scanner output, official documentation, runtime
-behavior, or repository history. Below the required threshold, they must gather
-more evidence or state the blocker instead of accepting completion.
+Agents must report confidence before accepting findings, validation conclusions,
+or completion. They must use 90% as the default minimum threshold. They must
+use 95% for high-risk acceptance such as security findings, destructive actions,
+public-interface or compatibility conclusions, release or PR readiness, broad
+no-findings claims, and claims that a problem is definitely fixed. Confidence must be backed by concrete evidence; use
+`skills/references/finding-severity.md` for calibration.
 
 ## Command Environment Prerequisite
 
 Before any skill runs, retries, replaces, or recommends a command, establish the
-repository command surface and execution environment. Treat the repository
-Makefile, documented entrypoints, and CI configuration as the source of truth;
-on developer machines, especially macOS, assume required tools may come from
-Homebrew or another user-shell setup rather than the OS defaults.
+repository command surface and execution environment. Prefer repository Make
+targets, documented entrypoints, and CI analogues.
 
-Run repository commands through the user's initialized shell when tool
-resolution matters, for example `zsh -lic 'make lint'`, and compare `make`,
-`ruby`, or other required tool paths against the initialized shell before
-calling a tool failure real. Do not invent direct commands, bypass Make targets,
-install alternate tools, or keep retrying variants merely to get something to
-run in the agent environment. Report shell, `PATH`, Homebrew, missing-tool, and
-version mismatches as environment or validation gaps while preserving the
-repository-defined command as the intended path.
+On developer machines, especially macOS, required tools may come from Homebrew
+or the user's initialized shell. Compare important tool resolution such as
+`make` or `ruby` against that environment before treating a failure as real. Do
+not report shell resolution as a repository failure until that check is done. Do
+not bypass Make targets. Do not invent direct commands, install alternate tools,
+or retry variants merely to get something to run in the agent environment.
 
-## Common Composition
+## Composition
 
-- `review-pr` orchestrates PR preparation with `project-workflow`,
-  `change-validation`, relevant language standards, `doc-standards`,
-  `code-review`, summary drafting, optional explicit `style-review`, and the
-  review target.
-- `code-issues` orchestrates a two-phase code-issue workflow: first aggregate confirmed
-  `project-workflow`, `code-review`, and `security-audit` findings into
-  `ISSUES.md`, then implement agreed fixes one code issue at a time.
-- `test-gaps` orchestrates a two-phase test-gap workflow: first aggregate
-  `project-workflow` context and confirmed missing or weak test coverage into
-  `TESTS.md`, then implement agreed test fixes one gap at a time.
-- `doc-gaps` orchestrates a one-pass doc-gap workflow: aggregate
-  `project-workflow` context and confirmed `$doc-standards` findings for
-  README, docs, examples, comments, and docstring gaps, implement confirmed
-  documentation fixes, validate them, and use `DOCS.md` only for audit-only
-  requests or unresolved gaps.
-- `feature-gaps` orchestrates a two-phase feature-opportunity workflow: first
-  aggregate `project-workflow` context, current repository behavior, and
-  comparable product evidence into `FEATURES.md`, then implement agreed main
-  product feature changes one feature at a time. Route standalone test, CI,
-  build, Makefile, release, validation, command discovery, and repository
-  workflow concerns to `test-gaps` or `project-gaps`.
-- `project-gaps` orchestrates a two-phase project workflow: first
-  aggregate `project-workflow` context and confirmed build, CI, Makefile,
-  release, setup, validation, command discovery, and repository workflow
-  opportunities into `PROJECTS.md`, then implement agreed project workflow
-  changes one gap at a time.
-- `reliability-gaps` orchestrates a two-phase reliability-gap workflow: first
-  aggregate `project-workflow` context and verified SRE, NALSD, operability,
-  overload, observability, release-safety, recovery, or data-integrity gaps into
-  `RELIABILITY.md`, then implement agreed reliability fixes one gap at a time.
-- `repo-health` orchestrates daily or weekly repository health
-  reporting across delivery flow, CI quality, release/deploy activity, and
-  service reliability. It should use `project-workflow` for repository
-  discovery and source boundaries, and keep missing GitHub, CircleCI,
-  Kubernetes/DigitalOcean, or UptimeRobot data explicit.
-- `diagnose-issue` orchestrates read-only CI and deployment failure diagnosis
-  for a selected latest pipeline, explicit pipeline ID, latest deployment
-  version, or explicit version. It should use `project-workflow` for repository
-  context and the bundled Ruby collector before suggesting fixes.
-- `code-review` performs the review pass and conditionally consults
-  `security-audit` for security-sensitive scope.
-- `style-review` performs an optional non-blocking polish pass when explicitly
-  requested, after or separate from `code-review`; it must not replace bug,
-  security, compatibility, test-gap, or doc-gap review.
-- `security-audit` pairs with `change-safety` for code changes and
-  `change-validation` for scanner, lint, or CI command selection.
-- `testing-standards` covers language-agnostic test design and coverage
-  decisions; pair it with language standards for idioms and
-  `change-validation` for command selection. It also owns test-harness and
-  test-support-code quality when that quality affects test correctness,
-  maintainability, determinism, configurability, or layering.
-- `doc-standards` covers README, docs, examples, command/config docs, public
-  API comments, docstrings, and stale-doc review; pair it with language
-  standards for API comments and docstrings, `naming-standards` for terminology,
-  `change-safety` for documented contract changes, and `change-validation` for
-  docs-related validation.
-- `reliability-standards` covers SRE, NALSD, production-readiness, SLO,
-  overload, observability, release-safety, recovery, and operability judgment;
-  pair it with `change-safety`, `security-audit`, `testing-standards`, and
-  `change-validation` as the scope requires.
-- `naming-standards` covers cross-language naming judgment for domain clarity,
-  vocabulary consistency, abstraction level, ambiguity, public terminology, and
-  rename safety; pair it with language standards for language-specific idioms.
-- `project-workflow` covers command discovery, CI expectations, downstream
+- `review-pr`: orchestrates PR preparation with workflow discovery,
+  validation, relevant standards, review, and summary drafting.
+- `code-issues`: records confirmed code defects in `ISSUES.md`; fixes one
+  agreed issue at a time.
+- `test-gaps`: records confirmed missing or weak coverage in `TESTS.md`; fixes
+  one agreed gap at a time.
+- `doc-gaps`: performs a documentation gap pass and fixes confirmed doc gaps;
+  uses `DOCS.md` only for audit-only or unresolved gaps.
+- `feature-gaps`: records product-facing opportunities in `FEATURES.md`; route
+  standalone test or project workflow concerns elsewhere.
+- `project-gaps`: records build, CI, Makefile, release, setup, validation,
+  command discovery, and workflow gaps in `PROJECTS.md`.
+- `reliability-gaps`: records SRE, operability, overload, observability,
+  release-safety, recovery, or data-integrity gaps in `RELIABILITY.md`.
+- `repo-health`: summarizes delivery, CI, release/deploy, and reliability
+  health from supported sources.
+- `diagnose-issue`: performs read-only diagnosis of selected CI, deployment,
+  rollout, runtime, monitor, or latest-version failures.
+- `code-review`: reviews for bugs, regressions, compatibility, missing
+  coverage, and documentation risk.
+- `style-review`: optional non-blocking polish only when explicitly requested.
+- `security-audit`: reviews security-sensitive code, tooling, dependencies, and
+  configuration.
+- `testing-standards`: owns test design, harness choice, coverage, fixtures,
+  determinism, and test-layer judgment.
+- `doc-standards`: owns README, docs, examples, command/config docs, comments,
+  docstrings, and stale-doc judgment.
+- `reliability-standards`: owns production readiness, SLO, overload,
+  observability, release-safety, recovery, and operability judgment.
+- `naming-standards`: owns domain clarity, vocabulary consistency, abstraction
+  level, ambiguity, public terminology, and rename safety.
+- `project-workflow`: owns command discovery, CI expectations, downstream
   `./bin` wiring, and shared Makefile fragment behavior.
-- `project-gaps` covers missing or weak project workflow capabilities for
-  build, CI, Makefile, release, setup, validation, command discovery, and
-  repository workflow surfaces.
-- `change-validation` should use `project-workflow` context before selecting
-  validation commands for orchestrated workflows.
-- Language standards pair with `change-validation` for check selection and
-  `change-safety` when public APIs, commands, or documented behavior change.
-  They pair with `naming-standards` when a change creates, reviews, or renames
-  identifiers, commands, flags, files, tests, fixtures, or documentation terms.
+- `change-validation`: owns repository-defined check selection and validation
+  reporting.
+- `change-safety`: owns compatibility, documented interfaces, migrations,
+  generated files, dependencies, and security-sensitive edits.
+- Language standards pair with validation, safety, naming, docs, and testing
+  skills as the touched surface requires.
 
-## Workflow Plan Templates
+## Workflow State
 
-Stateful workflow skills may include `references/plan.md`. These files are
-canonical plan templates for active runtime execution state, not durable task
-artifacts. Invoke the skill, for example `Find $test-gaps in <folder>`; the
-skill loads its plan template and instantiates it against the current repository
-root. In downstream repositories that vendor this project as `./bin`, the
-consuming repository remains the execution context and `bin/skills/**` remains
-shared guidance.
+Stateful gap and review workflows may include `references/plan.md`; those files
+are templates for runtime execution state, not durable project artifacts. Shared
+workflow mechanics live in `skills/references/gap-workflow.md`.
 
-## Goal Binding
+When the runtime supports goals, stateful workflows may bind one active goal to
+the selected mode and scope. Goals do not bypass skill steps, stop gates,
+permission gates, scoped ledgers, human confirmation requirements, or validation
+freshness rules.
 
-When the runtime supports goals, stateful workflow skills should bind one active
-goal to the selected skill mode and requested scope. The goal states the
-user-visible outcome, current waiting or blocked reason, and completion
-condition. Goals are per-session runtime state, like active plans; do not write
-them into the repository unless the human explicitly asks for a durable goal
-artifact.
+## Output And Validation
 
-Goals do not bypass skill steps, stop gates, permission gates, scoped ledger
-files, human confirmation requirements, or validation freshness rules. The
-selected skill still owns the workflow plan; the goal only makes the intended
-outcome and current state explicit.
-When the runtime has stricter status-transition rules, follow those runtime
-rules and use the skill's goal rules to explain the waiting, blocked, or done
-reason.
+When a skill is the final response, use that skill's required output format.
+When a skill is embedded by another skill, preserve its concrete facts and use
+the caller's output format.
 
-## Format Rule
+Use `testing-standards` before adding, reviewing, refactoring, or planning tests.
+In brief: inspect the dominant relevant harness, test observable
+repository-owned behavior through public or documented surfaces, keep tests
+readable and deterministic, and avoid coverage theater.
 
-When a skill is used as the final answer, use that skill's required output
-format. When a skill is embedded by another skill, preserve its concrete facts
-and use the caller's output format.
+Before running commands that require SSH credentials, GitHub auth, registry
+auth, cloning, fetching large dependencies, pushing, publishing, opening PRs, or
+updating remote state, make the requirement explicit and get permission. Treat
+network, credential, shell, `PATH`, and missing-tool failures as environment or
+validation gaps unless repository evidence proves otherwise.
 
-Findings must include confidence when the selected skill's format has findings
-or ledger entries. Use `skills/references/finding-severity.md`: record the
-agent's actual confidence percentage, record only findings that meet the
-applicable confidence threshold, gather more evidence for uncertain candidates,
-and discard candidates that cannot reach that threshold.
+## Maintenance
 
-## Testing Principle
-
-Use `testing-standards` when adding, reviewing, refactoring, or planning tests.
-In brief: inspect the repository's existing tests, fixtures, helpers,
-entrypoints, CI targets, and majority relevant test harness before adding new
-structure.
-Do not infer the test language from the implementation language; recommend or
-update the majority relevant existing harness, even when it tests code written
-in another language. Add language-native tests only when that is the majority
-relevant pattern, the changed surface is a language-level package/API contract,
-or the user explicitly asks for that level of coverage.
-If the dominant relevant harness is Cucumber, Gherkin, RSpec-style features,
-acceptance tests, or another cross-language repository-defined layer, agents
-must not add language-native tests for convenience or private access. They must
-stop and ask before using a different layer.
-Prefer the narrowest established test layer that credibly covers changed
-behavior through a public or documented surface; private-surface tests need
-explicit human approval. Treat tests as executable specifications for observable
-repository behavior, and for behavior-changing code prefer a small test-first
-loop: add or update the focused test first in TDD-style projects, or the focused
-scenario, feature, or spec first in BDD-style projects. Run it red when
-practical, make the smallest implementation change to go green, then refactor
-while keeping tests green. Report that trace in the final update so the workflow
-is auditable. Preserve meaningful coverage where practical, verify coverage
-claims when useful, scan for mutation-style gaps, and avoid coverage theater.
-Keep tests readable, edge-aware, deterministic, and descriptive when they fail.
-
-## Network And Remote Commands
-
-- Networked commands are acceptable when needed for setup, validation,
-  dependency resolution, scanning, or workflow execution.
-- Before running commands that require SSH credentials, GitHub auth, registry
-  auth, cloning, fetching large dependencies, pushing, publishing, opening PRs,
-  or updating remote state, make the network/auth requirement explicit and get
-  user permission.
-- Treat remote-write commands such as push, publish, release, Docker manifest
-  push, Buf push, and PR update/open flows as permission-gated even when a local
-  Make target wraps them.
-- If a needed command fails because network or credentials are unavailable,
-  report it as an environment or validation gap rather than a code failure.
-
-## Documentation And Examples
-
-- When a public command, API, Make target, environment variable, file format,
-  output shape, or operator-facing behavior changes, update the repository's
-  existing docs and examples in the same change.
-- Prefer updating existing README snippets, inline docs, examples, feature
-  files, or operator docs over creating new documentation locations.
-- If docs or examples are not updated for a user-facing change, state why they
-  are not needed.
-
-## Skill Metadata
-
+- Update existing docs and examples when public commands, APIs, Make targets,
+  environment variables, file formats, output shapes, or operator-facing
+  behavior change.
 - When a skill's trigger, scope, workflow, or user-facing behavior changes,
-  check the matching `agents/openai.yaml` and update its display name, short
-  description, or default prompt if they became stale.
-- Keep `agents/openai.yaml` concise; it should describe when to use the skill,
-  not repeat the full `SKILL.md` workflow.
-
-## Skill Lifecycle
-
-- Treat skills as maintained artifacts: review them when project workflow,
+  check `agents/openai.yaml` and keep it concise.
+- Treat skills as maintained artifacts and review them when project workflow,
   tooling, model behavior, or team conventions change.
-- Skills generated or drafted by a model need human review before adoption.
-- Periodically compare representative tasks with and without a skill; retire a
-  skill when it no longer improves outcomes or consistently overrides better
-  native behavior.
-
-## Skill Security
-
-- Treat external skills like third-party dependencies and review the full folder
-  before use.
-- Check descriptions for prompt injection or overbroad routing, and check bundled
-  scripts/assets for data exfiltration, broad filesystem access, remote code
-  execution, and unnecessary permissions.
-- Use `security-audit` with `references/skills.md` for skill-specific security
-  review.
+- Treat external skills like third-party dependencies. Use `security-audit` with
+  `references/skills.md` for skill-specific security review.
