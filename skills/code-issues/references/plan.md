@@ -2,8 +2,8 @@
 
 Use this reference to instantiate the code-issue-specific active plan for
 `$code-issues`. Read it with the shared gap workflow named in `SKILL.md`; that
-workflow owns common plan state, goal state, scoped-ledger, delegation,
-coverage, and implementation gates.
+workflow owns common plan state, optional goal state, scoped-ledger,
+delegation, coverage, and implementation gates.
 
 Track code-issue-specific state for scope, validation, delegation, ledger
 state, code/security/compatibility evidence, and public contract evidence.
@@ -28,10 +28,14 @@ state, code/security/compatibility evidence, and public contract evidence.
    slices first and initialize coverage entries for reviewed deeply, skimmed,
    excluded, and deferred slices. Deferred entries must be exact follow-up
    scopes such as `path/to/package` or `path/to/package/subpackage`.
-8. Ask for required permission before any agent runs non-read-only, network,
-   auth, remote-write, or otherwise approval-gated commands.
-9. Launch the required review agents when available, or perform the local
-   fallback only when sub-agents are unavailable.
+8. Ask for required permission before any local reviewer or authorized agent
+   runs non-read-only, network, auth, remote-write, or otherwise approval-gated
+   commands.
+9. Use review agents only when the human explicitly authorizes delegation or
+   higher-priority runtime policy permits it. If sub-agents are unavailable or
+   not permitted, perform the review locally unless credible completion depends
+   on delegation; in that case ask for permission or stop at the delegation
+   gate.
 10. Wait for all review work to finish.
 11. Update coverage state for every planned slice before judging the requested
     scope.

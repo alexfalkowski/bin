@@ -8,9 +8,10 @@ description: Use when, and only when, the user explicitly asks to prepare, open,
 Before executing this workflow, read `references/plan.md` and use it to maintain
 the active execution plan. The active plan is runtime state; do not write it
 into the repository unless the human explicitly asks for a durable plan file.
-When the runtime supports goals, bind this workflow to one active goal for the
-review PR outcome and update that goal as permission, validation, review, PR
-drafting, or remote-write state changes.
+Use runtime goals only when the human explicitly requests them or
+higher-priority runtime instructions allow goal creation for this workflow.
+Otherwise maintain permission, validation, review, PR drafting, and remote-write
+state in the active plan without creating a runtime goal.
 
 ## Steps
 

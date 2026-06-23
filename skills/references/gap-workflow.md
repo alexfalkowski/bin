@@ -11,9 +11,10 @@ These shared rules own workflow mechanics.
   skill's `references/plan.md` and maintain it as active runtime state. Do not
   write the plan into the repository unless the human explicitly asks for a
   durable plan file.
-- When the runtime supports goals, bind the selected mode and requested scope to
-  one active goal and update it as ledger, proposal, approval, validation,
-  summary, unresolved-ledger, or human-confirmation state changes.
+- Use runtime goals only when the human explicitly requests them or
+  higher-priority runtime instructions allow goal creation for this workflow.
+  Otherwise maintain the selected mode, requested scope, and state transitions
+  in the conversation or tool plan without creating a runtime goal.
 - Do not combine find and implement modes in one pass unless the selected skill
   explicitly defines a one-pass mode.
 - Preserve stop gates as plan boundaries. Do not continue past a stop gate based
@@ -22,9 +23,11 @@ These shared rules own workflow mechanics.
 
 ## Scoped Ledgers
 
-- Before checking, reading, creating, or updating a scoped ledger, ensure the
-  consuming repository root `.gitignore` exists and contains that ledger
-  filename as a standalone pattern. If the pattern is missing, add it.
+- Before creating or updating a scoped ledger, ensure the consuming repository
+  root `.gitignore` exists and contains that ledger filename as a standalone
+  pattern. If the pattern is missing, add it.
+- Checking whether a scoped ledger exists or reading an existing scoped ledger
+  must not modify `.gitignore`.
 - Use the selected skill's ledger filename in the requested package or folder,
   such as `PACKAGE_OR_FOLDER/ISSUES.md`, `TESTS.md`, `DOCS.md`,
   `FEATURES.md`, `PROJECTS.md`, or `RELIABILITY.md`.
@@ -40,18 +43,21 @@ These shared rules own workflow mechanics.
 
 ## Delegation And Permissions
 
-- Treat a find or audit invocation as the user's explicit request to delegate
-  review for that scope when the selected skill says so. Do not require the
-  user to separately say "use sub-agents", "spawn agents", or "delegate".
-- Use sub-agents for find or audit review whenever the active runtime provides
-  them and runtime policy/tooling permits delegation. Do not perform the review
-  locally first when delegation is available and required by the selected skill.
-- If delegation is denied, stop instead of falling back to a local review. If
-  sub-agents are unavailable, say so briefly and perform the review locally for
-  the requested scope.
-- Ask for human permission before agents run commands that require approval,
-  such as network, SSH, GitHub auth, registry auth, cloning, destructive
-  operations, remote writes, or non-read-only validation.
+- Use sub-agents only when the human explicitly authorizes delegation,
+  sub-agents, or parallel agent work, or when the active runtime or
+  higher-priority policy permits implicit delegation for this workflow.
+- If sub-agents are unavailable or not permitted, perform the review locally
+  unless the selected skill explicitly requires delegation and the requested
+  review cannot proceed safely without it.
+- If delegation would materially improve coverage but is not currently
+  authorized or permitted, ask the human for permission instead of assuming it.
+- If required delegation is denied or cannot be used, stop and state the
+  blocked delegation requirement instead of presenting a lower-confidence local
+  review as complete.
+- Ask for human permission before a local reviewer or authorized agent runs
+  commands that require approval, such as network, SSH, GitHub auth, registry
+  auth, cloning, destructive operations, remote writes, or non-read-only
+  validation.
 
 ## Scope Inventory And Slicing
 
@@ -66,11 +72,11 @@ These shared rules own workflow mechanics.
   guidance needed as evidence. Route upstream-only shared-tooling findings to a
   separate `bin`-scoped run instead of writing them into the consuming
   repository's scoped ledger.
-- Before assigning review agents, build a recursive scope inventory for the
-  requested package or folder. Include relevant file count, first-level
-  subfolders, nested packages, dominant languages, public entrypoints,
-  generated/vendor/build/cache exclusions, docs, examples, tests, validation
-  entrypoints, and the selected skill's domain-specific surfaces.
+- Before assigning review agents or starting local review, build a recursive
+  scope inventory for the requested package or folder. Include relevant file
+  count, first-level subfolders, nested packages, dominant languages, public
+  entrypoints, generated/vendor/build/cache exclusions, docs, examples, tests,
+  validation entrypoints, and the selected skill's domain-specific surfaces.
 - When the requested scope has repository-defined package, module, component,
   command, service, or area discovery, record coverage accounting from that
   discovery path: count or inventory summary; excluded paths such as `bin/**`,
@@ -122,8 +128,8 @@ These shared rules own workflow mechanics.
 
 ## Candidate Handling
 
-- Require each assigned agent to return candidates in the selected skill's
-  ledger format, without final IDs unless useful locally.
+- For delegated review, require each assigned agent to return candidates in the
+  selected skill's ledger format, without final IDs unless useful locally.
 - Use `../references/finding-severity.md` to discard low-confidence candidates
   before assigning severity or confidence when the selected skill records
   findings.

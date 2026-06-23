@@ -117,20 +117,22 @@ These feature-gap rules remain mandatory:
 
 - Use `FEATURES.md` in the requested package or folder as the proposal ledger,
   for example `PACKAGE_OR_FOLDER/FEATURES.md`.
-- Before assigning review agents, build a recursive scope inventory for the
-  requested package or folder: relevant file count, first-level subfolders,
-  nested packages, dominant languages, tests, public entrypoints, generated,
-  vendor, build, and cache exclusions, user-facing product surfaces,
-  package-consumer or service-author surfaces, operator-facing surfaces, docs,
-  examples, command help, and likely product extension points.
+- Before assigning review agents or starting local review, build a recursive
+  scope inventory for the requested package or folder: relevant file count,
+  first-level subfolders, nested packages, dominant languages, tests, public
+  entrypoints, generated, vendor, build, and cache exclusions, user-facing
+  product surfaces, package-consumer or service-author surfaces,
+  operator-facing surfaces, docs, examples, command help, and likely product
+  extension points.
 - Prefer slices based on repository-owned feature surface and user value:
   public commands/APIs, library or service behavior, package-consumer and
   service-author workflows, documented product examples, product onboarding
   paths, integrations, extension points, changed or recently touched product
   areas, and nearby tests. Use depth only as a discovery aid, not as the review
   boundary.
-- Each assigned agent owns recursive review only within its bounded slice. Each
-  agent must perform feature-gap discovery for that slice, pairing with
+- For delegated review, each assigned agent owns recursive review only within
+  its bounded slice. Each agent must perform feature-gap discovery for that
+  slice, pairing with
   `$project-workflow`, `$doc-standards`, `$naming-standards`, relevant language
   standards, `$change-safety`, `$testing-standards`, and `$change-validation`
   as the proposed feature surface requires. Agents must use `$testing-standards`
