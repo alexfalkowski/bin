@@ -112,8 +112,13 @@ These shared rules own workflow mechanics.
 
 ## Find And Audit Outcomes
 
-- If no confirmed gaps or proposals remain, report that result with coverage
-  state and do not create a scoped ledger.
+- If no confirmed gaps or proposals remain, report that result with a no-finding
+  closeout and do not create a scoped ledger. The closeout must include:
+  reviewed files or slices; supported usage, call sites, commands, tests, or CI
+  evidence checked; excluded or deferred files; repository policy exclusions or
+  suppressions applied; confidence as a percentage or narrow range; and the
+  remaining limits on that confidence. Do not present "nothing found" as a
+  broad assurance without this evidence.
 - If confirmed gaps or proposals remain, write them to the scoped ledger before
   making changes unless the selected skill explicitly defines a one-pass fix
   mode.

@@ -38,13 +38,19 @@ state, code/security/compatibility evidence, and public contract evidence.
     documentation/comment mismatch, prove the implementation is wrong with
     non-prose evidence before treating it as a code issue; otherwise classify it
     as a documentation gap.
-13. If no confirmed issues remain, report that result with the coverage state,
-    do not create `ISSUES.md`, and stop.
-14. If confirmed issues remain, write the scoped `ISSUES.md` with
+13. Before concluding there are no issues, run a final code-issue closeout
+    check. Name the public APIs, constructors, exported helpers, supported DI or
+    documented usage paths, real call sites, nil/error/edge behavior, tests or
+    CI evidence, and repository policy exclusions that were checked. If any of
+    these were not applicable, say why.
+14. If no confirmed issues remain, report that result with the no-finding
+    closeout required by the shared gap workflow, do not create `ISSUES.md`, and
+    stop.
+15. If confirmed issues remain, write the scoped `ISSUES.md` with
     `ISSUE-<number>` IDs.
-15. Present the scoped ledger, proposed fix plan, coverage state for broad
+16. Present the scoped ledger, proposed fix plan, coverage state for broad
     scopes, and runnable follow-up scopes for deferred slices.
-16. Stop before making fixes.
+17. Stop before making fixes.
 
 ## Implement Mode Plan
 
