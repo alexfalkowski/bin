@@ -70,6 +70,54 @@ regression. If current code and tests support the implementation, classify the
 candidate as a documentation gap or discard it instead of assigning severity to
 a code, test, reliability, or security finding.
 
+## Confidence Evidence Rubric
+
+Use confidence as a compact statement of completed evidence, not optimism. The
+same percentage can mean different work in a small package and a broad repo
+audit, so state the evidence behind it. For broad no-findings claims, release or
+PR readiness, compatibility conclusions, and definitely-fixed claims, require
+95% confidence or state the remaining blocker.
+
+- **Static/manual pass**: supports a scoped candidate or no-findings claim only
+  for the files, packages, modules, components, commands, services, or areas
+  actually inspected. It is not enough for a broad repo claim unless paired with
+  inventory accounting and supported usage evidence.
+- **Inventory/count reviewed**: raises confidence that the scope is complete
+  when the count or inventory comes from the repository-defined discovery path,
+  and exclusions like vendored dependencies, generated files, caches, ignored
+  submodules, build output, or skipped slices are named.
+- **Static analyzers**: increase confidence for the classes they analyze only
+  when they ran against the intended files, packages, modules, components, or
+  commands and did not no-op because of sandbox, cache, stale tool context, or
+  discovery failures.
+- **Unit or package tests**: increase confidence for behavior covered by the
+  repository's language-native test layer. Listener, cache, service, or sandbox
+  failures must be classified before treating them as repository evidence.
+- **Repository spec or feature target, such as `make specs`**: increases
+  confidence for supported end-to-end, integration, or service behavior when
+  that target is the dominant relevant harness.
+- **Lint target, such as `make lint` or the repository's exposed lint split**:
+  increases confidence for style, static policy, generated metadata, and
+  language/tooling checks that the target actually ran. Optional-tool no-ops do
+  not provide full coverage.
+- **Security target, such as `make sec`**: increases confidence for dependency,
+  vulnerability, container, or security-policy coverage that the target owns.
+  Network, cache, credential, or scanner failures must be reported as
+  validation gaps unless repository-owned code caused them.
+- **Generated freshness target**: increases confidence only for
+  generated-contract drift covered by the repository's documented stale or
+  generated check, such as `make proto-stale` when exposed.
+- **Remaining missing tools or environment blockers**: cap confidence to the
+  evidence still available. Record the blocker as missing tool, local
+  environment issue, or inconclusive validation instead of treating it as a
+  repository finding.
+
+For no-findings results, distinguish `No confirmed findings`, `No findings, but
+validation incomplete because X`, and `No findings and validation clean`.
+Report residual risk in concrete terms: unrun targets, no-op wrappers, skipped
+slices, unsupported paths, missing sidecars, unavailable scanners, or evidence
+that was limited to static review.
+
 ## Severity
 
 - `Critical`: Near-certain severe production breakage, data loss or corruption,

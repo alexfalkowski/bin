@@ -71,6 +71,13 @@ These shared rules own workflow mechanics.
   subfolders, nested packages, dominant languages, public entrypoints,
   generated/vendor/build/cache exclusions, docs, examples, tests, validation
   entrypoints, and the selected skill's domain-specific surfaces.
+- When the requested scope has repository-defined package, module, component,
+  command, service, or area discovery, record coverage accounting from that
+  discovery path: count or inventory summary; excluded paths such as `bin/**`,
+  vendored dependencies, generated folders, caches, build output, and
+  explicitly out-of-scope subtrees; major reviewed groups named in the
+  repository's own terminology; and any slices intentionally skipped with the
+  concrete reason.
 - Do not assign broad recursive subtrees merely because they are first-level
   subfolders. When a subtree contains many independent owners, workflows,
   responsibilities, packages, products, or audiences, split it into smaller
@@ -82,6 +89,36 @@ These shared rules own workflow mechanics.
 - Do not present a broad requested scope as fully reviewed when any relevant
   slice was only skimmed or deferred. Name those slices in the final coverage
   notes and provide runnable follow-up scopes for deferred review.
+
+## Audit Preflight And Validation Ladder
+
+- Before a long find or audit pass, run a tool and environment preflight through
+  `$project-workflow` and `$change-validation`: repository root, documented
+  entrypoints, CI analogue, initialized user shell, and applicable tool
+  availability or version checks. For toolchain-heavy audits, check required
+  language runtimes, analyzers, linters, schema or generation tools, security
+  scanners, sidecars, and service dependencies only when the repository's Make
+  targets, CI, scripts, or tests actually require them.
+- Preflight is evidence planning, not a reason to bypass repository Make
+  targets. Prefer the repository-defined target that owns each tool or service.
+- Run checks normally first. If a failure is clearly sandbox, cache-permission,
+  localhost listener, network, credential, service-dependency, or user-shell
+  environment related, retry only through the runtime's approved escalation or
+  initialized-shell path.
+- Classify every failed or skipped validation command as exactly one of:
+  repository finding, local environment issue, missing tool, or inconclusive.
+  Do not treat a target failure in the sandbox as a repository finding unless
+  repository-owned code, config, or workflow evidence proves it.
+- Do not lower confidence for a sandbox-only failure when the same command
+  passes through an approved outside-sandbox or initialized-shell path on the
+  same file state. Do lower or cap confidence when validation remains blocked,
+  missing, no-op, or inconclusive.
+- Preserve analyzer nuance in audit notes when relevant: analyzers may no-op or
+  report no matched packages, modules, files, or components in a restricted
+  sandbox or stale tool context; integration tests may need localhost listener
+  permissions or service dependencies; dependency, security, or generation
+  tools may need network access or cache writes outside the workspace; and a
+  target failing in the sandbox is not automatically a repository finding.
 
 ## Candidate Handling
 
@@ -121,15 +158,21 @@ These shared rules own workflow mechanics.
 ## Find And Audit Outcomes
 
 - If no confirmed gaps or proposals remain, report that result with a no-finding
-  closeout and do not create a scoped ledger. The closeout must include:
-  reviewed files or slices; supported usage, call sites, commands, tests, or CI
-  evidence checked; excluded or deferred files; repository policy exclusions or
-  suppressions applied; confidence as a percentage or narrow range; and the
-  remaining limits on that confidence. Do not present "nothing found" as a
-  broad assurance without this evidence.
+  closeout and do not create a scoped ledger. Use one of these outcomes:
+  `No confirmed findings`; `No findings, but validation incomplete because X`;
+  or `No findings and validation clean`. The closeout must include reviewed
+  files or slices; package count or inventory summary when applicable;
+  supported usage, call sites, commands, tests, or CI evidence checked;
+  validation commands and their classified results; excluded or deferred files;
+  repository policy exclusions or suppressions applied; confidence as a
+  percentage or narrow range; and the remaining limits on that confidence. Do
+  not present "nothing found" as a broad assurance without this evidence.
 - If confirmed gaps or proposals remain, write them to the scoped ledger before
   making changes unless the selected skill explicitly defines a one-pass fix
-  mode.
+  mode. Record only high-confidence, actionable findings with file/line,
+  command, config, runtime, or supported-usage evidence. Do not record
+  speculative exclusions, unsupported paths, or examples already ruled out by
+  `AGENTS.md` or the selected skill.
 - Stop after presenting the ledger and plan in find/audit modes when the
   selected skill requires a separate implementation pass.
 

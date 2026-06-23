@@ -15,36 +15,40 @@ evidence.
 2. Check whether scoped `RELIABILITY.md` already exists and stop if it does.
 3. Run `$project-workflow` discovery for entrypoints, CI, documented commands,
    operational docs, release/config surfaces, and `./bin` wiring.
-4. Identify the reliability surface in scope, including services, APIs, CLIs,
+4. Run the shared audit preflight from `../../references/gap-workflow.md`,
+   including applicable tool availability, service dependencies, validation
+   ladder, and command-failure classification.
+5. Identify the reliability surface in scope, including services, APIs, CLIs,
    jobs, scripts, deployment/config, observability, release, recovery, and
    operability evidence.
-5. Build a recursive scope inventory for the requested package or folder:
+6. Build a recursive scope inventory for the requested package or folder:
    relevant file count, first-level subfolders, nested packages, dominant
    languages, tests, public entrypoints, generated/vendor/build/cache
-   exclusions, and reliability-sensitive surfaces.
-6. Split the inventory into bounded reliability-risk or behavior-owned review
+   exclusions, reliability-sensitive surfaces, inventory count when applicable,
+   and the coverage accounting required by the shared workflow.
+7. Split the inventory into bounded reliability-risk or behavior-owned review
    slices. Use depth only as a discovery aid; do not assign a broad recursive
    subtree merely because it is a first-level subfolder.
-7. If the scope is too broad for a credible single pass, select the highest-risk
+8. If the scope is too broad for a credible single pass, select the highest-risk
    slices first and initialize coverage entries for reviewed deeply, skimmed,
    excluded, and deferred slices. Deferred entries must be exact follow-up
    scopes such as `path/to/package` or `path/to/package/subpackage`.
-8. Ask for required permission before any agent runs non-read-only, network,
+9. Ask for required permission before any agent runs non-read-only, network,
    auth, remote-write, destructive, or otherwise approval-gated commands.
-9. Launch the required review agents when available, or perform the local
+10. Launch the required review agents when available, or perform the local
    fallback only when sub-agents are unavailable.
-10. Wait for all review work to finish.
-11. Update coverage state for every planned slice before judging the requested
+11. Wait for all review work to finish.
+12. Update coverage state for every planned slice before judging the requested
     scope.
-12. Deduplicate candidates and directly re-check conflicting or overlapping
+13. Deduplicate candidates and directly re-check conflicting or overlapping
     conclusions against code, config, tests, docs, and CI.
-13. For candidates based on prose contradicting implementation, prove with
+14. For candidates based on prose contradicting implementation, prove with
     non-prose evidence that the implementation or repository-owned reliability
     control is wrong; otherwise classify the mismatch as a documentation gap.
-14. Confirm each gap names a current reliability promise or operational
+15. Confirm each gap names a current reliability promise or operational
     expectation, trigger, failure mode, missing or weak control, and user or
     operator impact.
-15. Run a final finding calibration pass:
+16. Run a final finding calibration pass:
     - Does the trigger exist in current supported operation?
     - Is the missing control repository-owned rather than normal review, CI, or
       deployment discipline?
@@ -52,23 +56,26 @@ evidence.
     - Would a skeptical maintainer likely agree this is more than optional
       hardening?
     If any answer is no, discard the candidate or move it to optional follow-up.
-16. Reject generic maturity advice, future-scale assumptions, private
+17. Reject generic maturity advice, future-scale assumptions, private
     preferences, and findings that belong in code, security, test, or doc
     ledgers.
-17. Before concluding there are no reliability gaps, run a final reliability
+18. Classify validation outcomes as repository finding, local environment
+    issue, missing tool, or inconclusive; apply the confidence evidence rubric
+    from `../../references/finding-severity.md`.
+19. Before concluding there are no reliability gaps, run a final reliability
     closeout check. Name the cancellation/context handling, deadlines, timeouts,
     retries, backoff, bounded memory/network/file/process behavior, lifecycle
     cleanup, shutdown/drain/health/readiness behavior, observability or operator
     impact, and CI/sidecar/runtime controls that were checked. If any of these
     were not applicable, say why.
-18. If no confirmed gaps remain, report that result with the no-finding closeout
+20. If no confirmed gaps remain, report that result with the no-finding closeout
     required by the shared gap workflow, do not create `RELIABILITY.md`, and
     stop.
-19. If confirmed gaps remain, write the scoped `RELIABILITY.md` with
+21. If confirmed gaps remain, write the scoped `RELIABILITY.md` with
     `REL-<number>` IDs.
-20. Present the scoped ledger, proposed reliability-fix plan, coverage state for
+22. Present the scoped ledger, proposed reliability-fix plan, coverage state for
     broad scopes, and runnable follow-up scopes for deferred slices.
-21. Stop before making fixes.
+23. Stop before making fixes.
 
 ## Implement Mode Plan
 

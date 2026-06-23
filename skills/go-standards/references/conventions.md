@@ -65,6 +65,31 @@ Use this reference when working in Go repositories.
 - Do not write internal Go tests in the production package just to reach unexported functions, methods, fields, or collaborators.
 - Keep test cases and test functions first in the file. Place fakes, stubs, spies, mock implementations, and helper types after the tests at the bottom of the file.
 
+## Audit And Validation
+
+- When a code, reliability, security, test-gap, or review workflow audits Go
+  behavior, pair the selected skill's shared inventory and confidence rules with
+  Go-specific coverage accounting when the repository exposes the relevant
+  commands.
+- Use `go list ./...` or the repository-defined equivalent to record Go package
+  count when the requested scope is broad enough for package inventory to affect
+  confidence. Name excluded paths such as `bin/**`, `vendor/**`, generated
+  folders, caches, build output, and intentionally skipped packages.
+- For broad Go audits, consider major reviewed groups such as config/CLI,
+  DI/module/lifecycle, HTTP/gRPC transport, token/access/limiter, SQL/cache,
+  encoding/compress, telemetry/feature/events, crypto, and
+  health/debug/time/id/helpers when those groups exist in the repository.
+- Preflight Go tool availability only when repository Make targets, CI,
+  scripts, or tests require it. Common tools in this ecosystem include the Go
+  toolchain, `fieldalignment`, `golangci-lint`, `buf`, `govulncheck`, Trivy,
+  sidecars, and service dependencies.
+- Preserve Go tooling nuance in audit notes: `fieldalignment` may report
+  `./... matched no packages` in a restricted sandbox or stale tool context;
+  `go test`, `make specs`, and `httptest` may need localhost listener
+  permissions; and `govulncheck`, Trivy, and Buf may need cache writes under
+  the user home directory. A sandbox failure is not automatically a repository
+  finding.
+
 ## Method Layout
 
 - For types with both exported and unexported methods, keep exported methods near the top of the type's method group and unexported methods below them.
