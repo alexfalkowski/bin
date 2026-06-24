@@ -54,6 +54,15 @@ Agents MUST:
   repository-owned dependency/tooling response; route project-owned upstream
   library bugs to that library's agent or ledger unless local adapter behavior is
   independently wrong.
+- Treat unowned working-tree changes as human changes by default. Do not undo,
+  overwrite, reformat, relocate, or "clean up" changes the agent did not make;
+  if they affect the current task, explain the conflict and ask before editing
+  them.
+- When reviewing, auditing, or incidentally noticing an issue outside the
+  current explicitly approved implementation scope, validate the candidate
+  against repository evidence and present the proposed fix before editing. When
+  more than one credible fix exists, compare the practical options and evidence
+  instead of implementing a self-selected design.
 - Follow existing repository patterns over personal judgment.
 - Treat skill workflow steps using "must", "do not", or "stop" language as
   blocking requirements.
@@ -74,6 +83,11 @@ Agents MUST NOT:
   contract changes.
 - Introduce import aliases, abstractions, helpers, files, or validation paths
   for personal clarity when local patterns already exist.
+- Start edits for review findings, audit findings, incidental discoveries, or
+  adjacent issues before the human approves what will change. When multiple
+  credible approaches exist, present the options and evidence first. This gate
+  is waived only when the current request explicitly says not to use it or
+  grants free-form implementation authority for that scope.
 - Treat `AGENTS.md` or `SKILL.md` instructions as optional.
 - Continue after discovering they violated an instruction; they must correct
   course immediately and remove their own noncompliant change.
