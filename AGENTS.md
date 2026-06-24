@@ -130,6 +130,8 @@ focused skill applies.
   test-layer guidance.
 - `doc-standards`: README, docs, examples, command/config docs, public API
   comments, docstrings, and stale-doc review.
+- `api-standards`: gRPC, Protocol Buffer, REST, HTTP/JSON, generated client,
+  public schema, resource, method, versioning, and API compatibility guidance.
 - `naming-standards`: domain clarity, public terminology, abstraction level,
   consistency, and rename safety.
 - `code-review`: bug, regression, risk, and missing-coverage findings.
@@ -420,6 +422,11 @@ Target-specific rules:
 - `doc-standards`: pair with language standards for API comments and docstrings,
   `naming-standards` for terminology, `change-safety` for documented contract
   changes, and `change-validation` for docs-related validation.
+- `api-standards`: pair with `go-standards` or `ruby-standards` for API
+  implementation code, `naming-standards` for resource/method/field names,
+  `doc-standards` for API docs and comments, `testing-standards` for API
+  coverage, `change-safety` for versioning and compatibility, and
+  `change-validation` for generated-contract and repository checks.
 - `reliability-standards`: pair with `change-safety`, `security-audit`,
   `testing-standards`, and `change-validation` for production-readiness, SLO,
   overload, observability, release-safety, recovery, or operability changes.

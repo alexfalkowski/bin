@@ -77,6 +77,8 @@ or approved escalation path, or report the blocker.
   determinism, and test-layer judgment.
 - `doc-standards`: owns README, docs, examples, command/config docs, comments,
   docstrings, and stale-doc judgment.
+- `api-standards`: owns gRPC, Protocol Buffer, REST, HTTP/JSON, generated
+  client, schema, resource, method, versioning, and API compatibility judgment.
 - `reliability-standards`: owns production readiness, SLO, overload,
   observability, release-safety, recovery, and operability judgment.
 - `naming-standards`: owns domain clarity, vocabulary consistency, abstraction
@@ -87,8 +89,8 @@ or approved escalation path, or report the blocker.
   reporting.
 - `change-safety`: owns compatibility, documented interfaces, migrations,
   generated files, dependencies, and security-sensitive edits.
-- Language standards pair with validation, safety, naming, docs, and testing
-  skills as the touched surface requires.
+- Language standards pair with API, validation, safety, naming, docs, and
+  testing skills as the touched surface requires.
 
 ## Workflow State
 
