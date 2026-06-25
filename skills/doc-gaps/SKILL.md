@@ -40,7 +40,12 @@ These doc-gap rules remain mandatory:
 - Use audit-only mode only when the user explicitly asks not to edit or asks only for an audit or ledger. When a stop gate prevents a correct documentation fix during one-pass mode, record unresolved confirmed findings instead of switching modes.
 - Use `DOCS.md` in the requested package or folder as the scoped ledger.
 - If scoped `DOCS.md` already exists, read it before reviewing. If it is a doc-gap ledger, include unresolved findings in the candidate set and update or delete the ledger after fixing them. If it is unrelated or ambiguous active work, stop and ask before editing it.
-- Use independent review agents when this skill authorizes delegated review and the active runtime provides and permits sub-agents. Do not require separate "use sub-agents" wording unless higher-priority runtime policy requires explicit delegation authorization; if that policy requires explicit authorization and the current request does not provide it, ask the human for permission when delegation would materially improve coverage.
+- Use independent review agents when this skill authorizes delegated review and
+  the active runtime provides and permits sub-agents. If a higher-priority
+  runtime rule requires explicit user delegation authorization and the current
+  request does not provide it, ask the human for permission when delegation
+  would materially improve coverage; do not silently switch to local-only
+  review.
 - Before assigning review agents or starting local review, build a recursive documentation inventory for the requested package or folder: README files, docs, examples, command help surfaces, package docs, public API comments, code-comment/docstring surfaces, first-level subfolders, nested packages, generated/vendor/build/cache exclusions, and relevant validation entrypoints.
 - Prefer slices based on authoritative documentation owner and user risk: README or user docs, command help, examples, public API/package docs, documented workflows, changed or recently touched areas, and code areas with public interfaces. Use depth only as a discovery aid, not as the review boundary.
 - For delegated review, each assigned agent owns recursive review only within its bounded slice. Each agent must perform a thorough documentation review for that slice, pairing with `$doc-standards`, relevant language standards, `$naming-standards` when terminology is unclear or inconsistent, and `$change-validation` for likely validation commands.
