@@ -37,10 +37,11 @@ evidence.
    runs non-read-only, network, auth, remote-write, destructive, or otherwise
    approval-gated commands.
 10. Use review agents when this skill authorizes delegated review and the active
-    runtime provides and permits sub-agents. Do not require separate delegation
-    wording unless higher-priority runtime policy requires it. If sub-agents are
-    unavailable or forbidden, perform the review locally unless credible
-    completion depends on delegation; in that case ask for permission or stop at
+    runtime provides and permits sub-agents. If a higher-priority runtime rule
+    requires explicit user delegation authorization and the current request does
+    not provide it, ask for permission instead of downgrading silently. If
+    sub-agents are unavailable, forbidden, or denied, perform local review only
+    when credible completion does not depend on delegation; otherwise stop at
     the delegation gate.
 11. Wait for all review work to finish.
 12. Update coverage state for every planned slice before judging the requested

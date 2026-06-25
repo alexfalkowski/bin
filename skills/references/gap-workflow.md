@@ -43,21 +43,23 @@ These shared rules own workflow mechanics.
 
 ## Delegation And Permissions
 
-- When the active runtime provides and permits sub-agents, treat a user
-  invocation of a selected skill that defines delegated review, parallel review,
-  or forward-testing as authorization to use sub-agents for that workflow. Do
-  not require the user to separately say "use sub-agents" unless
-  higher-priority runtime policy requires explicit delegation wording.
-- If higher-priority runtime policy requires explicit delegation authorization
-  and the current request does not provide it, ask the human for permission when
-  delegation would materially improve coverage or is required by the selected
-  skill.
-- If sub-agents are unavailable or forbidden by higher-priority policy, perform
-  the review locally unless the selected skill explicitly requires delegation
-  and the requested review cannot proceed safely without it.
-- If required delegation is denied or cannot be used, stop and state the
-  blocked delegation requirement instead of presenting a lower-confidence local
-  review as complete.
+- When the active runtime provides sub-agents and permits skill-level
+  authorization, treat a user invocation of a selected skill that defines
+  delegated review, parallel review, or forward-testing as authorization to use
+  sub-agents for that workflow.
+- If a higher-priority runtime rule requires explicit user delegation
+  authorization and the current request does not provide it, ask the human for
+  that permission when delegation would materially improve coverage or is
+  required by the selected skill. Do not silently downgrade to local-only review
+  or present a single-agent substitute as equivalent.
+- Once a current user message authorizes delegation, use sub-agents for the
+  selected workflow when they materially improve coverage or are required.
+- If sub-agents are unavailable, forbidden, or denied, perform local review only
+  when the selected skill does not require delegation and the requested review
+  can still reach the required evidence and confidence threshold without it.
+- If required delegation is denied or cannot be used, stop and state the blocked
+  delegation requirement instead of presenting a lower-confidence local review
+  as complete.
 - Ask for human permission before a local reviewer or authorized agent runs
   commands that require approval, such as network, SSH, GitHub auth, registry
   auth, cloning, destructive operations, remote writes, or non-read-only

@@ -21,6 +21,32 @@ require_pattern() {
   fi
 }
 
+reject_pattern() {
+  local file="$1"
+  local pattern="$2"
+
+  if [[ ! -f "$file" ]]; then
+    printf 'missing file: %s\n' "$file" >&2
+    missing=1
+    return
+  fi
+
+  if grep -Fq -- "$pattern" "$file"; then
+    printf 'forbidden policy marker in %s: %s\n' "$file" "$pattern" >&2
+    missing=1
+  fi
+}
+
+reject_policy_tree_pattern() {
+  local pattern="$1"
+
+  if grep -FRq -- "$pattern" AGENTS.md skills; then
+    printf 'forbidden policy marker in AGENTS.md or skills/: %s\n' "$pattern" >&2
+    grep -FRn -- "$pattern" AGENTS.md skills >&2
+    missing=1
+  fi
+}
+
 require_gitignore_pattern() {
   local pattern="$1"
 
@@ -55,6 +81,11 @@ require_pattern AGENTS.md "rerun Make targets through the initialized"
 require_pattern AGENTS.md "Use 90% as the"
 require_pattern AGENTS.md "Use 95% for high-risk acceptance"
 require_pattern AGENTS.md "Confidence must be backed by concrete evidence"
+require_pattern AGENTS.md "Treat a current user request such as \"use sub-agents\", \"delegate\""
+require_pattern AGENTS.md "I want to use them"
+require_pattern AGENTS.md "Do not silently downgrade to a single-agent"
+require_pattern AGENTS.md "Ask for the missing permission instead, and proceed with sub-agents"
+reject_pattern AGENTS.md "higher-priority runtime policy requires explicit delegation wording"
 
 require_pattern skills/README.md "Skills are mandatory operating rules, not advisory notes."
 require_pattern skills/README.md "## Command Environment Prerequisite"
@@ -62,6 +93,10 @@ require_pattern skills/README.md "Do not invent direct commands"
 require_pattern skills/README.md "use 90% as the default minimum threshold"
 require_pattern skills/README.md "use 95% for high-risk"
 require_pattern skills/README.md "Confidence must be backed by concrete evidence"
+require_pattern skills/README.md "Once a current user message"
+reject_pattern skills/README.md "Do not require the user to separately say \"use sub-agents\" unless"
+reject_pattern skills/README.md "runtime policy requires explicit delegation wording"
+reject_pattern skills/README.md "perform the work locally unless the selected skill explicitly requires delegation"
 
 require_pattern skills/project-workflow/SKILL.md "Before editing code, tests, docs, config, scripts, or validation paths, identify the local pattern"
 require_pattern skills/project-workflow/SKILL.md "macOS/Homebrew tool-path assumptions"
@@ -102,6 +137,36 @@ require_pattern skills/feature-gaps/SKILL.md "state the feature execution checkl
 require_pattern skills/project-gaps/SKILL.md "state the project execution checklist before editing"
 require_pattern skills/reliability-gaps/SKILL.md "state the reliability execution checklist before editing"
 require_pattern skills/reliability-gaps/SKILL.md "\`Red\`, \`Green\`, \`Refactor\`, and \`Validation\`"
+require_pattern skills/doc-gaps/SKILL.md "do not silently switch to local-only"
+
+require_pattern skills/references/gap-workflow.md "Once a current user message authorizes delegation"
+require_pattern skills/references/gap-workflow.md "Do not silently downgrade to local-only review"
+reject_pattern skills/references/gap-workflow.md "Do not require the user to separately say \"use sub-agents\" unless"
+reject_pattern skills/references/gap-workflow.md "higher-priority runtime policy requires explicit delegation wording"
+reject_pattern skills/references/gap-workflow.md "perform the review locally unless the selected skill explicitly requires delegation"
+reject_pattern skills/references/gap-workflow.md "If sub-agents are unavailable or forbidden by higher-priority policy, perform"
+
+reject_policy_tree_pattern "runtime permits it or local review"
+reject_policy_tree_pattern "Do not require separate delegation"
+reject_policy_tree_pattern "higher-priority runtime policy requires"
+reject_policy_tree_pattern "explicit delegation wording"
+reject_policy_tree_pattern "perform the work locally unless the selected skill explicitly requires delegation"
+reject_policy_tree_pattern "If sub-agents are unavailable or forbidden by higher-priority policy, perform"
+reject_policy_tree_pattern "perform the review locally unless credible completion depends on delegation"
+reject_policy_tree_pattern "single-agent and compensate"
+
+for plan in \
+  skills/code-issues/references/plan.md \
+  skills/doc-gaps/references/plan.md \
+  skills/feature-gaps/references/plan.md \
+  skills/project-gaps/references/plan.md \
+  skills/reliability-gaps/references/plan.md \
+  skills/test-gaps/references/plan.md
+do
+  require_pattern "$plan" "ask for permission instead of downgrading silently"
+  reject_pattern "$plan" "Do not require separate delegation wording unless higher-priority runtime policy requires it"
+  reject_pattern "$plan" "perform the review locally unless credible completion depends on delegation"
+done
 
 require_pattern skills/project-workflow/agents/openai.yaml "Treat AGENTS.md and selected skills as mandatory rules."
 require_pattern skills/project-workflow/agents/openai.yaml "initialized user-shell command environment"
@@ -114,6 +179,25 @@ require_pattern skills/test-gaps/agents/openai.yaml "answer test gap ID follow-u
 require_pattern skills/doc-gaps/agents/openai.yaml "answer doc gap ID follow-ups such as DOC-1"
 require_pattern skills/feature-gaps/agents/openai.yaml "answer feature ID follow-ups such as FEATURE-1"
 require_pattern skills/project-gaps/agents/openai.yaml "answer project gap ID follow-ups such as PROJECT-1"
+require_pattern skills/code-issues/agents/openai.yaml "ask for explicit delegation permission when runtime requires it"
+require_pattern skills/doc-gaps/agents/openai.yaml "ask for explicit delegation permission when runtime requires it"
+require_pattern skills/feature-gaps/agents/openai.yaml "ask for explicit delegation permission when runtime requires it"
+require_pattern skills/project-gaps/agents/openai.yaml "ask for explicit delegation permission when runtime requires it"
+require_pattern skills/reliability-gaps/agents/openai.yaml "ask for explicit delegation permission when runtime requires it"
+require_pattern skills/test-gaps/agents/openai.yaml "ask for explicit delegation permission when runtime requires it"
+require_pattern skills/code-issues/agents/openai.yaml "use local review only when the shared gap workflow allows it and the required confidence threshold can still be met"
+require_pattern skills/doc-gaps/agents/openai.yaml "use local review only when the shared gap workflow allows it and the required confidence threshold can still be met"
+require_pattern skills/feature-gaps/agents/openai.yaml "use local review only when the shared gap workflow allows it and the required confidence threshold can still be met"
+require_pattern skills/project-gaps/agents/openai.yaml "use local review only when the shared gap workflow allows it and the required confidence threshold can still be met"
+require_pattern skills/reliability-gaps/agents/openai.yaml "use local review only when the shared gap workflow allows it and the required confidence threshold can still be met"
+require_pattern skills/test-gaps/agents/openai.yaml "use local review only when the shared gap workflow allows it and the required confidence threshold can still be met"
+reject_policy_tree_pattern "use local review only when delegation is unavailable, denied, or not needed for confidence"
+reject_pattern skills/code-issues/agents/openai.yaml "runtime permits it or local review"
+reject_pattern skills/doc-gaps/agents/openai.yaml "runtime permits it or local review"
+reject_pattern skills/feature-gaps/agents/openai.yaml "runtime permits it or local review"
+reject_pattern skills/project-gaps/agents/openai.yaml "runtime permits it or local review"
+reject_pattern skills/reliability-gaps/agents/openai.yaml "runtime permits it or local review"
+reject_pattern skills/test-gaps/agents/openai.yaml "runtime permits it or local review"
 require_pattern skills/project-gaps/agents/openai.yaml "implementation home as current repo, shared bin, external repo, or mixed"
 require_pattern skills/change-validation/agents/openai.yaml "file changes make prior validation stale"
 require_pattern skills/change-validation/agents/openai.yaml "initialized user shell"
