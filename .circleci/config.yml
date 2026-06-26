@@ -31,13 +31,13 @@ jobs:
       - restore_cache:
           name: restore deps
           keys:
-            - bin-ruby-cache-{{ checksum "Gemfile.lock" }}-{{ checksum "~/.ruby-version" }}-{{ checksum ".source-key" }}
+            - bin-ruby-cache-{{ checksum "Gemfile.lock" }}-{{ checksum "~/.ruby-version" }}
             - bin-ruby-cache-
       - run: make dep
       - run: make clean-dep
       - save_cache:
           name: save deps
-          key: bin-ruby-cache-{{ checksum "Gemfile.lock" }}-{{ checksum "~/.ruby-version" }}-{{ checksum ".source-key" }}
+          key: bin-ruby-cache-{{ checksum "Gemfile.lock" }}-{{ checksum "~/.ruby-version" }}
           paths:
             - vendor
       - run: make scripts-lint
