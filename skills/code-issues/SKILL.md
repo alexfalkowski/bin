@@ -72,6 +72,8 @@ Use this structure:
 - Scope: path/to/file-or-folder
 - Impact: User-visible impact or violated contract.
 - Evidence: Concrete file and line references, command output, or code path.
+- Reproduction: Smallest supported command, test, API call, workflow, or
+  code-path trace that reproduces the bug or contract violation.
 - Proposed fix: Brief implementation direction.
 - Validation: Suggested checks for the fix.
 ```

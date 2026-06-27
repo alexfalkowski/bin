@@ -15,16 +15,16 @@ selected skill before applying personal judgment. If a rule or local pattern
 cannot work for the task, stop before editing, quote the governing instruction,
 and ask for approval to deviate.
 
-When the active runtime provides sub-agents and permits skill-level
-authorization, treat a user invocation of a selected skill that defines
-delegated review, parallel review, or forward-testing as authorization to use
-sub-agents for that workflow. If a higher-priority runtime rule requires
-explicit user delegation authorization and the current request does not provide
-it, ask the human for that permission when delegation would materially improve
-coverage or is required by the selected skill. Once a current user message
-authorizes delegation, use sub-agents. If sub-agents are unavailable, forbidden,
-or denied, perform the work locally only when the selected skill does not
-require delegation and the request can still be completed safely without it.
+When the active runtime provides and permits sub-agents, do not require the
+human to ask for agents, sub-agents, delegation, or parallel work before using
+them. Agent judgment is sufficient: use sub-agents for any skill combination
+when they would materially improve coverage, confidence, throughput,
+independent validation, forward-testing, or disjoint implementation, or when
+they are required by the selected skill. Ask for human permission before
+approval-gated commands or actions, not before delegation itself. If sub-agents
+are unavailable, forbidden, or denied, perform the work locally only when the
+selected skill does not require delegation and the request can still be
+completed safely without it.
 
 Agents must report confidence before accepting findings, validation conclusions,
 or completion. They must use 90% as the default minimum threshold. They must

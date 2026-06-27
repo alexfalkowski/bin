@@ -100,6 +100,9 @@ Use this structure:
 - Scope: path/to/file-or-folder
 - Impact: Risk created by the missing, weak, misleading, flaky, or wrong-layer coverage.
 - Evidence: Concrete file and line references, existing test behavior, command output, or untested code path.
+- Reproduction: Smallest supported command, scenario, test run, or front-door
+  trace that shows the behavior is unprotected, misleadingly covered, flaky, or
+  covered at the wrong layer.
 - Proposed fix: Brief test or test-harness direction using the narrowest credible established test layer.
 - Validation: Suggested checks for the test change.
 ```

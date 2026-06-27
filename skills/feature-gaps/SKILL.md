@@ -190,6 +190,9 @@ Use this structure:
 - Current limitation: The workflow limitation, missing capability, or friction.
 - Benefit: Why this matters to the named audience and how their workflow becomes better.
 - Evidence: Concrete file and line references, command behavior, docs, examples, comparable-tool evidence, or user/developer workflow evidence.
+- Reproduction: Smallest supported user, developer, service-author, operator,
+  or package-consumer workflow trace that demonstrates the current limitation
+  or missing capability.
 - Repository fit: Why this belongs in the current repository and matches existing patterns.
 - Product surface: Public command|API|library behavior|service/operator behavior|package-consumer workflow|integration|template|extension point.
 - Proposed feature: Smallest useful capability to add.
@@ -280,8 +283,9 @@ These feature implementation rules remain mandatory:
   configuration, or documented workflows.
 - Use `$change-validation` when selecting validation commands.
 - Report the result for that feature with `Red`, `Green`, `Refactor`, and
-  `Validation` entries. Use `Refactor: none` when no cleanup was needed after
-  green. Then ask the human to verify and explicitly say `FEATURE-N is done`.
+  `Validation` entries. Use `Refactor: none (<reason>)` when no cleanup was
+  needed after green. Then ask the human to verify and explicitly say
+  `FEATURE-N is done`.
 
 ## References
 

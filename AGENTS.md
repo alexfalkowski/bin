@@ -26,15 +26,18 @@ Agents MUST:
   or forward-testing and the active runtime provides and permits them. Do not
   treat required sub-agent use as optional based on scope size, convenience, or
   local confidence.
-- Treat a current user request such as "use sub-agents", "delegate",
-  "parallelize", or "I want to use them" as explicit delegation authorization
-  for the current conversation while that instruction remains applicable,
-  subject to higher-priority runtime limits.
-- If a higher-priority runtime rule requires explicit user delegation
-  authorization and the current request does not provide it, ask the human for
-  that permission when delegation would materially improve coverage or is
-  required by the selected skill. Do not silently downgrade to a single-agent
-  substitute or claim equivalent confidence.
+- Do not require the human to ask for agents, sub-agents, delegation, or
+  parallel work before using sub-agents when the active runtime provides and
+  permits them. Agent judgment is sufficient: use sub-agents for any skill
+  combination or workflow when they would materially improve coverage,
+  confidence, throughput, independent validation, forward-testing, or disjoint
+  implementation.
+- If the active runtime does not permit sub-agents for the current request,
+  treat delegation as unavailable. Continue locally only when the selected skill
+  does not require delegation and the required confidence threshold can still be
+  met; otherwise stop at the delegation gate. Do not offer a local-only pass as
+  equivalent, as the default next step, or as acceptable merely because the
+  repository looks small.
 - Report an explicit confidence percentage before treating a result, finding,
   validation conclusion, or task as accepted or complete. Use 90% as the
   default minimum threshold. Use 95% for high-risk acceptance, including
@@ -100,10 +103,11 @@ Agents MUST NOT:
 - Treat `AGENTS.md` or `SKILL.md` instructions as optional.
 - Continue after discovering they violated an instruction; they must correct
   course immediately and remove their own noncompliant change.
-- Announce that a task will stay single-agent because explicit delegation
-  wording is missing when delegation would materially improve coverage or is
-  required. Ask for the missing permission instead, and proceed with sub-agents
-  once a current user message authorizes them.
+- Announce that a task will stay single-agent because the human did not ask for
+  delegation when the active runtime provides and permits sub-agents and they
+  would materially improve the work. Use sub-agents in that case. Do not say the
+  agent can still do a local pass over a small repo when the selected skill's
+  confidence or coverage depends on delegation.
 
 If there is a conflict, precedence is:
 

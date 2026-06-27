@@ -43,17 +43,21 @@ These shared rules own workflow mechanics.
 
 ## Delegation And Permissions
 
-- When the active runtime provides sub-agents and permits skill-level
-  authorization, treat a user invocation of a selected skill that defines
-  delegated review, parallel review, or forward-testing as authorization to use
-  sub-agents for that workflow.
-- If a higher-priority runtime rule requires explicit user delegation
-  authorization and the current request does not provide it, ask the human for
-  that permission when delegation would materially improve coverage or is
-  required by the selected skill. Do not silently downgrade to local-only review
-  or present a single-agent substitute as equivalent.
-- Once a current user message authorizes delegation, use sub-agents for the
-  selected workflow when they materially improve coverage or are required.
+- When the active runtime provides and permits sub-agents, do not require the
+  human to ask for agents, sub-agents, delegation, or parallel work before using
+  them. Agent judgment is sufficient: use sub-agents for any skill combination
+  when they would materially improve coverage, confidence, throughput,
+  independent validation, forward-testing, or disjoint implementation, or when
+  they are required by the selected skill.
+- If the active runtime does not permit sub-agents for the current request,
+  treat delegation as unavailable. Continue locally only when the selected skill
+  does not require delegation and the required confidence threshold can still be
+  met; otherwise stop at the delegation gate. Do not silently downgrade to
+  local-only review or present a single-agent substitute as equivalent.
+- Use sub-agents for any skill combination when the active runtime provides and
+  permits them and they materially improve coverage, confidence, throughput,
+  independent validation, forward-testing, or disjoint implementation, or when
+  they are required by the selected skill.
 - If sub-agents are unavailable, forbidden, or denied, perform local review only
   when the selected skill does not require delegation and the requested review
   can still reach the required evidence and confidence threshold without it.
@@ -148,6 +152,26 @@ These shared rules own workflow mechanics.
 - Confirm each candidate against current code, docs, examples, tests, command
   behavior, CI config, generated contracts, and public interfaces relevant to
   the selected skill before recording, fixing, or dismissing it.
+- Reproduce each candidate before recording it as a confirmed ledger entry or
+  presenting it as a proposed finding. Use the smallest supported path that
+  demonstrates the issue or gap: a repository command, test, fixture, API call,
+  documented workflow, config path, command help lookup, reader action, CI path,
+  code-path trace, or negative search across the authoritative surface. For
+  absence-based gaps, reproduce the limitation by showing the supported user,
+  maintainer, or operator action that currently fails, is unsupported, or cannot
+  be completed from the existing surface.
+- Record the reproduction path in the candidate and ledger entry. The path must
+  name what was run or inspected, the observed result, and why that result
+  demonstrates the repository-owned issue, gap, or limitation. A reproduction
+  path can be non-executable only when the selected skill's surface is
+  inherently documentary or structural; in that case, record the exact lookup,
+  trace, negative search, or authoritative surface comparison that reproduces
+  the gap.
+- If reproduction is blocked by sandbox limits, missing tools, credentials,
+  network, optional services, or ambiguous setup, classify the blocker through
+  `$change-validation` and do not record the candidate as confirmed unless a
+  separate supported reproduction path proves it. Report the evidence gap or
+  deferred follow-up instead of raising confidence to the ledger threshold.
 - For reusable library, helper, or shared-tooling scopes, inspect supported
   usage evidence before recording or accepting a high-confidence issue, gap, or
   proposal: a real consumer, executable example, integration test, module wiring
@@ -188,9 +212,10 @@ These shared rules own workflow mechanics.
 - If confirmed gaps or proposals remain, write them to the scoped ledger before
   making changes unless the selected skill explicitly defines a one-pass fix
   mode. Record only high-confidence, actionable findings with file/line,
-  command, config, runtime, or supported-usage evidence. Do not record
-  speculative exclusions, unsupported paths, or examples already ruled out by
-  `AGENTS.md` or the selected skill.
+  command, config, runtime, supported-usage evidence, and a reproduction path.
+  Do not record speculative exclusions, unsupported paths, unreproduced
+  candidates, or examples already ruled out by `AGENTS.md` or the selected
+  skill.
 - Stop after presenting the ledger and plan in find/audit modes when the
   selected skill requires a separate implementation pass.
 
