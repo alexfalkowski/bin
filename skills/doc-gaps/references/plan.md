@@ -31,6 +31,10 @@ documentation surface.
    slices first and initialize coverage entries for reviewed deeply, skimmed,
    excluded, and deferred slices. Deferred entries must be exact follow-up
    scopes such as `path/to/package` or `path/to/package/subpackage`.
+   If the human requested a confidence closure audit, apply the confidence
+   closure rules from the shared workflow: every relevant slice must have a
+   route to `deep` or `excluded`, and any unfinished slice keeps the outcome
+   incomplete.
 8. Ask for required permission before any local reviewer or authorized agent
    runs non-read-only, network, auth, remote-write, or otherwise approval-gated
    commands.
@@ -56,15 +60,27 @@ documentation surface.
     candidates below the finding threshold, and candidates that belong to code,
     security, test, or reliability workflows. When dismissing, record why the
     existing surface owns the audience and action at risk.
-17. If no confirmed gaps remain, report that result with the coverage state, do
+17. Classify validation outcomes as repository finding, local environment
+    issue, missing tool, or inconclusive; apply the confidence evidence rubric
+    from `../../references/finding-severity.md`. For confidence closure audits,
+    include current CI or equivalent repository-defined validation evidence
+    before any no-gap closeout.
+18. Before concluding there are no doc gaps, run a final doc-gap closeout check.
+    Name the documentation surfaces, audiences, reader actions, authoritative
+    owners, minimum examples or commands, missing-contract categories,
+    validation evidence, and repository policy exclusions that were checked. If
+    any of these were not applicable, say why. For confidence closure audits,
+    also run the final challenge pass required by the shared workflow and name
+    any remaining counterexamples.
+19. If no confirmed gaps remain, report that result with the coverage state, do
     not create `DOCS.md`, and skip edit and validation steps.
-18. Implement confirmed doc gaps with the smallest clear documentation changes.
-19. If a confirmed gap cannot be fixed correctly in this pass, write or update
+20. Implement confirmed doc gaps with the smallest clear documentation changes.
+21. If a confirmed gap cannot be fixed correctly in this pass, write or update
     the scoped `DOCS.md` with `DOC-<number>` entries for unresolved gaps.
-20. If an existing doc-gap ledger is fully resolved, delete it.
-21. Validate the documentation change with commands appropriate to the changed
+22. If an existing doc-gap ledger is fully resolved, delete it.
+23. Validate the documentation change with commands appropriate to the changed
     files.
-22. Present fixed gaps, dismissed or out-of-scope candidates when relevant,
+24. Present fixed gaps, dismissed or out-of-scope candidates when relevant,
     coverage state for broad scopes, unresolved ledger entries if any, runnable
     follow-up scopes for deferred slices, and validation results.
 
@@ -80,16 +96,29 @@ documentation surface.
    language-specific documentation standards for the requested scope.
 5. Build and launch the same recursive, bounded-slice documentation review
    delegation plan as one-pass mode.
+   If the human requested a confidence closure audit, apply the confidence
+   closure rules from the shared workflow: every relevant slice must have a
+   route to `deep` or `excluded`, and any unfinished slice keeps the outcome
+   incomplete.
 6. Update coverage state for every planned slice before judging the requested
    scope.
 7. Deduplicate, route, and confirm candidates against code, docs, examples,
    command help, package docs, and public interfaces. When prose contradicts
    implementation, require non-prose evidence before treating code as wrong;
    otherwise classify stale prose as a doc gap.
-8. If no confirmed gaps remain, report that result with the coverage state, do
+8. Classify validation outcomes as repository finding, local environment issue,
+   missing tool, or inconclusive; apply the confidence evidence rubric from
+   `../../references/finding-severity.md`. For confidence closure audits,
+   include current CI or equivalent repository-defined validation evidence
+   before any no-gap closeout.
+9. Before concluding there are no doc gaps, run the final doc-gap closeout check
+   from one-pass mode. For confidence closure audits, also run the final
+   challenge pass required by the shared workflow and name any remaining
+   counterexamples.
+10. If no confirmed gaps remain, report that result with the coverage state, do
    not create `DOCS.md`, and stop.
-9. If confirmed gaps remain, write the scoped `DOCS.md` with `DOC-<number>`
+11. If confirmed gaps remain, write the scoped `DOCS.md` with `DOC-<number>`
    IDs.
-10. Present the scoped audit ledger, coverage state for broad scopes, and
+12. Present the scoped audit ledger, coverage state for broad scopes, and
     runnable follow-up scopes for deferred slices, then stop before making
     fixes.

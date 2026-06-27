@@ -26,6 +26,10 @@ surface, validation, delegation, ledger state, and repository-owned behavior.
    slices first and initialize coverage entries for reviewed deeply, skimmed,
    excluded, and deferred slices. Deferred entries must be exact follow-up
    scopes such as `path/to/package` or `path/to/package/subpackage`.
+   If the human requested a confidence closure audit, apply the confidence
+   closure rules from the shared workflow: every relevant slice must have a
+   route to `deep` or `excluded`, and any unfinished slice keeps the outcome
+   incomplete.
 8. Ask for required permission before any local reviewer or authorized agent
    runs non-read-only, network, auth, remote-write, or otherwise approval-gated
    commands.
@@ -44,13 +48,25 @@ surface, validation, delegation, ledger state, and repository-owned behavior.
     unavailable. Reject candidates that are duplicate, private-only,
     dependency-only, optional, or better handled by another skill such as
     `$project-gaps`.
-15. If no confirmed gaps remain, report that result with the coverage state, do
+15. Classify validation outcomes as repository finding, local environment
+    issue, missing tool, or inconclusive; apply the confidence evidence rubric
+    from `../../references/finding-severity.md`. For confidence closure audits,
+    include current CI or equivalent repository-defined validation evidence
+    before any no-finding closeout.
+16. Before concluding there are no test gaps, run a final test-gap closeout
+    check. Name the protected behaviors, public commands/APIs or documented
+    workflows, dominant test harnesses, nearby existing tests, test-support
+    surfaces, validation evidence, and repository policy exclusions that were
+    checked. If any of these were not applicable, say why. For confidence
+    closure audits, also run the final challenge pass required by the shared
+    workflow and name any remaining counterexamples.
+17. If no confirmed gaps remain, report that result with the coverage state, do
     not create `TESTS.md`, and stop.
-16. If confirmed gaps remain, write the scoped `TESTS.md` with `TEST-<number>`
+18. If confirmed gaps remain, write the scoped `TESTS.md` with `TEST-<number>`
     IDs.
-17. Present the scoped ledger, proposed test-fix plan, coverage state for broad
+19. Present the scoped ledger, proposed test-fix plan, coverage state for broad
     scopes, and runnable follow-up scopes for deferred slices.
-18. Stop before making fixes.
+20. Stop before making fixes.
 
 ## Implement Mode Plan
 

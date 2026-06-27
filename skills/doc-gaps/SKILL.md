@@ -1,6 +1,6 @@
 ---
 name: doc-gaps
-description: Use when the user asks to run $doc-gaps in a package or folder, find doc gaps in a package or folder, fix doc gaps in a package or folder, review docs for gaps, audit-only doc gaps, asks about doc gap IDs such as DOC-1, asks what the fix is for DOC-1, asks to fix or verify DOC-1, or says DOC-1 is done. Find and fix concrete missing, weak, stale, or misleading documentation in one pass, including README files, user-facing docs, examples, command help, package docs, public API comments, code comments, and docstrings required by $doc-standards and relevant language standards.
+description: Use when the user asks to run $doc-gaps in a package or folder, find doc gaps in a package or folder, find doc gaps with a specific confidence closure target such as 95% or 99%, fix doc gaps in a package or folder, review docs for gaps, audit-only doc gaps, asks about doc gap IDs such as DOC-1, asks what the fix is for DOC-1, asks to fix or verify DOC-1, or says DOC-1 is done. Find and fix concrete missing, weak, stale, or misleading documentation in one pass, including README files, user-facing docs, examples, command help, package docs, public API comments, code comments, and docstrings required by $doc-standards and relevant language standards.
 ---
 
 # Doc Gaps

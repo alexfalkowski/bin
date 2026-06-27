@@ -11,6 +11,21 @@ These shared rules own workflow mechanics.
   skill's `references/plan.md` and maintain it as active runtime state. Do not
   write the plan into the repository unless the human explicitly asks for a
   durable plan file.
+- If the human asks for an explicit or broad no-finding confidence target, such as
+  "95% confidence", "99% closure", "max confidence", "full closure", "no
+  issues anywhere", or equivalent broad assurance, treat the run as a
+  **confidence closure audit**. A confidence closure audit is still the selected
+  skill's find/audit mode, but it may not close with a no-finding outcome until
+  the confidence closure requirements below are satisfied. Use the requested
+  percentage as the scope no-finding confidence threshold, subject to mandatory
+  repository confidence floors such as the 95% floor for broad no-finding claims.
+  When no explicit percentage is given, use the broad no-finding default threshold
+  of 95%. If the requested percentage is below the mandatory floor, apply the
+  mandatory floor and say the lower request cannot waive repository confidence
+  rules. Do not accept 100% as an achievable threshold for repository review; if
+  the human asks for 100% certainty, explain that the workflow can pursue a lower
+  explicit target or continue gathering evidence, but cannot truthfully close at
+  100%.
 - Use runtime goals only when the human explicitly requests them or
   higher-priority runtime instructions allow goal creation for this workflow.
   Otherwise maintain the selected mode, requested scope, and state transitions
@@ -103,6 +118,11 @@ These shared rules own workflow mechanics.
 - Do not present a broad requested scope as fully reviewed when any relevant
   slice was only skimmed or deferred. Name those slices in the final coverage
   notes and provide runnable follow-up scopes for deferred review.
+- For confidence closure audits, plan the inventory so every relevant slice has a
+  route to `deep` or `excluded`. Do not intentionally leave relevant slices as
+  `skimmed` or `deferred` at closeout. If the scope is too large to finish in
+  the current run, keep the outcome incomplete and name the exact remaining
+  slices instead of lowering the standard.
 
 ## Audit Preflight And Validation Ladder
 
@@ -139,6 +159,11 @@ These shared rules own workflow mechanics.
   permissions or service dependencies; dependency, security, or generation
   tools may need network access or cache writes outside the workspace; and a
   target failing in the sandbox is not automatically a repository finding.
+- For confidence closure audits, collect current validation evidence from the
+  repository-owned CI analogue before any no-finding closeout. Prefer the latest
+  successful CI result for the exact commit when it is available; otherwise run
+  or explicitly classify the repository-defined equivalent targets. The mere
+  existence of CI is not validation evidence.
 
 ## Candidate Handling
 
@@ -148,6 +173,15 @@ These shared rules own workflow mechanics.
   files or surfaces that still deserve review, and exact follow-up scopes. A
   delegated "nothing found" response without coverage, rejected-lead, and
   follow-up-scope evidence is not enough to close a broad audit slice.
+- For confidence closure audits over broad repository, package-tree, or
+  multi-component scopes, use independent delegated review when the runtime
+  provides agents and the current request authorizes them. Assign disjoint
+  behavior-owned or risk-owned slices, require each agent to report coverage,
+  rejected leads, validation, and follow-up scopes, and perform a final local
+  challenge pass across the combined result. If agents are unavailable or not
+  authorized and delegation is needed for credible closure, stop at the
+  delegation gate or report the blocked requirement instead of presenting a
+  confidence closure result.
 - Use `../references/finding-severity.md` to discard low-confidence candidates
   before assigning severity or confidence when the selected skill records
   findings.
@@ -218,6 +252,18 @@ These shared rules own workflow mechanics.
   relevant planned slice is deep-reviewed or explicitly excluded. If any
   relevant slice is skimmed, deferred, or blocked, the final outcome must be
   `Audit incomplete: no confirmed findings so far`.
+- For confidence closure audits, do not use any no-finding closeout until all of
+  these are true:
+  - every relevant slice is `deep` or `excluded`;
+  - current CI or equivalent repository-defined validation evidence is clean, or
+    any unavailable check is classified and does not weaken the audited claim;
+  - every delegated slice result has coverage, rejected-lead, validation, and
+    follow-up-scope evidence;
+  - all candidates have been reproduced and either recorded, rejected, or routed
+    to the correct workflow;
+  - a final challenge pass names the strongest remaining counterexamples and
+    explains why they do not drop scope no-finding confidence below the requested
+    confidence threshold.
 - If no findings survive in reviewed slices but deferred slices remain,
   continue to the next highest-risk deferred slice when the turn, tools, and
   permissions allow. Do not stop merely because the first reviewed slices
