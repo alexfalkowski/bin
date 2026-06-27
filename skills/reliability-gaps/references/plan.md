@@ -36,12 +36,7 @@ evidence.
 9. Ask for required permission before any local reviewer or authorized agent
    runs non-read-only, network, auth, remote-write, destructive, or otherwise
    approval-gated commands.
-10. Use review agents when the active runtime provides and permits sub-agents
-    and they materially improve coverage, confidence, throughput, independent
-    validation, forward-testing, or disjoint implementation, or when this skill
-    requires delegated review. If sub-agents are unavailable, forbidden, or
-    denied, perform local review only when credible completion does not depend
-    on delegation; otherwise stop at the delegation gate.
+10. Apply the shared gap-workflow delegation gate before review work.
 11. Wait for all review work to finish.
 12. Update coverage state for every planned slice before judging the requested
     scope.
