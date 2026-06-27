@@ -17,27 +17,27 @@ before applying personal judgment.
 Agents MUST:
 
 - Read and follow the smallest matching skill before taking task action.
-- Treat sub-agents as available to every selected skill when the active runtime
-  provides and permits them. Use sub-agents for delegation, parallel review,
-  forward-testing, independent validation, read-only exploration, or disjoint
-  implementation work whenever they can materially improve coverage or
-  throughput.
+- Treat sub-agents as usable only when the active runtime provides them and the
+  current user request explicitly asks for sub-agents, delegation, or parallel
+  agent work. When sub-agents are authorized, use them for delegation, parallel
+  review, forward-testing, independent validation, read-only exploration, or
+  disjoint implementation work whenever they can materially improve coverage,
+  confidence, throughput, or implementation safety.
 - Use sub-agents when the selected skill requires delegation, parallel review,
-  or forward-testing and the active runtime provides and permits them. Do not
-  treat required sub-agent use as optional based on scope size, convenience, or
-  local confidence.
-- Do not require the human to ask for agents, sub-agents, delegation, or
-  parallel work before using sub-agents when the active runtime provides and
-  permits them. Agent judgment is sufficient: use sub-agents for any skill
-  combination or workflow when they would materially improve coverage,
-  confidence, throughput, independent validation, forward-testing, or disjoint
-  implementation.
-- If the active runtime does not permit sub-agents for the current request,
-  treat delegation as unavailable. Continue locally only when the selected skill
-  does not require delegation and the required confidence threshold can still be
-  met; otherwise stop at the delegation gate. Do not offer a local-only pass as
-  equivalent, as the default next step, or as acceptable merely because the
-  repository looks small.
+  or forward-testing and the current request authorizes them. Do not treat
+  required sub-agent use as optional based on scope size, convenience, or local
+  confidence once delegation is authorized.
+- If the current request does not authorize sub-agents, treat delegation as
+  unavailable. Continue locally only when the selected skill does not require
+  delegation and the required confidence threshold can still be met; otherwise
+  stop at the delegation gate and ask for explicit current-request sub-agent
+  authorization.
+- If sub-agents are authorized but unavailable, forbidden, or denied by the
+  runtime, continue locally only when the selected skill does not require
+  delegation and the required confidence threshold can still be met; otherwise
+  stop at the delegation gate and state the blocked delegation requirement plus
+  runtime limitation. Do not offer a local-only pass as equivalent, as the
+  default next step, or as acceptable merely because the repository looks small.
 - Report an explicit confidence percentage before treating a result, finding,
   validation conclusion, or task as accepted or complete. Use 90% as the
   default minimum threshold. Use 95% for high-risk acceptance, including
@@ -103,11 +103,11 @@ Agents MUST NOT:
 - Treat `AGENTS.md` or `SKILL.md` instructions as optional.
 - Continue after discovering they violated an instruction; they must correct
   course immediately and remove their own noncompliant change.
-- Announce that a task will stay single-agent because the human did not ask for
-  delegation when the active runtime provides and permits sub-agents and they
-  would materially improve the work. Use sub-agents in that case. Do not say the
-  agent can still do a local pass over a small repo when the selected skill's
-  confidence or coverage depends on delegation.
+- Present local-only work as equivalent when sub-agents are required for
+  credible confidence or coverage but are not authorized or available. When
+  authorization is missing, ask for explicit current-request sub-agent
+  authorization; when the runtime blocks authorized sub-agents, state the
+  blocked delegation requirement plus runtime limitation.
 
 If there is a conflict, precedence is:
 

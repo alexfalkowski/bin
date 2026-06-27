@@ -43,27 +43,25 @@ These shared rules own workflow mechanics.
 
 ## Delegation And Permissions
 
-- When the active runtime provides and permits sub-agents, do not require the
-  human to ask for agents, sub-agents, delegation, or parallel work before using
-  them. Agent judgment is sufficient: use sub-agents for any skill combination
-  when they would materially improve coverage, confidence, throughput,
-  independent validation, forward-testing, or disjoint implementation, or when
-  they are required by the selected skill.
-- If the active runtime does not permit sub-agents for the current request,
-  treat delegation as unavailable. Continue locally only when the selected skill
-  does not require delegation and the required confidence threshold can still be
-  met; otherwise stop at the delegation gate. Do not silently downgrade to
-  local-only review or present a single-agent substitute as equivalent.
-- Use sub-agents for any skill combination when the active runtime provides and
-  permits them and they materially improve coverage, confidence, throughput,
-  independent validation, forward-testing, or disjoint implementation, or when
-  they are required by the selected skill.
-- If sub-agents are unavailable, forbidden, or denied, perform local review only
-  when the selected skill does not require delegation and the requested review
-  can still reach the required evidence and confidence threshold without it.
-- If required delegation is denied or cannot be used, stop and state the blocked
-  delegation requirement instead of presenting a lower-confidence local review
-  as complete.
+- Use sub-agents only when the active runtime provides them and the current user
+  request explicitly asks for sub-agents, delegation, or parallel agent work.
+- When sub-agents are authorized, use them for any skill combination when they
+  materially improve coverage, confidence, throughput, independent validation,
+  forward-testing, or disjoint implementation, or when they are required by the
+  selected skill.
+- If the current request does not authorize sub-agents, perform local review
+  only when the selected skill does not require delegation and the requested
+  review can still reach the required evidence and confidence threshold without
+  it. If credible completion depends on delegation, stop at the delegation gate
+  and ask for explicit current-request sub-agent authorization.
+- If sub-agents are authorized but unavailable, forbidden, or denied by the
+  runtime, perform local review only when the selected skill does not require
+  delegation and the requested review can still reach the required evidence and
+  confidence threshold without it. If credible completion depends on
+  delegation, stop at the delegation gate and state the blocked delegation
+  requirement plus runtime limitation.
+- Do not silently downgrade to local-only review or present a single-agent
+  substitute as equivalent.
 - Ask for human permission before a local reviewer or authorized agent runs
   commands that require approval, such as network, SSH, GitHub auth, registry
   auth, cloning, destructive operations, remote writes, or non-read-only
