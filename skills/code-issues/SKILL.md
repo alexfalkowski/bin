@@ -1,6 +1,6 @@
 ---
 name: code-issues
-description: Use when the user asks to find $code-issues in a package or folder, find code issues in a package or folder, implement $code-issues in a package or folder, implement code issues in a package or folder, asks about issue IDs such as ISSUE-1, asks what the fix is for ISSUE-1, asks to fix or verify ISSUE-1, or says ISSUE-1 is done. Find concrete bugs, security issues, compatibility breaks, and public contract violations, record them in scoped ISSUES.md, and later propose and implement agreed fixes one code issue at a time.
+description: Use when the user asks to find $code-issues in a package or folder, find code issues in a package or folder, find code issues with a specific confidence closure target such as 95% or 99%, implement $code-issues in a package or folder, implement code issues in a package or folder, asks about issue IDs such as ISSUE-1, asks what the fix is for ISSUE-1, asks to fix or verify ISSUE-1, or says ISSUE-1 is done. Find concrete bugs, security issues, compatibility breaks, and public contract violations, record them in scoped ISSUES.md, and later propose and implement agreed fixes one code issue at a time.
 ---
 
 # Code Issues

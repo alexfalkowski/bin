@@ -28,6 +28,10 @@ state, code/security/compatibility evidence, and public contract evidence.
    slices first and initialize coverage entries for reviewed deeply, skimmed,
    excluded, and deferred slices. Deferred entries must be exact follow-up
    scopes such as `path/to/package` or `path/to/package/subpackage`.
+   If the human requested a confidence closure audit, apply the confidence
+   closure rules from the shared workflow: every relevant
+   slice must have a route to `deep` or `excluded`, and any unfinished slice
+   keeps the outcome incomplete.
 8. Ask for required permission before any local reviewer or authorized agent
    runs non-read-only, network, auth, remote-write, or otherwise approval-gated
    commands.
@@ -45,11 +49,15 @@ state, code/security/compatibility evidence, and public contract evidence.
 14. Classify validation outcomes as repository finding, local environment
     issue, missing tool, or inconclusive; apply the confidence evidence rubric
     from `../../references/finding-severity.md`.
+    For confidence closure audits, include current CI or equivalent
+    repository-defined validation evidence before any no-finding closeout.
 15. Before concluding there are no issues, run a final code-issue closeout
     check. Name the public APIs, constructors, exported helpers, supported DI or
     documented usage paths, real call sites, nil/error/edge behavior, tests or
     CI evidence, and repository policy exclusions that were checked. If any of
-    these were not applicable, say why.
+    these were not applicable, say why. For confidence closure audits, also run the
+    final challenge pass required by the shared workflow and name any remaining
+    counterexamples.
 16. If no confirmed issues remain and requested-scope coverage satisfies the
     shared no-finding threshold, report that result with the no-finding closeout
     required by the shared gap workflow, do not create `ISSUES.md`, and stop.

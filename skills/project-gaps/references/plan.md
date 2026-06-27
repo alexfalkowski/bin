@@ -33,6 +33,10 @@ implementation home, validation, delegation, ledger state, and workflow routing.
    value slices first and initialize coverage entries for reviewed deeply,
    skimmed, excluded, and deferred slices. Deferred entries must be exact
    follow-up scopes such as `path/to/package` or `path/to/package/subpackage`.
+   If the human requested a confidence closure audit, apply the confidence
+   closure rules from the shared workflow: every relevant slice must have a
+   route to `deep` or `excluded`, and any unfinished slice keeps the outcome
+   incomplete.
 8. Decide whether comparable CI, build, release, or developer workflow research
    is needed. Use allowed research tools when they materially improve proposal
    quality; ask permission before approval-gated network, auth, clone, or
@@ -62,13 +66,25 @@ implementation home, validation, delegation, ledger state, and workflow routing.
     normal project gap only for the current scope's dependency/workflow response
     such as upgrade, pin, workaround, replacement, validation, or upstream issue
     tracking.
-16. If no confirmed project gaps remain, report that result with the coverage
+16. Classify validation outcomes as repository finding, local environment
+    issue, missing tool, or inconclusive; apply the confidence evidence rubric
+    from `../../references/finding-severity.md`. For confidence closure audits,
+    include current CI or equivalent repository-defined validation evidence
+    before any no-finding closeout.
+17. Before concluding there are no project gaps, run a final project-gap
+    closeout check. Name the Make targets, CI jobs, scripts, setup flows,
+    validation and release paths, command-discovery surfaces, implementation
+    homes, routing decisions, validation evidence, and repository policy
+    exclusions that were checked. If any of these were not applicable, say why.
+    For confidence closure audits, also run the final challenge pass required
+    by the shared workflow and name any remaining counterexamples.
+18. If no confirmed project gaps remain, report that result with the coverage
     state, do not create `PROJECTS.md`, and stop.
-17. If confirmed project gaps remain, write the scoped `PROJECTS.md` with
+19. If confirmed project gaps remain, write the scoped `PROJECTS.md` with
     `PROJECT-<number>` IDs.
-18. Present the scoped ledger, proposed implementation plan, coverage state for
+20. Present the scoped ledger, proposed implementation plan, coverage state for
     broad scopes, and runnable follow-up scopes for deferred slices.
-19. Stop before implementing project changes.
+21. Stop before implementing project changes.
 
 ## Implement Mode Plan
 

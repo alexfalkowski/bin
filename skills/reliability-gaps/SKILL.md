@@ -1,6 +1,6 @@
 ---
 name: reliability-gaps
-description: Use when the user asks to find $reliability-gaps in a package or folder, find reliability gaps in a package or folder, review production readiness for a package or folder, implement $reliability-gaps in a package or folder, implement reliability gaps in a package or folder, asks about reliability gap IDs such as REL-1, asks what the fix is for REL-1, asks to fix or verify REL-1, or says REL-1 is done. Find verified reliability, operability, SLO, overload, observability, release-safety, recovery, data-integrity, disaster-readiness, or NALSD evidence gaps, record confirmed gaps in scoped RELIABILITY.md, and implement agreed fixes gap by gap.
+description: Use when the user asks to find $reliability-gaps in a package or folder, find reliability gaps in a package or folder, review production readiness for a package or folder, find reliability gaps with a specific confidence closure target such as 95% or 99%, implement $reliability-gaps in a package or folder, implement reliability gaps in a package or folder, asks about reliability gap IDs such as REL-1, asks what the fix is for REL-1, asks to fix or verify REL-1, or says REL-1 is done. Find verified reliability, operability, SLO, overload, observability, release-safety, recovery, data-integrity, disaster-readiness, or NALSD evidence gaps, record confirmed gaps in scoped RELIABILITY.md, and implement agreed fixes gap by gap.
 ---
 
 # Reliability Gaps
