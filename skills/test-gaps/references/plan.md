@@ -29,13 +29,12 @@ surface, validation, delegation, ledger state, and repository-owned behavior.
 8. Ask for required permission before any local reviewer or authorized agent
    runs non-read-only, network, auth, remote-write, or otherwise approval-gated
    commands.
-9. Use review agents when this skill authorizes delegated review and the active
-   runtime provides and permits sub-agents. If a higher-priority runtime rule
-   requires explicit user delegation authorization and the current request does
-   not provide it, ask for permission instead of downgrading silently. If
-   sub-agents are unavailable, forbidden, or denied, perform local review only
-   when credible completion does not depend on delegation; otherwise stop at the
-   delegation gate.
+9. Use review agents when the active runtime provides and permits sub-agents and
+   they materially improve coverage, confidence, throughput, independent
+   validation, forward-testing, or disjoint implementation, or when this skill
+   requires delegated review. If sub-agents are unavailable, forbidden, or
+   denied, perform local review only when credible completion does not depend on
+   delegation; otherwise stop at the delegation gate.
 10. Wait for all review work to finish.
 11. Update coverage state for every planned slice before judging the requested
     scope.

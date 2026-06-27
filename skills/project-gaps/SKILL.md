@@ -164,6 +164,9 @@ Use this structure:
 - Current limitation: The project workflow friction or missing project capability.
 - Project surface: Make target|CI job|script|setup flow|validation flow|release flow|command discovery|shared ./bin wiring.
 - Evidence: Concrete file and line references, command behavior, CI config, docs, examples, comparable workflow evidence, or maintainer workflow evidence.
+- Reproduction: Smallest supported maintainer, developer, CI, Make, setup,
+  validation, release, or command-discovery workflow trace that demonstrates
+  the current friction or missing project capability.
 - Ownership: Why this scope owns the fix, or why the issue is routed to a
   third-party, external repo, shared tooling, or upstream project-owned library.
 - Repository fit: Why this belongs in the current repository and matches existing project patterns.
@@ -255,8 +258,9 @@ These project-gap implementation rules remain mandatory:
   targets, setup, validation, release, configuration, or documented workflows.
 - Use `$change-validation` when selecting validation commands.
 - Report the result for that project gap with `Red`, `Green`, `Refactor`, and
-  `Validation` entries. Use `Refactor: none` when no cleanup was needed after
-  green. Then ask the human to verify and explicitly say `PROJECT-N is done`.
+  `Validation` entries. Use `Refactor: none (<reason>)` when no cleanup was
+  needed after green. Then ask the human to verify and explicitly say
+  `PROJECT-N is done`.
 
 ## References
 

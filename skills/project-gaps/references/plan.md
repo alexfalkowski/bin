@@ -37,13 +37,12 @@ implementation home, validation, delegation, ledger state, and workflow routing.
    is needed. Use allowed research tools when they materially improve proposal
    quality; ask permission before approval-gated network, auth, clone, or
    remote-write commands.
-9. Use review agents when this skill authorizes delegated review and the active
-   runtime provides and permits sub-agents. If a higher-priority runtime rule
-   requires explicit user delegation authorization and the current request does
-   not provide it, ask for permission instead of downgrading silently. If
-   sub-agents are unavailable, forbidden, or denied, perform local review only
-   when credible completion does not depend on delegation; otherwise stop at the
-   delegation gate.
+9. Use review agents when the active runtime provides and permits sub-agents and
+   they materially improve coverage, confidence, throughput, independent
+   validation, forward-testing, or disjoint implementation, or when this skill
+   requires delegated review. If sub-agents are unavailable, forbidden, or
+   denied, perform local review only when credible completion does not depend on
+   delegation; otherwise stop at the delegation gate.
 10. Wait for all review work to finish.
 11. Update coverage state for every planned slice before judging the requested
     scope.

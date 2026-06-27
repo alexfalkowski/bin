@@ -116,11 +116,39 @@ These are mandatory gates, not guidance.
 20. When tests use mocks, stubs, spies, fakes, or other test doubles, check whether each double protects a true boundary or only mirrors internal implementation; flag interaction-only tests that could pass while real behavior is broken.
 21. Before finishing test changes or reviews, do a mutation-style gap scan against changed behavior with an established test harness. Ask whether the tests would fail if a comparison changed, a boundary moved, a boolean flipped, an error path returned success, a collection or string operation changed, a fallback/default was removed, or an observable side effect disappeared. Strengthen the behavior test when the answer is no. Ask the human only when the correct boundary or product behavior is ambiguous.
 22. Before accepting or repeating a coverage claim, run the repository's selected coverage command when practical and inspect every metric the tool reports, not only line coverage. If coverage drops or a metric is weak, ask what repository-owned behavior is untested before adding line-targeted tests.
-23. After green and before broad validation, perform an explicit refactor pass on changed production code and tests. Remove duplication, simplify awkward setup, align with local naming/helpers, and keep behavior unchanged. If no cleanup is needed, record `Refactor: none`.
-24. Before finishing test changes or reviews, do a readability pass after formatting. Check that tests describe observable behavior, avoid hard-coded private implementation details unless those details are the public contract, keep setup expressions simple enough for review, and place helper functions according to the local or language-specific convention.
-25. Before finishing test changes or reviews, scan changed tests for repeated boolean or numeric assertions whose default failure output would not identify the behavior under test; add named subtests or assertion messages where needed.
-26. When reviewing test quality, evaluate whether the tests are understandable, maintainable, repeatable, atomic, necessary, granular, fast enough for their layer, and first/test-driven where that is relevant. Use scores only when the human asks for a scored review; otherwise turn the rubric into concrete findings and improvements.
-27. For behavior-changing code with an established test harness, report the trace in the final update using this shape: `TDD decision`, `Style detected`, `First test/scenario`, `Red`, `Green`, and `Refactor`. Include the test, scenario, feature, or spec added or updated first; whether the red step failed for the expected reason, passed unexpectedly, was not practical to run, or was missed; the implementation change that made it green; any mutation-style or coverage gap found; and any refactor after green. Use `Refactor: none` when no cleanup was needed.
+23. After first green and before broad validation, perform an explicit
+   Refactor step on changed production code and tests. Refactor is a mandatory
+   assessment step, not an optional cleanup note. Use behavior-preserving,
+   step-by-step changes only; when a cleanup would change behavior, return to
+   Red with a new test/scenario or propose it separately instead of hiding it in
+   Refactor.
+24. Run a two-pass refactor assessment after first green. First scrutinize the
+   local implementation and tests for code smells and test smells: duplication,
+   long methods or scripts, tangled conditionals, data clumps, primitive
+   obsession, unnecessary abstraction, tight coupling, unclear names, awkward
+   setup, hard-to-read assertions, and helpers that hide behavior. Then inspect
+   the boundary fit: caller-facing API shape, error handling, data shape,
+   fixture clarity, local helper/naming conventions, and whether the first green
+   implementation creates change pressure in nearby code. Use a third pass when
+   the change touches shared tooling, public or documented interfaces,
+   compatibility-sensitive behavior, security-sensitive behavior, release or CI
+   workflow, or when either earlier pass still leaves a credible smell. Prefer
+   the smallest cleanup that improves local design while preserving behavior,
+   and keep tests green after every refactor edit.
+   Use the Refactoring Guru catalog categories as checklist prompts, not as a
+   mandate to apply object-oriented patterns everywhere: bloaters,
+   object-orientation abuse where applicable, change preventers, dispensables,
+   couplers, composing methods, moving features, organizing data, simplifying
+   conditionals, simplifying method calls, and generalization cleanup. Translate
+   catalog items to the repository's language and local patterns only when they
+   fit the changed code.
+25. If no cleanup is needed, record `Refactor: none (<reason>)` after stating
+   which refactor passes were considered. A bare `Refactor: none` is not enough
+   for behavior-changing work with an established test harness.
+26. Before finishing test changes or reviews, do a readability pass after formatting. Check that tests describe observable behavior, avoid hard-coded private implementation details unless those details are the public contract, keep setup expressions simple enough for review, and place helper functions according to the local or language-specific convention.
+27. Before finishing test changes or reviews, scan changed tests for repeated boolean or numeric assertions whose default failure output would not identify the behavior under test; add named subtests or assertion messages where needed.
+28. When reviewing test quality, evaluate whether the tests are understandable, maintainable, repeatable, atomic, necessary, granular, fast enough for their layer, and first/test-driven where that is relevant. Use scores only when the human asks for a scored review; otherwise turn the rubric into concrete findings and improvements.
+29. For behavior-changing code with an established test harness, report the trace in the final update using this shape: `TDD decision`, `Style detected`, `First test/scenario`, `Red`, `Green`, and `Refactor`. Include the test, scenario, feature, or spec added or updated first; whether the red step failed for the expected reason, passed unexpectedly, was not practical to run, or was missed; the implementation change that made it green; the refactor scrutiny performed after first green, including any smells considered or removed and whether a third pass was required; any mutation-style or coverage gap found; and validation after refactor edits. Use `Refactor: none (<reason>)` when no cleanup was needed.
 
 ## Principles
 
@@ -146,6 +174,10 @@ These are mandatory gates, not guidance.
   otherwise test observable behavior or call out the validation gap.
 - Use tests as self-validating specifications that guide small, controlled implementation steps and expose interface design pressure before implementation. Do not turn TDD into a large upfront specification exercise; keep each test or scenario narrow enough to drive the next useful behavior.
 - Use test-first or scenario-first development for behavior changes when the repository has a credible test or BDD layer. Make the test-first decision before production edits. If the change is docs-only, policy-only, configuration-only, formatting-only, metadata-only, mechanical, generated, or cannot reasonably be exercised first, call out the exception and validate with the appropriate lint, schema, dry-run, or repository check instead.
+- Treat Refactor as the design-quality payoff of the TDD loop. Spend more
+  scrutiny here than on the first green implementation: look for real smells,
+  remove only the ones supported by local evidence, and avoid broad rewrites,
+  speculative abstraction, or unrelated polish.
 - Prefer classicist, behavior-oriented tests over mockist, interaction-heavy tests: test observable outcomes through real in-process collaborators where practical, and avoid mocking your own code just to isolate a class, method, function, or file.
 - Treat the unit under test as a behavior at an appropriate boundary, not automatically a single class, method, function, or file.
 - Do not create a one-to-one mapping between test files and implementation files by default. Group tests around public behavior, commands, scenarios, or contracts so implementation can be reorganized without invalidating the test suite.

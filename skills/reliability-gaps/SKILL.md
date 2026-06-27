@@ -94,6 +94,9 @@ Use this structure:
 - Scope: path/to/file-or-folder
 - Impact: User, operator, incident, availability, recovery, data-integrity, or scaling risk.
 - Evidence: Concrete file and line references, command behavior, config, docs, tests, missing control, failure mode, calculation gap, and the verification path used to rule out a guess.
+- Reproduction: Smallest supported trigger, workflow, config path, command,
+  test, trace, or operational scenario that reproduces the failure mode or
+  proves the missing reliability control.
 - Proposed fix: Smallest credible reliability improvement using established local patterns.
 - Validation: Suggested checks for the reliability change.
 ```
@@ -126,7 +129,10 @@ These reliability implementation rules remain mandatory:
    - `Validation`: the focused and expanded commands intended after refactor.
 - Implement only the agreed finding with the smallest clear reliability change.
 - Use `$reliability-standards` for reliability design, `$change-safety` for public or operational compatibility, `$testing-standards` for failure-path tests, and `$change-validation` for checks. Pair with `$security-audit` when the fix touches auth, secrets, privilege, DoS, logs, supply chain, or incident containment.
-- Report the result for that finding with `Red`, `Green`, `Refactor`, and `Validation` entries. Use `Refactor: none` when no cleanup was needed after green. Then ask the human to verify and explicitly say `REL-N is done`.
+- Report the result for that finding with `Red`, `Green`, `Refactor`, and
+  `Validation` entries. Use `Refactor: none (<reason>)` when no cleanup was
+  needed after green. Then ask the human to verify and explicitly say `REL-N is
+  done`.
 
 ## References
 
