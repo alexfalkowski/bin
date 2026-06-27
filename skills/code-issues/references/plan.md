@@ -50,9 +50,12 @@ state, code/security/compatibility evidence, and public contract evidence.
     documented usage paths, real call sites, nil/error/edge behavior, tests or
     CI evidence, and repository policy exclusions that were checked. If any of
     these were not applicable, say why.
-16. If no confirmed issues remain, report that result with the no-finding
-    closeout required by the shared gap workflow, do not create `ISSUES.md`, and
-    stop.
+16. If no confirmed issues remain and requested-scope coverage satisfies the
+    shared no-finding threshold, report that result with the no-finding closeout
+    required by the shared gap workflow, do not create `ISSUES.md`, and stop.
+    If coverage is incomplete, report `Audit incomplete: no confirmed findings
+    so far`, list deferred or blocked scopes, do not create `ISSUES.md`, and do
+    not present the requested scope as complete.
 17. If confirmed issues remain, write the scoped `ISSUES.md` with
     `ISSUE-<number>` IDs.
 18. Present the scoped ledger, proposed fix plan, coverage state for broad

@@ -142,8 +142,12 @@ These shared rules own workflow mechanics.
 
 ## Candidate Handling
 
-- For delegated review, require each assigned agent to return candidates in the
-  selected skill's ledger format, without final IDs unless useful locally.
+- For delegated review, require each assigned agent to return confirmed
+  candidates in the selected skill's ledger format, without final IDs unless
+  useful locally. Also require rejected leads with rejection reasons, risky
+  files or surfaces that still deserve review, and exact follow-up scopes. A
+  delegated "nothing found" response without coverage, rejected-lead, and
+  follow-up-scope evidence is not enough to close a broad audit slice.
 - Use `../references/finding-severity.md` to discard low-confidence candidates
   before assigning severity or confidence when the selected skill records
   findings.
@@ -197,16 +201,47 @@ These shared rules own workflow mechanics.
 
 ## Find And Audit Outcomes
 
-- If no confirmed gaps or proposals remain, report that result with a no-finding
-  closeout and do not create a scoped ledger. Use one of these outcomes:
-  `No confirmed findings`; `No findings, but validation incomplete because X`;
-  or `No findings and validation clean`. The closeout must include reviewed
-  files or slices; package count or inventory summary when applicable;
-  supported usage, call sites, commands, tests, or CI evidence checked;
-  validation commands and their classified results; excluded or deferred files;
-  repository policy exclusions or suppressions applied; confidence as a
-  percentage or narrow range; and the remaining limits on that confidence. Do
-  not present "nothing found" as a broad assurance without this evidence.
+- Use exactly one of these outcomes for find or audit closeout:
+  `Findings recorded`; `No findings and validation clean`;
+  `No findings, but validation incomplete because X`; or
+  `Audit incomplete: no confirmed findings so far`.
+- Distinguish finding confidence from audit completion confidence:
+  `Finding confidence` is confidence that each recorded finding is real and
+  repository-owned; `Coverage confidence` is confidence that reviewed slices
+  were checked adequately; `Scope no-finding confidence` is confidence that no
+  reportable finding remains in the requested scope. Broad no-finding closeouts
+  must report all three values, using `n/a` for finding confidence when no
+  findings were recorded.
+- For broad repository, package-tree, or multi-component scopes, do not use
+  `No findings and validation clean` or `No findings, but validation incomplete
+  because X` unless scope no-finding confidence is at least 95% and every
+  relevant planned slice is deep-reviewed or explicitly excluded. If any
+  relevant slice is skimmed, deferred, or blocked, the final outcome must be
+  `Audit incomplete: no confirmed findings so far`.
+- If no findings survive in reviewed slices but deferred slices remain,
+  continue to the next highest-risk deferred slice when the turn, tools, and
+  permissions allow. Do not stop merely because the first reviewed slices
+  produced no ledger entries.
+- For broad scopes, include a durable coverage table before any no-finding or
+  incomplete closeout:
+
+  ```markdown
+  | Slice | Status | Evidence | Validation | Confidence | Next scope |
+  | --- | --- | --- | --- | --- | --- |
+  ```
+
+  `Status` must be one of `deep`, `skimmed`, `deferred`, `blocked`, or
+  `excluded`. `Next scope` must be an exact runnable package, folder, command,
+  or explicit `n/a`.
+- If no confirmed gaps or proposals remain and the requested scope satisfies the
+  selected outcome's confidence and coverage requirements, report that result
+  with a no-finding closeout and do not create a scoped ledger. The closeout
+  must include reviewed files or slices; package count or inventory summary
+  when applicable; supported usage, call sites, commands, tests, or CI evidence
+  checked; validation commands and their classified results; excluded or
+  deferred files; repository policy exclusions or suppressions applied; the
+  confidence fields above; and the remaining limits on that confidence. Do not
+  present "nothing found" as a broad assurance without this evidence.
 - If confirmed gaps or proposals remain, write them to the scoped ledger before
   making changes unless the selected skill explicitly defines a one-pass fix
   mode. Record only high-confidence, actionable findings with file/line,
