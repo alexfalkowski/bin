@@ -68,9 +68,12 @@ evidence.
     cleanup, shutdown/drain/health/readiness behavior, observability or operator
     impact, and CI/sidecar/runtime controls that were checked. If any of these
     were not applicable, say why.
-20. If no confirmed gaps remain, report that result with the no-finding closeout
+20. If no confirmed gaps remain and requested-scope coverage satisfies the
+    shared no-finding threshold, report that result with the no-finding closeout
     required by the shared gap workflow, do not create `RELIABILITY.md`, and
-    stop.
+    stop. If coverage is incomplete, report `Audit incomplete: no confirmed
+    findings so far`, list deferred or blocked scopes, do not create
+    `RELIABILITY.md`, and do not present the requested scope as complete.
 21. If confirmed gaps remain, write the scoped `RELIABILITY.md` with
     `REL-<number>` IDs.
 22. Present the scoped ledger, proposed reliability-fix plan, coverage state for

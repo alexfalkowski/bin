@@ -24,6 +24,20 @@ invalid fixture, or unsupported manual construction is a lead, not a >=90%
 finding, unless repository evidence shows that path is plausibly exercised
 today.
 
+Do not collapse different confidence claims into one number. Use:
+
+- **Finding confidence** for the chance that a recorded finding is real,
+  repository-owned, and actionable.
+- **Coverage confidence** for the chance that reviewed slices were inspected
+  deeply enough for their stated outcome.
+- **Scope no-finding confidence** for the chance that no reportable finding
+  remains in the requested scope.
+
+For broad scopes, a high finding confidence or high coverage confidence for
+selected slices does not imply high scope no-finding confidence. If coverage is
+incomplete, say so directly instead of giving a low-value estimate that the
+entire codebase has no issues.
+
 Challenge confidence before accepting it. If an unresolved ownership, trigger,
 impact, usage, contract, or counterexample question would drop confidence below
 the threshold, gather evidence, lower confidence, route the concern, or state the
@@ -112,11 +126,14 @@ PR readiness, compatibility conclusions, and definitely-fixed claims, require
   environment issue, or inconclusive validation instead of treating it as a
   repository finding.
 
-For no-findings results, distinguish `No confirmed findings`, `No findings, but
-validation incomplete because X`, and `No findings and validation clean`.
-Report residual risk in concrete terms: unrun targets, no-op wrappers, skipped
-slices, unsupported paths, missing sidecars, unavailable scanners, or evidence
-that was limited to static review.
+For no-findings results, distinguish `No findings and validation clean`,
+`No findings, but validation incomplete because X`, and
+`Audit incomplete: no confirmed findings so far`. Report residual risk in
+concrete terms: unrun targets, no-op wrappers, skipped slices, unsupported
+paths, missing sidecars, unavailable scanners, or evidence that was limited to
+static review. Do not use a clean no-findings outcome for a broad scope unless
+scope no-finding confidence reaches the required threshold and no relevant
+slice remains skimmed, deferred, or blocked.
 
 ## Severity
 
