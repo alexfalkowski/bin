@@ -75,7 +75,18 @@ evidence.
     impact, and CI/sidecar/runtime controls that were checked. If any of these
     were not applicable, say why. For confidence closure audits, also run the final
     challenge pass required by the shared workflow and name any remaining
-    counterexamples.
+    counterexamples. For high-assurance closure, also account for materially
+    relevant reliability bug classes against the requested confidence threshold:
+    dependency outage and recovery behavior, cancellation and deadline
+    propagation, retry/backoff/load-shedding interaction, shutdown ordering and
+    repeated lifecycle start/stop behavior, queue or worker bounds, durable
+    idempotency or reconciliation paths for stateful work, telemetry of failure
+    modes, release or rollback controls, and generated/config drift. If
+    representative stress, race, outage, fault-injection, sidecar, integration,
+    freshness, or operator-scenario evidence is missing for a relevant class,
+    report it as a confidence limiter or route it to the right workflow; do not
+    record it as a reliability gap unless a current repository-owned failure
+    mode or missing control is confirmed.
 20. If no confirmed gaps remain and requested-scope coverage satisfies the
     shared no-finding threshold, report that result with the no-finding closeout
     required by the shared gap workflow, do not create `RELIABILITY.md`, and

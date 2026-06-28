@@ -57,7 +57,16 @@ state, code/security/compatibility evidence, and public contract evidence.
     CI evidence, and repository policy exclusions that were checked. If any of
     these were not applicable, say why. For confidence closure audits, also run the
     final challenge pass required by the shared workflow and name any remaining
-    counterexamples.
+    counterexamples. For high-assurance closure, also account for materially
+    relevant code bug classes against the requested confidence threshold:
+    parser/decoder and serialization behavior, boundary/default/zero-value
+    behavior, nil/error/panic paths, concurrent or shared state, resource
+    limits, generated/provider mapping drift, public API compatibility, and
+    supported construction or wiring paths. If representative fuzz, property,
+    race, stress, fixture, integration, analyzer, or generated freshness
+    evidence is missing for a relevant class, report it as a confidence limiter
+    or route it to the right workflow; do not record it as a code issue unless a
+    concrete bug or violated contract is confirmed.
 16. If no confirmed issues remain and requested-scope coverage satisfies the
     shared no-finding threshold, report that result with the no-finding closeout
     required by the shared gap workflow, do not create `ISSUES.md`, and stop.

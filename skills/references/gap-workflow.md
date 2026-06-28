@@ -26,6 +26,20 @@ These shared rules own workflow mechanics.
   the human asks for 100% certainty, explain that the workflow can pursue a lower
   explicit target or continue gathering evidence, but cannot truthfully close at
   100%.
+- Treat a confidence closure audit as **high-assurance closure** when the
+  requested threshold is higher than the broad no-finding default threshold, or
+  when the human asks for "max confidence", "full closure", "no issues
+  anywhere", "no possible bugs", or equivalent broad assurance. High-assurance
+  closure scales evidence to the requested threshold; do not hard-code one
+  percentage as the only trigger for stronger review.
+- Distinguish scope no-finding confidence from a literal "no possible bugs"
+  claim. The selected skill can close only on no remaining reportable findings
+  in the requested scope under the skill's evidence rules. If the human asks
+  about no possible bugs anywhere, report that as a separate residual
+  correctness-risk statement with explicit limits; do not use a clean
+  confidence-closure outcome as proof that unexercised state space, unsupported
+  construction, environment-specific behavior, or future dependency behavior is
+  bug-free.
 - Use runtime goals only when the human explicitly requests them or
   higher-priority runtime instructions allow goal creation for this workflow.
   Otherwise maintain the selected mode, requested scope, and state transitions
@@ -173,6 +187,16 @@ These shared rules own workflow mechanics.
   successful CI result for the exact commit when it is available; otherwise run
   or explicitly classify the repository-defined equivalent targets. The mere
   existence of CI is not validation evidence.
+- For high-assurance closure, add evidence planning before closeout. Identify
+  which bug classes are materially relevant to the requested scope and what
+  current evidence exercises them, such as parser/decoder fuzzing or property
+  tests, serialization round trips, boundary/default fixtures, race or stress
+  tests for concurrent state, lifecycle start/stop repetition, dependency
+  outage or fault-injection scenarios, generated-contract freshness checks,
+  security scanners, and integration tests with required sidecars. Missing
+  evidence is not itself a finding unless the selected skill says so, but it
+  must appear as a confidence limiter or be routed to the appropriate workflow
+  such as `$test-gaps` or `$project-gaps`.
 
 ## Candidate Handling
 
@@ -191,6 +215,14 @@ These shared rules own workflow mechanics.
   authorized and delegation is needed for credible closure, stop at the
   delegation gate or report the blocked requirement instead of presenting a
   confidence closure result.
+- For high-assurance closure with authorized agents, assign at least one
+  adversarial reviewer when practical. That reviewer should try to falsify the
+  no-finding conclusion, look for unsupported confidence leaps, unreviewed bug
+  classes, missing supported-usage evidence, and unresolved counterexamples.
+  Resolve the adversarial review explicitly before closeout. Do not pass
+  intended conclusions, rejected-lead rationale, or proposed confidence numbers
+  to the adversarial reviewer unless the validation task specifically requires
+  that context.
 - Use `../references/finding-severity.md` to discard low-confidence candidates
   before assigning severity or confidence when the selected skill records
   findings.
@@ -282,6 +314,12 @@ These shared rules own workflow mechanics.
   - a final challenge pass names the strongest remaining counterexamples and
     explains why they do not drop scope no-finding confidence below the requested
     confidence threshold.
+- For high-assurance closure, do not use any no-finding closeout until an
+  assurance matrix or equivalent compact accounting names the materially
+  relevant bug classes, current evidence, missing assurance, and any confidence
+  cap. If missing fuzz, race, stress, property, sidecar, scanner, or integration
+  evidence would make the requested confidence misleading, lower the confidence
+  or close with incomplete validation instead of stretching the number.
 - If no findings survive in reviewed slices but deferred slices remain,
   continue to the next highest-risk deferred slice when the turn, tools, and
   permissions allow. Do not stop merely because the first reviewed slices
@@ -297,6 +335,15 @@ These shared rules own workflow mechanics.
   `Status` must be one of `deep`, `skimmed`, `deferred`, `blocked`, or
   `excluded`. `Next scope` must be an exact runnable package, folder, command,
   or explicit `n/a`.
+- For high-assurance closure, include or summarize this assurance accounting:
+
+  ```markdown
+  | Bug Class | Relevant Surface | Evidence | Missing Assurance | Confidence Cap |
+  | --- | --- | --- | --- | --- |
+  ```
+
+  Keep it compact. Use `n/a` only when the bug class is not materially relevant
+  to the requested scope, and say why in the evidence cell.
 - If no confirmed gaps or proposals remain and the requested scope satisfies the
   selected outcome's confidence and coverage requirements, report that result
   with a no-finding closeout and do not create a scoped ledger. The closeout

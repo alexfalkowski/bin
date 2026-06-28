@@ -125,6 +125,19 @@ PR readiness, compatibility conclusions, and definitely-fixed claims, require
   evidence still available. Record the blocker as missing tool, local
   environment issue, or inconclusive validation instead of treating it as a
   repository finding.
+- **High-assurance bug-class evidence**: for high-assurance no-finding claims,
+  calibrate each materially relevant bug class against representative evidence
+  and the requested confidence threshold, not only reviewer effort. Examples
+  include fuzz or property coverage for parsers and encoders, boundary fixtures
+  for limit/default behavior, race or stress runs for shared state, repeated
+  lifecycle runs for startup/shutdown, outage or fault-injection scenarios for
+  dependencies, generated freshness checks for generated contracts, and
+  sidecar-backed integration tests for service behavior. Missing representative
+  evidence is a confidence limiter, not automatically a finding.
+- **Static impossibility or unsupported path**: a bug class can be marked not
+  relevant only when code structure, generated contracts, repository policy, or
+  supported usage evidence makes the trigger inapplicable. Do not mark a class
+  `n/a` merely because no issue was noticed.
 
 For no-findings results, distinguish `No findings and validation clean`,
 `No findings, but validation incomplete because X`, and
