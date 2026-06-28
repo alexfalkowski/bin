@@ -159,6 +159,15 @@ These shared rules own workflow mechanics.
   permissions or service dependencies; dependency, security, or generation
   tools may need network access or cache writes outside the workspace; and a
   target failing in the sandbox is not automatically a repository finding.
+- Prefer fast, reproducible local evidence before relying on broad CI. For
+  changed or suspect executable behavior, use the narrowest supported
+  repository-defined command or dominant-harness selector that exercises the
+  affected package, file, command, scenario, example, or test name. Broaden to
+  suite, lint, security, or CI-equivalent checks only when the change crosses
+  boundaries, affects shared infrastructure, or needs higher confidence.
+- CI can raise confidence only when the relevant current run or equivalent
+  repository-defined local command is observed and classified. The fact that CI
+  exists or will run later is not reproduction evidence for a ledger finding.
 - For confidence closure audits, collect current validation evidence from the
   repository-owned CI analogue before any no-finding closeout. Prefer the latest
   successful CI result for the exact commit when it is available; otherwise run
@@ -196,6 +205,11 @@ These shared rules own workflow mechanics.
   absence-based gaps, reproduce the limitation by showing the supported user,
   maintainer, or operator action that currently fails, is unsupported, or cannot
   be completed from the existing surface.
+- When an executable command can demonstrate the candidate through the dominant
+  harness or repository entrypoint, prefer that command over a static trace.
+  Use a non-executable trace, lookup, or negative search only for documentary,
+  structural, unsupported-mode, or absence-based candidates where no supported
+  command can demonstrate the gap.
 - Record the reproduction path in the candidate and ledger entry. The path must
   name what was run or inspected, the observed result, and why that result
   demonstrates the repository-owned issue, gap, or limitation. A reproduction
@@ -208,6 +222,10 @@ These shared rules own workflow mechanics.
   `$change-validation` and do not record the candidate as confirmed unless a
   separate supported reproduction path proves it. Report the evidence gap or
   deferred follow-up instead of raising confidence to the ledger threshold.
+- A suggested validation command is not itself reproduction. Before recording a
+  ledger entry, either run or inspect the smallest supported reproducer and
+  record the observed result, or keep the candidate below the confidence
+  threshold with the blocker named.
 - For reusable library, helper, or shared-tooling scopes, inspect supported
   usage evidence before recording or accepting a high-confidence issue, gap, or
   proposal: a real consumer, executable example, integration test, module wiring
