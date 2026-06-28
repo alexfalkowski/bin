@@ -62,6 +62,9 @@ Use this reference when working in Go repositories.
 - In this repository ecosystem, prefer `github.com/stretchr/testify/require` when adding assertion-based tests unless the package already uses a different local pattern.
 - When changing Go tests, scan changed `require.True`, `require.False`, `require.Equal`, `require.EqualValues`, `require.Less`, and `require.LessOrEqual` calls. Repeated or scenario-sensitive boolean and numeric assertions should include a message unless the test or subtest name already makes the behavior obvious.
 - Use this decision gate before creating or changing a Go test file: default to an external test package named `<package>_test`; use the production package only after explaining why the public or documented entrypoint cannot cover the behavior.
+- Keep Go benchmark functions in `benchmark_test.go` and fuzz functions in
+  `fuzz_test.go`. When reviewing Go tests, flag benchmark or fuzz entrypoints
+  placed in other `*_test.go` files.
 - Do not write internal Go tests in the production package just to reach unexported functions, methods, fields, or collaborators.
 - Keep test cases and test functions first in the file. Place fakes, stubs, spies, mock implementations, and helper types after the tests at the bottom of the file.
 
