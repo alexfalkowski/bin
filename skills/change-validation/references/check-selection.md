@@ -5,13 +5,20 @@ Use this reference when choosing which checks to run.
 ## Validation Principles
 
 - Before wrapping up code changes, run the applicable lint checks.
-- Run the narrowest check that gives credible confidence for the change.
+- Run the narrowest check that gives credible confidence for the change and
+  report when broader CI coverage is intentionally left to CI.
 - Prefer repository-defined commands because they encode project conventions.
-- Use direct commands when they are clearly narrower or better aligned with the task than a broader repo wrapper.
+- Use direct commands only when they are an established repository or harness
+  selector that is clearly narrower or better aligned with the task than a
+  broader repo wrapper.
 - Before running, retrying, replacing, or recommending commands, establish the repository root, documented entrypoint, CI analogue, initialized user shell, and any macOS/Homebrew tool-path assumptions.
 - Before selecting tests, identify the dominant relevant test harness and repository-defined entry point for the affected behavior.
 - Do not add or select an ad hoc language-native test command when the repository's established harness owns the behavior, unless the user explicitly asked for that layer or the behavior cannot be covered through the established harness.
 - If bypassing the dominant harness is necessary, stop before editing or validating and state why the established harness cannot cover the behavior.
+- For code or test changes, prefer fast feedback from supported package, file,
+  scenario, example, focus, or test-name selectors in the dominant harness
+  before running a broad suite. Do not use a selector that changes the test
+  layer or skips required setup.
 - Use CI configuration as a strong signal for which checks matter most.
 - Run the repository's setup target, such as `make dep`, when checks depend on installed dependencies, generated files, or vendored state.
 - Ask for permission before running checks that require SSH credentials, GitHub auth, registry auth, cloning, pushing, publishing, opening PRs, or updating remote state.
@@ -36,10 +43,13 @@ Use this reference when choosing which checks to run.
 ## Typical Validation Order
 
 1. Run setup or dependency installation when the required tools or generated/vendor state may be missing.
-2. Run the most targeted lint or test command that exercises the changed behavior.
+2. Run the fastest supported selector that exercises the changed area, such as a
+   package, file, scenario, example, focus tag, or test name exposed by the
+   repository's dominant harness.
 3. Run the nearest repository entry point, often a `make` target, when that is the project's standard workflow.
-4. Run any additional repo-defined checks that are clearly relevant to the risk of the change.
-5. Run broader lint or test suites only when the change touches shared infrastructure, multiple packages, or release-sensitive behavior.
+4. Run applicable lint for changed code, tests, scripts, docs, skills, or policy.
+5. Run any additional repo-defined checks that are clearly relevant to the risk of the change.
+6. Run broader lint or test suites only when the change touches shared infrastructure, multiple packages, or release-sensitive behavior.
 
 ## Output Format
 
@@ -75,6 +85,10 @@ For standalone validation reports, use exactly this Markdown structure and do no
   executable test harness owns the behavior.
 - For shell scripts, Dockerfiles, and Makefile glue, prefer the repo's lint targets when available.
 - For changes in any implementation language, first identify the majority relevant repository-defined test harness for the affected behavior; prefer the matching test entry point before inventing ad hoc commands.
+- For changes isolated to one package, file, command, scenario, or documented
+  example, prefer the matching supported selector first. If the repository only
+  exposes a broad `make` target, use that target and report the lack of a
+  narrower supported selector as validation scope, not as a failure.
 - If a service behavior is primarily covered by Cucumber, Gherkin, RSpec-style features, acceptance tests, or another cross-language harness, validate through that harness unless the user explicitly asks for lower-level tests.
 - Run language-specific lint or formatting commands for changed code when the repository exposes them, regardless of which harness owns the behavior tests.
 - For Go changes whose majority relevant tests are Go-based, prefer the repo's Go test entry points.

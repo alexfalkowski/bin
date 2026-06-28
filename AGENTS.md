@@ -48,6 +48,11 @@ Agents MUST:
   tests, logs, scanner output, official documentation, runtime behavior, or
   repository history. Below the required threshold, gather more evidence or
   state the blocker instead of accepting completion.
+- For ledger findings and validation conclusions, prefer reproducible local
+  evidence from the smallest supported command, test, scenario, trace, lookup,
+  or negative search that demonstrates the claim. CI running later is not
+  reproduction evidence unless a current CI result or equivalent
+  repository-defined command has been observed and classified.
 - Before accepting confidence at or above the required threshold, perform a
   challenge pass. Material unresolved questions, alternate owners, unsupported
   paths, or counterexamples must lower confidence; questions already answered by
@@ -479,6 +484,11 @@ Target-specific rules:
   explicitly requires another working directory.
 - Prefer `make` targets and documented entrypoints over direct tool
   invocations, even when a direct command appears equivalent.
+- For code and test changes, run the narrowest supported fast-feedback selector
+  in the dominant harness first, such as a package, file, scenario, example,
+  focus tag, test name, command, or documented entrypoint. Do not use speed as
+  a reason to bypass the repository-defined harness, skip required setup, or
+  test a private surface.
 - Show command discovery with `make` or `make help`.
 - Use `make dep` for Ruby dependency setup before checks that need installed
   gems or vendor state.

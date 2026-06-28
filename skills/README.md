@@ -115,6 +115,15 @@ When a skill is the final response, use that skill's required output format.
 When a skill is embedded by another skill, preserve its concrete facts and use
 the caller's output format.
 
+Prefer fast, reproducible local validation before broad CI confidence. For
+code or test changes, run the narrowest supported repository command or
+dominant-harness selector that exercises the affected package, file, scenario,
+example, focus tag, test name, command, or documented entrypoint. Then broaden
+to lint, suite, security, or CI-equivalent checks only when the change touches
+shared infrastructure, crosses boundaries, or needs higher confidence. CI
+running later is useful backup, but it is not reproduction evidence unless the
+current run or equivalent local command is observed and classified.
+
 Use `testing-standards` before adding, reviewing, refactoring, or planning tests.
 In brief: inspect the dominant relevant harness, test observable
 repository-owned behavior through public or documented surfaces, keep tests
