@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC1091
+# Run one Go fuzz target for a bounded time.
+
+set -eo pipefail
+
+if [[ -z ${package:-} ]]; then
+  echo "missing package" >&2
+  exit 1
+fi
+
+if [[ -z ${name:-} ]]; then
+  echo "missing name" >&2
+  exit 1
+fi
+
+source "$(dirname "$0")/../../lib/validate.sh"
+validate_package
+
+go test -vet=off -mod vendor -run '^$' "-fuzz=$name" "-fuzztime=${fuzztime:-10s}" "./$package"

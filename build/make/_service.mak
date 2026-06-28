@@ -16,6 +16,8 @@ override export image_type := $(value image_type)
 override export module := $(value module)
 override export id := $(value id)
 override export kind := $(value kind)
+override export name := $(value name)
+override export fuzztime := $(value fuzztime)
 
 download:
 	@go mod download
@@ -114,6 +116,10 @@ benchmarks: build
 # Set package=internal/foo, not ./internal/foo, to test one package.
 specs:
 	@$(BIN_ROOT)/build/go/test "$(if $(package),,$(COVER_PACKAGES))" $(if $(package),,$(PACKAGES))
+
+# Fuzz one Go target. Set package=internal/foo and name=FuzzName; fuzztime defaults to 10s.
+fuzz:
+	@$(BIN_ROOT)/build/go/fuzz
 
 # Fetch a Go module (set module=<path>).
 go-get:
