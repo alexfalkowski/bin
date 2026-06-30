@@ -50,6 +50,77 @@ These shared rules own workflow mechanics.
   on silence or a broad request.
 - Treat validation as stale when files change after a command ran.
 
+## Common Plan Mechanics
+
+Use these mechanics with the selected skill's `references/plan.md`. The plan
+names the domain-specific inventory surfaces, candidate tests, closeout
+questions, ledger filename, ID prefix, and implementation pairings.
+
+For find, audit-only, and one-pass modes:
+
+1. Confirm the requested package or folder scope.
+2. Check the selected skill's scoped ledger policy. For normal find/audit modes,
+   stop if an existing scoped ledger blocks review. For one-pass modes that
+   allow reading a ledger, incorporate matching ledger entries and stop on
+   unrelated or ambiguous active work.
+3. Run `$project-workflow` discovery for entrypoints, CI, documented commands,
+   relevant public surfaces, and `./bin` wiring.
+4. Build a recursive inventory using the selected plan's domain-specific
+   surfaces, then split it into bounded review slices. Use depth only as a
+   discovery aid, not as the review boundary.
+5. For broad scopes, choose highest-risk or highest-value slices first and
+   record `deep`, `skimmed`, `excluded`, and `deferred` coverage with exact
+   follow-up scopes. For confidence closure audits, every relevant slice must
+   route to `deep` or `excluded`; unfinished relevant slices keep the outcome
+   incomplete.
+6. Ask for required permission before a local reviewer or authorized agent runs
+   non-read-only, network, auth, remote-write, destructive, or otherwise
+   approval-gated commands.
+7. Apply the shared gap-workflow delegation gate before review work.
+8. Wait for review work to finish, update coverage for every planned slice, and
+   deduplicate or directly re-check conflicting candidates.
+9. Classify validation outcomes as repository finding, local environment issue,
+   missing tool, or inconclusive; use `finding-severity.md` for
+   confidence evidence. For confidence closure audits, include current CI or
+   equivalent repository-defined validation evidence before no-finding
+   closeout.
+10. If no confirmed entries remain, report the coverage state, do not create a
+    scoped ledger, and stop unless the selected one-pass mode has completed
+    edits. If coverage is incomplete, report the incomplete audit state and do
+    not present the requested scope as complete.
+11. If confirmed entries remain in find/audit modes, write the selected scoped
+    ledger with that skill's ID prefix, present the ledger and coverage state,
+    name runnable follow-up scopes, and stop before making fixes.
+
+For implement modes:
+
+1. Confirm scope and read the selected scoped ledger, or stop and ask whether to
+   run the matching find mode first.
+2. Run `$project-workflow` discovery for current entrypoints, CI, documented
+   commands, relevant public surfaces, and `./bin` wiring.
+3. Select the named entry ID or the next entry, then re-check the evidence
+   against current code, docs, tests, commands, and relevant generated or
+   workflow surfaces.
+4. If the entry is already resolved, stale, duplicated, outside scope, or owned
+   by another workflow, explain the routing and propose removing, moving, or
+   reclassifying it before editing.
+5. Present the current evidence, proposed solution, tradeoffs, and intended
+   validation. Stop until the human explicitly agrees to that solution. A named
+   fix, implement, or verify request selects the entry and permits evidence
+   refresh, but it is not approval to edit unless it also agrees to the proposed
+   solution.
+6. After agreement, state the local pattern, dominant relevant harness or
+   validation path, planned validation, and any needed deviation. Stop before
+   deviating from the selected skill, repository pattern, or documented
+   workflow.
+7. Implement only the agreed entry with the smallest clear change, using the
+   paired standards and validation skills named by the selected plan.
+8. Validate through repository Make targets or documented entrypoints, then ask
+   the human to verify with the selected `ID-<number> is done` phrase.
+9. Stop until confirmation. After confirmation, remove or revise the entry and
+   continue with the next entry, or delete the scoped ledger when all entries
+   are confirmed resolved.
+
 ## Scoped Ledgers
 
 - Before creating or updating a scoped ledger, ensure the consuming repository

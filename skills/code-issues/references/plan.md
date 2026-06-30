@@ -2,111 +2,54 @@
 
 Use this reference to instantiate the code-issue-specific active plan for
 `$code-issues`. Read it with the shared gap workflow named in `SKILL.md`; that
-workflow owns common plan state, optional goal state, scoped-ledger,
-delegation, coverage, and implementation gates.
+shared gap workflow owns common plan state, optional goal state, scoped-ledger,
+delegation, coverage, validation, and implementation gates.
 
 Track code-issue-specific state for scope, validation, delegation, ledger
 state, code/security/compatibility evidence, and public contract evidence.
 
 ## Find Mode Plan
 
-1. Confirm the requested package or folder scope.
-2. Check whether scoped `ISSUES.md` already exists and stop if it does.
-3. Run `$project-workflow` discovery for entrypoints, CI, and `./bin` wiring.
-4. Run the shared audit preflight from `../../references/gap-workflow.md`,
-   including applicable tool availability, service dependencies, validation
-   ladder, and command-failure classification.
-5. Build a recursive scope inventory for the requested package or folder:
-   relevant file count, first-level subfolders, nested packages, dominant
-   languages, tests, public entrypoints, generated/vendor/build/cache
-   exclusions, security-sensitive surfaces, inventory count when applicable,
-   and the coverage accounting required by the shared workflow.
-6. Split the inventory into bounded behavior-owned review slices. Use depth
-   only as a discovery aid; do not assign a broad recursive subtree merely
-   because it is a first-level subfolder.
-7. If the scope is too broad for a credible single pass, select the highest-risk
-   slices first and initialize coverage entries for reviewed deeply, skimmed,
-   excluded, and deferred slices. Deferred entries must be exact follow-up
-   scopes such as `path/to/package` or `path/to/package/subpackage`.
-   If the human requested a confidence closure audit, apply the confidence
-   closure rules from the shared workflow: every relevant
-   slice must have a route to `deep` or `excluded`, and any unfinished slice
-   keeps the outcome incomplete.
-8. Ask for required permission before any local reviewer or authorized agent
-   runs non-read-only, network, auth, remote-write, or otherwise approval-gated
-   commands.
-9. Apply the shared gap-workflow delegation gate before review work.
-10. Wait for all review work to finish.
-11. Update coverage state for every planned slice before judging the requested
-    scope.
-12. Deduplicate candidates and directly re-check conflicting or overlapping
-    conclusions.
-13. Confirm each finding is a concrete code issue, security issue,
-    compatibility break, or public contract violation. If the evidence is a
-    documentation/comment mismatch, prove the implementation is wrong with
-    non-prose evidence before treating it as a code issue; otherwise classify it
-    as a documentation gap.
-14. Classify validation outcomes as repository finding, local environment
-    issue, missing tool, or inconclusive; apply the confidence evidence rubric
-    from `../../references/finding-severity.md`.
-    For confidence closure audits, include current CI or equivalent
-    repository-defined validation evidence before any no-finding closeout.
-15. Before concluding there are no issues, run a final code-issue closeout
-    check. Name the public APIs, constructors, exported helpers, supported DI or
-    documented usage paths, real call sites, nil/error/edge behavior, tests or
-    CI evidence, and repository policy exclusions that were checked. If any of
-    these were not applicable, say why. For confidence closure audits, also run the
-    final challenge pass required by the shared workflow and name any remaining
-    counterexamples. For high-assurance closure, also account for materially
-    relevant code bug classes against the requested confidence threshold:
-    parser/decoder and serialization behavior, boundary/default/zero-value
-    behavior, nil/error/panic paths, concurrent or shared state, resource
-    limits, generated/provider mapping drift, public API compatibility, and
-    supported construction or wiring paths. If representative fuzz, property,
-    race, stress, fixture, integration, analyzer, or generated freshness
-    evidence is missing for a relevant class, report it as a confidence limiter
-    or route it to the right workflow; do not record it as a code issue unless a
-    concrete bug or violated contract is confirmed.
-16. If no confirmed issues remain and requested-scope coverage satisfies the
-    shared no-finding threshold, report that result with the no-finding closeout
-    required by the shared gap workflow, do not create `ISSUES.md`, and stop.
-    If coverage is incomplete, report `Audit incomplete: no confirmed findings
-    so far`, list deferred or blocked scopes, do not create `ISSUES.md`, and do
-    not present the requested scope as complete.
-17. If confirmed issues remain, write the scoped `ISSUES.md` with
-    `ISSUE-<number>` IDs.
-18. Present the scoped ledger, proposed fix plan, coverage state for broad
-    scopes, and runnable follow-up scopes for deferred slices.
-19. Stop before making fixes.
+1. Follow `../../references/gap-workflow.md#common-plan-mechanics` for shared
+   find-mode sequencing. Apply the shared gap-workflow delegation gate before review work.
+2. Use `ISSUES.md` as the scoped ledger and `ISSUE-<number>` IDs.
+3. Run `$project-workflow` discovery and the shared audit preflight, including
+   applicable tools, service dependencies, validation ladder, and command
+   failure classification.
+4. Inventory tests, public entrypoints, security-sensitive surfaces, supported
+   construction/wiring paths, generated/provider mappings, and repository policy
+   exclusions relevant to the requested scope.
+5. Confirm each finding is a concrete code issue, security issue,
+   compatibility break, or public contract violation. For prose mismatches,
+   prove implementation is wrong with non-prose evidence; otherwise route to a
+   documentation gap.
+6. Before a no-issue closeout, name the public APIs, constructors, exported
+   helpers, supported DI or documented usage paths, real call sites,
+   nil/error/edge behavior, tests or CI evidence, and policy exclusions
+   checked. For high-assurance closure, also account for materially relevant
+   bug classes such as parser/decoder behavior, serialization, boundary/default
+   values, nil/error/panic paths, concurrency, resource limits, mapping drift,
+   public API compatibility, and supported construction paths.
+7. If representative fuzz, property, race, stress, fixture, integration,
+   analyzer, or generated freshness evidence is missing for a relevant class,
+   report it as a confidence limiter or route it to the right workflow; do not
+   record it as a code issue unless a concrete bug or violated contract is
+   confirmed.
+8. If confirmed issues remain, write scoped `ISSUES.md`, present the ledger,
+   coverage state, proposed fix plan, and runnable follow-up scopes, then stop
+   before fixing.
 
 ## Implement Mode Plan
 
-1. Confirm the requested package or folder scope.
-2. Read scoped `ISSUES.md`, or stop and ask whether to run Find mode first.
-3. Run `$project-workflow` discovery for current entrypoints, CI, and `./bin`
-   wiring.
-4. Select the next issue by ID unless the human named a specific issue.
-5. Re-check the issue evidence against current code and tests.
-6. If the issue depends on prose contradicting implementation, prove the code is
-   wrong with non-prose evidence before proposing a code change. If code and
-   tests support the implementation, stop and propose reclassifying or fixing
-   the documentation instead.
-7. Present the issue evidence, proposed solution, compatibility or behavior
-   tradeoffs, and intended validation.
-8. Stop until the human explicitly agrees to that issue's solution. A named
-   fix, implement, or verify request selects the issue and permits re-checking
-   evidence and refreshing the proposal, but it is not approval to edit unless
-   the request also explicitly agrees to the proposed solution. If the proposal
-   was already presented and remains unchanged after re-checking, state only
-   the concise approval gate instead of repeating the full proposal.
-9. After agreement, state the local code pattern, dominant relevant test
-   harness, planned validation, and any needed deviation.
-10. If a deviation is needed, stop and ask before editing.
-11. Implement only the agreed issue with the smallest safe change.
-12. Use `$testing-standards` for regression coverage decisions.
-13. Validate the fix with commands appropriate to the changed files.
-14. Report the result and ask the human to verify with `ISSUE-<number> is done`.
-15. Stop until that confirmation arrives.
-16. After confirmation, remove or revise the issue in scoped `ISSUES.md`.
-17. Continue with the next issue, or delete scoped `ISSUES.md` after all issues
-    are confirmed resolved.
+1. Follow `../../references/gap-workflow.md#common-plan-mechanics` for shared
+   implement-mode sequencing.
+2. Re-check the selected issue against current code and tests. If it depends on
+   prose contradicting implementation, prove the code is wrong with non-prose
+   evidence before proposing a code change; otherwise propose documentation
+   reclassification or fix.
+3. Present issue evidence, proposed solution, compatibility or behavior
+   tradeoffs, and intended validation before asking for agreement.
+4. After agreement, state the local code pattern, dominant relevant test
+   harness, planned validation, and deviations.
+5. Use `$testing-standards` for regression coverage decisions and validate with
+   commands appropriate to the changed files.
