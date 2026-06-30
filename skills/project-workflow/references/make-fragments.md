@@ -9,6 +9,13 @@ Use this reference after you have identified which shared `bin/build/make/*.mak`
 - Validate path-sensitive behavior from this repository root and from the consuming repository root when helper paths or downstream layouts matter.
 - Preserve downstream `./bin` include behavior unless the user explicitly asks to change it.
 
+## Target Metadata
+
+- Treat comments immediately before targets as the external command catalog. A target that is called by humans, CI, downstream repositories, scripts, or any other external system must have a concise `# ...` comment that says what it does.
+- Treat uncommented targets as internal implementation details. Do not present or recommend them as discoverable commands unless the task explicitly targets internal Make wiring.
+- Do not add `.PHONY` entries mechanically for every target. Keep `.PHONY` selective, and add it only when there is a concrete file or directory collision risk and the target must always run.
+- Do not broaden a Makefile's `.PHONY` policy as cleanup while making unrelated target, comment, or validation changes.
+
 ## Common Fragment Map
 
 ### `help.mak`
