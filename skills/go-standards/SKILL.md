@@ -22,8 +22,18 @@ description: Use when writing, reviewing, refactoring, or documenting Go package
 10. Add or recommend Go `*_test.go` coverage only when the nearby majority relevant tests for that behavior are Go-based, the changed surface is a Go package/API contract that cannot be covered through the dominant harness, or the repository explicitly asks for Go-level coverage. Agents MUST stop and explain before creating Go tests when another harness owns the behavior.
 11. Before writing any Go `*_test.go` file, choose the test package deliberately. Default to an external `package_test` package. If you think the test must use the production package instead, stop and explain why the public or documented entrypoint cannot cover the behavior before writing that test.
 12. When writing or reviewing Go tests, benchmark functions MUST belong in `benchmark_test.go`, and fuzz functions MUST belong in `fuzz_test.go`.
-13. Pair this skill with `$testing-standards` when designing, reviewing, or refactoring Go test coverage.
-14. Pair this skill with `$change-validation` when selecting Go test, lint, coverage, or benchmark commands.
+13. Before adding or approving Go benchmarks or fuzz tests, require a concrete
+    repository-owned reason: a performance contract or performance question for
+    benchmarks, or an input/state space risk, parser/decoder surface,
+    concurrency/state-machine invariant, or regression history for fuzz tests.
+    Agents MUST NOT benchmark or fuzz aliases, re-exports, or thin wrappers
+    that only delegate to a canonical implementation unless the test states an
+    explicit rationale, such as compatibility/parity with the canonical surface
+    or wrapper overhead for a supported public contract. Otherwise prefer
+    ordinary behavior tests, executable examples, repository validation, or no
+    new coverage.
+14. Pair this skill with `$testing-standards` when designing, reviewing, or refactoring Go test coverage.
+15. Pair this skill with `$change-validation` when selecting Go test, lint, coverage, or benchmark commands.
 
 ## References
 
