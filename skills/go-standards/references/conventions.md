@@ -65,6 +65,15 @@ Use this reference when working in Go repositories.
 - Keep Go benchmark functions in `benchmark_test.go` and fuzz functions in
   `fuzz_test.go`. When reviewing Go tests, flag benchmark or fuzz entrypoints
   placed in other `*_test.go` files.
+- Before adding or approving Go benchmarks or fuzz tests, require a concrete
+  repository-owned reason: a performance contract or performance question for
+  benchmarks, or an input/state space risk, parser/decoder surface,
+  concurrency/state-machine invariant, or regression history for fuzz tests.
+- Do not benchmark or fuzz aliases, re-exports, or thin wrappers that only
+  delegate to a canonical implementation unless the test states an explicit
+  rationale, such as compatibility/parity with the canonical surface or wrapper
+  overhead for a supported public contract. Otherwise prefer ordinary behavior
+  tests, executable examples, repository validation, or no new coverage.
 - Do not write internal Go tests in the production package just to reach unexported functions, methods, fields, or collaborators.
 - Keep test cases and test functions first in the file. Place fakes, stubs, spies, mock implementations, and helper types after the tests at the bottom of the file.
 
