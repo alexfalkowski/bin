@@ -1,4 +1,4 @@
 interface:
   display_name: "Security Audit"
   short_description: "Audit security-sensitive changes"
-  default_prompt: "Use $security-audit for security, vulnerability, secret, auth, filesystem, shell, dependency, or skill-safety review."
+  default_prompt: "Use $security-audit for security, vulnerability, secret, auth, filesystem, shell, dependency, Docker, CI, or skill-safety review. For broad audits, use repo archetype lead generation, trace source-to-sink paths, classify scanner/no-op validation, account for rejected/routed leads and gaps, and keep findings at the security confidence threshold."

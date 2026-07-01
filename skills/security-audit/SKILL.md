@@ -23,6 +23,9 @@ to documentation instead.
 
 1. Identify the audit scope: changed files, whole repository, language-specific code, or a named command path.
 2. Read the smallest matching reference before auditing:
+   - `../references/gap-lead-generation.md` for broad repository, package-tree,
+     shared `./bin`, service, infrastructure, Docker, Ruby tooling, or Go
+     library audits where repository archetype should shape security leads.
    - `references/go.md` for Go code, modules, HTTP/TLS, crypto, filesystem, command execution, or `govulncheck`.
    - `references/ruby.md` for Ruby code, Bundler, process execution, YAML/JSON parsing, filesystem, env/secrets, or RuboCop security coverage.
    - `references/shell.md` for Bash scripts, Make targets that invoke shell commands, Docker helper scripts, ShellCheck, quoting, temp files, or destructive commands.

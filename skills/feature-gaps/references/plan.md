@@ -13,28 +13,32 @@ validation, delegation, external research, ledger state, and workflow routing.
 1. Follow `../../references/gap-workflow.md#common-plan-mechanics` for shared
    find-mode sequencing. Apply the shared gap-workflow delegation gate before review work.
 2. Use `FEATURES.md` as the scoped ledger and `FEATURE-<number>` IDs.
-3. Inventory product-owned CLIs, APIs, libraries, service/operator behavior,
+3. Read `../../references/gap-lead-generation.md`, classify the repository
+   archetype, and build a lead inventory for product-facing capabilities,
+   package-consumer workflows, service-author workflows, operator surfaces, and
+   shared-tooling capability when applicable.
+4. Inventory product-owned CLIs, APIs, libraries, service/operator behavior,
    package-consumer or service-author workflows, shipped templates, examples,
    docs, integrations, setup/onboarding flows, extension points, and comparable
    product, library, CLI, or system research when it materially improves
    proposal quality.
-4. Route standalone test-harness, CI, build, Makefile, release, validation,
+5. Route standalone test-harness, CI, build, Makefile, release, validation,
    command discovery, setup, and repository workflow concerns to `$test-gaps` or
    `$project-gaps`.
-5. Apply `SKILL.md#acceptance-gate` to each candidate and confirm audience,
+6. Apply `SKILL.md#acceptance-gate` to each candidate and confirm audience,
    current product limitation, practical audience benefit, repository-owned
    surface, value evidence, repository fit, smallest plausible implementation
    path, compatibility and maintenance tradeoffs, validation path, and correct
    workflow routing.
-6. Reject novelty, competitor checklists, trend-following, broad rewrites,
+7. Reject novelty, competitor checklists, trend-following, broad rewrites,
    new-framework preferences, future-roadmap assumptions, optional polish, vague
    benefits without concrete audience outcome, and findings belonging to other
    workflows.
-7. Before a no-gap closeout, name audiences, product surfaces, documented
+8. Before a no-gap closeout, name audiences, product surfaces, documented
    workflows, public commands/APIs or package-consumer paths, comparable-tool
-   research decisions, routing decisions, validation evidence, and policy
-   exclusions checked.
-8. If confirmed gaps remain, write scoped `FEATURES.md`, present the ledger,
+   research decisions, rejected and routed leads, validation evidence, and
+   policy exclusions checked.
+9. If confirmed gaps remain, write scoped `FEATURES.md`, present the ledger,
    coverage state, proposed implementation plan, and runnable follow-up scopes,
    then stop before implementing features.
 

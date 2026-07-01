@@ -55,6 +55,9 @@ These shared rules own workflow mechanics.
 Use these mechanics with the selected skill's `references/plan.md`. The plan
 names the domain-specific inventory surfaces, candidate tests, closeout
 questions, ledger filename, ID prefix, and implementation pairings.
+Use `gap-lead-generation.md` during find, audit-only, and one-pass modes to
+classify repository archetypes, build a lead inventory, and account for
+confirmed, rejected, routed, deferred, and blocked leads.
 
 For find, audit-only, and one-pass modes:
 
@@ -66,8 +69,8 @@ For find, audit-only, and one-pass modes:
 3. Run `$project-workflow` discovery for entrypoints, CI, documented commands,
    relevant public surfaces, and `./bin` wiring.
 4. Build a recursive inventory using the selected plan's domain-specific
-   surfaces, then split it into bounded review slices. Use depth only as a
-   discovery aid, not as the review boundary.
+   surfaces and `gap-lead-generation.md` archetypes, then split it into bounded
+   review slices. Use depth only as a discovery aid, not as the review boundary.
 5. For broad scopes, choose highest-risk or highest-value slices first and
    record `deep`, `skimmed`, `excluded`, and `deferred` coverage with exact
    follow-up scopes. For confidence closure audits, every relevant slice must
@@ -297,6 +300,10 @@ For implement modes:
 - Use `../references/finding-severity.md` to discard low-confidence candidates
   before assigning severity or confidence when the selected skill records
   findings.
+- Before deep review, create a lead inventory for each planned slice using the
+  selected skill's plan and `gap-lead-generation.md`. Lead inventory is a recall
+  tool only: it does not lower the selected skill's confidence, ownership,
+  reproduction, validation, or approval gates.
 - Confirm each candidate against current code, docs, examples, tests, command
   behavior, CI config, generated contracts, and public interfaces relevant to
   the selected skill before recording, fixing, or dismissing it.
@@ -353,6 +360,9 @@ For implement modes:
   below the selected skill's threshold, duplicative, out of scope, or owned by a
   different workflow. When useful, state the authoritative surface or workflow
   that owns the concern.
+- For local review as well as delegated review, preserve rejected, routed,
+  deferred, and blocked lead notes. A quiet audit without these notes is not
+  enough evidence for broad no-finding confidence.
 
 ## Find And Audit Outcomes
 
@@ -421,9 +431,10 @@ For implement modes:
   must include reviewed files or slices; package count or inventory summary
   when applicable; supported usage, call sites, commands, tests, or CI evidence
   checked; validation commands and their classified results; excluded or
-  deferred files; repository policy exclusions or suppressions applied; the
-  confidence fields above; and the remaining limits on that confidence. Do not
-  present "nothing found" as a broad assurance without this evidence.
+  deferred files; rejected, routed, deferred, and blocked lead accounting;
+  repository policy exclusions or suppressions applied; the confidence fields
+  above; and the remaining limits on that confidence. Do not present "nothing
+  found" as a broad assurance without this evidence.
 - If confirmed gaps or proposals remain, write them to the scoped ledger before
   making changes unless the selected skill explicitly defines a one-pass fix
   mode. Record only high-confidence, actionable findings with file/line,

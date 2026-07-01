@@ -17,26 +17,31 @@ evidence.
 3. Run `$project-workflow` discovery and the shared audit preflight, including
    applicable tools, service dependencies, validation ladder, and command
    failure classification.
-4. Inventory services, APIs, CLIs, jobs, scripts, deployment/config,
+4. Read `../../references/gap-lead-generation.md`, classify the repository
+   archetype, and build a lead inventory for operational, overload, lifecycle,
+   release-safety, observability, recovery, data-integrity, and operator
+   diagnostic risks in scope.
+5. Inventory services, APIs, CLIs, jobs, scripts, deployment/config,
    observability, release, recovery, operability evidence, tests, public
    entrypoints, reliability-sensitive surfaces, and generated/vendor/build/cache
    exclusions.
-5. For prose mismatches, prove with non-prose evidence that the implementation
+6. For prose mismatches, prove with non-prose evidence that the implementation
    or repository-owned reliability control is wrong; otherwise route to a
    documentation gap.
-6. Confirm each gap names a current reliability promise or operational
+7. Confirm each gap names a current reliability promise or operational
    expectation, trigger, failure mode, missing or weak control, and user or
    operator impact.
-7. Calibrate each candidate: the trigger exists in current supported operation,
+8. Calibrate each candidate: the trigger exists in current supported operation,
    the missing control is repository-owned, existing controls are insufficient,
    and a skeptical maintainer would likely agree it is more than optional
    hardening. Reject generic maturity advice, future-scale assumptions, private
    preferences, and findings belonging in code, security, test, or doc ledgers.
-8. Before a no-gap closeout, name cancellation/context handling, deadlines,
+9. Before a no-gap closeout, name cancellation/context handling, deadlines,
    timeouts, retries, backoff, bounded memory/network/file/process behavior,
    lifecycle cleanup, shutdown/drain/health/readiness behavior, observability or
-   operator impact, and CI/sidecar/runtime controls checked.
-9. For high-assurance closure, also account for dependency outage and recovery,
+   operator impact, CI/sidecar/runtime controls checked, and rejected, routed,
+   deferred, or blocked leads.
+10. For high-assurance closure, also account for dependency outage and recovery,
    cancellation and deadline propagation, retry/backoff/load-shedding
    interaction, shutdown ordering, repeated lifecycle start/stop behavior, queue
    or worker bounds, durable idempotency or reconciliation, telemetry of failure
@@ -44,7 +49,7 @@ evidence.
    representative stress, race, outage, fault-injection, sidecar, integration,
    freshness, or operator-scenario evidence is a confidence limiter or routed
    follow-up unless a current repository-owned failure mode is confirmed.
-10. If confirmed gaps remain, write scoped `RELIABILITY.md`, present the ledger,
+11. If confirmed gaps remain, write scoped `RELIABILITY.md`, present the ledger,
     coverage state, proposed reliability-fix plan, and runnable follow-up
     scopes, then stop before fixing.
 
