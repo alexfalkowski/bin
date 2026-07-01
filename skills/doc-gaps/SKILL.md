@@ -122,6 +122,9 @@ Keep optional follow-up notes separate from findings:
 
 - Read `references/plan.md` before starting one-pass mode or audit-only mode.
 - Read `../references/gap-workflow.md` for shared scoped-ledger, delegation, coverage, confidence, and approval gates.
+- Use `../references/gap-lead-generation.md` during one-pass and audit-only
+  modes to classify repo archetypes, generate documentation leads, and account
+  for rejected or routed candidates.
 - Use `$doc-standards` as the documentation quality bar and routing threshold.
 - Use `../references/finding-severity.md` for confidence filtering, confidence labels, and severity.
 - Use `$project-workflow` for repository command discovery, documented entrypoints, CI expectations, examples, and `./bin` wiring before review planning or validation.

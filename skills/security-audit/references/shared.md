@@ -7,6 +7,27 @@ Use this reference for any security audit, then load language-specific reference
 - Determine whether the user wants a diff audit, full repository audit, dependency scan, or one command/script path.
 - Identify trust boundaries: CLI args, env vars, config files, network input, filesystem paths, generated files, dependency metadata, and CI secrets.
 - For shared `./bin` tooling, consider both this repository root and downstream usage where helpers are invoked through `BIN_ROOT`.
+- For broad audits, use `../../references/gap-lead-generation.md` to classify
+  the repository archetype and build a security lead inventory before filtering
+  findings.
+
+## Source-To-Sink Review
+
+For each security-sensitive slice, trace concrete sources to concrete sinks:
+
+- Sources: CLI args, environment variables, config files, request bodies,
+  headers, metadata, generated input, fixtures, dependency metadata, CI
+  variables, and file paths.
+- Sinks: shell or process execution, filesystem writes/deletes, archive or
+  template expansion, YAML/JSON parsing, SQL or query construction, network
+  calls, TLS/auth configuration, logs, Docker build context, CI release steps,
+  and secret stores.
+- Controls: validation, allowlists, size limits, escaping, argv separation,
+  permissions, timeout/deadline behavior, scanner coverage, CI context scoping,
+  and repository-owned wrappers.
+- Outcomes: confirmed findings, rejected leads with the control that blocks
+  exploitation, routed dependency/tool findings, and validation gaps such as
+  missing or no-op scanners.
 
 ## Common Risks
 
@@ -15,6 +36,10 @@ Use this reference for any security audit, then load language-specific reference
 - Unsafe defaults: disabled TLS verification, broad filesystem permissions, world-writable files, unauthenticated endpoints, permissive CORS, weak crypto, or silent fallback to insecure behavior.
 - Dependency or container vulnerabilities not covered by the repository's validation commands.
 - CI or Make targets that expose secrets, run remote code, or differ materially from local validation.
+- Docker and release paths where the scanned artifact can differ from the
+  published artifact.
+- Skill metadata, bundled scripts, or imported references that expand routing,
+  permissions, network access, or executable behavior beyond the skill's scope.
 
 ## Validation
 

@@ -102,6 +102,9 @@ These code-issue implementation rules remain mandatory:
 
 - Read `references/plan.md` before starting Find mode or Implement mode.
 - Read `../references/gap-workflow.md` for shared scoped-ledger, delegation, coverage, confidence, and approval gates.
+- Use `../references/gap-lead-generation.md` during Find mode to classify repo
+  archetypes, generate high-risk leads, and account for rejected or routed
+  candidates.
 - Use `../references/finding-severity.md` for confidence filtering, confidence labels, and severity.
 - Use `$code-review` for review rigor and finding quality.
 - Use `$security-audit` for security-sensitive review scope.

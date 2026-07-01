@@ -266,6 +266,9 @@ These project-gap implementation rules remain mandatory:
 
 - Read `references/plan.md` before starting Find mode or Implement mode.
 - Read `../references/gap-workflow.md` for shared scoped-ledger, delegation, coverage, confidence, and approval gates.
+- Use `../references/gap-lead-generation.md` during Find mode to classify repo
+  archetypes, generate project-workflow leads, and account for rejected or
+  routed candidates.
 - Use `$project-workflow` for repository command discovery, documented
   entrypoints, CI expectations, examples, and `./bin` wiring before review
   planning or validation.

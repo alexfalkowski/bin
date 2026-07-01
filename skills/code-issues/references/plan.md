@@ -16,26 +16,30 @@ state, code/security/compatibility evidence, and public contract evidence.
 3. Run `$project-workflow` discovery and the shared audit preflight, including
    applicable tools, service dependencies, validation ladder, and command
    failure classification.
-4. Inventory tests, public entrypoints, security-sensitive surfaces, supported
+4. Read `../../references/gap-lead-generation.md`, classify the repository
+   archetype, and build a lead inventory for code, compatibility, security,
+   mapping, generated-contract, and supported-usage risks in scope.
+5. Inventory tests, public entrypoints, security-sensitive surfaces, supported
    construction/wiring paths, generated/provider mappings, and repository policy
    exclusions relevant to the requested scope.
-5. Confirm each finding is a concrete code issue, security issue,
+6. Confirm each finding is a concrete code issue, security issue,
    compatibility break, or public contract violation. For prose mismatches,
    prove implementation is wrong with non-prose evidence; otherwise route to a
    documentation gap.
-6. Before a no-issue closeout, name the public APIs, constructors, exported
+7. Before a no-issue closeout, name the public APIs, constructors, exported
    helpers, supported DI or documented usage paths, real call sites,
    nil/error/edge behavior, tests or CI evidence, and policy exclusions
-   checked. For high-assurance closure, also account for materially relevant
-   bug classes such as parser/decoder behavior, serialization, boundary/default
-   values, nil/error/panic paths, concurrency, resource limits, mapping drift,
-   public API compatibility, and supported construction paths.
-7. If representative fuzz, property, race, stress, fixture, integration,
+   checked, plus rejected, routed, deferred, and blocked leads. For
+   high-assurance closure, also account for materially relevant bug classes such
+   as parser/decoder behavior, serialization, boundary/default values,
+   nil/error/panic paths, concurrency, resource limits, mapping drift, public
+   API compatibility, and supported construction paths.
+8. If representative fuzz, property, race, stress, fixture, integration,
    analyzer, or generated freshness evidence is missing for a relevant class,
    report it as a confidence limiter or route it to the right workflow; do not
    record it as a code issue unless a concrete bug or violated contract is
    confirmed.
-8. If confirmed issues remain, write scoped `ISSUES.md`, present the ledger,
+9. If confirmed issues remain, write scoped `ISSUES.md`, present the ledger,
    coverage state, proposed fix plan, and runnable follow-up scopes, then stop
    before fixing.
 

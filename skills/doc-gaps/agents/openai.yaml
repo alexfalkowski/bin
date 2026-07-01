@@ -1,4 +1,4 @@
 interface:
   display_name: "Doc Gaps"
   short_description: "Find and fix scoped doc adequacy gaps"
-  default_prompt: "Use $doc-gaps with $doc-standards for scoped documentation adequacy gaps. Follow its active plan, apply the shared delegation gate, preserve confidence/validation/bin/** rules, handle DOCS.md audit-only or unresolved findings, answer doc gap ID follow-ups such as DOC-1, and fix confirmed docs in one pass."
+  default_prompt: "Use $doc-gaps with $doc-standards for scoped documentation adequacy gaps. Follow its active plan, use repo archetype lead generation before adequacy filtering, apply the shared delegation gate, preserve confidence/validation/bin/** rules, account for rejected/routed leads, handle DOCS.md audit-only or unresolved findings, answer doc gap ID follow-ups such as DOC-1, and fix confirmed docs in one pass."

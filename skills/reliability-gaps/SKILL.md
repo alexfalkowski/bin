@@ -138,6 +138,9 @@ These reliability implementation rules remain mandatory:
 
 - Read `references/plan.md` before starting Find mode or Implement mode.
 - Read `../references/gap-workflow.md` for shared scoped-ledger, delegation, coverage, confidence, and approval gates.
+- Use `../references/gap-lead-generation.md` during Find mode to classify repo
+  archetypes, generate reliability leads, and account for rejected or routed
+  candidates.
 - Use `../references/finding-severity.md` for confidence filtering, confidence labels, and severity.
 - Use `$reliability-standards` for SRE, NALSD, resilience, recovery, overload, observability, release-safety, and production-readiness judgment.
 - Use `$project-workflow` for repository command discovery, CI expectations, documented entrypoints, operational docs, and `./bin` wiring before review planning or validation.
