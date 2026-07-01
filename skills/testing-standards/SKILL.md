@@ -46,6 +46,12 @@ These are mandatory gates, not guidance.
 - Personal clarity, convenience, faster local execution, implementation
   language, or direct access to private functions are not valid reasons to
   bypass the dominant harness.
+- Tests MUST use the existing harness lifecycle and configuration shape unless
+  the changed behavior cannot be exercised through it. Before adding a second
+  process, port, config file, startup mode, lifecycle hook, env/config
+  indirection, custom harness class, fixture generator, or helper layer, agents
+  MUST stop and explain why the current harness cannot cover the behavior. If a
+  simpler existing config or scenario edit can cover it, use that path.
 - If the human asks to remove, skip, or simplify a test during a behavior
   change, agents MUST NOT infer that test-first workflow or coverage is waived.
   Ask whether to replace it with better-shaped coverage or explicitly accept no
