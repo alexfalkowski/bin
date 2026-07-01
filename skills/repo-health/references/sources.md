@@ -136,8 +136,8 @@ Useful read-only API pattern:
 
 1. List project pipelines for `gh/<owner>/<repo>` and the relevant branch:
    `/api/v2/project/gh/<owner>/<repo>/pipeline?branch=<branch>`.
-2. Page backward until the oldest collected pipeline is before the comparison
-   period start.
+2. Page backward until the oldest collected pipeline is before the oldest
+   requested trend window.
 3. For each pipeline, list workflows with `/api/v2/pipeline/<pipeline-id>/workflow`.
 4. Bucket workflows by `created_at`; count completed workflows, successes, and
    failures.
@@ -227,8 +227,9 @@ Useful data:
 When only a public status page is available, report only the facts visible from
 that page and label them as public status-page evidence.
 When an API key is available, use `custom_uptime_ranges` with exact Unix-second
-window boundaries for current and comparison periods. UptimeRobot returns the
-range values as a hyphen-separated string in the same order as requested.
+window boundaries for current, comparison, and trend periods. UptimeRobot
+returns the range values as a hyphen-separated string in the same order as
+requested.
 Request `logs=1` for incidents and `response_times=1` for response-time
 samples. If response-time samples do not cover the comparison window, report the
 previous response time as `n/a` instead of reusing account-level averages.

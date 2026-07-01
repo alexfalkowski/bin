@@ -15,6 +15,11 @@ require 'yaml'
 # sources, then prints a JSON document for the skill to summarize.
 class RepoHealthCollector
   HTTP_TIMEOUT_SECONDS = 15
+  TREND_WINDOW_COUNT = 4
+  STALE_PR_SECONDS = 7 * 24 * 60 * 60
+  CI_SUCCESS_RATE_ACTION_THRESHOLD = 0.90
+  CHANGE_RATIO_ACTION_THRESHOLD = 0.25
+  LIBRARY_RELEASE_AGE_ACTION_SECONDS = 90 * 24 * 60 * 60
 
   def initialize(options)
     @repo_path = File.expand_path(options.fetch(:repo_path))
@@ -88,6 +93,8 @@ class RepoHealthCollector
       cd_file: File.exist?(File.join(root, '.cd')),
       current: local_period(@current_start, @current_end),
       previous: local_period(@previous_start, @previous_end),
+      trend: period_windows.map { |window| local_period(window.fetch(:start), window.fetch(:end)) },
+      release_state: local_release_state,
       circleci_config: circleci_config(root)
     }
   end
@@ -123,6 +130,20 @@ class RepoHealthCollector
     }
   end
 
+  def local_release_state
+    latest = git_lines('for-each-ref', 'refs/tags', '--sort=-creatordate',
+                       '--format=%(refname:short)%09%(creatordate:iso-strict)').first
+    return { latest_tag: nil, unreleased_commit_count: git('rev-list', '--count', 'HEAD').to_i } unless latest
+
+    tag, created_at = latest.split("\t", 2)
+    {
+      latest_tag: tag,
+      latest_tag_created_at: created_at,
+      latest_release_age_seconds: @now - Time.parse(created_at),
+      unreleased_commit_count: git('rev-list', '--count', "#{tag}..HEAD").to_i
+    }
+  end
+
   def circleci_config(root)
     path = File.join(root, '.circleci', 'config.yml')
     return { present: false } unless File.exist?(path)
@@ -148,12 +169,14 @@ class RepoHealthCollector
     )
     stale_prs = open_prs.select do |pull_request|
       updated = pull_request['updatedAt'] && Time.parse(pull_request.fetch('updatedAt'))
-      updated && updated < @current_end - (7 * 24 * 60 * 60)
+      updated && updated < @current_end - STALE_PR_SECONDS
     end
+    trend = period_windows.map { |window| github_period(owner_repo, window.fetch(:start), window.fetch(:end)) }
 
     {
-      current: github_period(owner_repo, @current_start, @current_end),
-      previous: github_period(owner_repo, @previous_start, @previous_end),
+      current: trend[0],
+      previous: trend[1],
+      trend: trend,
       open_pr_count: open_prs.length,
       open_prs: open_prs,
       stale_pr_count: stale_prs.length,
@@ -217,10 +240,12 @@ class RepoHealthCollector
     workflows = circleci_workflows(pipelines, token)
     jobs = @include_jobs || mode == 'service' ? circleci_jobs(workflows, token) : []
     flaky = circleci_get("/insights/gh/#{owner_repo}/flaky-tests?branch=#{url_query(branch)}", token)
+    trend = period_windows.map { |window| circleci_period(workflows, jobs, window.fetch(:start), window.fetch(:end)) }
 
     {
-      current: circleci_period(workflows, jobs, @current_start, @current_end),
-      previous: circleci_period(workflows, jobs, @previous_start, @previous_end),
+      current: trend[0],
+      previous: trend[1],
+      trend: trend,
       flaky_tests: {
         total: flaky['total_flaky_tests'],
         examples: flaky.fetch('flaky_tests', []).map do |test|
@@ -331,7 +356,7 @@ class RepoHealthCollector
     key = ENV.fetch('UPTIMEROBOT_API_KEY', '').strip
     return unavailable('UPTIMEROBOT_API_KEY is not set') if key.empty?
 
-    ranges = "#{@current_start.to_i}_#{@current_end.to_i}-#{@previous_start.to_i}_#{@previous_end.to_i}"
+    ranges = period_windows.map { |window| "#{window.fetch(:start).to_i}_#{window.fetch(:end).to_i}" }.join('-')
     params = {
       'api_key' => key,
       'format' => 'json',
@@ -355,6 +380,9 @@ class RepoHealthCollector
     samples = monitor.fetch('response_times', [])
     current_samples = response_samples(samples, @current_start, @current_end)
     previous_samples = response_samples(samples, @previous_start, @previous_end)
+    response_averages = period_windows.map do |window|
+      average(response_samples(samples, window.fetch(:start), window.fetch(:end)))
+    end
 
     {
       status: 'used',
@@ -364,7 +392,8 @@ class RepoHealthCollector
       current_response_time_average_ms: average(current_samples),
       current_response_time_samples: current_samples.length,
       previous_response_time_average_ms: average(previous_samples),
-      previous_response_time_samples: previous_samples.length
+      previous_response_time_samples: previous_samples.length,
+      response_time_average_ms_by_period: response_averages
     }
   rescue StandardError => e
     unavailable(e.message)
@@ -412,6 +441,14 @@ class RepoHealthCollector
   end
 
   def summary_result(result)
+    delivery_flow = summary_delivery_flow(result)
+    ci_quality = summary_ci_quality(result)
+    release_and_deploy = summary_release_and_deploy(result)
+    service_reliability = summary_service_reliability(result)
+    trend_context = summary_trend_context(result)
+    action_queue = summary_action_queue(delivery_flow, ci_quality, release_and_deploy, service_reliability)
+    data_quality_actions = summary_data_quality_actions(result)
+
     {
       repository: result[:repository],
       repo_path: result[:repo_path],
@@ -421,10 +458,14 @@ class RepoHealthCollector
       window: result[:window],
       comparison_window: result[:comparison_window],
       sources: source_summary(result),
-      delivery_flow: summary_delivery_flow(result),
-      ci_quality: summary_ci_quality(result),
-      release_and_deploy: summary_release_and_deploy(result),
-      service_reliability: summary_service_reliability(result),
+      top_bottleneck: summary_top_bottleneck(action_queue),
+      action_queue: action_queue,
+      trend_context: trend_context,
+      data_quality_actions: data_quality_actions,
+      delivery_flow: delivery_flow,
+      ci_quality: ci_quality,
+      release_and_deploy: release_and_deploy,
+      service_reliability: service_reliability,
       notable_work: summary_notable_work(result)
     }
   end
@@ -445,7 +486,8 @@ class RepoHealthCollector
       previous: summary_delivery_period(result.dig(:local, :previous), summary_github_period(github, :previous)),
       open_pr_count: github_value(github, :open_pr_count),
       stale_pr_count: github_value(github, :stale_pr_count),
-      stale_prs: github_value(github, :stale_prs)
+      stale_prs: github_value(github, :stale_prs),
+      release_state: result.dig(:local, :release_state)
     }
   end
 
@@ -469,6 +511,7 @@ class RepoHealthCollector
     {
       current: summary_ci_period(circleci[:current]),
       previous: summary_ci_period(circleci[:previous]),
+      trend: circleci[:trend]&.map { |period| summary_ci_period(period) },
       flaky_tests: circleci[:flaky_tests],
       config: circleci[:config],
       pipelines_collected: circleci[:pipelines_collected],
@@ -496,7 +539,8 @@ class RepoHealthCollector
   def summary_release_and_deploy(result)
     {
       current: summary_release_period(result.dig(:local, :current), result.dig(:circleci, :current)),
-      previous: summary_release_period(result.dig(:local, :previous), result.dig(:circleci, :previous))
+      previous: summary_release_period(result.dig(:local, :previous), result.dig(:circleci, :previous)),
+      release_state: result.dig(:local, :release_state)
     }
   end
 
@@ -544,11 +588,397 @@ class RepoHealthCollector
       current_uptime: current_uptime,
       previous_uptime: previous_uptime,
       logs: uptimerobot[:logs],
+      current_incident_count: incident_logs(uptimerobot[:logs], @current_start, @current_end).length,
+      previous_incident_count: incident_logs(uptimerobot[:logs], @previous_start, @previous_end).length,
+      current_downtime_seconds: downtime_seconds(uptimerobot[:logs], @current_start, @current_end),
+      previous_downtime_seconds: downtime_seconds(uptimerobot[:logs], @previous_start, @previous_end),
+      current_mttr_seconds: mttr_seconds(uptimerobot[:logs], @current_start, @current_end),
+      previous_mttr_seconds: mttr_seconds(uptimerobot[:logs], @previous_start, @previous_end),
       current_response_time_average_ms: uptimerobot[:current_response_time_average_ms],
       current_response_time_samples: uptimerobot[:current_response_time_samples],
       previous_response_time_average_ms: uptimerobot[:previous_response_time_average_ms],
-      previous_response_time_samples: uptimerobot[:previous_response_time_samples]
+      previous_response_time_samples: uptimerobot[:previous_response_time_samples],
+      trend: summary_uptimerobot_trend(uptimerobot)
     }
+  end
+
+  def summary_trend_context(result)
+    {
+      window_count: TREND_WINDOW_COUNT,
+      windows: trend_window_summary,
+      delivery_flow: trend_metrics(summary_delivery_trend(result), {
+                                     commit_count: :neutral,
+                                     pr_merged: :neutral,
+                                     median_pr_age_seconds: :lower,
+                                     median_review_latency_seconds: :lower
+                                   }),
+      ci_quality: trend_metrics(summary_ci_trend(result), {
+                                  workflow_success_rate: :higher,
+                                  workflows_failed: :lower,
+                                  p95_workflow_duration_seconds: :lower
+                                }),
+      release_and_deploy: trend_metrics(summary_release_trend(result), {
+                                          tag_count: :neutral,
+                                          deploy_job_failed: :lower,
+                                          rollback_or_revert_count: :lower
+                                        }),
+      service_reliability: trend_metrics(summary_service_reliability_trend(result), {
+                                           uptime: :higher,
+                                           incident_count: :lower,
+                                           response_time_average_ms: :lower,
+                                           downtime_seconds: :lower
+                                         })
+    }
+  end
+
+  def summary_action_queue(delivery_flow, ci_quality, release_and_deploy, service_reliability)
+    actions = []
+    actions.concat(delivery_actions(delivery_flow))
+    actions.concat(ci_actions(ci_quality))
+    actions.concat(release_actions(release_and_deploy))
+    actions.concat(reliability_actions(service_reliability))
+    actions.sort_by { |action| [priority_rank(action.fetch(:priority)), action.fetch(:area)] }
+  end
+
+  def summary_top_bottleneck(action_queue)
+    action = action_queue.first
+    return nil unless action
+
+    pick_symbol(action, :priority, :area, :evidence, :suggested_action)
+  end
+
+  def summary_data_quality_actions(result)
+    actions = []
+    sources = source_summary(result)
+    actions << data_quality_action('GitHub', sources[:github], 'PR, review, release, and stale-queue metrics',
+                                   'Ensure GitHub API access and authenticate `gh` or set `GITHUB_TOKEN`/`GH_TOKEN`.')
+    actions << data_quality_action(
+      'CircleCI',
+      sources[:circleci],
+      'workflow reliability, duration, deploy, and flaky-test metrics',
+      'Ensure CircleCI API access and set `CIRCLE_TOKEN`/`CIRCLECI_TOKEN` or configure the CLI token.'
+    )
+
+    if result[:mode].start_with?('service')
+      actions << data_quality_action(
+        'UptimeRobot',
+        sources[:uptimerobot],
+        'external uptime, incident, MTTR, and response-time metrics',
+        'Ensure UptimeRobot API access and set `UPTIMEROBOT_API_KEY` plus `UPTIMEROBOT_MONITOR_IDS`.'
+      )
+      actions << data_quality_action('Kubernetes', sources[:kubernetes], 'runtime image, readiness, and restart state',
+                                     'Ensure `kubectl` can reach the target cluster context.')
+      actions << data_quality_action('DigitalOcean', sources[:digitalocean], 'cluster inventory and platform state',
+                                     'Ensure DigitalOcean API access and set `DIGITALOCEAN_ACCESS_TOKEN`.')
+    end
+
+    actions.compact
+  end
+
+  def summary_delivery_trend(result)
+    github = result[:github]
+    local_periods = result.dig(:local, :trend) || []
+    github_periods = summary_github_period(github, :trend) || []
+    period_count = [local_periods.length, github_periods.length].max
+
+    period_count.times.map do |index|
+      summary_delivery_period(local_periods[index], github_periods[index])
+    end
+  end
+
+  def summary_ci_trend(result)
+    circleci = result[:circleci]
+    return [] if unavailable_source?(circleci)
+
+    circleci.fetch(:trend, []).map { |period| summary_ci_period(period) }
+  end
+
+  def summary_release_trend(result)
+    local_periods = result.dig(:local, :trend) || []
+    circleci_periods = result.dig(:circleci, :trend) || []
+    period_count = [local_periods.length, circleci_periods.length].max
+
+    period_count.times.map do |index|
+      summary_release_period(local_periods[index], circleci_periods[index]).tap do |period|
+        period[:deploy_job_failed] = period.dig(:deploy_job, :failed)
+      end
+    end
+  end
+
+  def summary_service_reliability_trend(result)
+    uptimerobot = result[:uptimerobot]
+    return [] if unavailable_source?(uptimerobot)
+
+    summary_uptimerobot_trend(uptimerobot)
+  end
+
+  def summary_uptimerobot_trend(uptimerobot)
+    uptimes = uptime_ranges(uptimerobot)
+    response_averages = uptimerobot[:response_time_average_ms_by_period] || []
+    period_windows.map.with_index do |window, index|
+      {
+        uptime: numeric(uptimes[index]),
+        incident_count: incident_logs(uptimerobot[:logs], window.fetch(:start), window.fetch(:end)).length,
+        downtime_seconds: downtime_seconds(uptimerobot[:logs], window.fetch(:start), window.fetch(:end)),
+        mttr_seconds: mttr_seconds(uptimerobot[:logs], window.fetch(:start), window.fetch(:end)),
+        response_time_average_ms: response_averages[index]
+      }
+    end
+  end
+
+  def trend_metrics(periods, metrics)
+    metrics.to_h do |metric, direction|
+      [metric, trend_metric(periods, metric, direction)]
+    end
+  end
+
+  def trend_metric(periods, metric, direction)
+    values = periods.map { |period| period && period[metric] }
+    current = values[0]
+    previous = values[1]
+    four_window_median = median(values)
+    {
+      current: current,
+      previous: previous,
+      four_window_median: four_window_median,
+      delta_from_median: current && four_window_median ? current - four_window_median : nil,
+      signal: trend_signal(current, four_window_median, direction)
+    }
+  end
+
+  def trend_signal(current, baseline, direction)
+    return 'n/a' if current.nil? || baseline.nil?
+
+    delta = current - baseline
+    return 'flat' if delta.zero?
+    return delta.positive? ? 'up' : 'down' if direction == :neutral
+
+    better = direction == :higher ? delta.positive? : delta.negative?
+    better ? 'better' : 'worse'
+  end
+
+  def delivery_actions(delivery_flow)
+    return [] if unavailable_source?(delivery_flow)
+
+    current = delivery_flow[:current] || {}
+    previous = delivery_flow[:previous] || {}
+    actions = []
+
+    if delivery_flow[:stale_pr_count].to_i.positive?
+      actions << action('P2', 'Review', "#{delivery_flow[:stale_pr_count]} open PR(s) stale for more than 7 days.",
+                        'Close, merge, or revive each stale PR.')
+    end
+    if worsened?(current[:median_pr_age_seconds], previous[:median_pr_age_seconds], :lower)
+      evidence = "Median PR age rose from #{format_duration(previous[:median_pr_age_seconds])} " \
+                 "to #{format_duration(current[:median_pr_age_seconds])}."
+      actions << action('P2', 'Delivery', evidence,
+                        'Inspect the oldest merged and open PRs for review, CI, or release blockers.')
+    end
+    if worsened?(current[:median_review_latency_seconds], previous[:median_review_latency_seconds], :lower)
+      evidence = "Median review latency rose from #{format_duration(previous[:median_review_latency_seconds])} " \
+                 "to #{format_duration(current[:median_review_latency_seconds])}."
+      actions << action('P2', 'Review', evidence, 'Assign first-review ownership for active PRs.')
+    end
+
+    actions
+  end
+
+  def ci_actions(ci_quality)
+    return [] if unavailable_source?(ci_quality)
+
+    current = ci_quality[:current] || {}
+    previous = ci_quality[:previous] || {}
+    actions = []
+    success_rate = current[:workflow_success_rate]
+
+    if success_rate && success_rate < CI_SUCCESS_RATE_ACTION_THRESHOLD
+      evidence = "Workflow success rate is #{format_rate(success_rate)} " \
+                 "with #{current[:workflows_failed].to_i} failed workflow(s)."
+      actions << action('P1', 'CI', evidence,
+                        'Inspect the latest failed workflows before merging or releasing.')
+    elsif current[:workflows_failed].to_i.positive?
+      actions << action('P2', 'CI', "#{current[:workflows_failed]} workflow(s) failed in the window.",
+                        'Triage failed workflows and confirm reruns were not hiding a persistent failure.')
+    end
+    if worsened?(current[:p95_workflow_duration_seconds], previous[:p95_workflow_duration_seconds], :lower)
+      evidence = "p95 workflow duration rose from #{format_duration(previous[:p95_workflow_duration_seconds])} " \
+                 "to #{format_duration(current[:p95_workflow_duration_seconds])}."
+      actions << action('P3', 'CI', evidence,
+                        'Check the slowest workflows for dependency, cache, or test-runtime regressions.')
+    end
+    if ci_quality.dig(:flaky_tests, :total).to_i.positive?
+      actions << action('P2', 'Tests', "#{ci_quality.dig(:flaky_tests, :total)} flaky test(s) reported by CircleCI.",
+                        'Fix or quarantine the named flaky tests before relying on green reruns.')
+    end
+
+    actions
+  end
+
+  def release_actions(release_and_deploy)
+    current = release_and_deploy[:current] || {}
+    release_state = release_and_deploy[:release_state] || {}
+    deploy_job = current[:deploy_job] || {}
+    actions = []
+
+    if deploy_job[:failed].to_i.positive?
+      actions << action('P1', 'Deploy', "`deploy` failed #{deploy_job[:failed]} time(s).",
+                        'Inspect failed deploy jobs before the next release.')
+    end
+    if current[:rollback_or_revert_count].to_i.positive?
+      actions << action('P1', 'Release', "#{current[:rollback_or_revert_count]} revert or rollback commit(s) found.",
+                        'Review the reverted changes and confirm the release path is stable.')
+    end
+    if release_state[:unreleased_commit_count].to_i.positive? && current[:tag_count].to_i.zero?
+      priority = release_state[:latest_release_age_seconds].to_i > LIBRARY_RELEASE_AGE_ACTION_SECONDS ? 'P2' : 'P3'
+      evidence = "#{release_state[:unreleased_commit_count]} commit(s) " \
+                 "since latest tag #{release_state[:latest_tag] || 'n/a'}."
+      actions << action(priority, 'Release', evidence, 'Decide whether the accumulated changes need a release.')
+    end
+
+    actions
+  end
+
+  def reliability_actions(service_reliability)
+    actions = []
+    kubernetes = service_reliability[:kubernetes]
+    uptimerobot = service_reliability[:uptimerobot]
+
+    unless unavailable_source?(kubernetes)
+      if kubernetes[:pod_count].to_i.positive? && kubernetes[:ready_pod_count].to_i < kubernetes[:pod_count].to_i
+        actions << action('P1', 'Runtime', "#{kubernetes[:ready_pod_count]}/#{kubernetes[:pod_count]} pod(s) ready.",
+                          'Inspect the non-ready pods and rollout status.')
+      end
+      if kubernetes[:pod_restart_count].to_i.positive?
+        evidence = "#{kubernetes[:pod_restart_count]} pod/container restart(s) observed at collection time."
+        actions << action('P2', 'Runtime', evidence,
+                          'Check recent pod events and logs for recurring crashes.')
+      end
+    end
+
+    unless unavailable_source?(uptimerobot)
+      current_uptime = numeric(uptimerobot[:current_uptime])
+      if current_uptime && current_uptime < 99.9
+        actions << action('P1', 'Reliability', "External uptime is #{current_uptime}%.",
+                          'Review downtime logs and confirm whether the incident is resolved.')
+      end
+      if uptimerobot[:current_incident_count].to_i.positive?
+        actions << action('P1', 'Reliability', "#{uptimerobot[:current_incident_count]} incident(s) in the window.",
+                          'Review incident windows, MTTR, and any overlapping deploys.')
+      end
+      if worsened?(
+        uptimerobot[:current_response_time_average_ms],
+        uptimerobot[:previous_response_time_average_ms],
+        :lower
+      )
+        evidence = "Average response time rose from #{format_ms(uptimerobot[:previous_response_time_average_ms])} " \
+                   "to #{format_ms(uptimerobot[:current_response_time_average_ms])}."
+        actions << action('P2', 'Reliability', evidence,
+                          'Check recent deploys, saturation, and external dependency latency.')
+      end
+    end
+
+    actions
+  end
+
+  def data_quality_action(source, status, impact, setup_action)
+    return nil if status.nil? || status[:status] == 'used'
+    return nil if ['not a service repo', 'no .circleci/config.yml'].include?(status[:notes])
+
+    {
+      source: source,
+      status: status[:status],
+      reason: status[:notes],
+      impact: impact,
+      setup_action: setup_action
+    }
+  end
+
+  def action(priority, area, evidence, suggested_action)
+    {
+      priority: priority,
+      area: area,
+      evidence: evidence,
+      suggested_action: suggested_action
+    }
+  end
+
+  def priority_rank(priority)
+    { 'P1' => 1, 'P2' => 2, 'P3' => 3 }.fetch(priority, 9)
+  end
+
+  def worsened?(current, previous, direction)
+    return false if current.nil? || previous.nil?
+    return current.positive? if previous.zero? && direction == :lower
+    return current < previous if previous.zero? && direction == :higher
+
+    ratio = (current - previous).to_f / previous.abs
+    direction == :lower ? ratio > CHANGE_RATIO_ACTION_THRESHOLD : ratio < -CHANGE_RATIO_ACTION_THRESHOLD
+  end
+
+  def period_windows
+    windows = [
+      { start: @current_start, end: @current_end },
+      { start: @previous_start, end: @previous_end }
+    ]
+    while windows.length < TREND_WINDOW_COUNT
+      end_time = windows.last.fetch(:start)
+      windows << { start: end_time - window_seconds, end: end_time }
+    end
+    windows
+  end
+
+  def trend_window_summary
+    labels = %w[current previous minus_2 minus_3]
+    period_windows.map.with_index do |window, index|
+      { label: labels[index], start: window.fetch(:start).iso8601, end: window.fetch(:end).iso8601 }
+    end
+  end
+
+  def incident_logs(logs, start_time, end_time)
+    Array(logs).select do |log|
+      timestamp = log['datetime'] && Time.at(log.fetch('datetime').to_i)
+      timestamp && within?(timestamp, start_time, end_time) && incident_log?(log)
+    end
+  end
+
+  def incident_log?(log)
+    log['type'].to_i == 1 || log['duration'].to_i.positive?
+  end
+
+  def downtime_seconds(logs, start_time, end_time)
+    incident_logs(logs, start_time, end_time).sum { |log| log['duration'].to_i }
+  end
+
+  def mttr_seconds(logs, start_time, end_time)
+    median(incident_logs(logs, start_time, end_time).filter_map do |log|
+      duration = log['duration'].to_i
+      duration if duration.positive?
+    end)
+  end
+
+  def numeric(value)
+    return nil if value.nil? || value == ''
+
+    Float(value)
+  rescue ArgumentError, TypeError
+    nil
+  end
+
+  def format_duration(seconds)
+    return 'n/a' if seconds.nil?
+
+    return "#{(seconds / 86_400.0).round(1)}d" if seconds >= 86_400
+    return "#{(seconds / 3_600.0).round(1)}h" if seconds >= 3_600
+
+    "#{(seconds / 60.0).round(1)}m"
+  end
+
+  def format_ms(value)
+    value ? "#{value.round}ms" : 'n/a'
+  end
+
+  def format_rate(value)
+    value ? "#{(value * 100).round(1)}%" : 'n/a'
   end
 
   def summary_notable_work(result)
@@ -573,7 +1003,7 @@ class RepoHealthCollector
   end
 
   def uptime_ranges(uptimerobot)
-    uptimerobot.fetch(:uptime_ranges, '').split('-', 2)
+    uptimerobot.fetch(:uptime_ranges, '').split('-')
   end
 
   def pick_symbol(hash, *keys)
@@ -591,7 +1021,7 @@ class RepoHealthCollector
       pipelines.concat(items)
       oldest = items.filter_map { |pipeline| Time.parse(pipeline.fetch('created_at')) }.min
       page_token = data['next_page_token']
-      break if items.empty? || page_token.nil? || (oldest && oldest < @previous_start)
+      break if items.empty? || page_token.nil? || (oldest && oldest < period_windows.last.fetch(:start))
     end
     pipelines
   end

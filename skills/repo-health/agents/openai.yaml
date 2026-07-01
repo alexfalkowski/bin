@@ -1,4 +1,4 @@
 interface:
   display_name: "Repo Health"
-  short_description: "Summarize repo delivery and health"
-  default_prompt: "Use $repo-health to produce daily or weekly delivery, CI quality, release/deploy, and service-reliability summaries for the requested repository and period, with explicit comparison windows and missing-source boundaries."
+  short_description: "Summarize actionable repo health"
+  default_prompt: "Use $repo-health to produce daily or weekly delivery, CI quality, release/deploy, and service-reliability summaries for the requested repository and period, with explicit comparison windows, top bottleneck, prioritized action queue, trend context, and missing-source setup actions."
