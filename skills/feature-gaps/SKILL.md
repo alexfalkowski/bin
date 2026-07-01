@@ -263,6 +263,15 @@ These feature implementation rules remain mandatory:
   Treat silence or a broad "implement feature gaps" request as permission to
   start the proposal workflow, not as permission to edit.
 - After the human agrees and before editing, state the selected local code/config/docs pattern, dominant relevant test harness, planned validation command, and any deviation from `AGENTS.md` or selected skills. If a deviation is needed, stop and ask before editing.
+- In that pre-edit statement, also state the simplest implementation shape that
+  satisfies the feature using existing local code, config, docs, harness,
+  lifecycle, and validation patterns.
+- Treat new orchestration, lifecycle, or harness machinery as a complexity
+  trigger. Before adding extra processes, ports, config files, startup paths,
+  lifecycle hooks, env/config indirection, harness classes, generated fixtures,
+  or helper layers, stop and explain why the existing repository pattern cannot
+  support the approved feature. If the reason is only flexibility,
+  convenience, experimentation, or personal clarity, do not add the machinery.
 - For behavior-changing features, state the feature execution checklist before
   editing:
    - `TDD decision`: yes/no, with the concrete reason if no.
