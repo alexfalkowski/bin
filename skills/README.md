@@ -69,8 +69,8 @@ or approved escalation path, or report the blocker.
   command discovery, and workflow gaps in `PROJECTS.md`.
 - `reliability-gaps`: records SRE, operability, overload, observability,
   release-safety, recovery, or data-integrity gaps in `RELIABILITY.md`.
-- `repo-health`: summarizes delivery, CI, release/deploy, and reliability
-  health from supported sources.
+- `repo-health`: summarizes actionable delivery, CI, release/deploy, and
+  reliability health from supported sources.
 - `diagnose-issue`: performs read-only diagnosis of selected CI, deployment,
   rollout, runtime, monitor, or latest-version failures.
 - `code-review`: reviews for bugs, regressions, compatibility, missing

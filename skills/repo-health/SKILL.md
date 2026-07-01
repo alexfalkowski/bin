@@ -8,7 +8,8 @@ description: Use when the user asks for repo health, repository health report, d
 Use this skill to turn repository activity and operational evidence into a
 concise daily or weekly engineering-health report. Report what changed, whether
 delivery was smooth, and whether the repo or service looks healthier than the
-comparison period.
+comparison period. Convert measured bottlenecks into prioritized,
+evidence-backed follow-up actions that repository owners can complete.
 
 ## Workflow
 
@@ -46,7 +47,13 @@ comparison period.
 9. Keep collection read-only. API calls, `gh`, `curl`, `git log`, and
    repository searches are acceptable; do not modify remote systems, clusters,
    monitors, branches, PRs, or releases while producing the summary.
-10. Produce the summary in Markdown tables with a short narrative. Do not create
+10. Identify the top bottleneck from the collected evidence. Use `None from the
+   available data` when no threshold-backed bottleneck is present.
+11. Produce a prioritized action queue from stale PRs, review latency, CI
+   failures, deploy failures, flaky tests, release readiness, rollbacks,
+   incidents, uptime, response time, Kubernetes readiness, and missing material
+   data sources.
+12. Produce the summary in Markdown tables with a short narrative. Do not create
    files unless the user asks for a durable report.
 
 ## Reporting Rules
@@ -62,6 +69,8 @@ comparison period.
 - Prefer medians over averages for age, lead-time, duration, and recovery-time
   metrics.
 - Prefer period-over-period deltas over standalone counts.
+- Prefer threshold-backed action items over generic recommendations.
+- Include four-window trend context when the collector returns enough data.
 - Include exact window boundaries in the final report.
 - Call out interpretation separately from measured facts.
 
@@ -69,15 +78,17 @@ comparison period.
 
 - **Weekly**: Best for management rhythm, maintenance review, and service
   health. Include delivery flow, CI quality, release/deploy activity, service
-  reliability when applicable, notable changes, and risks.
+  reliability when applicable, trend context, notable changes, and prioritized
+  action items.
 - **Daily**: Best for operational check-ins. Emphasize yesterday/today flow,
   failed checks, deploys, incidents, open review bottlenecks, and follow-up
   actions.
 - **Library**: Omit service reliability unless monitors or deploys exist.
   Emphasize maintenance throughput, release readiness, CI, dependency/security
-  signals when available, and downstream-impact notes visible in the repo.
+  signals when available, unreleased commits, latest release age, and
+  downstream-impact notes visible in the repo.
 - **Service**: Include deployment, uptime, incident, response-time, Kubernetes,
-  and monitor-health evidence when available.
+  monitor-health evidence, and operational follow-up actions when available.
 
 ## References
 

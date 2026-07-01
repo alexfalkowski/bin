@@ -56,8 +56,9 @@ Use these mechanics with the selected skill's `references/plan.md`. The plan
 names the domain-specific inventory surfaces, candidate tests, closeout
 questions, ledger filename, ID prefix, and implementation pairings.
 Use `gap-lead-generation.md` during find, audit-only, and one-pass modes to
-classify repository archetypes, build a lead inventory, and account for
-confirmed, rejected, routed, deferred, and blocked leads.
+classify repository archetypes, build a lead inventory, use comparable
+repositories or framework checklists when useful, and account for confirmed,
+rejected, routed, deferred, and blocked leads.
 
 For find, audit-only, and one-pass modes:
 
@@ -304,6 +305,11 @@ For implement modes:
   selected skill's plan and `gap-lead-generation.md`. Lead inventory is a recall
   tool only: it does not lower the selected skill's confidence, ownership,
   reproduction, validation, or approval gates.
+- Treat comparable repository and external-framework evidence as lead
+  generation only. Before recording a candidate derived from GitHub owner
+  inventory, local checkout mapping, sibling repositories, or external
+  frameworks, reproduce the current repository-owned limitation through the
+  selected skill's normal evidence path.
 - Confirm each candidate against current code, docs, examples, tests, command
   behavior, CI config, generated contracts, and public interfaces relevant to
   the selected skill before recording, fixing, or dismissing it.

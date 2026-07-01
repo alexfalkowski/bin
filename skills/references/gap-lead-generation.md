@@ -7,16 +7,23 @@ selected skill applies its evidence gate.
 ## How To Use
 
 1. Classify the requested scope by repository archetype and public surface.
-2. Build a lead inventory from the matching archetype prompts below.
-3. For each lead, choose the owning workflow before investigating deeply.
-4. Try to disprove each lead using current code, docs, tests, command behavior,
+2. Use `comparable-lead-generation.md` when sibling repositories, GitHub owner
+   inventory, local checkouts, or external framework checklists would improve
+   recall for the requested scope.
+3. Build a lead inventory from the matching archetype prompts below and any
+   applicable comparable leads.
+4. For each lead, choose the owning workflow before investigating deeply.
+5. Try to disprove each lead using current code, docs, tests, command behavior,
    CI, generated contracts, and supported usage evidence.
-5. Record only leads that satisfy the selected skill's confidence and
+6. Record only leads that satisfy the selected skill's confidence and
    reproduction rules. Report rejected, routed, deferred, and blocked leads in
    closeout so a quiet audit still shows what was checked.
 
 Lead generation finds candidates; it does not lower confidence, ownership,
 reproduction, validation, or approval gates.
+Comparable systems are recall evidence only: do not record a finding merely
+because a sibling repository, GitHub inventory item, or external framework has a
+pattern the target lacks.
 
 ## Repository Archetypes
 
@@ -141,6 +148,10 @@ Before no-finding or incomplete closeout, include compact accounting:
 - `Deferred`: exact follow-up scopes that were not reviewed deeply.
 - `Blocked`: leads blocked by missing tools, credentials, services, sandbox,
   or ambiguous setup.
+
+When comparable lead generation was used or skipped, include the GitHub owner,
+matched local checkouts, comparable repositories, external frameworks, and any
+blocked inventory or checkout-mapping steps in the accounting.
 
 Rejected and routed leads should be brief, but they must be specific enough for
 a later reviewer to understand why the audit did not record them.
