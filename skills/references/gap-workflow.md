@@ -310,6 +310,17 @@ For implement modes:
   inventory, local checkout mapping, sibling repositories, or external
   frameworks, reproduce the current repository-owned limitation through the
   selected skill's normal evidence path.
+- Before recording a candidate, run an existing-surface challenge. List the
+  authoritative repository surfaces that could already satisfy the proposed
+  need, such as public APIs, commands, endpoints, generated contracts, runtime
+  health or metrics, shared helpers, framework behavior, configuration
+  defaults, docs, examples, tests, and supported consumer workflows. Reject or
+  route the candidate when the correct surface already covers the workflow.
+- For candidates that survive the existing-surface challenge, state the
+  residual gap: "Even with <existing surface>, the audience still cannot
+  <specific supported action/outcome>." If that sentence is weak, vague, or
+  mostly describes optional convenience, keep the lead below the selected
+  skill's ledger threshold and report it as rejected, routed, or deferred.
 - Confirm each candidate against current code, docs, examples, tests, command
   behavior, CI config, generated contracts, and public interfaces relevant to
   the selected skill before recording, fixing, or dismissing it.
@@ -366,6 +377,11 @@ For implement modes:
   below the selected skill's threshold, duplicative, out of scope, or owned by a
   different workflow. When useful, state the authoritative surface or workflow
   that owns the concern.
+- Treat optional follow-ups, speculative improvements, and leads that need
+  production evidence or a separate product/security/reliability design as
+  closeout notes only. Do not create a scoped ledger solely to store optional
+  follow-ups when no confirmed entries survive the selected skill's evidence
+  gate.
 - For local review as well as delegated review, preserve rejected, routed,
   deferred, and blocked lead notes. A quiet audit without these notes is not
   enough evidence for broad no-finding confidence.
