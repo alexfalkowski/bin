@@ -44,6 +44,10 @@ These shared rules own workflow mechanics.
   higher-priority runtime instructions allow goal creation for this workflow.
   Otherwise maintain the selected mode, requested scope, and state transitions
   in the conversation or tool plan without creating a runtime goal.
+- For substantial, ambiguous, or multi-iteration implementation work, read
+  `long-running-work.md` and keep its progress artifact as runtime state only.
+  Do not write progress files, design docs, or orchestration artifacts into the
+  repository unless the human explicitly asks for a durable file.
 - Do not combine find and implement modes in one pass unless the selected skill
   explicitly defines a one-pass mode.
 - Preserve stop gates as plan boundaries. Do not continue past a stop gate based
@@ -489,8 +493,18 @@ For implement modes:
   dominant relevant test harness or validation path, planned validation command,
   and any deviation from `AGENTS.md` or selected skills. If a deviation is
   needed, stop and ask before editing.
+- For substantial, ambiguous, or multi-iteration implementation work, use
+  `long-running-work.md` after the agreement gate. Maintain the progress
+  artifact in runtime state, ask only blocking questions after research, and
+  work in thin validated slices. This does not authorize combining find and
+  implement modes or editing outside the agreed entry.
 - Implement only the agreed entry with the smallest clear change using existing
   local patterns.
+- Before accepting substantial implementation work as complete, apply the fresh
+  review gate from `long-running-work.md`. Use an independent reviewer when
+  sub-agents are explicitly authorized and available; otherwise perform a named
+  local challenge pass and do not present it as equivalent to independent
+  review.
 - During automatic continuations while waiting for approval or an "`ID` is
   done" confirmation, do not repeat the full proposal or result. State the
   current waiting gate once, concisely.

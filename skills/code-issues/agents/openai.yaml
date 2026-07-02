@@ -1,4 +1,4 @@
 interface:
   display_name: "Code Issues"
   short_description: "Find scoped code defects and risks"
-  default_prompt: "Use $code-issues for scoped bug, security, compatibility, or public-contract issue ledgers. Follow its active plan, use repo archetype lead generation before filtering candidates, apply the shared delegation gate, preserve confidence/validation/bin/** rules, account for rejected/routed leads, handle ISSUES.md and no-finding/audit-incomplete output, answer issue ID follow-ups such as ISSUE-1, and fix one agreed issue at a time."
+  default_prompt: "Use $code-issues for scoped bug, security, compatibility, or public-contract issue ledgers. Follow its active plan, use repo archetype lead generation before filtering candidates, apply the shared delegation gate, preserve confidence/validation/bin/** rules, use runtime long-running progress for substantial agreed fixes, account for rejected/routed leads, handle ISSUES.md and no-finding/audit-incomplete output, answer issue ID follow-ups such as ISSUE-1, and fix one agreed issue at a time."

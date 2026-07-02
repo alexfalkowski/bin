@@ -101,7 +101,10 @@ or approved escalation path, or report the blocker.
 
 Stateful gap and review workflows may include `references/plan.md`; those files
 are templates for runtime execution state, not durable project artifacts. Shared
-workflow mechanics live in `skills/references/gap-workflow.md`.
+workflow mechanics live in `skills/references/gap-workflow.md`. For
+substantial, ambiguous, or multi-iteration work, use
+`skills/references/long-running-work.md` as a compact runtime-state pattern for
+research, blocking questions, thin slices, validation, and fresh review.
 
 Use runtime goals only when the human explicitly requests them or
 higher-priority runtime instructions allow goal creation for the selected
