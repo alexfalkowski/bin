@@ -211,6 +211,10 @@ These are mandatory gates, not guidance.
 - Make failures obvious and descriptive. Avoid bare assertions such as `expected true but got false`; include the case, input, expected behavior, and observed behavior when the assertion framework does not do so clearly.
 - For repeated low-information assertions, do not rely only on generic framework output such as `Should be false`, `expected true but got false`, or `expected 2, got 1`. Add a short assertion message or use named subtests so the failure identifies the specific scenario. This applies especially to repeated boolean and numeric assertions.
 - Keep tests readable. Add small helpers, fixtures, builders, or assertions when they make behavior easier to read, but avoid abstractions that hide the scenario being tested. If a test needs a derived value, prefer a named local or helper whose name explains the behavior over dense inline setup.
+- When tests repeat the same configuration literals, prefer the repository's
+  established fixture/helper location for a small constructor or builder. Keep
+  test call sites focused on the scenario-specific values, and avoid scattering
+  config construction across unrelated tests.
 - Use broader suites for shared infrastructure, compatibility-sensitive behavior, release-sensitive behavior, or changes that cross package, command, or service boundaries.
 - Use focused package, file, scenario, example, focus-tag, or test-name runs for
   fast feedback when the dominant harness supports them. Broaden only when the
