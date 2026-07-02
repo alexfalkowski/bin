@@ -63,6 +63,15 @@ candidate instead of recording it as low priority.
 - **Current limitation**: State the existing workflow limitation, missing
   capability, or friction. The limitation must exist today and must not already
   be solved by current code, docs, examples, or command behavior.
+- **Existing coverage**: Name the current product surfaces that already address
+  part or all of the need, including APIs, commands, endpoints, generated
+  contracts, runtime health or metrics, docs, examples, configuration, and
+  supported workflows. Reject the candidate if an existing surface already
+  solves the practical user action.
+- **Residual gap**: After accounting for existing coverage, state the remaining
+  supported action or outcome the audience still cannot complete. Reject the
+  candidate if the residual is only a weaker spelling of "more flexible",
+  "more convenient", or "another way to do the same thing".
 - **Negative capability proof**: If the proposal depends on a capability being
   absent, verify that absence across every layer that could already provide it:
   local code, generated code, framework wrappers, shared helpers, vendored
@@ -75,6 +84,11 @@ candidate instead of recording it as low priority.
   unlocked use cases, safer operation, or reduced support burden. Reject the
   candidate if the benefit cannot be stated as a specific improvement to the
   named audience's workflow.
+- **Common operation**: For new product capability, show that the action is a
+  normal or credibly recurring workflow for the named audience in this
+  repository's domain. Comparable-tool support alone is not enough; reject or
+  defer candidates whose value is mostly rare operator preference, library
+  affordance parity, or speculative future use.
 - **Repository ownership**: Show that this repository owns the behavior,
   interface, workflow, helper, or documentation surface where the feature
   belongs.
@@ -103,10 +117,10 @@ candidate instead of recording it as low priority.
   naming issue, style preference, or unsupported roadmap decision.
 
 Reject ideas whose support is only novelty, taste, competitor parity, a trend,
-an imagined future user, framework preference, private implementation
-preference, generic "nice to have" polish, or a vague benefit such as "more
-flexible", "better", "cleaner", or "more powerful" without a concrete audience
-outcome.
+an imagined future user, uncommon operation, framework preference, private
+implementation preference, generic "nice to have" polish, or a vague benefit
+such as "more flexible", "better", "cleaner", or "more powerful" without a
+concrete audience outcome.
 
 ## Find Mode
 
@@ -145,13 +159,22 @@ These feature-gap rules remain mandatory:
   architecture, and available comparable-tool evidence before recording it. Try
   to disprove the candidate by asking whether the workflow is already
   supported, whether the repository owns the behavior, whether the likely
-  audience exists, and whether the feature can be added incrementally using
-  local patterns.
+  audience exists, whether existing product surfaces already cover enough of the
+  workflow, whether the residual gap is still meaningful after that coverage,
+  whether the operation is common enough for the audience, and whether the
+  feature can be added incrementally using local patterns.
+- When sub-agents are authorized and candidate volume justifies delegation,
+  assign at least one disprover slice when practical. The disprover should look
+  for existing APIs, commands, endpoints, health/metrics, generated contracts,
+  docs, examples, tests, shared helpers, framework behavior, or workflow routing
+  that already covers each proposed feature, and should try to route weak leads
+  to another gap workflow or optional follow-up.
 - Record feature gaps only when the proposal names the audience, current
-  product workflow limitation, practical audience benefit, repository-owned
-  product surface, evidence of user, operator, service-author, package-consumer,
-  CLI, API, or library value, fit with existing patterns, smallest plausible
-  implementation path, compatibility risk, and validation path.
+  product workflow limitation, existing coverage, residual gap, practical
+  audience benefit, common-operation evidence, repository-owned product surface,
+  evidence of user, operator, service-author, package-consumer, CLI, API, or
+  library value, fit with existing patterns, smallest plausible implementation
+  path, compatibility risk, and validation path.
 - Do not record confirmed bugs, security issues, compatibility breaks,
   reliability gaps, missing tests, test-harness quality issues, stale docs,
   project workflow gaps, or unclear naming as feature gaps. Route them to
@@ -159,8 +182,8 @@ These feature-gap rules remain mandatory:
   `$doc-gaps`, `$project-gaps`, or `$naming-standards` as appropriate.
 - Do not record feature ideas whose evidence is only novelty, personal
   preference, a competitor checklist, a trend, an undocumented future roadmap,
-  a broad rewrite, a new framework preference, or optional polish with no
-  concrete workflow improvement.
+  an uncommon operation, a broad rewrite, a new framework preference, or
+  optional polish with no concrete workflow improvement.
 - Do not record feature proposals that require a new product direction,
   breaking public behavior, new external service, new dependency class, or
   significant maintenance commitment unless the current repository already
@@ -188,7 +211,13 @@ Use this structure:
 - Scope: path/to/file-or-folder
 - Audience: User|Developer|Maintainer|Operator|Package consumer|Service author
 - Current limitation: The workflow limitation, missing capability, or friction.
+- Existing coverage: Current product surfaces that already address part or all
+  of the need, and why they are insufficient for the named audience.
+- Residual gap: Even with the existing coverage, the audience still cannot
+  complete this specific supported workflow or outcome.
 - Benefit: Why this matters to the named audience and how their workflow becomes better.
+- Common operation: Evidence that this is a normal or recurring workflow for
+  the named audience, not only comparable-tool parity.
 - Evidence: Concrete file and line references, command behavior, docs, examples, comparable-tool evidence, or user/developer workflow evidence.
 - Reproduction: Smallest supported user, developer, service-author, operator,
   or package-consumer workflow trace that demonstrates the current limitation

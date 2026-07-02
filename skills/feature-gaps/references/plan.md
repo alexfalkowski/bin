@@ -25,20 +25,27 @@ validation, delegation, external research, ledger state, and workflow routing.
 5. Route standalone test-harness, CI, build, Makefile, release, validation,
    command discovery, setup, and repository workflow concerns to `$test-gaps` or
    `$project-gaps`.
-6. Apply `SKILL.md#acceptance-gate` to each candidate and confirm audience,
-   current product limitation, practical audience benefit, repository-owned
-   surface, value evidence, repository fit, smallest plausible implementation
-   path, compatibility and maintenance tradeoffs, validation path, and correct
+6. Challenge each candidate against existing product surfaces before accepting
+   it: APIs, commands, endpoints, generated contracts, runtime health/metrics,
+   docs, examples, configuration, supported workflows, framework behavior, and
+   shared helpers. Keep only candidates with a concrete residual gap after that
+   coverage is accounted for.
+7. Apply `SKILL.md#acceptance-gate` to each candidate and confirm audience,
+   current product limitation, existing coverage, residual gap, practical
+   audience benefit, common-operation evidence, repository-owned surface, value
+   evidence, repository fit, smallest plausible implementation path,
+   compatibility and maintenance tradeoffs, validation path, and correct
    workflow routing.
-7. Reject novelty, competitor checklists, trend-following, broad rewrites,
+8. Reject novelty, competitor checklists, trend-following, broad rewrites,
    new-framework preferences, future-roadmap assumptions, optional polish, vague
-   benefits without concrete audience outcome, and findings belonging to other
+   benefits without concrete audience outcome, uncommon operations without
+   evidence that the named audience needs them, and findings belonging to other
    workflows.
-8. Before a no-gap closeout, name audiences, product surfaces, documented
+9. Before a no-gap closeout, name audiences, product surfaces, documented
    workflows, public commands/APIs or package-consumer paths, comparable-tool
    research decisions, rejected and routed leads, validation evidence, and
    policy exclusions checked.
-9. If confirmed gaps remain, write scoped `FEATURES.md`, present the ledger,
+10. If confirmed gaps remain, write scoped `FEATURES.md`, present the ledger,
    coverage state, proposed implementation plan, and runnable follow-up scopes,
    then stop before implementing features.
 
