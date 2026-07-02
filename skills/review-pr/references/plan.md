@@ -12,6 +12,10 @@ repository root and keep `bin/` as shared guidance.
 - Preserve permission gates as plan boundaries.
 - Update the active plan when changed files, validation, review findings,
   drafted summary, or remote-write permission changes.
+- For substantial, ambiguous, or multi-iteration changes, use
+  `../../references/long-running-work.md` to track compact runtime progress and
+  review state. Do not write progress files or plan artifacts into the
+  repository unless the human explicitly asks for a durable file.
 - Treat validation as stale when files change after a command ran.
 - Do not run `make review`, `make push`, or any equivalent remote-write command
   unless the current request explicitly asked for that PR flow.
@@ -49,13 +53,18 @@ repository root and keep `bin/` as shared guidance.
 7. Apply relevant language, test, and documentation standards for the changed
    paths.
 8. Run `$code-review` on the current change.
-9. Run `$style-review` only when the human explicitly asked for non-blocking
+9. For substantial changes, apply the fresh review gate from
+   `../../references/long-running-work.md`: use an independent reviewer when
+   sub-agents are explicitly authorized and available; otherwise perform a
+   named local challenge pass and do not present it as equivalent to independent
+   review.
+10. Run `$style-review` only when the human explicitly asked for non-blocking
    polish.
-10. Resolve blocking review findings or get explicit approval to open the draft
+11. Resolve blocking review findings or get explicit approval to open the draft
     PR with unresolved findings documented.
-11. Read `references/summary-format.md`.
-12. Draft the lowercase, unprefixed `msg` and multiline Markdown `desc`.
-13. Write `desc` to a temporary file.
-14. Run `make msg="..." desc_file="$desc_file" review`.
-15. Read `references/output-format.md`.
-16. Report the result in the required output format.
+12. Read `references/summary-format.md`.
+13. Draft the lowercase, unprefixed `msg` and multiline Markdown `desc`.
+14. Write `desc` to a temporary file.
+15. Run `make msg="..." desc_file="$desc_file" review`.
+16. Read `references/output-format.md`.
+17. Report the result in the required output format.
