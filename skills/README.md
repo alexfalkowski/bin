@@ -112,6 +112,28 @@ workflow. Otherwise maintain stateful workflow progress in the conversation or
 tool plan. Goals do not bypass skill steps, stop gates, permission gates,
 scoped ledgers, human confirmation requirements, or validation freshness rules.
 
+## Remembered Commands
+
+Use these short commands instead of spelling out the full workflow:
+
+- `Work FEATURE-3 in path/FEATURES.md`: select the matching gap skill from the
+  ID prefix, refresh evidence, present the solution, and stop at the agreement
+  gate before editing.
+- `Agent work FEATURE-3/4/5 in path/FEATURES.md`: same as `Work`, plus explicit
+  current-request authorization to use sub-agents when they materially improve
+  coverage, throughput, implementation safety, or fresh review.
+- `Goal work FEATURE-3 in path/FEATURES.md`: same as `Work`, plus explicit
+  current-request authorization to use a runtime goal when goals are available
+  and useful.
+- `Agent goal work FEATURE-3/4/5 in path/FEATURES.md`: explicit authorization
+  for both sub-agents and a runtime goal.
+- `Approved. Continue.`: approve the most recently proposed solution and allow
+  the selected skill to implement it through its validation and review gates.
+
+These commands are shorthand only. They do not bypass solution agreement,
+scoped ledger rules, validation freshness, confidence thresholds, remote-write
+permission, or the selected skill's output format.
+
 ## Output And Validation
 
 When a skill is the final response, use that skill's required output format.

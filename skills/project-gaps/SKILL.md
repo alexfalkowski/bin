@@ -1,6 +1,6 @@
 ---
 name: project-gaps
-description: Use when the user asks to find $project-gaps in a package or folder, find project gaps in a package or folder, find project gaps with a specific confidence closure target such as 95% or 99%, find build, CI, Makefile, release, setup, validation, command discovery, or repository workflow gaps, implement $project-gaps in a package or folder, implement project gaps in a package or folder, asks about project gap IDs such as PROJECT-1, asks what the fix is for PROJECT-1, asks to fix or verify PROJECT-1, or says PROJECT-1 is done. Find concrete repository workflow and project plumbing improvements, record confirmed gaps in scoped PROJECTS.md, and later propose and implement agreed fixes one gap at a time.
+description: Use when the user asks to find $project-gaps in a package or folder, find project gaps in a package or folder, find project gaps with a specific confidence closure target such as 95% or 99%, find build, CI, Makefile, release, setup, validation, command discovery, or repository workflow gaps, implement $project-gaps in a package or folder, implement project gaps in a package or folder, uses a remembered command such as Work PROJECT-1 or Agent goal work PROJECT-1, asks about project gap IDs such as PROJECT-1, asks what the fix is for PROJECT-1, asks to fix or verify PROJECT-1, or says PROJECT-1 is done. Find concrete repository workflow and project plumbing improvements, record confirmed gaps in scoped PROJECTS.md, and later propose and implement agreed fixes one gap at a time.
 ---
 
 # Project Gaps

@@ -16,6 +16,10 @@ gates, validation rules, and output format.
 - Do not use this reference to combine find and implement modes, bypass
   approval gates, weaken confidence thresholds, skip validation, or replace
   repository-defined Make targets.
+- If the selected skill requires a proposed solution and human agreement before
+  editing, a request that says "implement" is not enough by itself. Refresh the
+  evidence, present the solution, and stop until the human agrees to that
+  solution.
 - Do not require sub-agents unless the current request authorizes them and the
   active runtime provides them. If sub-agents are unavailable, do not describe a
   local challenge pass as equivalent to independent review.
@@ -65,14 +69,15 @@ patterns, tests, or documented contracts.
 Use this loop inside the selected skill after the required approval gate has
 passed:
 
-1. Refresh the runtime artifact from current files, commands, and user answers.
-2. Select the next thin slice with acceptance criteria and validation.
-3. Implement the slice using existing local patterns.
-4. Run the narrowest repository-defined validation that credibly exercises the
+1. Confirm this reference has been read for the current task.
+2. Refresh the runtime artifact from current files, commands, and user answers.
+3. Select the next thin slice with acceptance criteria and validation.
+4. Implement the slice using existing local patterns.
+5. Run the narrowest repository-defined validation that credibly exercises the
    slice.
-5. Update the runtime artifact with changed paths, validation, remaining work,
+6. Update the runtime artifact with changed paths, validation, remaining work,
    blockers, and confidence limit.
-6. Continue only when the selected skill allows more work in the same mode and
+7. Continue only when the selected skill allows more work in the same mode and
    validation is not stale.
 
 If the work spans context boundaries, resume from the runtime artifact and
@@ -92,6 +97,9 @@ Before accepting substantial work as complete, run a fresh review gate:
   counterexamples, and lower confidence when unresolved questions remain.
 - Resolve blocking review findings or get explicit human approval to leave them
   unresolved before claiming the task is complete.
+- If sub-agents were authorized and available but the independent review was not
+  run, do not claim substantial work is complete at or above 90% confidence.
+  State the missed gate as a workflow blocker or validation gap.
 
 The reviewer checks whether the implementation satisfies the approved objective,
 preserves local contracts, follows the selected skill, and has credible
