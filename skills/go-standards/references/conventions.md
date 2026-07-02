@@ -18,6 +18,17 @@ Use this reference when working in Go repositories.
   wiring path, documented public contract, observed bug, concurrency boundary,
   security boundary, or realistic external input can trigger it. Otherwise make
   the narrower contract explicit in code or GoDoc and let misuse fail plainly.
+- When adding configuration, classify each field before choosing its home:
+  shared mechanics, domain-specific behavior, or test/setup convenience. Keep
+  shared config limited to behavior that is truly transport-, backend-, or
+  domain-agnostic. Put domain-specific classification near the package that owns
+  the native concept.
+- Do not overload policy callbacks with unrelated decisions. A policy should
+  answer one domain question, such as operation eligibility; separate failure
+  classification, routing, formatting, or transport-specific matching into
+  owned config or helpers.
+- Prefer native domain types over wrapper types unless the wrapper adds
+  validation, behavior, compatibility, or a repository-owned abstraction.
 
 ## Abstractions And Helpers
 
@@ -33,6 +44,11 @@ Use this reference when working in Go repositories.
   external boundary, or repository pattern needs the extra shape.
 - During refactor passes, inline helpers that merely restate their only call,
   especially when the helper name is no clearer than the wrapped expression.
+- When a helper grows a long parameter list, separate stable configuration from
+  per-call data before adding a new abstraction. Prefer an existing receiver
+  type when it already owns the state; use closure capture for small local
+  behavior; add a private struct only when it clarifies ownership or removes a
+  real data clump.
 
 ## Documentation
 
