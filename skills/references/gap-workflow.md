@@ -7,6 +7,19 @@ These shared rules own workflow mechanics.
 ## Mode And Plan State
 
 - If no scope is provided, stop and ask for the package or folder.
+- Treat remembered commands as gap-workflow shorthand:
+  - `Work ID` or `Work ID1/ID2 in LEDGER_PATH` selects the matching gap skill
+    from the ID prefix and enters implement mode for those IDs.
+  - `Agent work ID` explicitly authorizes sub-agents for the current request.
+  - `Goal work ID` explicitly authorizes a runtime goal for the current request
+    when runtime goals are available and useful.
+  - `Agent goal work ID` explicitly authorizes both sub-agents and a runtime
+    goal for the current request.
+  - `Approved. Continue.` approves the most recently proposed solution and
+    permits implementation to continue under the selected skill.
+  These shorthands do not bypass solution agreement, scoped ledger rules,
+  validation freshness, confidence thresholds, remote-write permission, or the
+  selected skill's output format.
 - Before starting a find, audit, one-pass, or implement mode, read the selected
   skill's `references/plan.md` and maintain it as active runtime state. Do not
   write the plan into the repository unless the human explicitly asks for a
@@ -45,7 +58,8 @@ These shared rules own workflow mechanics.
   Otherwise maintain the selected mode, requested scope, and state transitions
   in the conversation or tool plan without creating a runtime goal.
 - For substantial, ambiguous, or multi-iteration implementation work, read
-  `long-running-work.md` and keep its progress artifact as runtime state only.
+  `long-running-work.md` before proposing or implementing the first slice, and
+  keep its progress artifact as runtime state only.
   Do not write progress files, design docs, or orchestration artifacts into the
   repository unless the human explicitly asks for a durable file.
 - Do not combine find and implement modes in one pass unless the selected skill
@@ -116,7 +130,8 @@ For implement modes:
    validation. Stop until the human explicitly agrees to that solution. A named
    fix, implement, or verify request selects the entry and permits evidence
    refresh, but it is not approval to edit unless it also agrees to the proposed
-   solution.
+   solution. This remains true when the request says "implement", names
+   multiple related IDs, or authorizes agents.
 6. After agreement, state the local pattern, dominant relevant harness or
    validation path, planned validation, and any needed deviation. Stop before
    deviating from the selected skill, repository pattern, or documented
@@ -485,7 +500,9 @@ For implement modes:
 - A request that names an entry and asks to fix, implement, or verify it is
   permission to select that entry, re-check current evidence, and present or
   refresh the proposal. It is not approval to edit unless the request also
-  explicitly agrees to the proposed solution.
+  explicitly agrees to the proposed solution. When the request names multiple
+  related entries, present the combined or per-entry solution and stop before
+  editing the first entry.
 - Ask questions when behavior, compatibility, documentation location, test
   layer, implementation home, validation, operator workflow, or user intent is
   ambiguous enough that a correct change cannot be inferred from local context.
@@ -494,17 +511,20 @@ For implement modes:
   and any deviation from `AGENTS.md` or selected skills. If a deviation is
   needed, stop and ask before editing.
 - For substantial, ambiguous, or multi-iteration implementation work, use
-  `long-running-work.md` after the agreement gate. Maintain the progress
-  artifact in runtime state, ask only blocking questions after research, and
-  work in thin validated slices. This does not authorize combining find and
-  implement modes or editing outside the agreed entry.
+  `long-running-work.md` after the agreement gate. Confirm the reference was
+  read for the current task, maintain the progress artifact in runtime state,
+  ask only blocking questions after research, and work in thin validated
+  slices. This does not authorize combining find and implement modes or editing
+  outside the agreed entry.
 - Implement only the agreed entry with the smallest clear change using existing
   local patterns.
 - Before accepting substantial implementation work as complete, apply the fresh
   review gate from `long-running-work.md`. Use an independent reviewer when
   sub-agents are explicitly authorized and available; otherwise perform a named
   local challenge pass and do not present it as equivalent to independent
-  review.
+  review. If agents were authorized and available but this independent review
+  did not run, do not report the implementation complete at or above 90%
+  confidence.
 - During automatic continuations while waiting for approval or an "`ID` is
   done" confirmation, do not repeat the full proposal or result. State the
   current waiting gate once, concisely.
