@@ -57,9 +57,12 @@ validation, delegation, external research, ledger state, and workflow routing.
    framework wrappers, shared helpers, vendored dependency behavior when
    delegated, docs, tests, examples, command behavior, architecture, and
    comparable-tool evidence.
-3. Present feature evidence, audience benefit, repository fit, proposed
-   solution, compatibility and maintenance tradeoffs, and intended validation
-   before asking for agreement.
+3. Present the `SKILL.md#implementation-proposal-gate` decision packet before
+   asking for agreement. It must lead with `## Solution Shape`, make the
+   proposed design visually scannable before confidence or evidence details,
+   show tradeoffs visually, name intended validation, and end by pointing to
+   the canonical `Approved. Continue.` and `Agent approved. Continue.`
+   approval commands.
 4. After agreement, state local code/config/docs pattern, dominant relevant
    test harness, planned validation, and deviations. For behavior-changing
    features, also state the feature execution checklist: TDD decision, first
