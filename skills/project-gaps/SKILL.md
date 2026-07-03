@@ -150,30 +150,61 @@ These project-gap rules remain mandatory:
 
 Use this structure:
 
-```markdown
+````markdown
 # Projects
 
 ## PROJECT-1: Short concrete title
 
-- Type: Project Gap
-- Priority: High|Medium|Low
-- Confidence: 93%
-- Scope: path/to/file-or-folder
-- Audience: Developer|Maintainer|Operator|Package consumer|Service author
-- Implementation home: current repo|shared bin|external repo|mixed
-- Current limitation: The project workflow friction or missing project capability.
-- Project surface: Make target|CI job|script|setup flow|validation flow|release flow|command discovery|shared ./bin wiring.
-- Evidence: Concrete file and line references, command behavior, CI config, docs, examples, comparable workflow evidence, or maintainer workflow evidence.
-- Reproduction: Smallest supported maintainer, developer, CI, Make, setup,
-  validation, release, or command-discovery workflow trace that demonstrates
-  the current friction or missing project capability.
-- Ownership: Why this scope owns the fix, or why the issue is routed to a
-  third-party, external repo, shared tooling, or upstream project-owned library.
-- Repository fit: Why this belongs in the current repository and matches existing project patterns.
-- Proposed change: Smallest useful project workflow improvement.
-- Compatibility and maintenance: Public target behavior, dependency, migration, support, CI runtime, or maintenance tradeoffs.
-- Validation: Suggested checks for the project workflow change.
+| Field | Value |
+| --- | --- |
+| Type | Project Gap |
+| Priority | High \| Medium \| Low |
+| Confidence | 93% |
+| Scope | path/to/file-or-folder |
+| Audience | Developer \| Maintainer \| Operator \| Package consumer \| Service author |
+| Implementation home | current repo \| shared bin \| external repo \| mixed |
+| Project surface | Make target \| CI job \| script \| setup flow \| validation flow \| release flow \| command discovery \| shared ./bin wiring. |
+
+### Workflow Map
+
+```text
+current limitation: The project workflow friction or missing project capability.
+ownership: Why this scope owns the fix, or why the issue is routed to a
+third-party, external repo, shared tooling, or upstream project-owned library.
+repository fit: Why this belongs in the current repository and matches existing project patterns.
+compatibility and maintenance: Public target behavior, dependency, migration,
+support, CI runtime, or maintenance tradeoffs.
 ```
+
+### Evidence
+
+```text
+Evidence: Concrete file and line references, command behavior, CI config, docs,
+examples, comparable workflow evidence, or maintainer workflow evidence.
+Reproduction: Smallest supported maintainer, developer, CI, Make, setup,
+validation, release, or command-discovery workflow trace that demonstrates the
+current friction or missing project capability.
+```
+
+### Decision Trace
+
+```text
+maintainer or workflow actor
+  -> current command or project surface
+  -> observed friction or missing capability
+  -> owning implementation home
+  -> smallest useful project change
+  -> validation that proves the workflow
+```
+
+### Proposed Change
+
+```yaml
+proposed_change: Smallest useful project workflow improvement.
+validation:
+  - Suggested checks for the project workflow change.
+```
+````
 
 Keep optional follow-up notes separate from proposals:
 

@@ -146,7 +146,7 @@ require_pattern skills/test-gaps/SKILL.md "After the human agrees and before edi
 require_pattern skills/doc-gaps/SKILL.md "After the human agrees and before editing, state the selected local documentation pattern"
 require_pattern skills/feature-gaps/SKILL.md "After the human agrees and before editing, state the selected local code/config/docs pattern"
 require_pattern skills/project-gaps/SKILL.md "After the human agrees and before editing, state the selected local project workflow pattern"
-require_pattern skills/project-gaps/SKILL.md "Implementation home: current repo|shared bin|external repo|mixed"
+require_pattern skills/project-gaps/SKILL.md "| Implementation home | current repo \| shared bin \| external repo \| mixed |"
 require_pattern skills/project-gaps/SKILL.md "If a candidate's implementation home is outside the requested scope"
 require_pattern skills/reliability-gaps/SKILL.md "After the human agrees and before editing, state the selected local code/config/docs pattern"
 require_pattern skills/code-issues/SKILL.md "asks about issue IDs such as ISSUE-1"
@@ -169,6 +169,18 @@ require_pattern skills/doc-gaps/SKILL.md "Reproduction: Smallest reader action"
 require_pattern skills/feature-gaps/SKILL.md "Reproduction: Smallest supported user"
 require_pattern skills/project-gaps/SKILL.md "Reproduction: Smallest supported maintainer"
 require_pattern skills/reliability-gaps/SKILL.md "Reproduction: Smallest supported trigger"
+for gap_skill in \
+  skills/code-issues/SKILL.md \
+  skills/test-gaps/SKILL.md \
+  skills/doc-gaps/SKILL.md \
+  skills/feature-gaps/SKILL.md \
+  skills/project-gaps/SKILL.md \
+  skills/reliability-gaps/SKILL.md
+do
+  require_pattern "$gap_skill" "### Decision Trace"
+  require_pattern "$gap_skill" "### Proposed Change"
+  require_pattern "$gap_skill" "| Field | Value |"
+done
 
 require_pattern skills/references/gap-workflow.md "Do not silently downgrade to"
 require_pattern skills/references/gap-workflow.md "current user"
