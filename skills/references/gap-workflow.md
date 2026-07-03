@@ -17,6 +17,11 @@ These shared rules own workflow mechanics.
     goal for the current request.
   - `Approved. Continue.` approves the most recently proposed solution and
     permits implementation to continue under the selected skill.
+  - `Agent approved. Continue.` approves the most recently proposed solution
+    and explicitly authorizes sub-agents for the current implementation request.
+    Use them for disjoint implementation slices, validation support, or fresh
+    review when they materially improve throughput, coverage, confidence, or
+    implementation safety.
   These shorthands do not bypass solution agreement, scoped ledger rules,
   validation freshness, confidence thresholds, remote-write permission, or the
   selected skill's output format.
@@ -516,6 +521,11 @@ For implement modes:
   ask only blocking questions after research, and work in thin validated
   slices. This does not authorize combining find and implement modes or editing
   outside the agreed entry.
+- When the current implementation request authorizes agents, use sub-agents for
+  disjoint slices, validation support, or fresh review when they can materially
+  improve throughput, coverage, confidence, or implementation safety. Keep one
+  active ledger entry owner and do not let parallel work bypass the selected
+  skill's validation, review, or human confirmation gates.
 - Implement only the agreed entry with the smallest clear change using existing
   local patterns.
 - Before accepting substantial implementation work as complete, apply the fresh

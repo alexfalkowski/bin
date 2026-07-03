@@ -129,6 +129,10 @@ Use these short commands instead of spelling out the full workflow:
   for both sub-agents and a runtime goal.
 - `Approved. Continue.`: approve the most recently proposed solution and allow
   the selected skill to implement it through its validation and review gates.
+- `Agent approved. Continue.`: same as `Approved. Continue.`, plus explicit
+  current-request authorization to use sub-agents during implementation and
+  fresh review when they can work on disjoint slices, validation support, or
+  independent review without bypassing the selected skill's gates.
 
 These commands are shorthand only. They do not bypass solution agreement,
 scoped ledger rules, validation freshness, confidence thresholds, remote-write
