@@ -16,7 +16,8 @@ description: Use when running or selecting validation after code, docs, Makefile
 7. Treat validation as valid only for the file state it tested. If files change while a validation command is still running or after it completes, report that result as stale and rerun the relevant checks after final edits.
 8. Notice wrappers that no-op because optional tools are missing, and do not report them as full validation.
 9. Use `$testing-standards` when the task needs decisions about what tests to add or whether coverage is credible; keep this skill focused on selecting and reporting commands.
-10. When reporting standalone validation, use the exact structure in `references/check-selection.md`; when another skill embeds validation, preserve the command, result, coverage, and gap details.
+10. For standalone output, use `references/check-selection.md`; when embedded,
+    preserve command, result, coverage, and gap details in the caller's format.
 
 ## References
 

@@ -56,40 +56,6 @@ evidence-backed follow-up actions that repository owners can complete.
 12. Produce the summary in Markdown tables with a short narrative. Do not create
    files unless the user asks for a durable report.
 
-## Reporting Rules
-
-- Do not rank individual developers, infer effort from lines of code, or call a
-  person productive/unproductive from activity metrics.
-- Do not collapse delivery, quality, and reliability into a single repository
-  score.
-- Do not fabricate missing GitHub, CircleCI, Kubernetes, DigitalOcean, or
-  UptimeRobot values. State the missing source, credential, command, or mapping.
-- Do not expose tokens, API keys, private URLs, or raw incident payloads in the
-  final report.
-- Prefer medians over averages for age, lead-time, duration, and recovery-time
-  metrics.
-- Prefer period-over-period deltas over standalone counts.
-- Prefer threshold-backed action items over generic recommendations.
-- Include four-window trend context when the collector returns enough data.
-- Include exact window boundaries in the final report.
-- Call out interpretation separately from measured facts.
-
-## Summary Modes
-
-- **Weekly**: Best for management rhythm, maintenance review, and service
-  health. Include delivery flow, CI quality, release/deploy activity, service
-  reliability when applicable, trend context, notable changes, and prioritized
-  action items.
-- **Daily**: Best for operational check-ins. Emphasize yesterday/today flow,
-  failed checks, deploys, incidents, open review bottlenecks, and follow-up
-  actions.
-- **Library**: Omit service reliability unless monitors or deploys exist.
-  Emphasize maintenance throughput, release readiness, CI, dependency/security
-  signals when available, unreleased commits, latest release age, and
-  downstream-impact notes visible in the repo.
-- **Service**: Include deployment, uptime, incident, response-time, Kubernetes,
-  monitor-health evidence, and operational follow-up actions when available.
-
 ## References
 
 - Run `scripts/collect.rb --repo PATH` first for report-ready metrics and
@@ -98,4 +64,5 @@ evidence-backed follow-up actions that repository owners can complete.
   collection boundaries.
 - Read `references/metrics.md` for metric definitions, comparison logic, and
   anti-metrics.
-- Read `references/output.md` for the required final report shape.
+- Read `references/output.md` for reporting rules, summary modes, and the
+  required final report shape.

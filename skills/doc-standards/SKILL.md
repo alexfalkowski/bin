@@ -81,85 +81,13 @@ surface, treat the issue as a candidate documentation gap. If the only support
 for adequacy is that the README is long, a heading exists, every exported symbol
 has a comment, or a comment satisfies lint shape, do not pass the documentation.
 
-## Documentation Location
+## Detailed Standards
 
-Route documentation to the surface that owns the reader's next action:
-
-- **README**: project identity, boundary, first-use bootstrap, one minimal usage
-  path, essential configuration, applicable operations notes, and links to
-  deeper owners.
-- **User docs**: workflows, setup paths, operational procedures, migrations,
-  troubleshooting, and multi-step behavior that does not fit command help or API
-  comments.
-- **Command help**: command syntax, flags, environment variables, defaults,
-  error cases, and command-specific examples.
-- **Public API comments, GoDoc, RDoc, and docstrings**: callable API contracts,
-  behavior, parameters when non-obvious, return or nil semantics, exceptions or
-  errors, lifecycle, side effects, compatibility, and ownership boundaries.
-- **Executable examples**: reusable API usage, representative command flows, or
-  integration examples that can be validated by the repository's established
-  test or example harness.
-- **Schemas, `.proto` files, generated docs, and sample config**: exhaustive
-  field, wire, and generated reference material. Link to these owners instead of
-  duplicating them in README prose.
-
-## Documentation Standards
-
-- **Correctness**: Documentation must describe the current repository-owned
-  behavior, command syntax, configuration shape, examples, defaults, limits,
-  errors, compatibility expectations, and operational constraints accurately.
-  If documentation conflicts with code and tests, prove the implementation is
-  wrong with non-prose evidence before changing code; otherwise update the
-  documentation.
-- **Completeness**: Public entrypoints, exported APIs, commands, configuration
-  keys, setup paths, migrations, and examples need enough documentation for the
-  intended user to use or maintain them without reading private implementation
-  code first.
-- **Location**: Put documentation where the target audience will look: public
-  API comments near exported identifiers, command behavior in help or README
-  docs, setup and operator guidance in project docs, and executable examples
-  near the documented entrypoint. Do not accept correct information in the wrong
-  place when the intended user would not discover it before making the risky
-  decision.
-- **Examples**: Examples and commands should be copy-paste-ready when practical,
-  aligned with real entrypoints, and kept current with flags, config keys,
-  package names, imports, outputs, and validation constraints. Prefer
-  executable examples over README-only examples when the language or repository
-  already has an executable example convention for that public surface.
-- **Diagrams**: Use ASCII diagrams when they make control flow, data flow,
-  ownership, protocol boundaries, dependency direction, state transitions, or
-  lifecycle ordering easier to understand than prose. Keep diagrams small,
-  aligned with the documented behavior, and close to the relevant explanation.
-  Do not add decorative diagrams, file-tree art, or diagrams that duplicate an
-  authoritative generated diagram, schema, `.proto`, config, or command output.
-- **Public API comments and docstrings**: Explain exported behavior, contracts,
-  nil or error behavior, compatibility constraints, side effects, deprecations,
-  alias or wrapper relationships, and security or operational requirements when
-  those are not obvious from the signature. Follow the relevant language's
-  documentation requirements, but do not demand or write comments that merely
-  restate the identifier, signature, return type, or obvious implementation.
-- **Code comments**: Explain non-obvious intent, invariants, tradeoffs,
-  bug-workaround context, copied-code sources, external standards, incomplete
-  implementation state, or surprising behavior. Comments must explain why the
-  code exists or what contract it protects, not narrate what each line does. If
-  a clear comment cannot be written because the code itself is confused,
-  recommend `$code-issues`.
-- **Terminology**: Use the same names for concepts, commands, config keys, API
-  fields, and roles across docs, code, examples, and tests. Use
-  `$naming-standards` when unclear terminology creates misuse or maintenance
-  risk.
-- **Audience**: Keep startup docs concise, current, and structured with headings
-  and links to deeper docs. Do not bury critical setup, security, migration, or
-  operational instructions in unrelated comments or long prose.
-
-## Code Comment Standard
-
-Read `references/comments.md` when reviewing or writing code comments, public
-API comments, docstrings, RDoc, GoDoc, or shell function comments.
-
-## README Standard
-
-Read `references/readme.md` when writing, reviewing, or updating README files.
+- Read `references/standards.md` when deciding documentation location,
+  adequacy, examples, diagrams, terminology, or audience fit.
+- Read `references/comments.md` when reviewing or writing code comments, public
+  API comments, docstrings, RDoc, GoDoc, or shell function comments.
+- Read `references/readme.md` when writing, reviewing, or updating README files.
 
 ## Finding Threshold
 
@@ -192,3 +120,5 @@ gap. When the confirmed problem is missing or weak test coverage, use
   docstrings, RDoc, GoDoc, and shell function comments.
 - Read `references/readme.md` for README responsibilities, project-type
   expectations, alerts, duplication rules, and README anti-patterns.
+- Read `references/standards.md` for documentation location, correctness,
+  completeness, examples, diagrams, terminology, and audience rules.

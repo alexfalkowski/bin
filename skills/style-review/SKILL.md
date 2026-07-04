@@ -42,33 +42,14 @@ security, compatibility, testing, or documentation findings.
    change would make the code easier to read, maintain, or align with local
    patterns.
 9. Do not create or update `ISSUES.md`; style notes are not ledger findings.
-10. When style-review is the final response, use the exact structure below; do
-   not add, remove, rename, or reorder sections.
+10. For standalone output, use `references/output-format.md`.
 11. When another skill embeds style notes, preserve the non-blocking nature,
    file references, suggestions, and rationale in the caller's output format.
 
-## Output Format
-
-Use exactly this Markdown structure:
-
-```markdown
-## Style Notes
-
-- path/to/file:line - Non-blocking note title.
-  Why: Explain the readability, consistency, idiom, or maintenance benefit.
-  Suggestion: Describe the smallest clear polish change.
-
-## Optional Cleanups
-
-- Optional cleanup that is not worth blocking the change.
-```
-
-Use `- None.` for any empty section. Keep notes short and explicitly
-non-blocking. If a concern would be worth blocking a change, it belongs in
-another review skill instead.
-
 ## References
 
+- Read `references/output-format.md` before producing standalone style-review
+  output.
 - Use relevant language standards for language-specific readability, idiom, and
   local convention checks.
 - Use `$naming-standards` when names create unclear or inconsistent style.

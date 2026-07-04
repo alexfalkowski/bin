@@ -42,8 +42,9 @@ finding to documentation instead of changing code.
     without adding domain clarity or boundary ownership.
 12. If the review scope includes security-sensitive code, configuration, dependencies, shell execution, filesystem writes/deletes, network/auth/TLS behavior, secrets/env handling, Docker helpers, or CI/security tooling, consult `$security-audit` and the smallest matching security reference; keep this skill's findings format.
 13. Verify claims against concrete file and line references whenever possible.
-14. When code review is the final response, use the exact structure in `references/findings-format.md`; do not add, remove, rename, or reorder sections.
-15. When another skill embeds this review, preserve findings, open questions, testing gaps, and summary facts in the caller's output format.
+14. For standalone output, use `references/findings-format.md`; when embedded,
+    preserve findings, open questions, testing gaps, and summary facts in the
+    caller's format.
 
 ## References
 

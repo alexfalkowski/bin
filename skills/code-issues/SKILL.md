@@ -1,21 +1,18 @@
 ---
 name: code-issues
-description: Use when the user asks to find $code-issues in a package or folder, find code issues in a package or folder, find code issues with a specific confidence closure target such as 95% or 99%, implement $code-issues in a package or folder, implement code issues in a package or folder, uses a remembered command such as Work ISSUE-1 or Agent goal work ISSUE-1, asks about issue IDs such as ISSUE-1, asks what the fix is for ISSUE-1, asks to fix or verify ISSUE-1, or says ISSUE-1 is done. Find concrete bugs, security issues, compatibility breaks, and public contract violations, record them in scoped ISSUES.md, and later propose and implement agreed fixes one code issue at a time.
+description: Use when the user asks to find or implement $code-issues/code issues in a package or folder, set a confidence closure target such as 95% or 99%, uses Work ISSUE-1 or Agent goal work ISSUE-1, asks about issue IDs such as ISSUE-1, asks what the fix is for ISSUE-1, asks to fix or verify ISSUE-1, or says ISSUE-1 is done. Find concrete bugs, security issues, compatibility breaks, and public contract violations; record scoped ISSUES.md entries; later propose and implement agreed fixes one at a time.
 ---
 
 # Code Issues
 
-Use this skill in two distinct modes:
+Use this skill in two distinct modes; do not combine them in one pass:
 
 - **Find mode**: `Find $code-issues in PACKAGE_OR_FOLDER` or `Find code issues in PACKAGE_OR_FOLDER`.
 - **Implement mode**: `Implement $code-issues in PACKAGE_OR_FOLDER` or `Implement code issues in PACKAGE_OR_FOLDER`.
 
-Do not combine the two modes in one pass.
-
-Before starting Find mode or Implement mode, read `references/plan.md` and
-`../references/gap-workflow.md`. The plan owns active runtime state; the shared
-gap workflow owns ledger, delegation, scope, coverage, confidence, and approval
-gates.
+Before either mode, read `references/plan.md` and
+`../references/gap-workflow.md`; they own runtime state, ledger, delegation,
+scope, coverage, confidence, and approval gates.
 
 ## Operating Stance
 
@@ -36,78 +33,15 @@ while prose disagrees, treat it as a documentation gap and update the docs.
 Follow `references/plan.md#find-mode-plan` and the find/audit rules in
 `../references/gap-workflow.md`.
 
-These code-issue rules remain mandatory:
-
-- Use `ISSUES.md` in the requested package or folder as the review ledger, for
-  example `PACKAGE_OR_FOLDER/ISSUES.md`.
-- Prefer slices based on repository-owned behavior and risk: public commands/APIs, changed or recently touched areas, auth/network/filesystem/process boundaries, config/CI/release paths, documented workflows, and nearby tests. Use depth only as a discovery aid, not as the review boundary.
-- For delegated review, each assigned agent owns recursive review only within its bounded slice. Each agent must perform a thorough and accurate `$code-review` and `$security-audit` for that slice, using `$testing-standards` for concrete missing-coverage or weak-test analysis and `$change-validation` for likely validation commands.
-- Confirm each candidate finding against the code before recording it. Findings must be concrete bugs, security issues, compatibility breaks, or violated public contracts with user-visible impact.
-- Treat provider-to-public-contract adapters, lookup tables, data enrichment,
-  normalization maps, embedded assets, vendored static data, and generated
-  schema/value translations as high-risk review slices when they affect API
-  output, routing, auth, billing, persistence, or user-visible behavior.
-- When reviewing code that maps provider, asset, generated, embedded, or
-  vendored data values into repository-owned public values, inspect the actual
-  emitted data set or representative fixtures. Do not assume names in a mapping
-  table match provider output. Check for unmapped provider values, stale
-  fixtures, fallback-to-empty behavior, and public contract violations caused
-  by normalization drift.
-- For candidates based on documentation or comments contradicting code, require non-prose proof that the implementation is wrong before recording a code issue. Existing tests, helper names, runtime behavior, or commit history that support the implementation mean the candidate is a doc gap, not a code issue.
-- Do not record standalone missing, weak, flaky, misleading, or wrong-layer tests as code issues unless they are tied to a confirmed bug, security issue, compatibility break, or violated public contract. Use `$test-gaps` for standalone missing or weak test coverage passes.
-- Do not record standalone missing, weak, stale, misleading, or wrong-location documentation, README, example, comment, or docstring gaps as code issues unless they reveal a confirmed bug, security issue, compatibility break, or violated public contract. Use `$doc-gaps` for standalone documentation review passes.
-- Do not report optional regression tests, unused convenience aliases, API symmetry, or documentation polish as findings by themselves. List them only as testing gaps, doc gaps, or optional follow-up notes when relevant.
+Read `references/find-rules.md`; those code-issue rules remain mandatory in
+Find mode.
 
 ## `ISSUES.md` Format
 
-Use this structure:
-
-````markdown
-# Issues
-
-## ISSUE-1: Short concrete title
-
-| Field | Value |
-| --- | --- |
-| Severity | Critical \| High \| Medium \| Low |
-| Confidence | 93% |
-| Scope | path/to/file-or-folder |
-| Impact | User-visible impact or violated contract. |
-
-### Evidence
-
-```text
-Evidence: Concrete file and line references, command output, or code path.
-Reproduction: Smallest supported command, test, API call, workflow, or
-code-path trace that reproduces the bug or contract violation.
-```
-
-### Decision Trace
-
-```text
-supported entrypoint
-  -> observed behavior
-  -> violated contract or user-visible failure
-  -> smallest safe fix
-  -> validation that proves the fix
-```
-
-### Proposed Change
-
-```yaml
-proposed_fix: Brief implementation direction.
-validation:
-  - Suggested checks for the fix.
-```
-````
-
-Keep optional follow-up notes separate from findings:
-
-```markdown
-## Testing Gaps And Follow-Ups
-
-- Optional or non-blocking note.
-```
+Before creating, updating, or interpreting `ISSUES.md`, read
+`references/ledger-format.md`. The ledger format must keep `| Field | Value |`,
+`Reproduction: Smallest supported command`, `### Decision Trace`, and
+`### Proposed Change`.
 
 ## Implement Mode
 
@@ -124,6 +58,10 @@ These code-issue implementation rules remain mandatory:
 ## References
 
 - Read `references/plan.md` before starting Find mode or Implement mode.
+- Read `references/find-rules.md` during Find mode before reviewing or
+  recording candidates.
+- Read `references/ledger-format.md` before creating, updating, or interpreting
+  `ISSUES.md`.
 - Read `../references/gap-workflow.md` for shared scoped-ledger, delegation, coverage, confidence, and approval gates.
 - Use `../references/gap-lead-generation.md` during Find mode to classify repo
   archetypes, generate high-risk leads, and account for rejected or routed
