@@ -36,8 +36,8 @@ to documentation instead.
 5. Inspect concrete data/control flow before reporting a risk. Prefer file and line references over general advice.
 6. When a candidate depends on prose contradicting implementation, first prove the implementation is insecure or wrong with non-prose evidence. If current code, tests, runtime behavior, scanner output, or history support the implementation, do not report a security finding; use `$doc-gaps` for the stale prose.
 7. Report exploitable findings first.
-8. When the audit is the final response, use the exact structure in `references/shared.md`; do not add, remove, rename, or reorder sections.
-9. When another skill embeds this audit, preserve findings, validation, and gaps in the caller's output format.
+8. For standalone output, use `references/shared.md`; when embedded, preserve
+   findings, validation, and gaps in the caller's format.
 
 ## References
 

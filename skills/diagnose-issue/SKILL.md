@@ -31,8 +31,7 @@ the user explicitly asks after the diagnosis.
    - `references/deployment.md` for deployment and runtime diagnosis.
    - `references/output.md` before writing the final answer.
 3. Use `scripts/collect.rb` as the default collection path when Ruby is
-   available. It returns focused JSON findings plus source evidence for the
-   selected target.
+   available; the mode references contain the exact commands and options.
 4. Collect manually only for missing evidence or a narrower user request that
    the script cannot cover. State why the collector was insufficient before
    relying on manual `gh`, CircleCI, `kubectl`, DigitalOcean, UptimeRobot, or
@@ -41,31 +40,6 @@ the user explicitly asks after the diagnosis.
    windows, missing credentials, and collection-time Kubernetes state.
 6. Give fixes as ordered suggestions. Prefer the smallest likely fix first, and
    identify what evidence would confirm or reject each suggestion.
-
-## Collector
-
-Run from the repository being diagnosed:
-
-```bash
-ruby <skill-dir>/scripts/collect.rb --mode ci --repo <repo-path>
-ruby <skill-dir>/scripts/collect.rb --mode ci --pipeline <circleci-pipeline-number> --repo <repo-path>
-ruby <skill-dir>/scripts/collect.rb --mode deployment --repo <repo-path>
-ruby <skill-dir>/scripts/collect.rb --mode deployment --version <version-tag> --repo <repo-path>
-```
-
-Useful options:
-
-- `--target latest`: inspect the latest CI pipeline or latest deployment
-  version. This is the default.
-- `--pipeline PIPELINE`: inspect one CircleCI pipeline by numeric pipeline
-  number. UUIDs still work, but users should not need to provide them.
-- `--version VERSION`: inspect one version tag in deployment mode.
-- `--branch BRANCH`: override the branch for latest CI pipeline lookup.
-
-Deployment mode requires a `.cd` file at the repository root. It includes the
-CircleCI `deploy` job for the selected version plus current DigitalOcean,
-Kubernetes, and UptimeRobot evidence when credentials and mappings are
-available.
 
 ## Evidence Rules
 

@@ -91,136 +91,46 @@ These are mandatory gates, not guidance.
 ## Steps
 
 1. Confirm the task involves adding tests, changing tests, reviewing test quality, planning coverage, or deciding where behavior should be exercised.
-2. First decide whether the change has repository-owned executable behavior that
-   should be tested. For docs, policy, configuration, metadata,
-   formatting-only edits, generated artifacts, and simple shell/Make/Docker
-   glue, default to validation rather than TDD unless an established harness
-   already owns that behavior.
-3. Inspect the repository's existing tests, fixtures, helpers, entrypoints, CI targets, and the language or harness used by most relevant tests before recommending, adding, or changing test structure.
-4. Do not infer the repository's test strategy or test language from the implementation language. Agents MUST follow the majority pattern of the relevant existing tests for the behavior, even when that means testing one implementation language from another language or harness. Add language-native tests only when that is the majority relevant local pattern, the changed surface is a language-level package/API contract, or the user explicitly asks for that level of coverage.
-5. Do not infer the repository's test strategy only from language-native test files such as `*_test.go`; inspect cross-language harness directories such as `test/`, `features/`, and `spec/`, plus CI or make targets, before adding tests.
-6. Detect the dominant local test style before choosing the loop: prefer BDD/scenario-first when behavior is primarily exercised through `features/`, Cucumber/Gherkin, RSpec-style specs, acceptance tests, or Given/When/Then scenarios; prefer TDD/test-first when behavior is primarily exercised through unit, package, table-driven, or assertion-based tests. When both exist, choose the narrowest established layer that protects the changed behavior.
-7. Check whether the change should preserve, restore, or improve coverage; do not let meaningful behavior lose coverage without calling out the gap.
-8. Before adding a new standalone test, check whether the behavior is already covered by existing tests and whether the right change is to extend an existing table, fixture, helper, or assertion block.
-9. Before choosing the test boundary, identify the front door that will call the
+2. Decide whether the change has repository-owned executable behavior. For docs, policy, configuration, metadata, formatting-only edits, generated artifacts, and simple shell/Make/Docker glue, default to validation unless an established harness owns the behavior.
+3. Inspect existing tests, fixtures, helpers, entrypoints, CI targets, and the language or harness used by most relevant tests before recommending, adding, or changing test structure.
+4. Do not infer the repository's test strategy or test language from implementation language or `*_test.go` files alone. Agents MUST follow the majority relevant test pattern, including cross-language harnesses such as `test/`, `features/`, and `spec/`; add language-native tests only when that layer owns the behavior, the surface is a language-level package/API contract, or the user asks for it.
+5. Detect the dominant local test style before choosing the loop: prefer BDD/scenario-first for feature/spec/Given-When-Then harnesses and TDD/test-first for unit, package, table-driven, or assertion-based tests. When both exist, choose the narrowest established layer that protects the changed behavior.
+6. Check whether the change should preserve, restore, or improve coverage; do not let meaningful behavior lose coverage without calling out the gap.
+7. Before adding a new standalone test, check whether existing tests already cover the behavior or should be extended through a table, fixture, helper, or assertion block.
+8. Before choosing the test boundary, identify the front door that will call the
    new or changed behavior. Use the narrowest established layer that still
    exercises that caller-facing contract; do not start from an exported helper,
    method, constructor, interface, or package merely because it is public.
-10. Before editing behavior-changing production code that adds or changes a
+9. Before editing behavior-changing production code that adds or changes a
    public or documented API, sketch the intended caller or scenario first so the
    first test exercises the caller-facing contract rather than an implementation
    seam.
-11. Before editing behavior-changing production code, make an explicit test-first decision. State either `TDD: yes` with the first test/scenario you will add or update, or `TDD: no` with the concrete reason test-first is not practical. Do this before production edits, not retroactively after implementation. For docs, policy, configuration, metadata, formatting-only changes, generated artifacts, or shell/Make/Docker glue without an established executable test harness, use `TDD: no` and validate with `$change-validation` instead. For behavior-preserving fixes where the only plausible test would be cryptic implementation-order coverage, state `TDD: no` with that reason and use validation plus an intent comment when warranted.
-12. For behavior-changing code with an established test harness, prefer a test-first loop. In TDD-style projects, write or update the narrowest credible test first; in BDD-style projects, write or update the narrowest credible scenario, feature, or spec first. Run it and confirm it fails for the expected reason when practical. If the test passes unexpectedly, stop before production edits and re-check whether the behavior is already covered, whether the assertion is too weak, or whether a different test layer is needed. Implement the smallest code change to pass it, then perform a refactor pass while keeping tests green.
-13. If behavior-changing production code was edited before the test-first decision, and the change has an established test harness, stop and correct course: add or update the narrowest credible test immediately, run it against the current state when practical, and explicitly report that the red step was missed before continuing.
-14. Choose the narrowest established test layer that credibly covers the changed behavior.
-15. While editing, get fast feedback from the narrowest supported selector in
+10. Before editing behavior-changing production code, make an explicit test-first decision. State `TDD: yes` with the first test/scenario, or `TDD: no` with the concrete reason. For non-executable or behavior-preserving changes where the only plausible test would be cryptic implementation-order coverage, use validation and an intent comment when warranted.
+11. For behavior-changing code with an established harness, prefer test-first: write or update the narrowest credible test/scenario, run it to the expected red when practical, implement the smallest green change, then refactor while keeping tests green. If the test passes unexpectedly, stop and re-check coverage, assertion strength, or layer choice before production edits.
+12. If behavior-changing production code was edited before the test-first decision, stop and correct course: add or update the narrowest credible test, run it against the current state when practical, and report that the red step was missed.
+13. Choose the narrowest established test layer that credibly covers the changed behavior.
+14. While editing, get fast feedback from the narrowest supported selector in
     that layer: package, file, scenario, example, focus tag, test name, command,
     or documented entrypoint. Do not use speed as a reason to switch to a
     different layer, skip required setup, or test private surfaces.
-16. Test through public or documented APIs, commands, tasks, or service entrypoints so coverage reflects real consumer behavior.
-17. Do not add tests against private functions, private methods, or internal-only seams unless the human explicitly asks for that approach. If private-surface testing seems necessary, first explain why the behavior cannot be covered through a public or documented entrypoint, then ask before writing it.
-18. Preserve the repository's existing test framework, fixture layout, helper style, assertion idioms, and naming patterns unless the task explicitly changes testing infrastructure.
-19. Pair with the relevant language standard skill for language-specific idioms, and with `$change-validation` for selecting or reporting commands.
-20. If another testing-focused skill applies, use this skill for cross-language test policy and the other skill only for specialized language, framework, or library details; this skill's cross-language rules take precedence unless the human or repository instructions explicitly say otherwise.
-21. When tests use mocks, stubs, spies, fakes, or other test doubles, check whether each double protects a true boundary or only mirrors internal implementation; flag interaction-only tests that could pass while real behavior is broken.
-22. Before finishing test changes or reviews, do a mutation-style gap scan against changed behavior with an established test harness. Ask whether the tests would fail if a comparison changed, a boundary moved, a boolean flipped, an error path returned success, a collection or string operation changed, a fallback/default was removed, or an observable side effect disappeared. Strengthen the behavior test when the answer is no. Ask the human only when the correct boundary or product behavior is ambiguous.
-23. Before accepting or repeating a coverage claim, run the repository's selected coverage command when practical and inspect every metric the tool reports, not only line coverage. If coverage drops or a metric is weak, ask what repository-owned behavior is untested before adding line-targeted tests.
-24. After first green and before broad validation, perform an explicit
-   Refactor step on changed production code and tests. Refactor is a mandatory
-   assessment step, not an optional cleanup note. Use behavior-preserving,
-   step-by-step changes only; when a cleanup would change behavior, return to
-   Red with a new test/scenario or propose it separately instead of hiding it in
-   Refactor.
-25. Run a two-pass refactor assessment after first green. First scrutinize the
-   local implementation and tests for code smells and test smells: duplication,
-   long methods or scripts, tangled conditionals, data clumps, primitive
-   obsession, unnecessary abstraction, tight coupling, unclear names, awkward
-   setup, hard-to-read assertions, and helpers that hide behavior. Then inspect
-   the boundary fit: caller-facing API shape, error handling, data shape,
-   fixture clarity, local helper/naming conventions, and whether the first green
-   implementation creates change pressure in nearby code. Use a third pass when
-   the change touches shared tooling, public or documented interfaces,
-   compatibility-sensitive behavior, security-sensitive behavior, release or CI
-   workflow, or when either earlier pass still leaves a credible smell. Prefer
-   the smallest cleanup that improves local design while preserving behavior,
-   and keep tests green after every refactor edit.
-   Use the Refactoring Guru catalog categories as checklist prompts, not as a
-   mandate to apply object-oriented patterns everywhere: bloaters,
-   object-orientation abuse where applicable, change preventers, dispensables,
-   couplers, composing methods, moving features, organizing data, simplifying
-   conditionals, simplifying method calls, and generalization cleanup. Translate
-   catalog items to the repository's language and local patterns only when they
-   fit the changed code.
-26. If no cleanup is needed, record `Refactor: none (<reason>)` after stating
-   which refactor passes were considered. A bare `Refactor: none` is not enough
-   for behavior-changing work with an established test harness.
-27. Before finishing test changes or reviews, do a readability pass after formatting. Check that tests describe observable behavior, avoid hard-coded private implementation details unless those details are the public contract, keep setup expressions simple enough for review, and place helper functions according to the local or language-specific convention.
-28. Before finishing test changes or reviews, scan changed tests for repeated boolean or numeric assertions whose default failure output would not identify the behavior under test; add named subtests or assertion messages where needed.
-29. When reviewing test quality, evaluate whether the tests are understandable, maintainable, repeatable, atomic, necessary, granular, fast enough for their layer, and first/test-driven where that is relevant. Use scores only when the human asks for a scored review; otherwise turn the rubric into concrete findings and improvements.
-30. For behavior-changing code with an established test harness, report the trace in the final update using this shape: `TDD decision`, `Style detected`, `First test/scenario`, `Red`, `Green`, and `Refactor`. Include the test, scenario, feature, or spec added or updated first; whether the red step failed for the expected reason, passed unexpectedly, was not practical to run, or was missed; the implementation change that made it green; the refactor scrutiny performed after first green, including any smells considered or removed and whether a third pass was required; any mutation-style or coverage gap found; and validation after refactor edits. Use `Refactor: none (<reason>)` when no cleanup was needed.
+15. Test through public or documented APIs, commands, tasks, or service entrypoints so coverage reflects real consumer behavior.
+16. Do not add tests against private functions, private methods, or internal-only seams unless the human explicitly asks for that approach. If private-surface testing seems necessary, first explain why a public or documented entrypoint cannot cover it, then ask before writing it.
+17. Preserve the repository's existing test framework, fixture layout, helper style, assertion idioms, and naming patterns unless the task explicitly changes testing infrastructure.
+18. Pair with the relevant language standard skill for language-specific idioms, and with `$change-validation` for commands.
+19. If another testing-focused skill applies, use this skill for cross-language policy and the other skill only for specialized language, framework, or library details.
+20. When tests use mocks, stubs, spies, fakes, or other test doubles, check whether each double protects a true boundary or only mirrors internal implementation.
+21. Before finishing, run a mutation-style gap scan and strengthen the behavior test if comparisons, boundaries, booleans, error paths, collection/string operations, defaults, or observable side effects could change without failure.
+22. Before accepting or repeating a coverage claim, run the selected coverage command when practical and inspect every reported metric, not only line coverage.
+23. After first green and before broad validation, perform an explicit Refactor step on changed production code and tests. Refactor is a mandatory assessment step, not an optional cleanup note. Use behavior-preserving, step-by-step changes only; when cleanup would change behavior, return to Red or propose it separately.
+24. Run a two-pass refactor assessment after first green: inspect local code smells and test smells, then boundary fit. Use a third pass when the change touches shared tooling, public or documented interfaces, compatibility-sensitive behavior, security-sensitive behavior, release or CI workflow, or when either earlier pass still leaves a credible smell. Use the Refactoring Guru catalog categories as checklist prompts, including composing methods, moving features, organizing data, simplifying conditionals, simplifying method calls, and generalization cleanup, only when they fit local patterns.
+25. If no cleanup is needed, record `Refactor: none (<reason>)` after stating which refactor passes were considered.
+26. Before finishing, do a readability pass after formatting and scan changed tests for low-information repeated boolean or numeric assertions; add named subtests or assertion messages where needed.
+27. When reviewing test quality, evaluate whether tests are understandable, maintainable, repeatable, atomic, necessary, granular, fast enough for their layer, and first/test-driven where relevant. Use scores only when asked.
+28. For behavior-changing code with an established test harness, report `TDD decision`, `Style detected`, `First test/scenario`, `Red`, `Green`, `Refactor`, mutation/coverage gaps, and validation. Use `Refactor: none (<reason>)` when no cleanup was needed.
 
-## Principles
+## References
 
-- Assert changed behavior and contracts, not incidental implementation details.
-- Let tests validate the intended public caller experience, not design the API
-  around the first convenient implementation seam.
-- Outside-in does not mean "test the nearest public function first"; it means
-  start from the real consumer-visible boundary, then let internal public
-  functions, interfaces, and collaborators emerge only when the caller requires
-  them.
-- Do not add or require tests for refactors and optimizations that preserve the
-  same contract. Add tests only when the optimization creates observable risk,
-  such as concurrency ordering, cleanup, cancellation, timing, error handling,
-  compatibility, or documented lifecycle behavior.
-- Do not turn a straightforward behavior-preserving fix into cryptic test code
-  only to show that internal operations happen in the right order. If the order
-  matters to users, document and test the observable contract. If it only matters
-  as implementation intent, prefer the fix, a small explanatory comment where
-  future maintainers might remove it, and normal validation.
-- Do not write source-inspection tests to enforce implementation absence, such
-  as parsing ASTs to assert that a function is not called. If the absence of a
-  construct is truly a repository rule, encode it as lint or static analysis;
-  otherwise test observable behavior or call out the validation gap.
-- Use tests as self-validating specifications that guide small, controlled implementation steps and expose interface design pressure before implementation. Do not turn TDD into a large upfront specification exercise; keep each test or scenario narrow enough to drive the next useful behavior.
-- Use test-first or scenario-first development for behavior changes when the repository has a credible test or BDD layer. Make the test-first decision before production edits. If the change is docs-only, policy-only, configuration-only, formatting-only, metadata-only, mechanical, generated, or cannot reasonably be exercised first, call out the exception and validate with the appropriate lint, schema, dry-run, or repository check instead.
-- Treat Refactor as the design-quality payoff of the TDD loop. Spend more
-  scrutiny here than on the first green implementation: look for real smells,
-  remove only the ones supported by local evidence, and avoid broad rewrites,
-  speculative abstraction, or unrelated polish.
-- Prefer classicist, behavior-oriented tests over mockist, interaction-heavy tests: test observable outcomes through real in-process collaborators where practical, and avoid mocking your own code just to isolate a class, method, function, or file.
-- Treat the unit under test as a behavior at an appropriate boundary, not automatically a single class, method, function, or file.
-- Do not create a one-to-one mapping between test files and implementation files by default. Group tests around public behavior, commands, scenarios, or contracts so implementation can be reorganized without invalidating the test suite.
-- Do not extract production helpers only to make them directly testable. Extract for readability, shared domain knowledge, or separation of concerns, then test the behavior through the owning public entrypoint unless the helper is itself a documented API.
-- Treat audit findings as candidates, not marching orders. Re-check whether nearby tests already cover the behavior before adding new tests.
-- Do not add tests whose main assertion is that an underlying library or framework works correctly, including dependency injection containers, validators, encoders, parsers, serializers, client libraries, or standard-library behavior. Test repository-owned validation, mapping, error handling, lifecycle, compatibility promises, or consumer-visible composition instead.
-- Prefer extending the local test shape over inventing parallel structure. If an existing fixture, table, scenario helper, or assertion helper already carries the behavior, add the missing assertion there rather than creating a separate test.
-- For DI, configuration, module, or wiring code, avoid exhaustive provider-registration, pointer-projection, or container-resolution tests unless they protect a distinct repository-owned public contract that is not covered by a higher-level consumer path.
-- Use test doubles mainly at true boundaries: network calls, databases, clocks, filesystem, subprocesses, randomness, third-party services, slow infrastructure, or hard-to-trigger failures. Avoid stubbing internal collaborators unless it makes the test more deterministic, focused, or practical without hiding the behavior under test.
-- Treat coverage as a useful signal, not a blind target: preserve existing meaningful coverage where practical, improve it when new or risky behavior is under-tested, and explain when coverage cannot reasonably be added.
-- Just because production code is written in one language does not mean new tests should be written in that language; follow the majority relevant test harness when the repository tests behavior from another language or feature layer.
-- Prefer table-driven tests when covering multiple inputs, branches, edge cases, or examples, unless the repository's local style clearly uses another readable pattern.
-- When writing or reviewing tests for changed behavior, inspect the changed decision points: conditionals, early returns, error handling, loops, switch/case branches, parsing paths, and fallback/default behavior. Cover the meaningful consumer-visible paths, not every implementation branch mechanically.
-- Cover relevant edge cases and failure paths for changed behavior, especially empty input, boundary values, malformed input, missing files or tools, non-zero commands, path errors, permissions, parsing failures, and argument pass-through.
-- Keep tests deterministic: avoid uncontrolled network, wall-clock time, random data, ordering assumptions, real home directories, and shared mutable state.
-- Build test data with complete, valid defaults and local overrides so each test can show only the meaningful difference. Prefer existing production constructors, parsers, schemas, or validation helpers when the repository already uses them; do not redefine production validation rules inside tests.
-- Prefer fresh test data per test over shared mutable setup. Use setup hooks only when they improve clarity without creating order dependence or hidden state.
-- Watch for coverage theater: tests that mock the code being tested, assert only that an internal collaborator was called, exercise trivial getters or setters without meaningful behavior, or hit lines without covering branches, boundaries, errors, and observable outcomes.
-- Do not add build-tagged, architecture-specific, integration, service-dependent, or environment-specific tests unless the repository's normal validation or CI actually runs that mode, or the change explicitly adds that validation mode.
-- Structure tests so the setup, action, and assertion are easy to follow; use Arrange-Act-Assert or Given-When-Then when the repository does not already have a clearer local pattern.
-- Make failures obvious and descriptive. Avoid bare assertions such as `expected true but got false`; include the case, input, expected behavior, and observed behavior when the assertion framework does not do so clearly.
-- For repeated low-information assertions, do not rely only on generic framework output such as `Should be false`, `expected true but got false`, or `expected 2, got 1`. Add a short assertion message or use named subtests so the failure identifies the specific scenario. This applies especially to repeated boolean and numeric assertions.
-- Keep tests readable. Add small helpers, fixtures, builders, or assertions when they make behavior easier to read, but avoid abstractions that hide the scenario being tested. If a test needs a derived value, prefer a named local or helper whose name explains the behavior over dense inline setup.
-- When tests repeat the same configuration literals, prefer the repository's
-  established fixture/helper location for a small constructor or builder. Keep
-  test call sites focused on the scenario-specific values, and avoid scattering
-  config construction across unrelated tests.
-- Use broader suites for shared infrastructure, compatibility-sensitive behavior, release-sensitive behavior, or changes that cross package, command, or service boundaries.
-- Use focused package, file, scenario, example, focus-tag, or test-name runs for
-  fast feedback when the dominant harness supports them. Broaden only when the
-  change risk, shared surface, or confidence target requires it, and report any
-  broader CI-equivalent checks left to CI as validation scope rather than proof.
-- Do not add behavioral tests for docs-only or formatting-only changes; run relevant lint, docs, or formatting validation when available.
-- When reviewing tests, check these rules explicitly and flag tests that use private surfaces without approval, follow the wrong harness, miss important edge cases, produce unclear failures, or are hard to read.
-- For shared `./bin` scripts and make fragments, validate from the consuming repository root when behavior depends on downstream include wiring or test/build layout.
-- Report validation gaps honestly, including lint-only coverage, missing tools, skipped checks, environment limits, and wrappers that no-op.
+- Read `references/principles.md` when designing, adding, reviewing, or
+  refactoring non-trivial tests; when choosing between public boundaries,
+  fixtures, doubles, coverage, determinism, or validation breadth; or when a
+  test candidate risks encoding implementation detail instead of behavior.
