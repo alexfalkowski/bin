@@ -186,6 +186,68 @@ focused skill applies.
 
 Treat this `AGENTS.md` as the repo-specific companion to those skills.
 
+## Remembered workflow commands
+
+Treat these short commands as binding workflow shorthands, not casual prose.
+They select the matching skill and its gates before any edits. Supported gap
+IDs include `FEATURE-*`, `ISSUE-*`, `TEST-*`, `DOC-*`, `PROJECT-*`, and
+`RELIABILITY-*`; route each ID to the matching gap skill and ledger.
+
+- `Work FEATURE-3 in path/FEATURES.md`: select the matching gap skill from the
+  ID prefix, refresh evidence, present the solution, and stop at the agreement
+  gate before editing. Apply the same shape to other ledgers, such as
+  `Work ISSUE-3 in path/ISSUES.md` or `Work TEST-3 in path/TESTS.md`.
+- `Agent work FEATURE-3/4/5 in path/FEATURES.md`: same as `Work`, plus explicit
+  current-request authorization to use sub-agents when they materially improve
+  coverage, throughput, implementation safety, or fresh review. Apply the same
+  shape to other ledger IDs.
+- `Goal work FEATURE-3 in path/FEATURES.md`: same as `Work`, plus explicit
+  current-request authorization to use a runtime goal when goals are available
+  and useful. Apply the same shape to other ledger IDs.
+- `Agent goal work FEATURE-3/4/5 in path/FEATURES.md`: explicit authorization
+  for both sub-agents and a runtime goal. Apply the same shape to other ledger
+  IDs.
+- `Approved. Continue.`: approve the most recently proposed solution and allow
+  the selected skill to implement it through its validation and review gates.
+- `Agent approved. Continue.`: same as `Approved. Continue.`, plus explicit
+  current-request authorization to use sub-agents during implementation and
+  fresh review when they can work on disjoint slices, validation support, or
+  independent review without bypassing the selected skill's gates.
+
+These commands are shorthand only. They do not bypass solution agreement,
+scoped ledger rules, validation freshness, confidence thresholds, remote-write
+permission, or the selected skill's output format.
+
+## Skill workflow mechanics
+
+Stateful gap and review workflows may include `references/plan.md`; those files
+are templates for runtime execution state, not durable project artifacts.
+Shared workflow mechanics live in `skills/references/gap-workflow.md`. For
+substantial, ambiguous, or multi-iteration work, use
+`skills/references/long-running-work.md` as a compact runtime-state pattern for
+research, blocking questions, thin slices, validation, and fresh review.
+
+Use runtime goals only when the human explicitly requests them or
+higher-priority runtime instructions allow goal creation for the selected
+workflow. Otherwise maintain stateful workflow progress in the conversation or
+tool plan. Goals do not bypass skill steps, stop gates, permission gates,
+scoped ledgers, human confirmation requirements, or validation freshness rules.
+
+When a skill owns the final response, use that skill's required output format.
+When a skill is embedded by another skill, preserve its concrete facts and use
+the caller's output format.
+
+Use `testing-standards` before adding, reviewing, refactoring, or planning
+tests. Inspect the dominant relevant harness, test observable
+repository-owned behavior through public or documented surfaces, keep tests
+readable and deterministic, and avoid coverage theater.
+
+Before running commands that require SSH credentials, GitHub auth, registry
+auth, cloning, fetching large dependencies, pushing, publishing, opening PRs, or
+updating remote state, make the requirement explicit and get permission. Treat
+network, credential, shell, `PATH`, and missing-tool failures as environment or
+validation gaps unless repository evidence proves otherwise.
+
 When a downstream repo reads this repository as `./bin`, treat `bin/` as
 vendored shared tooling:
 
@@ -566,8 +628,15 @@ Target-specific rules:
 
 - Prefer the smallest compatible change; these scripts are reused across
   projects.
+- Update existing docs and examples when public commands, APIs, Make targets,
+  environment variables, file formats, output shapes, or operator-facing
+  behavior change.
 - Update `skills/<name>/agents/openai.yaml` when a skill's trigger, scope,
   workflow, display name, short description, default prompt, or user-facing
   behavior changes.
+- Treat skills as maintained artifacts and review them when project workflow,
+  tooling, model behavior, or team conventions change.
+- Treat external skills like third-party dependencies. Use `security-audit` with
+  `skills/references/skills.md` for skill-specific security review.
 - After edits, run the narrowest repository-defined checks that cover the
   changed files, then expand to CI-equivalent targets when risk justifies it.

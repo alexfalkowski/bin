@@ -101,5 +101,5 @@ Dockerfile lint targets depend on `shellcheck` and `hadolint`;
 - `build/docker/go/Dockerfile.dockerignore`: shared Docker build-context
   exclusions for the Go service Dockerfile.
 - `quality/`: shared lint, feature, benchmark, and coverage helpers.
-- `skills/README.md`: shared skill composition and lifecycle guidance.
-- `AGENTS.md`: repository instructions and shared agent operating rules.
+- `AGENTS.md`: repository instructions, shared skills, and agent operating
+  rules.

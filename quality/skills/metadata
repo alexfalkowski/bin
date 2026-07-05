@@ -127,7 +127,6 @@ def valid_markdown_references?(path)
 end
 
 def checkable_reference?(path, reference)
-  return false if path == 'skills/README.md'
   return reference.start_with?('../') if path.start_with?('skills/references/')
 
   true
