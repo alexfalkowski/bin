@@ -64,15 +64,46 @@ version files, and environment-specific settings.
 
 ## 🤖 Agent Skills
 
-This repository also ships shared agent guidance in `skills/`. Downstream
-repositories should point agents at the shared instructions instead of copying
-the skill list:
+This repository also ships shared agent guidance in `skills/`. Each skill is a
+`skills/<name>/SKILL.md` file that works with both OpenAI Codex and Claude Code;
+`skills/<name>/agents/openai.yaml` carries the Codex-specific interface.
+
+### Codex
+
+Codex discovers `skills/**` by scanning the project tree, so downstream
+repositories only need to point agents at the shared instructions instead of
+copying the skill list:
 
 ```markdown
 ## Shared guidance
 
 Use `bin/AGENTS.md` for shared skills and cross-repository defaults.
 ```
+
+Invoke a skill with its `$` prefix, for example `$code-review`.
+
+### Claude Code
+
+Claude Code does not scan submodules; it only loads skills from `.claude/skills/`
+and instructions from `CLAUDE.md`. Wire a repository once with the shared
+bootstrap, then commit the results:
+
+```make
+include bin/build/make/claude.mak
+```
+
+```bash
+make claude-init
+```
+
+This creates a `.claude/skills` symlink to `bin/skills` and a managed block in
+`CLAUDE.md` that imports the local and shared `AGENTS.md`. Both are committed, so
+every later clone works with no per-machine setup beyond the one-time workspace
+trust prompt. Invoke a skill as a slash command, for example `/code-review`.
+Re-run `make claude-init` only when the shared skills directory moves; adding a
+new skill needs no downstream change because the symlink targets the whole
+`skills/` directory. Wiring the `*-template` repositories once pre-wires every
+repository generated from them.
 
 Update `AGENTS.md` when the shared skill set, composition rules, or repository
 workflow guidance changes.
@@ -97,6 +128,8 @@ Dockerfile lint targets depend on `shellcheck` and `hadolint`;
 
 - `make` or `make help`: current command catalog for this repository.
 - `build/make/*.mak`: reusable Makefile fragments for downstream projects.
+- `build/claude/init`: one-time Claude Code wiring for a consuming repository
+  (run via `make claude-init`).
 - `build/docker/go/Dockerfile`: shared Go service Dockerfile template.
 - `build/docker/go/Dockerfile.dockerignore`: shared Docker build-context
   exclusions for the Go service Dockerfile.

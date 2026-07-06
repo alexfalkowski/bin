@@ -599,8 +599,8 @@ Target-specific rules:
 ## Local contracts
 
 - Public shared surfaces live in `build/make/`, `build/docker/`, `build/go/`,
-  `build/git/`, `build/sec/`, `quality/`, and `skills/`; inspect the relevant
-  files before editing.
+  `build/git/`, `build/sec/`, `build/claude/`, `quality/`, and `skills/`;
+  inspect the relevant files before editing.
 - Preserve formatting from `.editorconfig`, Ruby settings from `.rubocop.yml`,
   and nearby Bash/Ruby style. Do not duplicate those config files here.
 - Make fragments derive `BIN_ROOT` from their include location. For path-related
@@ -634,6 +634,12 @@ Target-specific rules:
 - Update `skills/<name>/agents/openai.yaml` when a skill's trigger, scope,
   workflow, display name, short description, default prompt, or user-facing
   behavior changes.
+- Keep skills tool-agnostic. `skills/<name>/SKILL.md` is shared by Codex and
+  Claude Code, so do not hardcode a single assistant; where attribution or
+  invocation differs, cover both. `build/claude/init` (via `make claude-init`)
+  wires Claude Code by symlinking `.claude/skills` to `skills/` and importing
+  `AGENTS.md` from `CLAUDE.md`; the symlink targets the whole directory, so
+  adding a skill needs no downstream re-wiring.
 - Treat skills as maintained artifacts and review them when project workflow,
   tooling, model behavior, or team conventions change.
 - Treat external skills like third-party dependencies. Use `security-audit` with

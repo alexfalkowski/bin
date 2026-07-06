@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+# Wire the current repository for Claude Code from the shared bin skills.
+#
+# Creates a .claude/skills symlink to the shared skills directory and a managed
+# block in CLAUDE.md that imports the shared (and any local) agent instructions.
+# Safe to run repeatedly; only the managed CLAUDE.md block is rewritten.
+
+set -eo pipefail
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+bin_root="${BIN_ROOT:-$(cd "$script_dir/../.." && pwd -P)}"
+project_root="$(pwd -P)"
+
+skills_src="$bin_root/skills"
+shared_agents="$bin_root/AGENTS.md"
+
+if [[ ! -d $skills_src ]]; then
+  printf 'shared skills not found: %s\n' "$skills_src" >&2
+  exit 1
+fi
+
+relpath() {
+  ruby -e 'require "pathname"; print Pathname.new(ARGV[0]).relative_path_from(Pathname.new(ARGV[1])).to_s' "$1" "$2"
+}
+
+# 1. Link the shared skills into the Claude project skills directory.
+mkdir -p "$project_root/.claude"
+rel_skills="$(relpath "$skills_src" "$project_root/.claude")"
+ln -sfn "$rel_skills" "$project_root/.claude/skills"
+
+# 2. Build the CLAUDE.md import list: local instructions first, then shared.
+imports=()
+if [[ -f $project_root/AGENTS.md && ! $project_root/AGENTS.md -ef $shared_agents ]]; then
+  imports+=("@AGENTS.md")
+fi
+imports+=("@$(relpath "$shared_agents" "$project_root")")
+
+# 3. Rewrite a managed block in CLAUDE.md without disturbing other content.
+export CLAUDE_MD="$project_root/CLAUDE.md"
+export IMPORTS="${imports[*]}"
+ruby <<'RUBY'
+path    = ENV["CLAUDE_MD"]
+imports = ENV["IMPORTS"].split
+open_marker  = "<!-- BEGIN bin claude-init -->"
+close_marker = "<!-- END bin claude-init -->"
+block = ([open_marker] + imports + [close_marker]).join("\n")
+
+text = File.exist?(path) ? File.read(path) : ""
+region = /#{Regexp.escape(open_marker)}.*?#{Regexp.escape(close_marker)}\n?/m
+if text =~ region
+  text = text.sub(region, block + "\n")
+elsif text.strip.empty?
+  text = block + "\n"
+else
+  text = text.rstrip + "\n\n" + block + "\n"
+end
+File.write(path, text)
+RUBY
+
+printf 'Claude Code wired for %s\n' "$project_root"
+printf '  .claude/skills -> %s\n' "$rel_skills"
+printf '  CLAUDE.md imports: %s\n' "${imports[*]}"

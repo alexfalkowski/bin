@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-# Generate a source cache key from tracked files, excluding the bin submodule.
+# Generate a source cache key from tracked files, excluding the bin submodule
+# and the .claude agent wiring (its .claude/skills symlink points at a directory
+# and has no file content to hash).
 
 set -eo pipefail
 
@@ -16,7 +18,7 @@ else
   exit 1
 fi
 
-git ls-files -z . ':!:bin' ':!:bin/**' > "$files"
+git ls-files -z . ':!:bin' ':!:bin/**' ':!:.claude' ':!:.claude/**' > "$files"
 xargs -0 "${hash_command[@]}" < "$files" > "$hashes"
 
 key="$(cut -d" " -f1 "$hashes" | "${hash_command[@]}")"
