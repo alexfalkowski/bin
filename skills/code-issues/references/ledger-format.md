@@ -9,6 +9,7 @@ Use this structure:
 
 | Field | Value |
 | --- | --- |
+| Type | Code Issue |
 | Severity | Critical \| High \| Medium \| Low |
 | Confidence | 93% |
 | Scope | path/to/file-or-folder |
@@ -44,7 +45,7 @@ validation:
 Keep optional follow-up notes separate from findings:
 
 ```markdown
-## Testing Gaps And Follow-Ups
+## Optional Issue Follow-Ups
 
 - Optional or non-blocking note.
 ```

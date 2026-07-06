@@ -54,6 +54,8 @@ These code-issue implementation rules remain mandatory:
 - When re-checking an issue whose evidence depends on documentation or comments contradicting implementation, prove the code is wrong before proposing a code change. If non-prose evidence supports the implementation, explain that the ledger item is invalid as a code issue and propose reclassifying or fixing the documentation instead.
 - After the human agrees and before editing, state the selected local code pattern, dominant relevant test harness, planned validation command, and any deviation from `AGENTS.md` or selected skills. If a deviation is needed, stop and ask before editing.
 - Use `$testing-standards` when deciding whether to add or update regression tests for the fix, and prefer its test-first or scenario-first loop when a behavior-changing fix has a credible test or BDD layer.
+- For behavior-changing fixes, state the issue execution checklist before editing: `TDD decision`, `First test/scenario`, `Expected red`, `Intended green change`, `Refactor checkpoint`, and `Validation`.
+- Report `Red`, `Green`, `Refactor`, and `Validation` entries. Use `Refactor: none (<reason>)` when no cleanup was needed after green. Ask the human to verify and say `ISSUE-N is done`.
 
 ## References
 

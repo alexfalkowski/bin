@@ -68,6 +68,8 @@ These test-gap implementation rules remain mandatory:
 - After the human agrees and before editing, state the selected local test pattern, dominant relevant test harness, planned validation command, and any deviation from `AGENTS.md` or selected skills. If a deviation is needed, stop and ask before editing.
 - Implement only the agreed finding with the smallest clear test change, preferring the existing local test shape over new standalone structure.
 - Use `$testing-standards` for test design and pair with the relevant language standard for local idioms. If implementing the test gap requires production behavior to change, prefer the test-first or scenario-first loop from `$testing-standards`.
+- For test gaps that require behavior-changing production code, state the test execution checklist before editing: `TDD decision`, `First test/scenario`, `Expected red`, `Intended green change`, `Refactor checkpoint`, and `Validation`.
+- Report `Red`, `Green`, `Refactor`, and `Validation` entries. Use `Refactor: none (<reason>)` when no cleanup was needed after green. Ask the human to verify and say `TEST-N is done`.
 
 ## References
 

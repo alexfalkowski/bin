@@ -11,7 +11,7 @@ GAP_CONTRACTS = {
   'project-gaps' => { ledger: 'PROJECTS.md', id: 'PROJECT' },
   'reliability-gaps' => { ledger: 'RELIABILITY.md', id: 'REL' }
 }.freeze
-REFERENCE_PATTERN = %r{(?<!/)(?:\.\./)*references/[A-Za-z0-9._/-]+\.md}
+REFERENCE_PATTERN = %r{(?<!/)(?:\.\./)*references/[A-Za-z0-9._/-]+\.md(?:#[^\s`)]+)?}
 
 def present_string?(value)
   value.is_a?(String) && !value.strip.empty?
@@ -120,10 +120,46 @@ def valid_markdown_references?(path)
     checkable_reference?(path, reference)
   end
 
-  references.map do |reference|
-    reference_candidates(path, reference).any? { |candidate| File.file?(candidate) } ||
-      report_failure("missing referenced file in #{path}: #{reference}")
-  end.all?
+  references.map { |reference| valid_reference?(path, reference) }.all?
+end
+
+def valid_reference?(path, reference)
+  file, fragment = reference.split('#', 2)
+  target = reference_candidates(path, file).find { |candidate| File.file?(candidate) }
+  return report_failure("missing referenced file in #{path}: #{reference}") unless target
+  return true if fragment.nil?
+  return true if heading_anchors(target).include?(fragment)
+
+  report_failure("missing anchor in #{path}: #{reference}")
+end
+
+def heading_anchors(path)
+  seen = Hash.new(0)
+  markdown_headings(path).map do |heading|
+    slug = anchor_slug(heading)
+    seen[slug] += 1
+    seen[slug] == 1 ? slug : "#{slug}-#{seen[slug] - 1}"
+  end
+end
+
+def markdown_headings(path)
+  fence = nil
+  File.readlines(path).filter_map do |line|
+    marker = line[/\A\s*(`{3,}|~{3,})/, 1]
+    fence = toggle_fence(fence, marker) if marker
+    line[/\A\#{1,6}\s+(.+?)\s*$/, 1] if fence.nil? && marker.nil?
+  end
+end
+
+def toggle_fence(fence, marker)
+  return marker if fence.nil?
+  return nil if marker[0] == fence[0] && marker.length >= fence.length
+
+  fence
+end
+
+def anchor_slug(heading)
+  heading.downcase.gsub(/[^a-z0-9 _-]/, '').strip.tr(' ', '-')
 end
 
 def checkable_reference?(path, reference)
