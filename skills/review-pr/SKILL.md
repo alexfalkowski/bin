@@ -32,11 +32,14 @@ These rules remain mandatory:
 - Draft the `msg` and `desc` from `references/summary-format.md`. Keep `msg`
   lowercase and unprefixed because `make review` adds the branch-derived
   `type(scope):` prefix; do not flatten the multiline Markdown `desc`.
-- When attribution is appropriate or requested, append this footer to the
-  summary instead of a `Co-authored-by:` trailer:
+- When attribution is appropriate or requested, append an `AI-assisted-by:`
+  footer to the summary instead of a `Co-authored-by:` trailer. Name the
+  assistant that actually did the work and link to its home page. Use the entry
+  that matches the running tool:
 
 ```text
 AI-assisted-by: [Codex](https://openai.com/codex/)
+AI-assisted-by: [Claude Code](https://claude.com/claude-code)
 ```
 
 - Write the multiline Markdown `desc` to a temporary file with `mktemp`, then run the review target with the drafted subject and file path:
