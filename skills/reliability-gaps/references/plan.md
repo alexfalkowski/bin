@@ -70,7 +70,12 @@ evidence.
    test harness, planned validation, and deviations. For behavior-changing
    fixes, state the reliability execution checklist: TDD decision, first
    test/scenario, expected red, intended green change, refactor checkpoint, and
-   validation.
+   validation. When the harness is runnable, observe and paste the red before
+   implementation edits; if it is not runnable, stop and request agreement to
+   proceed test-after with the reason instead of skipping red silently.
 6. Use `$reliability-standards`, `$change-safety`, `$testing-standards`,
    `$change-validation`, and `$security-audit` as required, then report `Red`,
-   `Green`, `Refactor`, and `Validation`.
+   `Green`, `Refactor`, and `Validation`. `Red` and `Green` must each paste the
+   actual command and its real output using the same command/selector; label
+   work as `test-after (not TDD)` with the reason when red was never observed
+   before implementation.
