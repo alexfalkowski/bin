@@ -183,9 +183,14 @@ for gap_skill in \
   skills/project-gaps/SKILL.md \
   skills/reliability-gaps/SKILL.md
 do
-  require_pattern "$gap_skill" "### Decision Trace"
-  require_pattern "$gap_skill" "### Proposed Change"
   require_pattern "$gap_skill" "| Field | Value |"
+  require_pattern "$gap_skill" "| Status |"
+  require_pattern "$gap_skill" "**Summary.**"
+  require_pattern "$gap_skill" "### Context"
+  require_pattern "$gap_skill" "### Evidence"
+  require_pattern "$gap_skill" "### Proposal"
+  require_pattern "$gap_skill" "### Alternatives Considered"
+  require_pattern "$gap_skill" "### Definition of Success"
 done
 
 require_pattern skills/references/gap-workflow.md "Do not silently downgrade to"

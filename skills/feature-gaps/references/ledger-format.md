@@ -1,6 +1,13 @@
 # `FEATURES.md` Format
 
-Use this structure:
+Each entry is a short, debatable mini-PRD: skimmable at the top, with just
+enough reasoning and alternatives for a reviewer to agree or push back. Keep the
+**required core** on every entry. Add the **expandable sections** only when the
+entry warrants them; feature proposals often warrant `### Goals / Non-goals`.
+
+## Required Core
+
+Use this structure for every entry:
 
 ````markdown
 # Features
@@ -9,6 +16,7 @@ Use this structure:
 
 | Field | Value |
 | --- | --- |
+| Status | Proposed \| Accepted \| In progress \| Rejected |
 | Type | Feature Gap |
 | Priority | High \| Medium \| Low |
 | Confidence | 93% |
@@ -16,50 +24,65 @@ Use this structure:
 | Audience | User \| Developer \| Maintainer \| Operator \| Package consumer \| Service author |
 | Product surface | Public command \| API \| library behavior \| service/operator behavior \| package-consumer workflow \| integration \| template \| extension point. |
 
-### Workflow Map
+**Summary.** One or two sentences a reviewer can read on their own: the workflow
+the audience cannot complete today and why it matters.
 
-```text
-current limitation: The workflow limitation, missing capability, or friction.
-existing coverage: Current product surfaces that already address part or all of
-the need, and why they are insufficient for the named audience.
-residual gap: Even with the existing coverage, the audience still cannot
-complete this specific supported workflow or outcome.
-benefit: Why this matters to the named audience and how their workflow becomes better.
-common operation: Evidence that this is a normal or recurring workflow for the
-named audience, not only comparable-tool parity.
-```
+### Context
+The current limitation, the existing product surfaces that already address part
+of the need and why they fall short, and the residual gap — even with that
+coverage, the named audience still cannot complete this specific supported
+workflow. Note why now: evidence it is a normal or recurring workflow, not only
+comparable-tool parity.
 
 ### Evidence
-
-```text
 Evidence: Concrete file and line references, command behavior, docs, examples,
 comparable-tool evidence, or user/developer workflow evidence.
 Reproduction: Smallest supported user, developer, service-author, operator, or
 package-consumer workflow trace that demonstrates the current limitation or
 missing capability.
-```
 
-### Decision Trace
+### Proposal
+The smallest useful capability to add, why it fits this repository and its
+existing patterns, and any public-behavior, dependency, migration, or
+maintenance cost.
 
-```text
-named audience
-  -> supported workflow
-  -> existing coverage
-  -> residual gap
-  -> smallest useful feature
-  -> validation that proves the feature
-```
+### Alternatives Considered
+- Chosen: the proposal above — why this shape wins for the audience.
+- Other option: a wider build, a different surface, or reusing an existing
+  surface — why not.
+- Do nothing: the cost to the audience of leaving the gap.
 
-### Proposed Change
-
-```yaml
-repository_fit: Why this belongs in the current repository and matches existing patterns.
-proposed_feature: Smallest useful capability to add.
-compatibility_and_maintenance: Public behavior, dependency, migration, support, or maintenance tradeoffs.
-validation:
-  - Suggested checks for the feature change.
-```
+### Definition of Success
+- The observable outcome the audience gains (the previously blocked workflow now
+  completes) plus the validation that proves the feature.
 ````
+
+## Add When Warranted
+
+Add these sections only when the entry needs them; feature proposals usually
+warrant Goals / Non-goals.
+
+````markdown
+### Goals / Non-goals
+- Goal: the audience outcome the feature must deliver.
+- Non-goal: adjacent capabilities this deliberately does not build.
+
+### Open Questions
+- A product-direction, scope, or compatibility decision that needs the human.
+
+### Decision
+> Accepted 2026-07-07 — chose <option> because <reason>.
+````
+
+## Status And Lifecycle
+
+`Status` is a lightweight hint for where the entry stands in the current
+conversation, not a durable record: `Proposed` when first recorded, `Accepted`
+after the human agrees, `In progress` while implementing, and `Rejected` for an
+entry ruled out but kept for context. The `### Decision` line is an optional
+one-line record of the agreement-gate outcome. Per the shared gap workflow,
+remove the entry once the change is confirmed done and delete the ledger once
+every entry is resolved.
 
 Keep optional follow-up notes separate from proposals:
 
