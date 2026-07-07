@@ -22,32 +22,28 @@ Agents MUST:
   agent work. When sub-agents are authorized, use them for delegation, parallel
   review, forward-testing, independent validation, read-only exploration, or
   disjoint implementation work whenever they can materially improve coverage,
-  confidence, throughput, or implementation safety.
-- Use sub-agents when the selected skill requires delegation, parallel review,
-  or forward-testing and the current request authorizes them. Do not treat
-  required sub-agent use as optional based on scope size, convenience, or local
-  confidence once delegation is authorized.
-- If the current request does not authorize sub-agents, treat delegation as
-  unavailable. Continue locally only when the selected skill does not require
-  delegation and the required confidence threshold can still be met; otherwise
-  stop at the delegation gate and ask for explicit current-request sub-agent
-  authorization.
-- If sub-agents are authorized but unavailable, forbidden, or denied by the
-  runtime, continue locally only when the selected skill does not require
-  delegation and the required confidence threshold can still be met; otherwise
-  stop at the delegation gate and state the blocked delegation requirement plus
-  runtime limitation. Do not offer a local-only pass as equivalent, as the
-  default next step, or as acceptable merely because the repository looks small.
-- Report an explicit confidence percentage before treating a result, finding,
-  validation conclusion, or task as accepted or complete. Use 90% as the
-  default minimum threshold. Use 95% for high-risk acceptance, including
-  security findings, destructive actions, public interface or compatibility
-  conclusions, release or PR readiness, CI/deployment root-cause conclusions,
-  broad no-findings claims, and claims that a problem is definitely fixed.
-  Confidence must be backed by concrete evidence such as source inspection,
-  tests, logs, scanner output, official documentation, runtime behavior, or
-  repository history. Below the required threshold, gather more evidence or
-  state the blocker instead of accepting completion.
+  confidence, throughput, or implementation safety. When the selected skill
+  requires delegation, parallel review, or forward-testing, do not treat that
+  required use as optional based on scope size, convenience, or local
+  confidence.
+- At the delegation gate, continue locally only when the selected skill does not
+  require delegation and the required confidence threshold can still be met.
+  Otherwise stop: if the current request does not authorize sub-agents, ask for
+  explicit current-request sub-agent authorization; if authorized sub-agents are
+  unavailable, forbidden, or denied by the runtime, state the blocked delegation
+  requirement plus the runtime limitation. Do not offer a local-only pass as
+  equivalent, as the default next step, or as acceptable merely because the
+  repository looks small.
+- Report an explicit confidence percentage before treating any result, finding,
+  validation conclusion, or task as accepted or complete. Default minimum is
+  90%; require 95% for high-risk acceptance: security findings, destructive
+  actions, public-interface or compatibility conclusions, release or PR
+  readiness, CI/deployment root-cause conclusions, broad no-findings claims, and
+  claims that a problem is definitely fixed. Back every number with concrete
+  evidence — source inspection, tests, logs, scanner output, official
+  documentation, runtime behavior, or repository history. Below the required
+  threshold, gather more evidence or state the blocker instead of accepting
+  completion.
 - For ledger findings and validation conclusions, prefer reproducible local
   evidence from the smallest supported command, test, scenario, trace, lookup,
   or negative search that demonstrates the claim. CI running later is not
@@ -84,9 +80,8 @@ Agents MUST:
 - Treat skill workflow steps using "must", "do not", or "stop" language as
   blocking requirements.
 - Stop and ask before deviating from a selected skill, repository instruction,
-  dominant test harness, local style, or documented workflow.
-- State the exact instruction being deviated from before proposing any
-  deviation.
+  dominant test harness, local style, or documented workflow, and state the
+  exact instruction being deviated from before proposing any deviation.
 - Treat a checklist item the agent itself declared (for example "TDD decision:
   scenario-first") as a binding commitment. If it cannot be honored, STOP at that
   item and flag the deviation before continuing; silence is a violation.
@@ -111,11 +106,6 @@ Agents MUST NOT:
 - Treat `AGENTS.md` or `SKILL.md` instructions as optional.
 - Continue after discovering they violated an instruction; they must correct
   course immediately and remove their own noncompliant change.
-- Present local-only work as equivalent when sub-agents are required for
-  credible confidence or coverage but are not authorized or available. When
-  authorization is missing, ask for explicit current-request sub-agent
-  authorization; when the runtime blocks authorized sub-agents, state the
-  blocked delegation requirement plus runtime limitation.
 - Report `Red`, `Green`, `Refactor`, or any TDD cycle without pasting the actual
   command and its output; never narrate end-of-run debugging of already-written
   code as a red-then-green cycle.
