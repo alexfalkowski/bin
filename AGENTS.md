@@ -87,6 +87,9 @@ Agents MUST:
   dominant test harness, local style, or documented workflow.
 - State the exact instruction being deviated from before proposing any
   deviation.
+- Treat a checklist item the agent itself declared (for example "TDD decision:
+  scenario-first") as a binding commitment. If it cannot be honored, STOP at that
+  item and flag the deviation before continuing; silence is a violation.
 - Re-read the selected skill and identify the governing instruction when the
   human challenges process, asks what the skill says, or points out a suspected
   instruction violation.
@@ -113,6 +116,11 @@ Agents MUST NOT:
   authorization is missing, ask for explicit current-request sub-agent
   authorization; when the runtime blocks authorized sub-agents, state the
   blocked delegation requirement plus runtime limitation.
+- Report `Red`, `Green`, `Refactor`, or any TDD cycle without pasting the actual
+  command and its output; never narrate end-of-run debugging of already-written
+  code as a red-then-green cycle.
+- Present work as test-driven when the failing test was never observed before
+  implementation; label such work "test-after (not TDD)" with the reason.
 
 If there is a conflict, precedence is:
 

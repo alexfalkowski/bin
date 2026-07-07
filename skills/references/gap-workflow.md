@@ -515,6 +515,13 @@ For implement modes:
   dominant relevant test harness or validation path, planned validation command,
   and any deviation from `AGENTS.md` or selected skills. If a deviation is
   needed, stop and ask before editing.
+- When the execution checklist includes `Expected red`, confirm the dominant
+  harness can actually execute before behavior-changing edits, then paste the
+  observed red (exact command + failing output) before making implementation
+  edits; the reported `Green` MUST be that same command passing. If the harness
+  is not runnable, STOP: make it runnable and observe the red, or explicitly
+  request agreement to proceed test-after with the reason. Silent test-after and
+  reporting a red/green cycle without pasted command output are prohibited.
 - For substantial, ambiguous, or multi-iteration implementation work, use
   `long-running-work.md` after the agreement gate. Confirm the reference was
   read for the current task, maintain the progress artifact in runtime state,

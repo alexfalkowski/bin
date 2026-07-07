@@ -80,7 +80,7 @@ These project-gap implementation rules remain mandatory:
   "implement project gaps" request as permission to start the proposal
   workflow, not as permission to edit.
 - After the human agrees and before editing, state the selected local project workflow pattern, dominant relevant validation path, planned validation command, and any deviation from `AGENTS.md` or selected skills. If a deviation is needed, stop and ask before editing.
-- For behavior-changing project workflow changes, state the project execution checklist before editing: `TDD decision`, `First test/scenario`, `Expected red`, `Intended green change`, `Refactor checkpoint`, and `Validation`.
+- For behavior-changing project workflow changes, state the project execution checklist before editing: `TDD decision`, `First test/scenario`, `Expected red`, `Intended green change`, `Refactor checkpoint`, and `Validation`. When the harness is runnable, observe and paste the red (command + failing output) before implementation edits; if it is not runnable, stop and request agreement to proceed test-after with the reason rather than skipping red silently.
 - Implement only the agreed project gap with the smallest clear change that
   preserves existing public behavior unless the human explicitly approved a
   compatibility break.
@@ -93,7 +93,7 @@ These project-gap implementation rules remain mandatory:
 - Use `$doc-standards` when the project change affects public commands, Make
   targets, setup, validation, release, configuration, or documented workflows.
 - Use `$change-validation` when selecting validation commands.
-- Report `Red`, `Green`, `Refactor`, and `Validation` entries. Use `Refactor: none (<reason>)` when no cleanup was needed after green. Ask the human to verify and say `PROJECT-N is done`.
+- Report `Red`, `Green`, `Refactor`, and `Validation` entries. `Red` and `Green` must each paste the actual command and its real output using the same command/selector; a label without pasted output is not acceptable, and work where red was never observed before implementation must be labeled `test-after (not TDD)` with the reason instead of a TDD cycle. Use `Refactor: none (<reason>)` when no cleanup was needed after green. Ask the human to verify and say `PROJECT-N is done`.
 
 ## References
 
