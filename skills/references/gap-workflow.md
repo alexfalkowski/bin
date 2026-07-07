@@ -132,11 +132,12 @@ For implement modes:
    by another workflow, explain the routing and propose removing, moving, or
    reclassifying it before editing.
 5. Present the current evidence, proposed solution, tradeoffs, and intended
-   validation. Stop until the human explicitly agrees to that solution. A named
-   fix, implement, or verify request selects the entry and permits evidence
-   refresh, but it is not approval to edit unless it also agrees to the proposed
-   solution. This remains true when the request says "implement", names
-   multiple related IDs, or authorizes agents.
+   validation as a decision card (see `../references/decision-card.md`) so the
+   human can agree, reject, or revise quickly. Stop until the human explicitly
+   agrees to that solution. A named fix, implement, or verify request selects the
+   entry and permits evidence refresh, but it is not approval to edit unless it
+   also agrees to the proposed solution. This remains true when the request says
+   "implement", names multiple related IDs, or authorizes agents.
 6. After agreement, state the local pattern, dominant relevant harness or
    validation path, planned validation, and any needed deviation. Stop before
    deviating from the selected skill, repository pattern, or documented

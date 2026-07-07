@@ -55,10 +55,13 @@ local project gap.
 ## `PROJECTS.md` Format
 
 Before creating, updating, or interpreting `PROJECTS.md`, read
-`references/ledger-format.md`. The ledger format must keep `| Field | Value |`,
+`references/ledger-format.md`. Each entry is a short mini-RFC. The required core
+must keep `| Field | Value |`, a `| Status |` row, a `**Summary.**` line,
 `| Implementation home | current repo \| shared bin \| external repo \| mixed |`,
-`Reproduction: Smallest supported maintainer`, `### Decision Trace`, and
-`### Proposed Change`.
+`### Context`, `### Evidence` with `Reproduction: Smallest supported maintainer`,
+`### Proposal`, `### Alternatives Considered`, and `### Definition of Success`.
+Add `### Goals / Non-goals`, `### Open Questions`, and `### Decision` only when
+the entry warrants them.
 
 ## Implement Mode
 
@@ -105,6 +108,7 @@ These project-gap implementation rules remain mandatory:
 - Read `references/ledger-format.md` before creating, updating, or interpreting
   `PROJECTS.md`.
 - Read `../references/gap-workflow.md` for shared scoped-ledger, delegation, coverage, confidence, and approval gates.
+- Use `../references/decision-card.md` to present the agreement-gate proposal as a decision card.
 - Use `../references/gap-lead-generation.md` during Find mode to classify repo
   archetypes, generate project-workflow leads, and account for rejected or
   routed candidates.

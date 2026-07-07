@@ -65,9 +65,12 @@ Find mode.
 ## `FEATURES.md` Format
 
 Before creating, updating, or interpreting `FEATURES.md`, read
-`references/ledger-format.md`. The ledger format must keep `| Field | Value |`,
-`Reproduction: Smallest supported user`, `### Decision Trace`, and
-`### Proposed Change`.
+`references/ledger-format.md`. Each entry is a short mini-PRD. The required core
+must keep `| Field | Value |`, a `| Status |` row, a `**Summary.**` line,
+`### Context`, `### Evidence` with `Reproduction: Smallest supported user`,
+`### Proposal`, `### Alternatives Considered`, and `### Definition of Success`.
+Add `### Goals / Non-goals` (usually warranted for features), `### Open
+Questions`, and `### Decision` when the entry warrants them.
 
 ## Implement Mode
 

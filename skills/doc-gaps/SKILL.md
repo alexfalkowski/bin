@@ -59,9 +59,12 @@ recording findings. Keep GoDoc details in `$go-standards`, RDoc details in
 ## Candidate And `DOCS.md` Format
 
 Before creating, updating, or interpreting `DOCS.md`, read
-`references/ledger-format.md`. The ledger format must keep `| Field | Value |`,
-`Reproduction: Smallest reader action`, `### Decision Trace`, and
-`### Proposed Change`.
+`references/ledger-format.md`. Each entry is a short mini-RFC. The required core
+must keep `| Field | Value |`, a `| Status |` row, a `**Summary.**` line,
+`### Context`, `### Evidence` with `Reproduction: Smallest reader action`,
+`### Proposal`, `### Alternatives Considered`, and `### Definition of Success`.
+Add `### Goals / Non-goals`, `### Open Questions`, and `### Decision` only when
+the entry warrants them.
 
 ## References
 
@@ -73,6 +76,7 @@ Before creating, updating, or interpreting `DOCS.md`, read
 - Read `references/ledger-format.md` before creating, updating, or interpreting
   `DOCS.md`.
 - Read `../references/gap-workflow.md` for shared scoped-ledger, delegation, coverage, confidence, and approval gates.
+- Use `../references/decision-card.md` to present the agreement-gate proposal as a decision card for unresolved-ledger fixes.
 - Use `../references/gap-lead-generation.md` during one-pass and audit-only
   modes to classify repo archetypes, generate documentation leads, and account
   for rejected or routed candidates.

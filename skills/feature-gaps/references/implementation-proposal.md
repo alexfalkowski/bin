@@ -1,11 +1,14 @@
 # Implementation Proposal Gate
 
-Before asking for agreement to edit a feature, present a compact decision
-packet that helps the human decide quickly. The packet is primarily for judging
-whether the solution shape looks right, not for re-proving the feature's
-accuracy. Do not bury the ask after a long plan update or repeated prose. Lead
-with the implementation shape, then separate decision metadata, rationale,
-tradeoffs, and validation visually.
+Before asking for agreement to edit a feature, present a compact decision card.
+Its job is the *how* and the *ask*: the concrete implementation shape you
+propose, one crisp decision, and the main cost to watch. The *what* and *why*
+already live in the `FEATURES.md` entry, so point back to `FEATURE-N` instead of
+restating the problem, evidence, or feature-level alternatives. Lead with
+`## Solution Shape`; do not bury the ask after a long plan update. The
+`## Decision` block is the shared decision card (`../../references/decision-card.md`);
+`## Solution Shape` and `### Other Shapes Considered` are the feature-specific
+additions for a design-heavy gate.
 
 Use this structure:
 
@@ -30,43 +33,31 @@ validation:
   - Targeted command or scenario.
 ```
 
-## Decision Needed
+## Decision
 
-| Question | Recommendation |
+| Field | Value |
 | --- | --- |
 | Implement now? | Yes \| No \| Revise |
 | Scope | FEATURE-N and the smallest package/config/doc surfaces needed. |
 | Compatibility | Additive \| Breaking \| Mixed, with the concrete reason. |
 | Confidence | 94% |
+| Watch | The main compatibility, maintenance, dependency, security, or config-surface cost to weigh. |
 
-### Why This Is Still Worth Doing
-
-```text
-current gap: The supported workflow still unavailable today.
-existing coverage: What the repository already provides.
-residual need: What the audience still cannot do.
-audience payoff: The concrete outcome gained.
-```
-
-### Decision Trace
-
-```text
-audience workflow
-  -> current supported surface
-  -> residual gap
-  -> proposed smallest shape
-  -> validation proving it works
-```
-
-### Tradeoffs
-
-| Accept | Watch |
-| --- | --- |
-| Benefit or simplification gained. | Compatibility, maintenance, dependency, security, or config-surface cost. |
+Full problem, evidence, and alternatives: see FEATURE-N in `FEATURES.md`.
 
 Approval command:
 
 - `Approved. Continue.` approves this solution shape and starts implementation.
 - `Agent approved. Continue.` approves this solution shape and authorizes
   sub-agents for implementation or fresh review when useful.
+````
+
+Add this section only when a real fork exists in *how* to implement the feature;
+omit it otherwise (feature-level alternatives stay in the `FEATURES.md` entry):
+
+````markdown
+### Other Shapes Considered
+
+- Chosen shape: why it fits the existing local patterns.
+- Alternative shape: a different implementation approach — why not.
 ````
