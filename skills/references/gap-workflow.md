@@ -7,21 +7,30 @@ These shared rules own workflow mechanics.
 ## Mode And Plan State
 
 - If no scope is provided, stop and ask for the package or folder.
-- Treat remembered commands as gap-workflow shorthand:
-  - `Work ID` or `Work ID1/ID2 in LEDGER_PATH` selects the matching gap skill
+- Treat remembered commands as gap-workflow shorthand. `Start` begins the
+  workflow, `Approved` accepts the presented solution, and `Done` confirms an
+  entry is verified; each takes the same optional tail (`in LEDGER_PATH` when
+  the ID is ambiguous, and `with agents`, `with a goal`, or
+  `with agents and a goal`):
+  - `Start ID` or `Start ID1/ID2 in LEDGER_PATH` selects the matching gap skill
     from the ID prefix and enters implement mode for those IDs.
-  - `Agent work ID` explicitly authorizes sub-agents for the current request.
-  - `Goal work ID` explicitly authorizes a runtime goal for the current request
-    when runtime goals are available and useful.
-  - `Agent goal work ID` explicitly authorizes both sub-agents and a runtime
-    goal for the current request.
-  - `Approved. Continue.` approves the most recently proposed solution and
-    permits implementation to continue under the selected skill.
-  - `Agent approved. Continue.` approves the most recently proposed solution
-    and explicitly authorizes sub-agents for the current implementation request.
-    Use them for disjoint implementation slices, validation support, or fresh
-    review when they materially improve throughput, coverage, confidence, or
-    implementation safety.
+  - `Start ID with agents` explicitly authorizes sub-agents for the current
+    request.
+  - `Start ID with a goal` explicitly authorizes a runtime goal for the current
+    request when runtime goals are available and useful.
+  - `Start ID with agents and a goal` explicitly authorizes both sub-agents and
+    a runtime goal for the current request.
+  - `Approved ID` approves the presented solution for that entry and permits
+    implementation to continue under the selected skill.
+  - `Approved ID with agents` approves the presented solution and explicitly
+    authorizes sub-agents for the current implementation request. Use them for
+    disjoint implementation slices, validation support, or fresh review when
+    they materially improve throughput, coverage, confidence, or implementation
+    safety. The `with a goal` and `with agents and a goal` tails apply here too.
+  - `Done ID` confirms the entry is verified and complete; the selected skill
+    drops or revises that entry and continues with the next. Its tail
+    (`with agents`, `with a goal`, `with agents and a goal`) carries that
+    authorization forward to the next entry.
   These shorthands do not bypass solution agreement, scoped ledger rules,
   validation freshness, confidence thresholds, remote-write permission, or the
   selected skill's output format.
@@ -145,7 +154,7 @@ For implement modes:
 7. Implement only the agreed entry with the smallest clear change, using the
    paired standards and validation skills named by the selected plan.
 8. Validate through repository Make targets or documented entrypoints, then ask
-   the human to verify with the selected `ID-<number> is done` phrase.
+   the human to verify with the selected `Done ID-<number>` phrase.
 9. Stop until confirmation. After confirmation, remove or revise the entry and
    continue with the next entry, or delete the scoped ledger when all entries
    are confirmed resolved.
@@ -543,12 +552,13 @@ For implement modes:
   review. If agents were authorized and available but this independent review
   did not run, do not report the implementation complete at or above 90%
   confidence.
-- During automatic continuations while waiting for approval or an "`ID` is
-  done" confirmation, do not repeat the full proposal or result. State the
+- During automatic continuations while waiting for approval or a `Done ID`
+  confirmation, do not repeat the full proposal or result. State the
   current waiting gate once, concisely.
-- Do not move to the next entry until the human says the current entry is done.
-- After the human confirms an entry is done, remove or revise that entry in the
-  scoped ledger. If an entry is deemed invalid, remove it only after explaining
-  why and getting human agreement.
+- Do not move to the next entry until the human confirms the current entry with
+  `Done ID`.
+- After the human confirms an entry with `Done ID`, remove or revise that entry
+  in the scoped ledger. If an entry is deemed invalid, remove it only after
+  explaining why and getting human agreement.
 - Once all entries are resolved and confirmed done by the human, delete the
   scoped ledger.

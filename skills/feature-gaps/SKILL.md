@@ -1,6 +1,6 @@
 ---
 name: feature-gaps
-description: Use when the user asks to find or implement $feature-gaps/feature gaps in a package or folder, set a confidence closure target such as 95% or 99%, find main product capability gaps, find product-owned user/operator/service-author/package-consumer/CLI/API/library opportunities, uses Work FEATURE-1 or Agent goal work FEATURE-1, asks about feature IDs such as FEATURE-1, asks what the proposal is for FEATURE-1, asks to fix or verify FEATURE-1, or says FEATURE-1 is done. Find repository-fit feature opportunities with explicit audience benefit; record scoped FEATURES.md proposals; later propose and implement agreed changes one at a time. Do not use for standalone test, CI, build, Makefile, release, validation, or repository workflow gaps.
+description: Use when the user asks to find or implement $feature-gaps/feature gaps in a package or folder, set a confidence closure target such as 95% or 99%, find main product capability gaps, find product-owned user/operator/service-author/package-consumer/CLI/API/library opportunities, uses Start FEATURE-1 or Approved FEATURE-1 with agents and a goal, asks about feature IDs such as FEATURE-1, asks what the proposal is for FEATURE-1, asks to fix or verify FEATURE-1, or uses Done FEATURE-1. Find repository-fit feature opportunities with explicit audience benefit; record scoped FEATURES.md proposals; later propose and implement agreed changes one at a time. Do not use for standalone test, CI, build, Makefile, release, validation, or repository workflow gaps.
 ---
 
 # Feature Gaps
@@ -81,7 +81,7 @@ Follow `references/plan.md#implement-mode-plan` and the implementation rules in
 
 Before asking for agreement to edit a feature, read
 `references/implementation-proposal.md` and present that decision packet. It
-must lead with `## Solution Shape`. `Approved. Continue.` approves this solution shape and starts implementation. `Agent approved. Continue.` approves this solution shape and authorizes sub-agents for implementation or fresh review when useful.
+must lead with `## Solution Shape`. `Approved FEATURE-N` approves this solution shape and starts implementation. `Approved FEATURE-N with agents` approves this solution shape and authorizes sub-agents for implementation or fresh review when useful. The `with a goal` and `with agents and a goal` tails apply here too.
 
 These feature implementation rules remain mandatory:
 
@@ -126,7 +126,7 @@ These feature implementation rules remain mandatory:
 - Use `$doc-standards` when the feature changes public commands, APIs, examples,
   configuration, or documented workflows.
 - Use `$change-validation` when selecting validation commands.
-- Report `Red`, `Green`, `Refactor`, and `Validation` entries. `Red` and `Green` must each paste the actual command and its real output using the same command/selector; a label without pasted output is not acceptable, and work where red was never observed before implementation must be labeled `test-after (not TDD)` with the reason instead of a TDD cycle. Use `Refactor: none (<reason>)` when no cleanup was needed after green. Ask the human to verify and say `FEATURE-N is done`.
+- Report `Red`, `Green`, `Refactor`, and `Validation` entries. `Red` and `Green` must each paste the actual command and its real output using the same command/selector; a label without pasted output is not acceptable, and work where red was never observed before implementation must be labeled `test-after (not TDD)` with the reason instead of a TDD cycle. Use `Refactor: none (<reason>)` when no cleanup was needed after green. Ask the human to verify and say `Done FEATURE-N`.
 
 ## References
 

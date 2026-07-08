@@ -1,6 +1,6 @@
 ---
 name: code-issues
-description: Use when the user asks to find or implement $code-issues/code issues in a package or folder, set a confidence closure target such as 95% or 99%, uses Work ISSUE-1 or Agent goal work ISSUE-1, asks about issue IDs such as ISSUE-1, asks what the fix is for ISSUE-1, asks to fix or verify ISSUE-1, or says ISSUE-1 is done. Find concrete bugs, security issues, compatibility breaks, and public contract violations; record scoped ISSUES.md entries; later propose and implement agreed fixes one at a time.
+description: Use when the user asks to find or implement $code-issues/code issues in a package or folder, set a confidence closure target such as 95% or 99%, uses Start ISSUE-1 or Approved ISSUE-1 with agents and a goal, asks about issue IDs such as ISSUE-1, asks what the fix is for ISSUE-1, asks to fix or verify ISSUE-1, or uses Done ISSUE-1. Find concrete bugs, security issues, compatibility breaks, and public contract violations; record scoped ISSUES.md entries; later propose and implement agreed fixes one at a time.
 ---
 
 # Code Issues
@@ -58,7 +58,7 @@ These code-issue implementation rules remain mandatory:
 - After the human agrees and before editing, state the selected local code pattern, dominant relevant test harness, planned validation command, and any deviation from `AGENTS.md` or selected skills. If a deviation is needed, stop and ask before editing.
 - Use `$testing-standards` when deciding whether to add or update regression tests for the fix, and prefer its test-first or scenario-first loop when a behavior-changing fix has a credible test or BDD layer.
 - For behavior-changing fixes, state the issue execution checklist before editing: `TDD decision`, `First test/scenario`, `Expected red`, `Intended green change`, `Refactor checkpoint`, and `Validation`. When the harness is runnable, observe and paste the red (command + failing output) before implementation edits; if it is not runnable, stop and request agreement to proceed test-after with the reason rather than skipping red silently.
-- Report `Red`, `Green`, `Refactor`, and `Validation` entries. `Red` and `Green` must each paste the actual command and its real output using the same command/selector; a label without pasted output is not acceptable, and work where red was never observed before implementation must be labeled `test-after (not TDD)` with the reason instead of a TDD cycle. Use `Refactor: none (<reason>)` when no cleanup was needed after green. Ask the human to verify and say `ISSUE-N is done`.
+- Report `Red`, `Green`, `Refactor`, and `Validation` entries. `Red` and `Green` must each paste the actual command and its real output using the same command/selector; a label without pasted output is not acceptable, and work where red was never observed before implementation must be labeled `test-after (not TDD)` with the reason instead of a TDD cycle. Use `Refactor: none (<reason>)` when no cleanup was needed after green. Ask the human to verify and say `Done ISSUE-N`.
 
 ## References
 

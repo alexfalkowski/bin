@@ -1,6 +1,6 @@
 ---
 name: reliability-gaps
-description: Use when the user asks to find or implement $reliability-gaps/reliability gaps in a package or folder, review production readiness, set a confidence closure target such as 95% or 99%, uses Work REL-1 or Agent goal work REL-1, asks about reliability gap IDs such as REL-1, asks what the fix is for REL-1, asks to fix or verify REL-1, or says REL-1 is done. Find verified reliability, operability, SLO, overload, observability, release-safety, recovery, data-integrity, disaster-readiness, or NALSD gaps; record scoped RELIABILITY.md entries; implement agreed fixes gap by gap.
+description: Use when the user asks to find or implement $reliability-gaps/reliability gaps in a package or folder, review production readiness, set a confidence closure target such as 95% or 99%, uses Start REL-1 or Approved REL-1 with agents and a goal, asks about reliability gap IDs such as REL-1, asks what the fix is for REL-1, asks to fix or verify REL-1, or uses Done REL-1. Find verified reliability, operability, SLO, overload, observability, release-safety, recovery, data-integrity, disaster-readiness, or NALSD gaps; record scoped RELIABILITY.md entries; implement agreed fixes gap by gap.
 ---
 
 # Reliability Gaps
@@ -69,7 +69,7 @@ These reliability implementation rules remain mandatory:
 - For behavior-changing fixes, state the reliability execution checklist before editing: `TDD decision`, `First test/scenario`, `Expected red`, `Intended green change`, `Refactor checkpoint`, and `Validation`. When the harness is runnable, observe and paste the red (command + failing output) before implementation edits; if it is not runnable, stop and request agreement to proceed test-after with the reason rather than skipping red silently.
 - Implement only the agreed finding with the smallest clear reliability change.
 - Use `$reliability-standards` for reliability design, `$change-safety` for public or operational compatibility, `$testing-standards` for failure-path tests, and `$change-validation` for checks. Pair with `$security-audit` when the fix touches auth, secrets, privilege, DoS, logs, supply chain, or incident containment.
-- Report `Red`, `Green`, `Refactor`, and `Validation` entries. `Red` and `Green` must each paste the actual command and its real output using the same command/selector; a label without pasted output is not acceptable, and work where red was never observed before implementation must be labeled `test-after (not TDD)` with the reason instead of a TDD cycle. Use `Refactor: none (<reason>)` when no cleanup was needed after green. Ask the human to verify and say `REL-N is done`.
+- Report `Red`, `Green`, `Refactor`, and `Validation` entries. `Red` and `Green` must each paste the actual command and its real output using the same command/selector; a label without pasted output is not acceptable, and work where red was never observed before implementation must be labeled `test-after (not TDD)` with the reason instead of a TDD cycle. Use `Refactor: none (<reason>)` when no cleanup was needed after green. Ask the human to verify and say `Done REL-N`.
 
 ## References
 
