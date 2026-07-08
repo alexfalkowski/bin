@@ -157,7 +157,7 @@ stash: add
 unstash:
 	@git stash pop
 
-# Generate a repo source key (sha256 of tracked files excluding bin/) into .source-key.
+# Generate a repo source key (sha256 of tracked files excluding bin/ and agent wiring) into .source-key.
 source-key:
 	@$(BIN_ROOT)/build/git/source-key
 
