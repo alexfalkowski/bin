@@ -70,8 +70,22 @@ This repository also ships shared agent guidance in `skills/`. Each skill is a
 
 ### Codex
 
-Codex discovers `skills/**` by scanning the project tree, so downstream
-repositories only need to point agents at the shared instructions instead of
+Codex discovers repository skills from `.agents/skills`, so wire a downstream
+repository once with the shared bootstrap, then commit the result:
+
+```make
+include bin/build/make/codex.mak
+```
+
+```bash
+make codex-init
+```
+
+This creates a `.agents/skills` symlink to `bin/skills`, so every later clone can
+invoke shared skills with `$`, for example `$code-review`.
+
+Codex reads `AGENTS.md` separately for repository instructions. Downstream
+repositories should still point agents at the shared instructions instead of
 copying the skill list:
 
 ```markdown
@@ -79,8 +93,6 @@ copying the skill list:
 
 Use `bin/AGENTS.md` for shared skills and cross-repository defaults.
 ```
-
-Invoke a skill with its `$` prefix, for example `$code-review`.
 
 ### Claude Code
 
@@ -128,6 +140,8 @@ Dockerfile lint targets depend on `shellcheck` and `hadolint`;
 
 - `make` or `make help`: current command catalog for this repository.
 - `build/make/*.mak`: reusable Makefile fragments for downstream projects.
+- `build/codex/init`: one-time Codex wiring for a consuming repository (run via
+  `make codex-init`).
 - `build/claude/init`: one-time Claude Code wiring for a consuming repository
   (run via `make claude-init`).
 - `build/docker/go/Dockerfile`: shared Go service Dockerfile template.

@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# Wire the current repository for Codex from the shared bin skills.
+#
+# Creates a .agents/skills symlink to the shared skills directory so Codex can
+# discover repo-scoped skills for explicit $skill invocation. Safe to run
+# repeatedly.
+
+set -eo pipefail
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+bin_root="${BIN_ROOT:-$(cd "$script_dir/../.." && pwd -P)}"
+project_root="$(pwd -P)"
+
+skills_src="$bin_root/skills"
+
+if [[ ! -d $skills_src ]]; then
+  printf 'shared skills not found: %s\n' "$skills_src" >&2
+  exit 1
+fi
+
+relpath() {
+  ruby -e 'require "pathname"; print Pathname.new(ARGV[0]).relative_path_from(Pathname.new(ARGV[1])).to_s' "$1" "$2"
+}
+
+mkdir -p "$project_root/.agents"
+rel_skills="$(relpath "$skills_src" "$project_root/.agents")"
+ln -sfn "$rel_skills" "$project_root/.agents/skills"
+
+printf 'Codex wired for %s\n' "$project_root"
+printf '  .agents/skills -> %s\n' "$rel_skills"

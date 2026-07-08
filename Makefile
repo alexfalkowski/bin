@@ -2,6 +2,7 @@ include build/make/help.mak
 include build/make/ruby.mak
 include build/make/git.mak
 include build/make/claude.mak
+include build/make/codex.mak
 
 # Lint Bash scripts under build/, quality/, and lib/ with ShellCheck.
 scripts-lint:
