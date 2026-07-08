@@ -47,9 +47,10 @@ Full problem, evidence, and alternatives: see FEATURE-N in `FEATURES.md`.
 
 Approval command:
 
-- `Approved. Continue.` approves this solution shape and starts implementation.
-- `Agent approved. Continue.` approves this solution shape and authorizes
-  sub-agents for implementation or fresh review when useful.
+- `Approved FEATURE-N` approves this solution shape and starts implementation.
+- `Approved FEATURE-N with agents` approves this solution shape and authorizes
+  sub-agents for implementation or fresh review when useful. The `with a goal`
+  and `with agents and a goal` tails apply here too.
 ````
 
 Add this section only when a real fork exists in *how* to implement the feature;

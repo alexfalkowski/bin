@@ -191,26 +191,38 @@ They select the matching skill and its gates before any edits. Supported gap
 IDs include `FEATURE-*`, `ISSUE-*`, `TEST-*`, `DOC-*`, `PROJECT-*`, and
 `RELIABILITY-*`; route each ID to the matching gap skill and ledger.
 
-- `Work FEATURE-3 in path/FEATURES.md`: select the matching gap skill from the
+Three verbs carry the workflow, and each takes the same optional tail. `Start`
+begins the workflow, `Approved` accepts the presented solution, and `Done`
+confirms an entry is verified. After any verb, name the ID, add
+`in path/LEDGER.md` when the ID is ambiguous, then add `with agents`,
+`with a goal`, or `with agents and a goal` to authorize sub-agents, a runtime
+goal, or both. On `Done`, the tail carries that authorization to the next entry.
+
+- `Start FEATURE-3 in path/FEATURES.md`: select the matching gap skill from the
   ID prefix, refresh evidence, present the solution, and stop at the agreement
   gate before editing. Apply the same shape to other ledgers, such as
-  `Work ISSUE-3 in path/ISSUES.md` or `Work TEST-3 in path/TESTS.md`.
-- `Agent work FEATURE-3/4/5 in path/FEATURES.md`: same as `Work`, plus explicit
-  current-request authorization to use sub-agents when they materially improve
-  coverage, throughput, implementation safety, or fresh review. Apply the same
-  shape to other ledger IDs.
-- `Goal work FEATURE-3 in path/FEATURES.md`: same as `Work`, plus explicit
-  current-request authorization to use a runtime goal when goals are available
-  and useful. Apply the same shape to other ledger IDs.
-- `Agent goal work FEATURE-3/4/5 in path/FEATURES.md`: explicit authorization
-  for both sub-agents and a runtime goal. Apply the same shape to other ledger
-  IDs.
-- `Approved. Continue.`: approve the most recently proposed solution and allow
+  `Start ISSUE-3 in path/ISSUES.md` or `Start TEST-3 in path/TESTS.md`.
+- `Start FEATURE-3 with agents`: same as `Start`, plus explicit current-request
+  authorization to use sub-agents when they materially improve coverage,
+  throughput, implementation safety, or fresh review. Apply the same shape to
+  other ledger IDs.
+- `Start FEATURE-3 with a goal`: same as `Start`, plus explicit current-request
+  authorization to use a runtime goal when goals are available and useful.
+  Apply the same shape to other ledger IDs.
+- `Start FEATURE-3 with agents and a goal`: explicit authorization for both
+  sub-agents and a runtime goal. Ranges also work, such as
+  `Start FEATURE-3/4/5 with agents and a goal`.
+- `Approved FEATURE-3`: approve the presented solution for that entry and allow
   the selected skill to implement it through its validation and review gates.
-- `Agent approved. Continue.`: same as `Approved. Continue.`, plus explicit
+- `Approved FEATURE-3 with agents`: same as `Approved FEATURE-3`, plus explicit
   current-request authorization to use sub-agents during implementation and
   fresh review when they can work on disjoint slices, validation support, or
-  independent review without bypassing the selected skill's gates.
+  independent review without bypassing the selected skill's gates. The
+  `with a goal` and `with agents and a goal` tails apply here too.
+- `Done FEATURE-3`: confirm the presented entry is verified and complete; the
+  selected skill drops or revises that entry and continues with the next. The
+  tail carries forward — `Done FEATURE-3 with agents` authorizes sub-agents for
+  the next entry, and `with a goal` / `with agents and a goal` apply too.
 
 These commands are shorthand only. They do not bypass solution agreement,
 scoped ledger rules, validation freshness, confidence thresholds, remote-write

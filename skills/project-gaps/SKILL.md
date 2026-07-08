@@ -1,6 +1,6 @@
 ---
 name: project-gaps
-description: Use when the user asks to find or implement $project-gaps/project gaps in a package or folder, set a confidence closure target such as 95% or 99%, find build, CI, Makefile, release, setup, validation, command discovery, or repository workflow gaps, uses Work PROJECT-1 or Agent goal work PROJECT-1, asks about project gap IDs such as PROJECT-1, asks what the fix is for PROJECT-1, asks to fix or verify PROJECT-1, or says PROJECT-1 is done. Find concrete repository workflow and project plumbing improvements; record scoped PROJECTS.md entries; later propose and implement agreed fixes one at a time.
+description: Use when the user asks to find or implement $project-gaps/project gaps in a package or folder, set a confidence closure target such as 95% or 99%, find build, CI, Makefile, release, setup, validation, command discovery, or repository workflow gaps, uses Start PROJECT-1 or Approved PROJECT-1 with agents and a goal, asks about project gap IDs such as PROJECT-1, asks what the fix is for PROJECT-1, asks to fix or verify PROJECT-1, or uses Done PROJECT-1. Find concrete repository workflow and project plumbing improvements; record scoped PROJECTS.md entries; later propose and implement agreed fixes one at a time.
 ---
 
 # Project Gaps
@@ -96,7 +96,7 @@ These project-gap implementation rules remain mandatory:
 - Use `$doc-standards` when the project change affects public commands, Make
   targets, setup, validation, release, configuration, or documented workflows.
 - Use `$change-validation` when selecting validation commands.
-- Report `Red`, `Green`, `Refactor`, and `Validation` entries. `Red` and `Green` must each paste the actual command and its real output using the same command/selector; a label without pasted output is not acceptable, and work where red was never observed before implementation must be labeled `test-after (not TDD)` with the reason instead of a TDD cycle. Use `Refactor: none (<reason>)` when no cleanup was needed after green. Ask the human to verify and say `PROJECT-N is done`.
+- Report `Red`, `Green`, `Refactor`, and `Validation` entries. `Red` and `Green` must each paste the actual command and its real output using the same command/selector; a label without pasted output is not acceptable, and work where red was never observed before implementation must be labeled `test-after (not TDD)` with the reason instead of a TDD cycle. Use `Refactor: none (<reason>)` when no cleanup was needed after green. Ask the human to verify and say `Done PROJECT-N`.
 
 ## References
 

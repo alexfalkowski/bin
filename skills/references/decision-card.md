@@ -29,9 +29,10 @@ Full context, evidence, and alternatives: see ID-N in its ledger.
 
 Approval command:
 
-- `Approved. Continue.` approves this proposal and starts implementation.
-- `Agent approved. Continue.` approves this proposal and authorizes sub-agents
-  for implementation or fresh review when useful.
+- `Approved ID-N` approves this proposal and starts implementation.
+- `Approved ID-N with agents` approves this proposal and authorizes sub-agents
+  for implementation or fresh review when useful. The `with a goal` and
+  `with agents and a goal` tails apply here too.
 ````
 
 ## Add When Warranted
