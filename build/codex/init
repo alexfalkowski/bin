@@ -3,7 +3,7 @@
 #
 # Creates a .agents/skills symlink for shared skills, a .codex/config.toml
 # symlink for the shared permission profile, and a .codex/rules/bin.rules
-# symlink for shared host-execution guardrails. Safe to run repeatedly;
+# symlink for shared execution guardrails. Safe to run repeatedly;
 # repo-owned real config and rule files are never overwritten.
 
 set -eo pipefail

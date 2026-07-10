@@ -649,19 +649,16 @@ Target-specific rules:
   invocation differs, cover both. `build/codex/init` (via `make codex-init`)
   wires Codex by symlinking `.agents/skills` to `skills/`, `.codex/config.toml`
   to the shared permission profile, and `.codex/rules/bin.rules` to the shared
-  host-execution guardrails; repo-owned real config and rule files are left
+  execution guardrails; repo-owned real config and rule files are left
   untouched. The project must be trusted before Codex loads project config and
   rules, and permission profiles require Codex 0.138.0 or later. The shared
-  profile makes workspace `.git` metadata writable for routine staging and
-  commits, grants write access to the standard Go, RuboCop, and Trivy caches plus
-  the macOS golangci-lint cache, grants read-only access to common host credential
-  locations, and allows outbound internet access. The shared rules allow `make
-  specs`, `make features`, `make coverage`, `make fuzzes`, and `make benchmarks`
-  to run outside the sandbox without prompting. Use the profile only in trusted
-  repositories
-  because sandboxed commands can transmit readable credentials and host-allowed
-  Make targets inherit the user's access. Remote and destructive Git operations
-  remain governed by the shared rules and explicit workflow permission gates.
+  profile selects `:danger-full-access`, so commands run without filesystem or
+  network sandbox restrictions. Approval remains `on-request`; shared rules
+  require approval for recognized remote writes and destructive operations and
+  forbid catastrophic commands. Use the profile only in trusted repositories
+  because every command, hook, and dependency script inherits the user's host
+  access. The shared rules and explicit workflow permission gates remain in
+  force, but the rules are not a filesystem or network sandbox.
   Per-machine additions belong in `~/.codex/config.toml` and `~/.codex/rules/`.
   `build/claude/init` (via `make claude-init`)
   wires Claude Code by symlinking `.claude/skills` to `skills/`, symlinking

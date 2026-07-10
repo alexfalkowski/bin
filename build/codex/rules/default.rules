@@ -1,28 +1,6 @@
-# Shared host-execution guardrails for repositories wired through
-# `make codex-init`. Routine workspace commands stay sandboxed; remote-write,
+# Shared execution guardrails for repositories wired through `make codex-init`.
+# Commands run without sandbox restrictions by default; remote-write,
 # destructive, and external-service commands remain approval-gated.
-
-prefix_rule(
-    pattern = [
-        "make",
-        ["specs", "features", "coverage", "fuzzes", "benchmarks"],
-    ],
-    decision = "allow",
-    justification = "Supported spec, feature, coverage, fuzz, and benchmark targets may run outside the sandbox without prompting.",
-    match = [
-        "make specs",
-        "make specs package=internal/foo",
-        "make features",
-        "make coverage",
-        "make fuzzes package=internal/foo name=FuzzDecode",
-        "make benchmarks",
-    ],
-    not_match = [
-        "make fuzz",
-        "make benchmark",
-        "make specs-lint",
-    ],
-)
 
 prefix_rule(
     pattern = [
