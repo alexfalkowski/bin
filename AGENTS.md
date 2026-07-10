@@ -656,8 +656,9 @@ Target-specific rules:
   commits, grants write access to the standard Go, RuboCop, and Trivy caches plus
   the macOS golangci-lint cache, grants read-only access to common host credential
   locations, and allows outbound internet access. The shared rules allow `make
-  specs`, `make coverage`, `make fuzzes`, and `make benchmarks` to run outside
-  the sandbox without prompting. Use the profile only in trusted repositories
+  specs`, `make features`, `make coverage`, `make fuzzes`, and `make benchmarks`
+  to run outside the sandbox without prompting. Use the profile only in trusted
+  repositories
   because sandboxed commands can transmit readable credentials and host-allowed
   Make targets inherit the user's access. Remote and destructive Git operations
   remain governed by the shared rules and explicit workflow permission gates.
