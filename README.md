@@ -100,6 +100,12 @@ catastrophic commands. Codex may therefore complete routine work without
 interrupting the user while retaining the explicit permission gates in
 `AGENTS.md`.
 
+Within the workspace, the profile denies `.env`, `.env.*`, and `.envrc` files
+at the repository root and in nested directories. It does not blanket-deny PEM
+files because dependencies can vendor public CA bundles in that format; trusted
+repository commands can therefore read and modify workspace PEM files like
+other workspace files.
+
 > [!WARNING]
 > The shared profile is for trusted repositories. Sandboxed commands can read
 > SSH, AWS, netrc, Docker, Kubernetes, and GitHub CLI credentials and can send
@@ -117,7 +123,8 @@ per-machine additions in `~/.codex/config.toml` and
 `~/.codex/rules/default.rules`; Codex also records accepted persistent command
 prefixes in that user rules file. Re-run `make codex-init` only when the shared
 paths move. Updates to the shared profile or rules propagate with the next
-`bin` submodule update.
+`bin` submodule update; start a new Codex session afterward so its sandbox uses
+the updated profile.
 
 Codex reads `AGENTS.md` separately for repository instructions. Downstream
 repositories should still point agents at the shared instructions instead of
