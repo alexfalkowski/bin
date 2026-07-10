@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
-# Wire the current repository for Codex from the shared bin skills.
+# Wire the current repository for Codex from the shared bin configuration.
 #
-# Creates a .agents/skills symlink to the shared skills directory so Codex can
-# discover repo-scoped skills for explicit $skill invocation. Safe to run
-# repeatedly.
+# Creates a .agents/skills symlink for shared skills, a .codex/config.toml
+# symlink for the shared permission profile, and a .codex/rules/bin.rules
+# symlink for shared host-execution guardrails. Safe to run repeatedly;
+# repo-owned real config and rule files are never overwritten.
 
 set -eo pipefail
 
@@ -12,9 +13,21 @@ bin_root="${BIN_ROOT:-$(cd "$script_dir/../.." && pwd -P)}"
 project_root="$(pwd -P)"
 
 skills_src="$bin_root/skills"
+config_src="$bin_root/build/codex/config.toml"
+rules_src="$bin_root/build/codex/rules/default.rules"
 
 if [[ ! -d $skills_src ]]; then
   printf 'shared skills not found: %s\n' "$skills_src" >&2
+  exit 1
+fi
+
+if [[ ! -f $config_src ]]; then
+  printf 'shared Codex config not found: %s\n' "$config_src" >&2
+  exit 1
+fi
+
+if [[ ! -f $rules_src ]]; then
+  printf 'shared Codex rules not found: %s\n' "$rules_src" >&2
   exit 1
 fi
 
@@ -26,5 +39,37 @@ mkdir -p "$project_root/.agents"
 rel_skills="$(relpath "$skills_src" "$project_root/.agents")"
 ln -sfn "$rel_skills" "$project_root/.agents/skills"
 
+mkdir -p "$project_root/.codex"
+
+config_dst="$project_root/.codex/config.toml"
+rel_config=""
+if [[ -e $config_dst && ! -L $config_dst ]]; then
+  printf 'leaving repo-owned %s in place (not a symlink)\n' "$config_dst" >&2
+else
+  rel_config="$(relpath "$config_src" "$project_root/.codex")"
+  ln -sfn "$rel_config" "$config_dst"
+fi
+
+rules_dir="$project_root/.codex/rules"
+rel_rules=""
+if [[ -L $rules_dir ]]; then
+  printf 'leaving repo-owned %s in place (symlinked directory)\n' "$rules_dir" >&2
+else
+  mkdir -p "$rules_dir"
+  rules_dst="$rules_dir/bin.rules"
+  if [[ -e $rules_dst && ! -L $rules_dst ]]; then
+    printf 'leaving repo-owned %s in place (not a symlink)\n' "$rules_dst" >&2
+  else
+    rel_rules="$(relpath "$rules_src" "$rules_dir")"
+    ln -sfn "$rel_rules" "$rules_dst"
+  fi
+fi
+
 printf 'Codex wired for %s\n' "$project_root"
 printf '  .agents/skills -> %s\n' "$rel_skills"
+if [[ -n $rel_config ]]; then
+  printf '  .codex/config.toml -> %s\n' "$rel_config"
+fi
+if [[ -n $rel_rules ]]; then
+  printf '  .codex/rules/bin.rules -> %s\n' "$rel_rules"
+fi

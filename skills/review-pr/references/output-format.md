@@ -25,7 +25,7 @@ unprefixed subject
 
 ## Review Target
 
-- command: `make msg="..." desc_file="..." review`
+- command: `make review msg="..." desc_file="..."`
   result: passed
   pr: https://github.com/org/repo/pull/123
 

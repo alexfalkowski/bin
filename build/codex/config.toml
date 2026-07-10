@@ -1,0 +1,37 @@
+# Shared Codex permissions for repositories wired through `make codex-init`.
+approval_policy = "on-request"
+approvals_reviewer = "user"
+default_permissions = "shared-development"
+
+[permissions.shared-development]
+description = "Autonomous workspace development with credential files denied."
+extends = ":workspace"
+
+[permissions.shared-development.filesystem]
+glob_scan_max_depth = 12
+"~/.ssh" = "deny"
+"~/.aws" = "deny"
+"~/.netrc" = "deny"
+"~/.docker/config.json" = "deny"
+"~/.kube/config" = "deny"
+"~/.config/gh" = "deny"
+"~/.cache/go-build" = "write"
+"~/.cache/rubocop_cache" = "write"
+"~/.cache/trivy" = "write"
+"~/Library/Caches/go-build" = "write"
+"~/Library/Caches/trivy" = "write"
+"~/go/pkg/mod" = "write"
+
+[permissions.shared-development.filesystem.":workspace_roots"]
+".git" = "write"
+".env" = "deny"
+".env.*" = "deny"
+".envrc" = "deny"
+"*.pem" = "deny"
+"**/.env" = "deny"
+"**/.env.*" = "deny"
+"**/.envrc" = "deny"
+"**/*.pem" = "deny"
+
+[permissions.shared-development.network]
+enabled = false

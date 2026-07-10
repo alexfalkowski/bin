@@ -646,7 +646,17 @@ Target-specific rules:
   behavior changes.
 - Keep skills tool-agnostic. `skills/<name>/SKILL.md` is shared by Codex and
   Claude Code, so do not hardcode a single assistant; where attribution or
-  invocation differs, cover both. `build/claude/init` (via `make claude-init`)
+  invocation differs, cover both. `build/codex/init` (via `make codex-init`)
+  wires Codex by symlinking `.agents/skills` to `skills/`, `.codex/config.toml`
+  to the shared permission profile, and `.codex/rules/bin.rules` to the shared
+  host-execution guardrails; repo-owned real config and rule files are left
+  untouched. The project must be trusted before Codex loads project config and
+  rules, and permission profiles require Codex 0.138.0 or later. The shared
+  profile makes workspace `.git` metadata writable for routine staging and
+  commits; remote and destructive Git operations remain governed by the shared
+  rules and explicit workflow permission gates. Per-machine additions belong
+  in `~/.codex/config.toml` and `~/.codex/rules/`.
+  `build/claude/init` (via `make claude-init`)
   wires Claude Code by symlinking `.claude/skills` to `skills/`, symlinking
   `.claude/settings.json` to the shared `build/claude/settings.json`
   permissions baseline (unless the repo owns a real, non-symlink

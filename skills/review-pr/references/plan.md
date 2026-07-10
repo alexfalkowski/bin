@@ -65,6 +65,6 @@ repository root and keep `bin/` as shared guidance.
 12. Read `references/summary-format.md`.
 13. Draft the lowercase, unprefixed `msg` and multiline Markdown `desc`.
 14. Write `desc` to a temporary file.
-15. Run `make msg="..." desc_file="$desc_file" review`.
+15. Run `make review msg="..." desc_file="$desc_file"`.
 16. Read `references/output-format.md`.
 17. Report the result in the required output format.
