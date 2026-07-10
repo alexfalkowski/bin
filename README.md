@@ -108,14 +108,19 @@ include bin/build/make/claude.mak
 make claude-init
 ```
 
-This creates a `.claude/skills` symlink to `bin/skills` and a managed block in
-`CLAUDE.md` that imports the local and shared `AGENTS.md`. Both are committed, so
-every later clone works with no per-machine setup beyond the one-time workspace
-trust prompt. Invoke a skill as a slash command, for example `/code-review`.
-Re-run `make claude-init` only when the shared skills directory moves; adding a
-new skill needs no downstream change because the symlink targets the whole
-`skills/` directory. Wiring the `*-template` repositories once pre-wires every
-repository generated from them.
+This creates a `.claude/skills` symlink to `bin/skills`, a `.claude/settings.json`
+symlink to the shared permissions baseline in `bin/build/claude/settings.json`
+(unless the repository owns a real, non-symlink `settings.json`), and a managed
+block in `CLAUDE.md` that imports the local and shared `AGENTS.md`. All are
+committed, so every later clone works with no per-machine setup beyond the
+one-time workspace trust prompt. Invoke a skill as a slash command, for example
+`/code-review`. Re-run `make claude-init` only when the shared skills directory
+moves; adding a new skill or updating the permissions baseline needs no
+downstream change because the symlinks target shared paths that follow `bin`.
+Put per-repository or per-machine permission tweaks in the gitignored
+`.claude/settings.local.json`, which Claude Code merges over the baseline.
+Wiring the `*-template` repositories once pre-wires every repository generated
+from them.
 
 Update `AGENTS.md` when the shared skill set, composition rules, or repository
 workflow guidance changes.

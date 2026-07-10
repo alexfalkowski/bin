@@ -647,9 +647,14 @@ Target-specific rules:
 - Keep skills tool-agnostic. `skills/<name>/SKILL.md` is shared by Codex and
   Claude Code, so do not hardcode a single assistant; where attribution or
   invocation differs, cover both. `build/claude/init` (via `make claude-init`)
-  wires Claude Code by symlinking `.claude/skills` to `skills/` and importing
-  `AGENTS.md` from `CLAUDE.md`; the symlink targets the whole directory, so
-  adding a skill needs no downstream re-wiring.
+  wires Claude Code by symlinking `.claude/skills` to `skills/`, symlinking
+  `.claude/settings.json` to the shared `build/claude/settings.json`
+  permissions baseline (unless the repo owns a real, non-symlink
+  `settings.json`), and importing `AGENTS.md` from `CLAUDE.md`; the symlinks
+  target shared paths, so updating skills or the permissions baseline needs no
+  downstream re-wiring, only a `git submodule update`. Per-repo or per-machine
+  permission tweaks belong in the gitignored `.claude/settings.local.json`,
+  which Claude Code merges over the baseline.
 - Treat skills as maintained artifacts and review them when project workflow,
   tooling, model behavior, or team conventions change.
 - Treat external skills like third-party dependencies. Use `security-audit` with

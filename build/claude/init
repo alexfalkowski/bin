@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 # Wire the current repository for Claude Code from the shared bin skills.
 #
-# Creates a .claude/skills symlink to the shared skills directory and a managed
-# block in CLAUDE.md that imports the shared (and any local) agent instructions.
-# Safe to run repeatedly; only the managed CLAUDE.md block is rewritten.
+# Creates a .claude/skills symlink to the shared skills directory, a
+# .claude/settings.json symlink to the shared permissions baseline, and a
+# managed block in CLAUDE.md that imports the shared (and any local) agent
+# instructions. Safe to run repeatedly; only the managed CLAUDE.md block is
+# rewritten, and a repo-owned real settings.json is never overwritten.
 
 set -eo pipefail
 
@@ -12,6 +14,7 @@ bin_root="${BIN_ROOT:-$(cd "$script_dir/../.." && pwd -P)}"
 project_root="$(pwd -P)"
 
 skills_src="$bin_root/skills"
+settings_src="$bin_root/build/claude/settings.json"
 shared_agents="$bin_root/AGENTS.md"
 
 if [[ ! -d $skills_src ]]; then
@@ -27,6 +30,17 @@ relpath() {
 mkdir -p "$project_root/.claude"
 rel_skills="$(relpath "$skills_src" "$project_root/.claude")"
 ln -sfn "$rel_skills" "$project_root/.claude/skills"
+
+# 1b. Link the shared permissions baseline, unless this repo owns a real
+# settings.json (a plain file is treated as human-owned and left untouched).
+settings_dst="$project_root/.claude/settings.json"
+rel_settings=""
+if [[ -e $settings_dst && ! -L $settings_dst ]]; then
+  printf 'leaving repo-owned %s in place (not a symlink)\n' "$settings_dst" >&2
+else
+  rel_settings="$(relpath "$settings_src" "$project_root/.claude")"
+  ln -sfn "$rel_settings" "$settings_dst"
+fi
 
 # 2. Build the CLAUDE.md import list: local instructions first, then shared.
 imports=()
@@ -59,4 +73,7 @@ RUBY
 
 printf 'Claude Code wired for %s\n' "$project_root"
 printf '  .claude/skills -> %s\n' "$rel_skills"
+if [[ -n $rel_settings ]]; then
+  printf '  .claude/settings.json -> %s\n' "$rel_settings"
+fi
 printf '  CLAUDE.md imports: %s\n' "${imports[*]}"
