@@ -91,15 +91,19 @@ an existing real config can merge the shared settings explicitly.
 
 The permission profile requires Codex 0.138.0 or later. It allows normal edits
 inside the workspace, including Git metadata for routine staging and commits,
-permits the standard Go, RuboCop, and Trivy caches, denies common credential
-files to sandboxed commands, blocks sandboxed command network access by
-default, and sends legitimate escalation requests to the user for approval.
-Making `.git` writable also permits sandboxed commands to
-change repository metadata, configuration, and hooks; use the profile only in
-trusted repositories. The rules classify remote writes and destructive
-operations for approval and forbid catastrophic commands. Codex may therefore
-complete routine work without interrupting the user while retaining the
-explicit permission gates in `AGENTS.md`.
+permits the standard Go, RuboCop, and Trivy caches, grants read-only access to
+common host credential locations, and allows outbound internet access. The
+rules classify remote writes and destructive operations for approval and
+forbid catastrophic commands. Codex may therefore complete routine work
+without interrupting the user while retaining the explicit permission gates in
+`AGENTS.md`.
+
+> [!WARNING]
+> The shared profile is for trusted repositories. Sandboxed commands can read
+> SSH, AWS, netrc, Docker, Kubernetes, and GitHub CLI credentials and can send
+> data over the internet. Making `.git` writable also permits commands to change
+> repository metadata, configuration, and hooks. Review commands and dependency
+> scripts before authorizing workflows that use host credentials.
 
 Legacy `sandbox_mode` settings and the `--sandbox` CLI flag take precedence over
 permission profiles. Remove those overrides when the shared profile should be
