@@ -42,13 +42,24 @@ AI-assisted-by: [Codex](https://openai.com/codex/)
 AI-assisted-by: [Claude Code](https://claude.com/claude-code)
 ```
 
-- Write the multiline Markdown `desc` to a temporary file with `mktemp`, then run the review target with the drafted subject and file path:
+- Create the temporary `desc_file` yourself; never ask the user to provide its
+  path or populate it. Run this portable command and capture the returned path:
 
 ```bash
-make review msg="unprefixed subject" desc_file="$desc_file"
+mktemp "${TMPDIR:-/tmp}/review-pr.XXXXXX"
 ```
 
-- Pass `desc_file` as the path to the multiline Markdown summary; do not flatten the summary into a single line or pass Markdown through a quoted shell argument.
+- Write the multiline Markdown `desc` to that file, then substitute the returned
+  path directly into the review command so the guarded Make target remains the
+  command prefix:
+
+```bash
+make review msg="unprefixed subject" desc_file="/returned/path/review-pr.ABC123"
+```
+
+- Remove the temporary file after `make review`, including when the review
+  command fails. Do not flatten the summary into a single line or pass Markdown
+  through a quoted shell argument.
 - Read `references/output-format.md`, then report the result using that exact
   structure.
 

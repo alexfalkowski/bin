@@ -19,6 +19,7 @@ glob_scan_max_depth = 12
 "~/.cache/rubocop_cache" = "write"
 "~/.cache/trivy" = "write"
 "~/Library/Caches/go-build" = "write"
+"~/Library/Caches/golangci-lint" = "write"
 "~/Library/Caches/trivy" = "write"
 "~/go/pkg/mod" = "write"
 
