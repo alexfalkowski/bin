@@ -1,4 +1,4 @@
 interface:
   display_name: "Review PR"
-  short_description: "Prepare an approved review PR flow"
-  default_prompt: "Use $review-pr when I explicitly ask to commit, push, and open or update a review PR; maintain its active plan, use runtime goals only when authorized, use a fresh review gate for substantial changes, include review-time documentation judgment through $doc-standards, and put the guarded Make review target before its variable assignments."
+  short_description: "Prepare a portable approved review PR flow"
+  default_prompt: "Use $review-pr when I explicitly ask to commit, push, and open or update a review PR; maintain its active plan, use runtime goals only when authorized, use a fresh review gate for substantial changes, include review-time documentation judgment through $doc-standards, create and clean up a portable desc_file without asking me for it, and put the guarded Make review target before its variable assignments."

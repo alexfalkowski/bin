@@ -653,12 +653,15 @@ Target-specific rules:
   untouched. The project must be trusted before Codex loads project config and
   rules, and permission profiles require Codex 0.138.0 or later. The shared
   profile makes workspace `.git` metadata writable for routine staging and
-  commits, grants read-only access to common host credential locations, and
-  allows outbound internet access. Use it only in trusted repositories because
-  sandboxed commands can transmit readable credentials. Remote and destructive
-  Git operations remain governed by the shared rules and explicit workflow
-  permission gates. Per-machine additions belong in `~/.codex/config.toml` and
-  `~/.codex/rules/`.
+  commits, grants write access to the standard Go, RuboCop, and Trivy caches plus
+  the macOS golangci-lint cache, grants read-only access to common host credential
+  locations, and allows outbound internet access. The shared rules allow `make
+  specs`, `make coverage`, `make fuzzes`, and `make benchmarks` to run outside
+  the sandbox without prompting. Use the profile only in trusted repositories
+  because sandboxed commands can transmit readable credentials and host-allowed
+  Make targets inherit the user's access. Remote and destructive Git operations
+  remain governed by the shared rules and explicit workflow permission gates.
+  Per-machine additions belong in `~/.codex/config.toml` and `~/.codex/rules/`.
   `build/claude/init` (via `make claude-init`)
   wires Claude Code by symlinking `.claude/skills` to `skills/`, symlinking
   `.claude/settings.json` to the shared `build/claude/settings.json`

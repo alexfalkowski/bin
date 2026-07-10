@@ -64,7 +64,11 @@ repository root and keep `bin/` as shared guidance.
     PR with unresolved findings documented.
 12. Read `references/summary-format.md`.
 13. Draft the lowercase, unprefixed `msg` and multiline Markdown `desc`.
-14. Write `desc` to a temporary file.
-15. Run `make review msg="..." desc_file="$desc_file"`.
-16. Read `references/output-format.md`.
-17. Report the result in the required output format.
+14. Create `desc_file` yourself with
+    `mktemp "${TMPDIR:-/tmp}/review-pr.XXXXXX"`; never ask the user for the path
+    or file contents. Capture the returned path and write `desc` to it.
+15. Substitute the returned path directly into
+    `make review msg="..." desc_file="/returned/path/review-pr.ABC123"`.
+16. Remove `desc_file`, including when `make review` fails.
+17. Read `references/output-format.md`.
+18. Report the result in the required output format.
