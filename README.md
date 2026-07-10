@@ -153,9 +153,13 @@ downstream change because the symlinks target shared paths that follow `bin`.
 The baseline sets `sandbox.enabled: false` to match the Codex
 `:danger-full-access` posture, so commands run without Claude Code's bash
 sandbox. The `permissions` allow, ask, and deny arrays are the guardrails:
-`allow` keeps routine dev commands prompt-free, `ask` gates recognized remote
-writes and destructive operations, and `deny` forbids catastrophic commands.
-Explicit workflow permission gates in `AGENTS.md` also remain in force.
+`allow` lets Claude read, write, and run anything locally without prompts
+(`Bash(*)` plus unrestricted `Read`/`Edit`/`Write`), `ask` gates recognized
+remote writes and destructive operations, and `deny` forbids catastrophic
+commands. Like Codex `:danger-full-access`, the baseline applies no filesystem
+sandbox and no secret-read restrictions; only the named remote-write and
+destructive command shapes prompt or are refused. Explicit workflow permission
+gates in `AGENTS.md` also remain in force.
 
 > [!WARNING]
 > The shared baseline is only for trusted repositories. Every command, Make

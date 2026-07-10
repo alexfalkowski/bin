@@ -670,10 +670,14 @@ Target-specific rules:
   `sandbox.enabled: false` to match the Codex `:danger-full-access` posture, so
   commands run without Claude Code's bash sandbox; the `permissions`
   allow/ask/deny arrays are the guardrails (equivalent to the Codex
-  `default.rules`), where `allow` keeps routine dev commands prompt-free, `ask`
-  gates recognized remote writes and destructive operations, and `deny` forbids
-  catastrophic commands. Use the baseline only in trusted repositories because
-  every command and hook inherits the user's host access. Per-repo or
+  `default.rules`), where `allow` lets Claude read, write, and run anything
+  locally without prompts (`Bash(*)` plus unrestricted `Read`/`Edit`/`Write`),
+  `ask` gates recognized remote writes and destructive operations, and `deny`
+  forbids catastrophic commands. Like Codex `:danger-full-access`, the baseline
+  applies no filesystem sandbox and no secret-read restrictions; only the
+  named remote-write and destructive command shapes prompt or are refused. Use
+  the baseline only in trusted repositories because every command and hook
+  inherits the user's host access, including local credential files. Per-repo or
   per-machine permission tweaks belong in the gitignored
   `.claude/settings.local.json`, which Claude Code merges over the baseline.
 - Treat skills as maintained artifacts and review them when project workflow,
