@@ -45,7 +45,7 @@ AI-assisted-by: [Claude Code](https://claude.com/claude-code)
 - Write the multiline Markdown `desc` to a temporary file with `mktemp`, then run the review target with the drafted subject and file path:
 
 ```bash
-make msg="unprefixed subject" desc_file="$desc_file" review
+make review msg="unprefixed subject" desc_file="$desc_file"
 ```
 
 - Pass `desc_file` as the path to the multiline Markdown summary; do not flatten the summary into a single line or pass Markdown through a quoted shell argument.

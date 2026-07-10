@@ -1,0 +1,325 @@
+# Shared host-execution guardrails for repositories wired through
+# `make codex-init`. Routine workspace commands stay sandboxed; Codex's
+# user approval reviewer handles exceptional escalations.
+
+prefix_rule(
+    pattern = [
+        "make",
+        [
+            "push",
+            "push-docker",
+            "proto-push",
+            "release-docker",
+            "new-release",
+            "manifest-docker",
+            "sync",
+            "force",
+            "reset",
+            "purge",
+            "purge-local",
+            "purge-remote",
+            "delete",
+            "delete-version",
+            "start",
+            "stop",
+            "pr",
+            "review",
+            "ready",
+            "draft",
+            "merge",
+        ],
+    ],
+    decision = "prompt",
+    justification = "Remote-write, destructive, and external-service Make targets require explicit authorization.",
+    match = [
+        "make push",
+        "make proto-push",
+        "make reset",
+        "make review",
+        "make start",
+    ],
+    not_match = [
+        "make lint",
+        "make specs",
+        "make features",
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "push"],
+    decision = "prompt",
+    justification = "Pushing changes updates a remote repository.",
+    match = [
+        "git push",
+        "git push origin feature",
+        "git push --force-with-lease origin feature",
+    ],
+    not_match = [
+        "git fetch origin",
+        "git status",
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "push", ["--force", "-f"]],
+    decision = "forbidden",
+    justification = "Use guarded force-push behavior such as `--force-with-lease` instead.",
+    match = [
+        "git push --force origin feature",
+        "git push -f origin feature",
+    ],
+    not_match = [
+        "git push --force-with-lease origin feature",
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "reset", "--hard"],
+    decision = "prompt",
+    justification = "A hard reset can discard uncommitted work.",
+    match = [
+        "git reset --hard",
+        "git reset --hard HEAD~1",
+    ],
+    not_match = [
+        "git reset --soft HEAD~1",
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "clean", ["-f", "-fd", "-df", "-fx", "-fdx"]],
+    decision = "prompt",
+    justification = "Git clean permanently removes untracked files.",
+    match = [
+        "git clean -f",
+        "git clean -fd",
+        "git clean -fdx",
+    ],
+    not_match = [
+        "git clean -n",
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "rebase"],
+    decision = "prompt",
+    justification = "Rebasing rewrites local history and can require conflict resolution.",
+    match = [
+        "git rebase origin/master",
+        "git rebase --continue",
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "branch", "-D"],
+    decision = "prompt",
+    justification = "Force-deleting a branch can discard unmerged work.",
+    match = [
+        "git branch -D feature",
+    ],
+    not_match = [
+        "git branch -d feature",
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "checkout", "--"],
+    decision = "prompt",
+    justification = "Checking out paths can overwrite working-tree changes.",
+    match = [
+        "git checkout -- README.md",
+    ],
+    not_match = [
+        "git checkout feature",
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "restore"],
+    decision = "prompt",
+    justification = "Restoring paths can overwrite working-tree or index changes.",
+    match = [
+        "git restore README.md",
+        "git restore --staged README.md",
+    ],
+)
+
+prefix_rule(
+    pattern = ["gh", "pr", ["create", "merge", "close", "edit", "reopen", "ready", "review", "comment"]],
+    decision = "prompt",
+    justification = "This command changes pull-request state on GitHub.",
+    match = [
+        "gh pr create --draft",
+        "gh pr merge --auto --squash",
+        "gh pr review 123 --approve",
+    ],
+    not_match = [
+        "gh pr view 123",
+        "gh pr checks 123",
+    ],
+)
+
+prefix_rule(
+    pattern = ["gh", "issue", ["create", "close", "edit", "reopen", "comment"]],
+    decision = "prompt",
+    justification = "This command changes issue state on GitHub.",
+    match = [
+        "gh issue create --title bug",
+        "gh issue close 123",
+    ],
+    not_match = [
+        "gh issue view 123",
+        "gh issue list",
+    ],
+)
+
+prefix_rule(
+    pattern = ["gh", "release", ["create", "delete", "edit", "upload"]],
+    decision = "prompt",
+    justification = "This command changes published release state on GitHub.",
+    match = [
+        "gh release create v1.2.3",
+        "gh release delete v1.2.3",
+    ],
+    not_match = [
+        "gh release view v1.2.3",
+        "gh release list",
+    ],
+)
+
+prefix_rule(
+    pattern = ["gem", "push"],
+    decision = "prompt",
+    justification = "Publishing a gem updates a public or private registry.",
+    match = [
+        "gem push package.gem",
+    ],
+)
+
+prefix_rule(
+    pattern = ["npm", ["publish", "unpublish"]],
+    decision = "prompt",
+    justification = "Publishing or removing a package updates a registry.",
+    match = [
+        "npm publish",
+        "npm unpublish package@1.0.0",
+    ],
+    not_match = [
+        "npm test",
+    ],
+)
+
+prefix_rule(
+    pattern = ["rm", ["-rf", "-fr", "-r", "-R"]],
+    decision = "prompt",
+    justification = "Recursive deletion can permanently remove files.",
+    match = [
+        "rm -rf build",
+        "rm -R reports",
+    ],
+    not_match = [
+        "rm file.txt",
+    ],
+)
+
+prefix_rule(
+    pattern = ["rm", ["-rf", "-fr"], ["/", "~", "$HOME"]],
+    decision = "forbidden",
+    justification = "Refuse catastrophic root or home-directory deletion.",
+    match = [
+        "rm -rf /",
+        "rm -fr ~",
+        "rm -rf $HOME",
+    ],
+    not_match = [
+        "rm -rf build",
+    ],
+)
+
+prefix_rule(
+    pattern = ["docker", "system", "prune"],
+    decision = "prompt",
+    justification = "Docker system pruning can remove shared images, containers, and caches.",
+    match = [
+        "docker system prune",
+        "docker system prune --all",
+    ],
+)
+
+prefix_rule(
+    pattern = ["docker", ["rm", "rmi"]],
+    decision = "prompt",
+    justification = "Removing Docker containers or images changes shared host state.",
+    match = [
+        "docker rm container",
+        "docker rmi image",
+    ],
+)
+
+prefix_rule(
+    pattern = ["docker", "volume", "rm"],
+    decision = "prompt",
+    justification = "Removing Docker volumes can permanently delete data.",
+    match = [
+        "docker volume rm data",
+    ],
+)
+
+prefix_rule(
+    pattern = ["kubectl", ["apply", "create", "delete", "edit", "patch", "replace", "scale"]],
+    decision = "prompt",
+    justification = "This command changes Kubernetes cluster state.",
+    match = [
+        "kubectl apply -f deployment.yml",
+        "kubectl delete pod service-123",
+        "kubectl scale deployment service --replicas=3",
+    ],
+    not_match = [
+        "kubectl get pods",
+        "kubectl logs service-123",
+    ],
+)
+
+prefix_rule(
+    pattern = ["sudo"],
+    decision = "forbidden",
+    justification = "Run privileged commands manually after reviewing them.",
+    match = [
+        "sudo make install",
+        "sudo rm file.txt",
+    ],
+)
+
+prefix_rule(
+    pattern = [["mkfs", "mkfs.ext2", "mkfs.ext3", "mkfs.ext4", "mkfs.xfs", "mkfs.btrfs", "newfs"]],
+    decision = "forbidden",
+    justification = "Filesystem creation can destroy data; run it manually after reviewing the target device.",
+    match = [
+        "mkfs /dev/disk2",
+        "newfs /dev/disk2",
+    ],
+)
+
+prefix_rule(
+    pattern = ["diskutil", ["eraseDisk", "eraseVolume", "partitionDisk", "deleteVolume"]],
+    decision = "forbidden",
+    justification = "Disk erasure and partitioning can destroy data; run them manually after reviewing the target device.",
+    match = [
+        "diskutil eraseDisk APFS External /dev/disk2",
+        "diskutil partitionDisk /dev/disk2 GPT APFS Data 100%",
+    ],
+    not_match = [
+        "diskutil list",
+        "diskutil info /dev/disk2",
+    ],
+)
+
+prefix_rule(
+    pattern = ["dd"],
+    decision = "prompt",
+    justification = "Raw copying can overwrite devices or large files.",
+    match = [
+        "dd if=image.iso of=/dev/disk2",
+        "dd if=/dev/zero of=output.bin bs=1m count=1",
+    ],
+)

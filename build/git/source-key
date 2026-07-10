@@ -18,7 +18,7 @@ else
   exit 1
 fi
 
-git ls-files -z . ':!:bin' ':!:bin/**' ':!:.agents' ':!:.agents/**' ':!:.claude' ':!:.claude/**' > "$files"
+git ls-files -z . ':!:bin' ':!:bin/**' ':!:.agents' ':!:.agents/**' ':!:.claude' ':!:.claude/**' ':!:.codex' ':!:.codex/**' > "$files"
 xargs -0 "${hash_command[@]}" < "$files" > "$hashes"
 
 key="$(cut -d" " -f1 "$hashes" | "${hash_command[@]}")"
