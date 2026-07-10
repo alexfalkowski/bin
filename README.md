@@ -93,8 +93,9 @@ The permission profile requires Codex 0.138.0 or later. It allows normal edits
 inside the workspace, including Git metadata for routine staging and commits,
 permits the standard Go, RuboCop, and Trivy caches plus the macOS golangci-lint
 cache, grants read-only access to common host credential locations, and allows
-outbound internet access. The rules allow `make specs`, `make coverage`, `make
-fuzzes`, and `make benchmarks` to run outside the sandbox without prompting,
+outbound internet access. The rules allow `make specs`, `make features`, `make
+coverage`, `make fuzzes`, and `make benchmarks` to run outside the sandbox
+without prompting,
 classify remote writes and destructive operations for approval, and forbid
 catastrophic commands. Codex may therefore complete routine work without
 interrupting the user while retaining the explicit permission gates in

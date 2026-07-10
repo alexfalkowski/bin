@@ -5,19 +5,19 @@
 prefix_rule(
     pattern = [
         "make",
-        ["specs", "coverage", "fuzzes", "benchmarks"],
+        ["specs", "features", "coverage", "fuzzes", "benchmarks"],
     ],
     decision = "allow",
-    justification = "Supported test, coverage, fuzz, and benchmark targets may run outside the sandbox without prompting.",
+    justification = "Supported spec, feature, coverage, fuzz, and benchmark targets may run outside the sandbox without prompting.",
     match = [
         "make specs",
         "make specs package=internal/foo",
+        "make features",
         "make coverage",
         "make fuzzes package=internal/foo name=FuzzDecode",
         "make benchmarks",
     ],
     not_match = [
-        "make features",
         "make fuzz",
         "make benchmark",
         "make specs-lint",
