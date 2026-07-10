@@ -83,37 +83,26 @@ make codex-init
 
 This creates a `.agents/skills` symlink to `bin/skills`, a `.codex/config.toml`
 symlink to the shared permission profile in `bin/build/codex/config.toml`, and a
-`.codex/rules/bin.rules` symlink to the shared host-execution guardrails. A
+`.codex/rules/bin.rules` symlink to the shared execution guardrails. A
 repository-owned real config or rule file is left untouched. Every later clone
 can invoke shared skills with `$`, for example `$code-review`, and receives the
 shared permissions after the one-time project trust prompt. Repositories with
 an existing real config can merge the shared settings explicitly.
 
-The permission profile requires Codex 0.138.0 or later. It allows normal edits
-inside the workspace, including Git metadata for routine staging and commits,
-permits the standard Go, RuboCop, and Trivy caches plus the macOS golangci-lint
-cache, grants read-only access to common host credential locations, and allows
-outbound internet access. The rules allow `make specs`, `make features`, `make
-coverage`, `make fuzzes`, and `make benchmarks` to run outside the sandbox
-without prompting,
-classify remote writes and destructive operations for approval, and forbid
-catastrophic commands. Codex may therefore complete routine work without
-interrupting the user while retaining the explicit permission gates in
-`AGENTS.md`.
-
-Within the workspace, the profile denies `.env`, `.env.*`, and `.envrc` files
-at the repository root and in nested directories. It does not blanket-deny PEM
-files because dependencies can vendor public CA bundles in that format; trusted
-repository commands can therefore read and modify workspace PEM files like
-other workspace files.
+The permission profile requires Codex 0.138.0 or later. It selects the built-in
+`:danger-full-access` profile, so commands run without filesystem or network
+sandbox restrictions. Approval remains `on-request`; the shared rules require
+approval for recognized remote writes and destructive operations and forbid
+catastrophic commands. Explicit workflow permission gates in `AGENTS.md` also
+remain in force.
 
 > [!WARNING]
-> The shared profile is for trusted repositories. Sandboxed commands can read
-> SSH, AWS, netrc, Docker, Kubernetes, and GitHub CLI credentials and can send
-> data over the internet. Making `.git` writable also permits commands to change
-> repository metadata, configuration, and hooks. The host-allowed Make targets
-> bypass the sandbox and inherit the user's access. Review commands, Makefiles,
-> and dependency scripts before running them with this profile.
+> The shared profile is only for trusted repositories. Every command, Make
+> target, hook, and dependency script inherits the user's host access: it can
+> read or modify files outside the workspace, access credentials, and send data
+> over the internet. The shared rules cover named risky command shapes; they are
+> not a filesystem or network sandbox. Review executable repository content
+> before running it with this profile.
 
 Legacy `sandbox_mode` settings and the `--sandbox` CLI flag take precedence over
 permission profiles. Remove those overrides when the shared profile should be
@@ -124,8 +113,8 @@ per-machine additions in `~/.codex/config.toml` and
 `~/.codex/rules/default.rules`; Codex also records accepted persistent command
 prefixes in that user rules file. Re-run `make codex-init` only when the shared
 paths move. Updates to the shared profile or rules propagate with the next
-`bin` submodule update; start a new Codex session afterward so its sandbox uses
-the updated profile.
+`bin` submodule update; start a new Codex session afterward so it uses the
+updated permissions.
 
 Codex reads `AGENTS.md` separately for repository instructions. Downstream
 repositories should still point agents at the shared instructions instead of
@@ -191,7 +180,7 @@ Dockerfile lint targets depend on `shellcheck` and `hadolint`;
 - `build/codex/init`: one-time Codex wiring for a consuming repository (run via
   `make codex-init`).
 - `build/codex/config.toml` and `build/codex/rules/default.rules`: shared Codex
-  permission profile and host-execution guardrails.
+  permission profile and execution guardrails.
 - `build/claude/init`: one-time Claude Code wiring for a consuming repository
   (run via `make claude-init`).
 - `build/docker/go/Dockerfile`: shared Go service Dockerfile template.
