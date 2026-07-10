@@ -149,6 +149,22 @@ one-time workspace trust prompt. Invoke a skill as a slash command, for example
 `/code-review`. Re-run `make claude-init` only when the shared skills directory
 moves; adding a new skill or updating the permissions baseline needs no
 downstream change because the symlinks target shared paths that follow `bin`.
+
+The baseline sets `sandbox.enabled: false` to match the Codex
+`:danger-full-access` posture, so commands run without Claude Code's bash
+sandbox. The `permissions` allow, ask, and deny arrays are the guardrails:
+`allow` keeps routine dev commands prompt-free, `ask` gates recognized remote
+writes and destructive operations, and `deny` forbids catastrophic commands.
+Explicit workflow permission gates in `AGENTS.md` also remain in force.
+
+> [!WARNING]
+> The shared baseline is only for trusted repositories. Every command, Make
+> target, hook, and dependency script inherits the user's host access: it can
+> read or modify files outside the workspace, access credentials, and send data
+> over the internet. The permissions arrays cover named risky command shapes;
+> they are not a filesystem or network sandbox. Review executable repository
+> content before running it with this baseline.
+
 Put per-repository or per-machine permission tweaks in the gitignored
 `.claude/settings.local.json`, which Claude Code merges over the baseline.
 Wiring the `*-template` repositories once pre-wires every repository generated

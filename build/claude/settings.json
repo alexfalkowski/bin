@@ -1,5 +1,8 @@
 {
   "defaultMode": "acceptEdits",
+  "sandbox": {
+    "enabled": false
+  },
   "permissions": {
     "allow": [
       "Bash(zsh -lic *)",
@@ -154,10 +157,22 @@
       "Bash(gh pr merge*)",
       "Bash(gh pr close*)",
       "Bash(gh pr edit*)",
+      "Bash(gh pr reopen*)",
+      "Bash(gh pr ready*)",
+      "Bash(gh pr review*)",
+      "Bash(gh pr comment*)",
       "Bash(gh issue create*)",
+      "Bash(gh issue close*)",
+      "Bash(gh issue edit*)",
+      "Bash(gh issue reopen*)",
+      "Bash(gh issue comment*)",
       "Bash(gh release create*)",
+      "Bash(gh release delete*)",
+      "Bash(gh release edit*)",
+      "Bash(gh release upload*)",
       "Bash(gem push*)",
       "Bash(npm publish*)",
+      "Bash(dd *)",
       "Bash(rm -rf *)",
       "Bash(rm -fr *)",
       "Bash(rm -r *)",
@@ -183,6 +198,10 @@
       "Bash(git push -f *)",
       "Bash(mkfs*)",
       "Bash(dd *of=/dev/*)",
+      "Bash(diskutil eraseDisk*)",
+      "Bash(diskutil eraseVolume*)",
+      "Bash(diskutil partitionDisk*)",
+      "Bash(diskutil deleteVolume*)",
       "Read(**/.env)",
       "Read(**/.env.*)",
       "Read(**/.envrc)",
