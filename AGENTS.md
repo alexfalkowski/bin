@@ -666,9 +666,16 @@ Target-specific rules:
   permissions baseline (unless the repo owns a real, non-symlink
   `settings.json`), and importing `AGENTS.md` from `CLAUDE.md`; the symlinks
   target shared paths, so updating skills or the permissions baseline needs no
-  downstream re-wiring, only a `git submodule update`. Per-repo or per-machine
-  permission tweaks belong in the gitignored `.claude/settings.local.json`,
-  which Claude Code merges over the baseline.
+  downstream re-wiring, only a `git submodule update`. The baseline sets
+  `sandbox.enabled: false` to match the Codex `:danger-full-access` posture, so
+  commands run without Claude Code's bash sandbox; the `permissions`
+  allow/ask/deny arrays are the guardrails (equivalent to the Codex
+  `default.rules`), where `allow` keeps routine dev commands prompt-free, `ask`
+  gates recognized remote writes and destructive operations, and `deny` forbids
+  catastrophic commands. Use the baseline only in trusted repositories because
+  every command and hook inherits the user's host access. Per-repo or
+  per-machine permission tweaks belong in the gitignored
+  `.claude/settings.local.json`, which Claude Code merges over the baseline.
 - Treat skills as maintained artifacts and review them when project workflow,
   tooling, model behavior, or team conventions change.
 - Treat external skills like third-party dependencies. Use `security-audit` with
