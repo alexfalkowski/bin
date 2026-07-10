@@ -28,11 +28,9 @@ glob_scan_max_depth = 12
 ".env" = "deny"
 ".env.*" = "deny"
 ".envrc" = "deny"
-"*.pem" = "deny"
 "**/.env" = "deny"
 "**/.env.*" = "deny"
 "**/.envrc" = "deny"
-"**/*.pem" = "deny"
 
 [permissions.shared-development.network]
 enabled = true
