@@ -225,6 +225,20 @@ prefix_rule(
 )
 
 prefix_rule(
+    pattern = ["rm", "-f"],
+    decision = "allow",
+    justification = "Non-recursive forced removal is permitted for temporary-file cleanup.",
+    match = [
+        "rm -f test/reports/output.txt",
+        "rm -f -- /tmp/agent-temp-file",
+    ],
+    not_match = [
+        "rm -rf test/reports",
+        "rm -r test/reports",
+    ],
+)
+
+prefix_rule(
     pattern = ["rm", ["-rf", "-fr"], ["/", "~", "$HOME"]],
     decision = "forbidden",
     justification = "Refuse catastrophic root or home-directory deletion.",

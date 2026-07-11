@@ -92,9 +92,9 @@ an existing real config can merge the shared settings explicitly.
 The permission profile requires Codex 0.138.0 or later. It selects the built-in
 `:danger-full-access` profile, so commands run without filesystem or network
 sandbox restrictions. Approval remains `on-request`; the shared rules require
-approval for recognized remote writes and destructive operations and forbid
-catastrophic commands. Explicit workflow permission gates in `AGENTS.md` also
-remain in force.
+approval for recognized remote writes and recursive destructive operations,
+allow direct non-recursive `rm -f` cleanup, and forbid catastrophic commands.
+Explicit workflow permission gates in `AGENTS.md` also remain in force.
 
 > [!WARNING]
 > The shared profile is only for trusted repositories. Every command, Make
@@ -155,11 +155,12 @@ The baseline sets `sandbox.enabled: false` to match the Codex
 sandbox. The `permissions` allow, ask, and deny arrays are the guardrails:
 `allow` lets Claude read, write, and run anything locally without prompts
 (`Bash(*)` plus unrestricted `Read`/`Edit`/`Write`), `ask` gates recognized
-remote writes and destructive operations, and `deny` forbids catastrophic
-commands. Like Codex `:danger-full-access`, the baseline applies no filesystem
-sandbox and no secret-read restrictions; only the named remote-write and
-destructive command shapes prompt or are refused. Explicit workflow permission
-gates in `AGENTS.md` also remain in force.
+remote writes and recursive destructive operations, and `deny` forbids
+catastrophic commands. Non-recursive `rm -f` cleanup is allowed. Like Codex
+`:danger-full-access`, the baseline applies no filesystem sandbox and no
+secret-read restrictions; only the named remote-write and destructive command
+shapes prompt or are refused. Explicit workflow permission gates in `AGENTS.md`
+also remain in force.
 
 > [!WARNING]
 > The shared baseline is only for trusted repositories. Every command, Make
