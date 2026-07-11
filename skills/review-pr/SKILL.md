@@ -32,6 +32,11 @@ These rules remain mandatory:
 - Draft the `msg` and `desc` from `references/summary-format.md`. Keep `msg`
   lowercase and unprefixed because `make review` adds the branch-derived
   `type(scope):` prefix; do not flatten the multiline Markdown `desc`.
+- Do not hard-wrap `msg` or `desc` content to a fixed column width (for example
+  ~80 characters). Write each subject line, bullet, and paragraph as a single
+  logical line and let GitHub soft-wrap it; insert line breaks only where a real
+  break belongs, between bullets, list items, or paragraphs. This governs the PR
+  and commit text you generate, not this repository's own Markdown files.
 - When attribution is appropriate or requested, append an `AI-assisted-by:`
   footer to the summary instead of a `Co-authored-by:` trailer. Name the
   assistant that actually did the work and link to its home page. Use the entry

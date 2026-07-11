@@ -18,16 +18,13 @@ Use this reference when drafting the `msg` value and PR summary content for `mak
 ```markdown
 ## What
 
-- Describe what changed in terms of behavior, documentation, commands,
-  configuration, or public/reviewer-visible outcomes.
-- Mention the context the code cannot fully tell the reviewer, such as scope,
-  intentional boundaries, compatibility notes, non-goals, or user-facing effect.
+- Describe what changed in terms of behavior, documentation, commands, configuration, or public/reviewer-visible outcomes.
+- Mention the context the code cannot fully tell the reviewer, such as scope, intentional boundaries, compatibility notes, non-goals, or user-facing effect.
 - Avoid implementation mechanics unless they are the observable change.
 
 ## Why
 
-- Explain why the PR matters: the problem, risk, workflow gap, maintenance
-  benefit, or user value it addresses.
+- Explain why the PR matters: the problem, risk, workflow gap, maintenance benefit, or user value it addresses.
 - Make this the selling point of the PR.
 - Do not repeat the What section or rely on the diff to imply motivation.
 
@@ -35,14 +32,13 @@ Use this reference when drafting the `msg` value and PR summary content for `mak
 
 - `command` - passed
 - Mention new or changed tests and what behavior, edge case, or risk they cover.
-- Mention expected CI coverage only as additional verification, not as a
-  replacement for unrun local checks.
-- Call out validation gaps, manual verification still needed, or intentionally
-  scoped testing.
+- Mention expected CI coverage only as additional verification, not as a replacement for unrun local checks.
+- Call out validation gaps, manual verification still needed, or intentionally scoped testing.
 ```
 
 - Do not add markdown, labels, bullets, quotes, or surrounding commentary to `msg`.
 - Do not add extra PR summary sections or alternate titles to `desc`.
+- Do not hard-wrap `msg` or `desc` content to a fixed line width (for example ~80 characters); write each subject, bullet, and paragraph as one logical line and let GitHub soft-wrap it. Insert line breaks only where a real break belongs, between bullets, list items, or paragraphs.
 - When a footer is needed, append it after `## Testing`; footers are allowed and are not sections.
 - If a PR summary section has no entries, write exactly `- None.`
 - Keep the testing section honest about what ran, what passed, and what did not run.
