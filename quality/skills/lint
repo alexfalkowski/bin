@@ -21,6 +21,31 @@ require_pattern() {
   fi
 }
 
+require_ledger_core() {
+  local file="$1"
+
+  require_pattern "$file" "| Field | Value |"
+  require_pattern "$file" "| Status |"
+  require_pattern "$file" "**Summary.**"
+  require_pattern "$file" "### What"
+  require_pattern "$file" "**Current.**"
+  require_pattern "$file" "**Expected.**"
+  require_pattern "$file" "### Why"
+  require_pattern "$file" "**Impact.**"
+  require_pattern "$file" "#### Evidence"
+  require_pattern "$file" "**Claim:**"
+  require_pattern "$file" "**Observed:**"
+  require_pattern "$file" "**Reproduction:**"
+  require_pattern "$file" "**Source:**"
+  require_pattern "$file" "### How"
+  require_pattern "$file" "#### Proposal"
+  require_pattern "$file" "**Keep.**"
+  require_pattern "$file" "#### Alternatives Considered"
+  require_pattern "$file" "#### Definition of Success"
+  require_pattern "$file" "**Validation:**"
+  require_pattern "$file" "#### Situation Map"
+}
+
 reject_pattern() {
   local file="$1"
   local pattern="$2"
@@ -174,12 +199,12 @@ require_pattern skills/code-issues/SKILL.md "Use \`Refactor: none (<reason>)\`"
 require_pattern skills/test-gaps/SKILL.md "state the test execution checklist before editing"
 require_pattern skills/test-gaps/SKILL.md "\`Red\`, \`Green\`, \`Refactor\`"
 require_pattern skills/test-gaps/SKILL.md "Use \`Refactor: none (<reason>)\`"
-require_pattern skills/code-issues/SKILL.md "Reproduction: Smallest supported command"
-require_pattern skills/test-gaps/SKILL.md "Reproduction: Smallest supported command"
-require_pattern skills/doc-gaps/SKILL.md "Reproduction: Smallest reader action"
-require_pattern skills/feature-gaps/SKILL.md "Reproduction: Smallest supported user"
-require_pattern skills/project-gaps/SKILL.md "Reproduction: Smallest supported maintainer"
-require_pattern skills/reliability-gaps/SKILL.md "Reproduction: Smallest supported trigger"
+require_pattern skills/code-issues/SKILL.md "**Reproduction:** Smallest supported command"
+require_pattern skills/test-gaps/SKILL.md "**Reproduction:** Smallest supported command"
+require_pattern skills/doc-gaps/SKILL.md "**Reproduction:** Smallest reader action"
+require_pattern skills/feature-gaps/SKILL.md "**Reproduction:** Smallest supported user"
+require_pattern skills/project-gaps/SKILL.md "**Reproduction:** Smallest supported maintainer"
+require_pattern skills/reliability-gaps/SKILL.md "**Reproduction:** Smallest supported trigger"
 for gap_skill in \
   skills/code-issues/SKILL.md \
   skills/test-gaps/SKILL.md \
@@ -188,15 +213,39 @@ for gap_skill in \
   skills/project-gaps/SKILL.md \
   skills/reliability-gaps/SKILL.md
 do
-  require_pattern "$gap_skill" "| Field | Value |"
-  require_pattern "$gap_skill" "| Status |"
-  require_pattern "$gap_skill" "**Summary.**"
-  require_pattern "$gap_skill" "### Context"
-  require_pattern "$gap_skill" "### Evidence"
-  require_pattern "$gap_skill" "### Proposal"
-  require_pattern "$gap_skill" "### Alternatives Considered"
-  require_pattern "$gap_skill" "### Definition of Success"
+  require_ledger_core "$gap_skill"
 done
+
+for ledger_format in \
+  skills/code-issues/references/ledger-format.md \
+  skills/test-gaps/references/ledger-format.md \
+  skills/doc-gaps/references/ledger-format.md \
+  skills/feature-gaps/references/ledger-format.md \
+  skills/project-gaps/references/ledger-format.md \
+  skills/reliability-gaps/references/ledger-format.md
+do
+  require_ledger_core "$ledger_format"
+  require_pattern "$ledger_format" "self-contained"
+  require_pattern "$ledger_format" "What -> Why -> How"
+  require_pattern "$ledger_format" "Write short, direct sentences"
+  require_pattern "$ledger_format" "Source locations support verification; they do not carry the explanation"
+  require_pattern "$ledger_format" "line number only when"
+  require_pattern "$ledger_format" "minimum 90%, or 95% for high-risk acceptance"
+  require_pattern "$ledger_format" "architecture document"
+done
+
+require_pattern skills/references/decision-card.md "| What |"
+require_pattern skills/references/decision-card.md "| Why |"
+require_pattern skills/references/decision-card.md "| How |"
+require_pattern skills/references/decision-card.md "minimum 90%, or 95% for high-risk acceptance"
+require_pattern skills/references/decision-card.md "decision above must stand on its own"
+require_pattern skills/feature-gaps/references/implementation-proposal.md "| What |"
+require_pattern skills/feature-gaps/references/implementation-proposal.md "| Why |"
+require_pattern skills/feature-gaps/references/implementation-proposal.md "| How |"
+require_pattern skills/feature-gaps/references/implementation-proposal.md "minimum 90%, or 95% for high-risk acceptance"
+require_pattern skills/feature-gaps/references/implementation-proposal.md "decision above must stand on its own"
+reject_pattern skills/references/decision-card.md "Full context, evidence, and alternatives: see"
+reject_pattern skills/feature-gaps/references/implementation-proposal.md "Full problem, evidence, and alternatives: see"
 
 require_pattern skills/references/gap-workflow.md "Do not silently downgrade to"
 require_pattern skills/references/gap-workflow.md "current user"
@@ -211,6 +260,8 @@ require_pattern skills/references/gap-workflow.md "Record the reproduction path 
 require_pattern skills/references/gap-workflow.md "do not record the candidate as confirmed unless a"
 require_pattern skills/references/gap-workflow.md "separate supported reproduction path proves it"
 require_pattern skills/references/gap-workflow.md "supported-usage evidence, and a reproduction path"
+require_pattern skills/references/gap-workflow.md "without requiring migration"
+require_pattern skills/references/gap-workflow.md "Make every ledger entry understandable without opening source files"
 require_pattern skills/references/gap-workflow.md "gap-lead-generation.md"
 require_pattern skills/references/gap-workflow.md "lead inventory"
 require_pattern skills/references/gap-workflow.md "rejected, routed, deferred, and blocked lead"

@@ -39,12 +39,16 @@ Find mode.
 ## `ISSUES.md` Format
 
 Before creating, updating, or interpreting `ISSUES.md`, read
-`references/ledger-format.md`. Each entry is a short mini-RFC. The required core
-must keep `| Field | Value |`, a `| Status |` row, a `**Summary.**` line,
-`### Context`, `### Evidence` with `Reproduction: Smallest supported command`,
-`### Proposal`, `### Alternatives Considered`, and `### Definition of Success`.
-Add `### Goals / Non-goals`, `### Open Questions`, and `### Decision` only when
-the entry warrants them.
+`references/ledger-format.md`. Each entry is a self-contained mini-RFC using
+`What -> Why -> How`. The required core must keep `| Field | Value |`,
+`| Status |`, and `**Summary.**`; `### What` with `**Current.**` and
+`**Expected.**`; `### Why` with `**Impact.**` and `#### Evidence` containing
+`**Claim:**`, `**Observed:**`, `**Reproduction:** Smallest supported command`,
+and `**Source:**`; and `### How` with `#### Proposal`, `**Keep.**`,
+`#### Alternatives Considered`, and `#### Definition of Success` containing
+`**Validation:**`. Add `#### Situation Map`,
+`### Goals / Non-goals`, `### Open Questions`, and `### Decision` only when the
+entry warrants them.
 
 ## Implement Mode
 
@@ -68,7 +72,7 @@ These code-issue implementation rules remain mandatory:
 - Read `references/ledger-format.md` before creating, updating, or interpreting
   `ISSUES.md`.
 - Read `../references/gap-workflow.md` for shared scoped-ledger, delegation, coverage, confidence, and approval gates.
-- Use `../references/decision-card.md` to present the agreement-gate proposal as a decision card.
+- Use `../references/decision-card.md` to present the agreement-gate proposal as a self-contained decision card.
 - Use `../references/gap-lead-generation.md` during Find mode to classify repo
   archetypes, generate high-risk leads, and account for rejected or routed
   candidates.

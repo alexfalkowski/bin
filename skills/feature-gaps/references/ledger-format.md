@@ -1,9 +1,21 @@
 # `FEATURES.md` Format
 
-Each entry is a short, debatable mini-PRD: skimmable at the top, with just
-enough reasoning and alternatives for a reviewer to agree or push back. Keep the
-**required core** on every entry. Add the **expandable sections** only when the
-entry warrants them; feature proposals often warrant `### Goals / Non-goals`.
+Each entry is a self-contained, debatable mini-PRD: the product form of the
+shared mini-RFC. A reviewer must be able to understand the opportunity, the
+evidence, and the proposed direction without opening another file. Organize the
+entry as `What -> Why -> How`. Keep the **required core** on every
+entry, and add the **expandable sections** only when they help a real decision;
+feature proposals often warrant `### Goals / Non-goals`.
+
+Write short, direct sentences. Use the table for classification, the summary
+for the main point, and the body for supporting detail. Do not repeat the
+same prose across those layers.
+
+Source locations support verification; they do not carry the explanation.
+Prefer a stable command, API, workflow, example, public symbol, or documented
+surface over a bare line number. Add a line number only when it makes the source
+faster to find. Include the relevant short excerpt or observed output when the
+reviewer would otherwise need to reconstruct the claim from source.
 
 ## Required Core
 
@@ -19,42 +31,64 @@ Use this structure for every entry:
 | Status | Proposed \| Accepted \| In progress \| Rejected |
 | Type | Feature Gap |
 | Priority | High \| Medium \| Low |
-| Confidence | 93% |
+| Confidence | 93% — one-line reason; minimum 90%, or 95% for high-risk acceptance. |
 | Scope | path/to/file-or-folder |
 | Audience | User \| Developer \| Maintainer \| Operator \| Package consumer \| Service author |
 | Product surface | Public command \| API \| library behavior \| service/operator behavior \| package-consumer workflow \| integration \| template \| extension point. |
 
-**Summary.** One or two sentences a reviewer can read on their own: the workflow
-the audience cannot complete today and why it matters.
+**Summary.** In one or two plain sentences, state the workflow the audience
+cannot complete, why that matters, and the proposed capability direction.
 
-### Context
-The current limitation, the existing product surfaces that already address part
-of the need and why they fall short, and the residual gap — even with that
-coverage, the named audience still cannot complete this specific supported
-workflow. Note why now: evidence it is a normal or recurring workflow, not only
-comparable-tool parity.
+### What
 
-### Evidence
-Evidence: Concrete file and line references, command behavior, docs, examples,
-comparable-tool evidence, or user/developer workflow evidence.
-Reproduction: Smallest supported user, developer, service-author, operator, or
-package-consumer workflow trace that demonstrates the current limitation or
-missing capability.
+**Current.** State the audience workflow, the existing product surfaces that
+address part of it, and the residual limitation. Make the residual gap explicit:
+even with the existing surface, the named audience still cannot complete the
+specific outcome.
 
-### Proposal
-The smallest useful capability to add, why it fits this repository and its
+**Expected.** State the new audience outcome and the product surface through
+which it should be available.
+
+### Why
+
+**Impact.** Explain the concrete audience benefit and why this is a normal or
+recurring workflow rather than parity for its own sake.
+
+#### Evidence
+
+- **Claim:** The plain-language product fact this evidence establishes.
+- **Observed:** The current limitation or missing capability, with enough detail
+  to understand it here.
+- **Reproduction:** Smallest supported user, developer, service-author,
+  operator, or package-consumer workflow trace that demonstrates the current
+  limitation or missing capability.
+- **Source:** `path/to/file` — stable command, API, workflow, example, public
+  symbol, or heading; line number optional.
+
+### How
+
+#### Proposal
+
+Describe the smallest useful capability, why it fits this repository and its
 existing patterns, and any public-behavior, dependency, migration, or
 maintenance cost.
 
-### Alternatives Considered
+**Keep.** Name the existing APIs, defaults, workflows, or compatibility
+boundaries that must remain unchanged.
+
+#### Alternatives Considered
+
 - Chosen: the proposal above — why this shape wins for the audience.
 - Other option: a wider build, a different surface, or reusing an existing
   surface — why not.
 - Do nothing: the cost to the audience of leaving the gap.
 
-### Definition of Success
+#### Definition of Success
+
 - The observable outcome the audience gains (the previously blocked workflow now
-  completes) plus the validation that proves the feature.
+  completes).
+- **Validation:** The repository command(s), scenario(s), or supported workflow
+  that prove the result.
 ````
 
 ## Add When Warranted
@@ -63,6 +97,23 @@ Add these sections only when the entry needs them; feature proposals usually
 warrant Goals / Non-goals.
 
 ````markdown
+#### Situation Map
+
+Place this directly after `**Expected.**` under `### What`.
+
+Use only when a small visual explains a multi-step workflow, boundary, ownership
+relationship, or current-versus-expected outcome better than the prose. Do not
+turn the entry into an architecture document.
+
+```text
+[Audience]
+    |
+    v
+[Product surface]
+    |-- today --> [Current outcome]
+    +-- target -> [Expected outcome]
+```
+
 ### Goals / Non-goals
 - Goal: the audience outcome the feature must deliver.
 - Non-goal: adjacent capabilities this deliberately does not build.
