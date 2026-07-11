@@ -27,6 +27,7 @@
       "Bash(make reset*)",
       "Bash(make purge*)",
       "Bash(make delete*)",
+      "Bash(make done*)",
       "Bash(make start*)",
       "Bash(make stop*)",
       "Bash(make pr*)",
