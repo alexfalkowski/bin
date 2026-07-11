@@ -142,11 +142,13 @@ For implement modes:
    reclassifying it before editing.
 5. Present the current evidence, proposed solution, tradeoffs, and intended
    validation as a decision card (see `../references/decision-card.md`) so the
-   human can agree, reject, or revise quickly. Stop until the human explicitly
-   agrees to that solution. A named fix, implement, or verify request selects the
-   entry and permits evidence refresh, but it is not approval to edit unless it
-   also agrees to the proposed solution. This remains true when the request says
-   "implement", names multiple related IDs, or authorizes agents.
+   human can agree, reject, or revise quickly. The card must restate enough
+   `What`, `Why`, and `How` to stand on its own; understanding the decision must
+   not depend on opening the ledger or source files. Stop until the human
+   explicitly agrees to that solution. A named fix, implement, or verify request
+   selects the entry and permits evidence refresh, but it is not approval to edit
+   unless it also agrees to the proposed solution. This remains true when the
+   request says "implement", names multiple related IDs, or authorizes agents.
 6. After agreement, state the local pattern, dominant relevant harness or
    validation path, planned validation, and any needed deviation. Stop before
    deviating from the selected skill, repository pattern, or documented
@@ -174,6 +176,10 @@ For implement modes:
 - In implement mode, read the scoped ledger first and treat it as the working
   ledger. If it does not exist, stop and ask whether to run the matching find
   mode first for that scope.
+- Read existing entries written in the previous `Context` / `Evidence` /
+  `Proposal` mini-RFC shape without requiring migration. Rewrite an entry to the
+  current `What` / `Why` / `How` shape only when creating or otherwise updating
+  that entry.
 - Record durable findings or proposals only in the scoped ledger defined by the
   selected skill.
 - Assign IDs using the selected skill's prefix, such as `ISSUE-N`, `TEST-N`,
@@ -378,6 +384,12 @@ For implement modes:
   inherently documentary or structural; in that case, record the exact lookup,
   trace, negative search, or authoritative surface comparison that reproduces
   the gap.
+- Make every ledger entry understandable without opening source files. State a
+  plain-language claim and observed result before its source locator. Prefer a
+  stable symbol, command, target, test, scenario, config key, API, or heading;
+  use a line number only as an optional locator. Include a short relevant excerpt
+  or observed output when the reader would otherwise need to infer the claim
+  from source.
 - If reproduction is blocked by sandbox limits, missing tools, credentials,
   network, optional services, or ambiguous setup, classify the blocker through
   `$change-validation` and do not record the candidate as confirmed unless a

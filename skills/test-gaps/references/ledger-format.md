@@ -1,9 +1,20 @@
 # `TESTS.md` Format
 
-Each entry is a short, debatable mini-RFC: skimmable at the top, with just
-enough reasoning and alternatives for a reviewer to agree or push back. Keep the
-**required core** on every entry. Add the **expandable sections** only when the
-entry warrants them; do not pad a trivial gap.
+Each entry is a self-contained, debatable mini-RFC. A reviewer must be able to
+understand the coverage risk, the evidence, and the proposed direction without
+opening another file. Organize the entry as `What -> Why -> How`. Keep the
+**required core** on every entry, and add the **expandable sections** only when
+they help a real decision.
+
+Write short, direct sentences. Use the table for classification, the summary
+for the main point, and the body for supporting detail. Do not repeat the
+same prose across those layers.
+
+Source locations support verification; they do not carry the explanation.
+Prefer a stable behavior, test, scenario, command, target, or symbol over a bare
+line number. Add a line number only when it makes the source faster to find.
+Include the relevant short excerpt or observed output when the reviewer would
+otherwise need to reconstruct the claim from source.
 
 ## Required Core
 
@@ -19,37 +30,59 @@ Use this structure for every entry:
 | Status | Proposed \| Accepted \| In progress \| Rejected |
 | Type | Test Gap |
 | Severity | Critical \| High \| Medium \| Low |
-| Confidence | 93% |
+| Confidence | 93% — one-line reason; minimum 90%, or 95% for high-risk acceptance. |
 | Scope | path/to/file-or-folder |
 | Impact | Risk created by the missing, weak, misleading, flaky, or wrong-layer coverage. |
 
-**Summary.** One or two sentences a reviewer can read on their own: which
-repository-owned behavior is unprotected and why that matters.
+**Summary.** In one or two plain sentences, state which repository-owned
+behavior is unprotected, why that matters, and the proposed coverage direction.
 
-### Context
-The repository-owned behavior at risk, its current test surface, and the
-uncovered, misleading, flaky, or wrong-layer path. Name the narrowest
-established test layer that should own it.
+### What
 
-### Evidence
-Evidence: Concrete file and line references, existing test behavior, command
-output, or untested code path.
-Reproduction: Smallest supported command, scenario, test run, or front-door
-trace that shows the behavior is unprotected, misleadingly covered, flaky, or
-covered at the wrong layer.
+**Current.** State the repository-owned behavior at risk, its current test
+surface, and the missing, misleading, flaky, or wrong-layer coverage.
 
-### Proposal
-The recommended coverage: the narrowest credible established test layer and the
-smallest test or harness change that protects the behavior.
+**Expected.** State the protection the established test layer should provide
+and the signal a regression should produce.
 
-### Alternatives Considered
+### Why
+
+**Impact.** Explain the concrete regression, false-confidence, maintenance, or
+user risk created by the current coverage.
+
+#### Evidence
+
+- **Claim:** The plain-language coverage fact this evidence establishes.
+- **Observed:** The actual missing assertion, misleading pass, flaky result,
+  wrong-layer behavior, or command output, with enough detail to understand it
+  here.
+- **Reproduction:** Smallest supported command, scenario, test run, or
+  front-door trace that shows the behavior is unprotected, misleadingly covered,
+  flaky, or covered at the wrong layer.
+- **Source:** `path/to/file` — stable behavior, test, scenario, target, or
+  symbol; line number optional.
+
+### How
+
+#### Proposal
+
+Name the narrowest credible established test layer and the smallest test or
+harness change that protects the behavior.
+
+**Keep.** Name the product behavior, unrelated test layers, fixtures, or harness
+semantics that must remain unchanged.
+
+#### Alternatives Considered
+
 - Chosen: the proposal above — why this test layer and shape fit.
 - Other layer: a different test layer (unit / feature / integration) — why not.
 - Do nothing: the risk of leaving the behavior unprotected.
 
-### Definition of Success
+#### Definition of Success
+
 - The new or fixed test fails against the unprotected behavior and passes once
-  it is covered, plus the validation command(s) that show it.
+  it is covered.
+- **Validation:** The repository command(s) or scenario(s) that prove the result.
 ````
 
 ## Add When Warranted
@@ -57,6 +90,23 @@ smallest test or harness change that protects the behavior.
 Add these sections only when the entry needs them; omit them otherwise.
 
 ````markdown
+#### Situation Map
+
+Place this directly after `**Expected.**` under `### What`.
+
+Use only when a small visual explains a multi-step flow, boundary, ownership
+relationship, or current-versus-expected outcome better than the prose. Do not
+turn the entry into an architecture document.
+
+```text
+[Audience]
+    |
+    v
+[Supported surface]
+    |-- today --> [Current outcome]
+    +-- target -> [Expected outcome]
+```
+
 ### Goals / Non-goals
 - Goal: which behavior the coverage must protect.
 - Non-goal: behavior or layers this deliberately does not test.

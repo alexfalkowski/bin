@@ -1,9 +1,20 @@
 # `PROJECTS.md` Format
 
-Each entry is a short, debatable mini-RFC: skimmable at the top, with just
-enough reasoning and alternatives for a reviewer to agree or push back. Keep the
-**required core** on every entry. Add the **expandable sections** only when the
-entry warrants them; do not pad a trivial gap.
+Each entry is a self-contained, debatable mini-RFC. A reviewer must be able to
+understand the workflow gap, the evidence, and the proposed direction without
+opening another file. Organize the entry as `What -> Why -> How`. Keep the
+**required core** on every entry, and add the **expandable sections** only when
+they help a real decision.
+
+Write short, direct sentences. Use the table for classification, the summary
+for the main point, and the body for supporting detail. Do not repeat the
+same prose across those layers.
+
+Source locations support verification; they do not carry the explanation.
+Prefer a stable Make target, CI job, script, command, workflow, or heading over a
+bare line number. Add a line number only when it makes the source faster to
+find. Include the relevant short excerpt or observed output when the reviewer
+would otherwise need to reconstruct the claim from source.
 
 ## Required Core
 
@@ -19,41 +30,63 @@ Use this structure for every entry:
 | Status | Proposed \| Accepted \| In progress \| Rejected |
 | Type | Project Gap |
 | Priority | High \| Medium \| Low |
-| Confidence | 93% |
+| Confidence | 93% — one-line reason; minimum 90%, or 95% for high-risk acceptance. |
 | Scope | path/to/file-or-folder |
 | Audience | Developer \| Maintainer \| Operator \| Package consumer \| Service author |
 | Implementation home | current repo \| shared bin \| external repo \| mixed |
 | Project surface | Make target \| CI job \| script \| setup flow \| validation flow \| release flow \| command discovery \| shared ./bin wiring. |
 
-**Summary.** One or two sentences a reviewer can read on their own: the project
-workflow friction or missing capability and who it slows down.
+**Summary.** In one or two plain sentences, state the project workflow friction,
+why it matters, and the proposed improvement direction.
 
-### Context
-The current workflow friction or missing capability, why this scope owns the
-fix (or why it is routed to third-party, external repo, shared tooling, or an
-upstream project-owned library), and why it fits this repository's existing
-project patterns.
+### What
 
-### Evidence
-Evidence: Concrete file and line references, command behavior, CI config, docs,
-examples, comparable workflow evidence, or maintainer workflow evidence.
-Reproduction: Smallest supported maintainer, developer, CI, Make, setup,
-validation, release, or command-discovery workflow trace that demonstrates the
-current friction or missing project capability.
+**Current.** State the supported project workflow, its current friction or
+missing capability, and who encounters it.
 
-### Proposal
-The smallest useful project workflow improvement, its implementation home, and
-any public-target, dependency, migration, CI-runtime, or maintenance cost.
+**Expected.** State the workflow outcome that should become possible and the
+project surface that should provide it.
 
-### Alternatives Considered
+### Why
+
+**Impact.** Explain the concrete developer, maintainer, operator, consumer, CI,
+release, or delivery cost and why the named implementation home owns the change.
+
+#### Evidence
+
+- **Claim:** The plain-language workflow fact this evidence establishes.
+- **Observed:** The actual command behavior, CI result, setup friction, missing
+  surface, or workflow trace, with enough detail to understand it here.
+- **Reproduction:** Smallest supported maintainer, developer, CI, Make, setup,
+  validation, release, or command-discovery workflow trace that demonstrates
+  the current friction or missing project capability.
+- **Source:** `path/to/file` — stable Make target, CI job, script, command,
+  workflow, or heading; line number optional.
+
+### How
+
+#### Proposal
+
+Describe the smallest useful project workflow improvement, its implementation
+home, and any public-target, dependency, migration, CI-runtime, or maintenance
+cost.
+
+**Keep.** Name the existing targets, CI behavior, setup paths, release behavior,
+or ownership boundaries that must remain unchanged.
+
+#### Alternatives Considered
+
 - Chosen: the proposal above — why this home and surface fit.
 - Other option: a different implementation home (shared bin / repo-local /
   external) or project surface — why not.
 - Do nothing: the friction of leaving the workflow as is.
 
-### Definition of Success
+#### Definition of Success
+
 - The observable proof the workflow improves (the target runs, CI passes, or the
-  command is discoverable) plus the validation that proves it.
+  command is discoverable).
+- **Validation:** The repository command(s), CI path(s), or workflow check(s)
+  that prove the result.
 ````
 
 ## Add When Warranted
@@ -61,6 +94,23 @@ any public-target, dependency, migration, CI-runtime, or maintenance cost.
 Add these sections only when the entry needs them; omit them otherwise.
 
 ````markdown
+#### Situation Map
+
+Place this directly after `**Expected.**` under `### What`.
+
+Use only when a small visual explains a multi-step workflow, boundary, ownership
+relationship, or current-versus-expected outcome better than the prose. Do not
+turn the entry into an architecture document.
+
+```text
+[Audience]
+    |
+    v
+[Project surface]
+    |-- today --> [Current outcome]
+    +-- target -> [Expected outcome]
+```
+
 ### Goals / Non-goals
 - Goal: the workflow outcome the change must deliver.
 - Non-goal: workflows or surfaces this deliberately does not change.

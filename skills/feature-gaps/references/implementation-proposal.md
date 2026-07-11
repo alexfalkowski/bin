@@ -1,12 +1,13 @@
 # Implementation Proposal Gate
 
 Before asking for agreement to edit a feature, present a compact decision card.
-Its job is the *how* and the *ask*: the concrete implementation shape you
-propose, one crisp decision, and the main cost to watch. The *what* and *why*
-already live in the `FEATURES.md` entry, so point back to `FEATURE-N` instead of
-restating the problem, evidence, or feature-level alternatives. Lead with
-`## Solution Shape`; do not bury the ask after a long plan update. The
-`## Decision` block is the shared decision card (`../../references/decision-card.md`);
+Its job is to make the *what*, *why*, *how*, and ask understandable without
+opening `FEATURES.md` or source files. Lead with `## Solution Shape` (the
+concrete implementation shape), then give a self-contained decision summary and
+the main cost to watch. Keep `FEATURE-N` as the full mini-PRD and include its ID
+so the reader can find it; do not use it as a substitute for the summary or bury
+the ask after a long plan update. The `## Decision` block is the shared decision
+card (`../../references/decision-card.md`);
 `## Solution Shape` and `### Other Shapes Considered` are the feature-specific
 additions for a design-heavy gate.
 
@@ -38,12 +39,16 @@ validation:
 | Field | Value |
 | --- | --- |
 | Implement now? | Yes \| No \| Revise |
+| What | Current audience outcome -> expected audience outcome, in one plain sentence. |
+| Why | Audience impact plus the strongest observed evidence. |
+| How | This solution shape, what remains unchanged, and how success will be proved. |
 | Scope | FEATURE-N and the smallest package/config/doc surfaces needed. |
 | Compatibility | Additive \| Breaking \| Mixed, with the concrete reason. |
-| Confidence | 94% |
+| Confidence | 94% — one-line reason; minimum 90%, or 95% for high-risk acceptance. |
 | Watch | The main compatibility, maintenance, dependency, security, or config-surface cost to weigh. |
 
-Full problem, evidence, and alternatives: see FEATURE-N in `FEATURES.md`.
+Source mini-PRD: FEATURE-N in `FEATURES.md`. This locator is for deeper
+verification; the decision above must stand on its own.
 
 Approval command:
 

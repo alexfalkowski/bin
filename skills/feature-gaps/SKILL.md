@@ -65,12 +65,16 @@ Find mode.
 ## `FEATURES.md` Format
 
 Before creating, updating, or interpreting `FEATURES.md`, read
-`references/ledger-format.md`. Each entry is a short mini-PRD. The required core
-must keep `| Field | Value |`, a `| Status |` row, a `**Summary.**` line,
-`### Context`, `### Evidence` with `Reproduction: Smallest supported user`,
-`### Proposal`, `### Alternatives Considered`, and `### Definition of Success`.
-Add `### Goals / Non-goals` (usually warranted for features), `### Open
-Questions`, and `### Decision` when the entry warrants them.
+`references/ledger-format.md`. Each entry is a self-contained mini-PRD organized
+like the shared mini-RFC: `What -> Why -> How`. The required core must keep
+`| Field | Value |`, `| Status |`, and `**Summary.**`; `### What` with
+`**Current.**` and `**Expected.**`; `### Why` with `**Impact.**` and
+`#### Evidence` containing `**Claim:**`, `**Observed:**`,
+`**Reproduction:** Smallest supported user`, and `**Source:**`; and `### How`
+with `#### Proposal`, `**Keep.**`, `#### Alternatives Considered`, and
+`#### Definition of Success` containing `**Validation:**`. Add
+`#### Situation Map`, `### Goals / Non-goals` (usually warranted for features),
+`### Open Questions`, and `### Decision` when the entry warrants them.
 
 ## Implement Mode
 
@@ -81,7 +85,8 @@ Follow `references/plan.md#implement-mode-plan` and the implementation rules in
 
 Before asking for agreement to edit a feature, read
 `references/implementation-proposal.md` and present that decision packet. It
-must lead with `## Solution Shape`. `Approved FEATURE-N` approves this solution shape and starts implementation. `Approved FEATURE-N with agents` approves this solution shape and authorizes sub-agents for implementation or fresh review when useful. The `with a goal` and `with agents and a goal` tails apply here too.
+must lead with `## Solution Shape` and include a self-contained `What`, `Why`,
+and `How` decision summary. `Approved FEATURE-N` approves this solution shape and starts implementation. `Approved FEATURE-N with agents` approves this solution shape and authorizes sub-agents for implementation or fresh review when useful. The `with a goal` and `with agents and a goal` tails apply here too.
 
 These feature implementation rules remain mandatory:
 
@@ -95,7 +100,7 @@ These feature implementation rules remain mandatory:
   before asking for agreement. Keep plan state separate from the decision
   packet; use the plan only to show workflow progress, not as the primary
   decision surface. Put `## Solution Shape` first so the human can judge the
-  design shape before reading confidence, evidence, or plan state.
+  design shape before reading the self-contained decision summary or plan state.
 - Ask questions when audience, product direction, compatibility, dependency
   policy, UX/DX behavior, test layer, validation, or user intent is ambiguous.
   Treat silence or a broad "implement feature gaps" request as permission to
