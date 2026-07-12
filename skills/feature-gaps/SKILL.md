@@ -11,8 +11,11 @@ Use this skill in two distinct modes; do not combine them in one pass:
 - **Implement mode**: `Implement $feature-gaps in PACKAGE_OR_FOLDER` or `Implement feature gaps in PACKAGE_OR_FOLDER`.
 
 Before either mode, read `references/plan.md` and
-`../references/gap-workflow.md`; they own runtime state, ledger, delegation,
-scope, coverage, confidence, and approval gates.
+`../references/gap-workflow.md` and the mode-specific reference below own
+runtime state, ledger, delegation,
+scope, coverage, confidence, and approval gates. Before Find mode, also read
+`../references/gap-workflow/find-audit.md`; before Implement mode, also read
+`../references/gap-workflow/implementation.md`.
 
 ## Operating Stance
 
@@ -57,7 +60,7 @@ confidence or higher; otherwise gather more evidence or reject it.
 ## Find Mode
 
 Follow `references/plan.md#find-mode-plan` and the find/audit rules in
-`../references/gap-workflow.md`.
+`../references/gap-workflow/find-audit.md`.
 
 Read `references/find-rules.md`; those feature-gap rules remain mandatory in
 Find mode.
@@ -79,7 +82,7 @@ with `#### Proposal`, `**Keep.**`, `#### Alternatives Considered`, and
 ## Implement Mode
 
 Follow `references/plan.md#implement-mode-plan` and the implementation rules in
-`../references/gap-workflow.md`.
+`../references/gap-workflow/implementation.md`.
 
 ## Implementation Proposal Gate
 
@@ -144,7 +147,9 @@ These feature implementation rules remain mandatory:
   `FEATURES.md`.
 - Read `references/implementation-proposal.md` before asking for agreement to
   edit a feature.
-- Read `../references/gap-workflow.md` for shared scoped-ledger, delegation, coverage, confidence, and approval gates.
+- Read `../references/gap-workflow.md` for shared scoped-ledger and delegation
+  gates; read `../references/gap-workflow/find-audit.md` for Find-mode rules and
+  `../references/gap-workflow/implementation.md` for Implement-mode rules.
 - Use `../references/gap-lead-generation.md` during Find mode to classify repo
   archetypes, generate product-surface leads, and account for rejected or routed
   candidates.

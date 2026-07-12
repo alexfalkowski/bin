@@ -63,8 +63,11 @@ make review msg="unprefixed subject" desc_file="/returned/path/review-pr.ABC123"
 ```
 
 - Remove the temporary file after `make review`, including when the review
-  command fails. Do not flatten the summary into a single line or pass Markdown
-  through a quoted shell argument.
+  command fails. Use a direct `rm -f -- /returned/path/review-pr.ABC123`
+  invocation after substituting the captured path; do not wrap cleanup in
+  `zsh -lic`, `sh -c`, or another shell command because the shared Codex rule
+  allows direct non-recursive `rm -f` only. Do not flatten the summary into a
+  single line or pass Markdown through a quoted shell argument.
 - Read `references/output-format.md`, then report the result using that exact
   structure.
 

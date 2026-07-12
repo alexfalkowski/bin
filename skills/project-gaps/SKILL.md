@@ -11,8 +11,11 @@ Use this skill in two distinct modes; do not combine them in one pass:
 - **Implement mode**: `Implement $project-gaps in PACKAGE_OR_FOLDER` or `Implement project gaps in PACKAGE_OR_FOLDER`.
 
 Before either mode, read `references/plan.md` and
-`../references/gap-workflow.md`; they own runtime state, ledger, delegation,
-scope, coverage, confidence, and approval gates.
+`../references/gap-workflow.md` and the mode-specific reference below own
+runtime state, ledger, delegation,
+scope, coverage, confidence, and approval gates. Before Find mode, also read
+`../references/gap-workflow/find-audit.md`; before Implement mode, also read
+`../references/gap-workflow/implementation.md`.
 
 ## Operating Stance
 
@@ -43,7 +46,7 @@ confidence or higher; otherwise gather more evidence or reject it.
 ## Find Mode
 
 Follow `references/plan.md#find-mode-plan` and the find/audit rules in
-`../references/gap-workflow.md`.
+`../references/gap-workflow/find-audit.md`.
 
 Read `references/find-rules.md`; those project-gap rules remain mandatory in
 Find mode.
@@ -70,7 +73,7 @@ and add `#### Situation Map`, `### Goals / Non-goals`, `### Open Questions`, and
 ## Implement Mode
 
 Follow `references/plan.md#implement-mode-plan` and the implementation rules in
-`../references/gap-workflow.md`.
+`../references/gap-workflow/implementation.md`.
 
 These project-gap implementation rules remain mandatory:
 
@@ -111,7 +114,9 @@ These project-gap implementation rules remain mandatory:
   candidate.
 - Read `references/ledger-format.md` before creating, updating, or interpreting
   `PROJECTS.md`.
-- Read `../references/gap-workflow.md` for shared scoped-ledger, delegation, coverage, confidence, and approval gates.
+- Read `../references/gap-workflow.md` for shared scoped-ledger and delegation
+  gates; read `../references/gap-workflow/find-audit.md` for Find-mode rules and
+  `../references/gap-workflow/implementation.md` for Implement-mode rules.
 - Use `../references/decision-card.md` to present the agreement-gate proposal as a self-contained decision card.
 - Use `../references/gap-lead-generation.md` during Find mode to classify repo
   archetypes, generate project-workflow leads, and account for rejected or
