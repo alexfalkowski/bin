@@ -69,6 +69,8 @@ When workflow discovery is the final response, use exactly this Markdown structu
 - Treat the consuming repository's `AGENTS.md` as binding local policy before applying shared `./bin` defaults.
 - Inspect the root `Makefile` to see which `bin/build/make/*.mak` fragments are included.
 - Use `make-fragments.md` to interpret included shared fragments after checking the root `Makefile`; do not let the fragment map replace the repository's actual command surface.
+- After confirming downstream scope, read `downstream-defaults.md` for conditional
+  shared-bin defaults; do not load it for work confined to this repository.
 - Validate path-sensitive behavior from the consuming repository root when downstream layout affects target behavior.
 - Preserve downstream local code, test, documentation, configuration, and validation patterns unless the user explicitly asks to change them.
 - Be careful with targets that resolve helper paths through `BIN_ROOT`; they should work in downstream repos and inside the `bin` repo itself, but downstream test/build layouts may still differ.
