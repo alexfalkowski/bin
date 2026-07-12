@@ -68,7 +68,8 @@ repository root and keep `bin/` as shared guidance.
     `mktemp "${TMPDIR:-/tmp}/review-pr.XXXXXX"`; never ask the user for the path
     or file contents. Capture the returned path and write `desc` to it.
 15. Substitute the returned path directly into
-    `make review msg="..." desc_file="/returned/path/review-pr.ABC123"`.
-16. Remove `desc_file`, including when `make review` fails.
+    `make review cleanup_desc_file=true msg="..." desc_file="/returned/path/review-pr.ABC123"`.
+16. Rely on `make review` to remove the opted-in temporary `desc_file`,
+    including when commit, push, or draft creation fails.
 17. Read `references/output-format.md`.
 18. Report the result in the required output format.
