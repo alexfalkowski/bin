@@ -1,9 +1,20 @@
 ---
 name: review-pr
-description: Use when, and only when, the user explicitly asks to prepare, open, update, or run a review PR from local changes. Review, validate, commit, force-push, and open a draft pull request with the repository review target.
+description: >-
+  Use when, and only when, the user invokes $review-pr or explicitly asks to
+  prepare, open, update, or run a review PR from local changes. A bare
+  current-request invocation runs the full workflow: review, validate, commit,
+  force-push, and open a draft pull request with the repository review target.
 ---
 
 # Review PR
+
+A bare `$review-pr` invocation is an explicit current-request instruction to
+run the full workflow for the current repository: review and validate local
+changes, commit them, force-push the branch, and open a draft pull request. It
+does not require an `in SCOPE` suffix. If an existing PR or draft description
+would be updated, ask before replacing it; future changes do not carry forward
+permission to push again.
 
 Before executing this workflow, read `references/plan.md` and use it to maintain
 the active execution plan. The active plan is runtime state; do not write it
@@ -17,7 +28,7 @@ Follow `references/plan.md#execution-plan`.
 
 These rules remain mandatory:
 
-- Confirm the user explicitly asked in the current request to commit, push, update, or open a review PR. If not, do not run `make review`, `make push`, or any equivalent push/PR update command.
+- Confirm that the current request contains `$review-pr` or an equivalent explicit request to commit, push, update, or open a review PR. If not, do not run `make review`, `make push`, or any equivalent push/PR update command.
 - If new changes would make an existing PR description, review comment, or previously drafted summary obsolete, flag that and ask whether the user wants the PR updated before pushing anything.
 - Make the remote-write behavior of `make review` explicit before running it: the target commits, force-pushes, and opens a draft PR.
 - Use `$change-validation`, relevant language standards, `$doc-standards`, and

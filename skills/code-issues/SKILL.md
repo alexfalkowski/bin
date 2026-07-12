@@ -5,7 +5,9 @@ description: Use when the user asks to find or implement $code-issues/code issue
 
 # Code Issues
 
-Use this skill in two distinct modes; do not combine them in one pass:
+Use Find mode by default when no mode is stated. Enter Implement mode only
+after the human explicitly agrees to a specific proposed solution, typically
+with `Approved ISSUE-N`. Do not combine modes in one pass:
 
 - **Find mode**: `Find $code-issues in PACKAGE_OR_FOLDER` or `Find code issues in PACKAGE_OR_FOLDER`.
 - **Implement mode**: `Implement $code-issues in PACKAGE_OR_FOLDER` or `Implement code issues in PACKAGE_OR_FOLDER`.

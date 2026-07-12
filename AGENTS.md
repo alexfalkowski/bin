@@ -167,6 +167,18 @@ IDs include `FEATURE-*`, `ISSUE-*`, `TEST-*`, `DOC-*`, `PROJECT-*`, and
 `with a goal`, and `with agents and a goal` tails carry current-request
 authorization.
 
+These authorization tails also apply after a generic skill invocation, such as
+`$skill-name in SCOPE`, `Find $skill-name in SCOPE`, or
+`Implement $skill-name in SCOPE`. They carry the same current-request
+authorization without changing the skill's mode, default behavior, or approval
+gates. `SCOPE` is interpreted by the selected skill: normally a package or
+folder, but it may be a CI/deployment target, repository and reporting period,
+or another skill-defined target. Skills that do not accept a generic scope
+remain explicit-request exceptions. `review-pr` is one such exception: its
+bare current-request invocation targets the current repository and means the
+full review, validation, commit, force-push, and draft-PR workflow; it does not
+use a path scope.
+
 - `Start FEATURE-3 in path/FEATURES.md`: select the matching gap skill,
   refresh evidence, present the solution, and stop at the agreement gate
   before editing. `Start ISSUE-3 in path/ISSUES.md` follows the same shape.

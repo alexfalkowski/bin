@@ -11,6 +11,9 @@ delivery was smooth, and whether the repo or service looks healthier than the
 comparison period. Convert measured bottlenecks into prioritized,
 evidence-backed follow-up actions that repository owners can complete.
 
+For a generic invocation, `SCOPE` is a repository together with its requested
+reporting period and comparison period, not necessarily a local folder.
+
 ## Workflow
 
 1. Identify the requested repository, period, comparison period, and summary

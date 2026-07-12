@@ -225,12 +225,23 @@ prefix_rule(
 )
 
 prefix_rule(
+    pattern = ["rm", "-f", ["-r", "-R", "-rf", "-fr"]],
+    decision = "prompt",
+    justification = "Forced recursive deletion can permanently remove files.",
+    match = [
+        "rm -f -r",
+        "rm -f -R",
+        "rm -f -rf",
+        "rm -f -fr",
+    ],
+)
+
+prefix_rule(
     pattern = ["rm", "-f"],
     decision = "allow",
-    justification = "Non-recursive forced removal is permitted for temporary-file cleanup.",
+    justification = "Non-recursive forced removal is permitted without prompting; recursive and catastrophic deletion remain guarded.",
     match = [
-        "rm -f test/reports/output.txt",
-        "rm -f -- /tmp/agent-temp-file",
+        "rm -f",
     ],
     not_match = [
         "rm -rf test/reports",

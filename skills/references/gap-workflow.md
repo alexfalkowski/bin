@@ -24,6 +24,14 @@ These shared rules own workflow mechanics.
     tail carries forward to the next entry.
   These shorthands do not bypass solution agreement, scoped ledgers, validation
   freshness, confidence thresholds, remote-write permission, or output format.
+
+- A generic invocation such as `$skill-name in SCOPE` uses the selected skill's
+  declared default mode. One-pass skills execute that pass; two-phase gap
+  skills default to Find mode and must present a proposal before entering
+  Implement mode. The `with agents`, `with a goal`, and `with agents and a goal`
+  tails may follow generic, Find, or Implement invocations and carry the same
+  current-request authorization without changing mode selection or bypassing
+  approval gates.
 - Before starting find, audit, one-pass, or implement mode, read the selected
   skill's `references/plan.md` and keep it as runtime state. Do not write it to
   the repository unless the human explicitly asks for a durable plan file.
