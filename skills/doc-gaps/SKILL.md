@@ -11,8 +11,12 @@ Use one-pass mode by default; use audit-only mode only when explicitly asked:
 - **Audit-only mode**: `Audit-only $doc-gaps in PACKAGE_OR_FOLDER` or `Find doc gaps in PACKAGE_OR_FOLDER without editing`.
 
 Before either mode, read `references/plan.md` and
-`../references/gap-workflow.md`; they own runtime state, ledger, delegation,
-scope, coverage, confidence, and approval gates.
+`../references/gap-workflow.md` and the mode-specific reference below own
+runtime state, ledger, delegation,
+scope, coverage, confidence, and approval gates. Before one-pass or audit-only
+mode, also read `../references/gap-workflow/find-audit.md`.
+Before implementation of a scoped entry, also read
+`../references/gap-workflow/implementation.md`.
 
 ## Operating Stance
 
@@ -31,7 +35,7 @@ the repository implements.
 ## One-Pass Mode
 
 Follow `references/plan.md#one-pass-mode-plan` and the find/audit rules in
-`../references/gap-workflow.md`.
+`../references/gap-workflow/find-audit.md`.
 
 Read `references/one-pass-rules.md`; those doc-gap rules remain mandatory in
 one-pass mode. Before editing in one-pass mode, state the selected local
@@ -42,7 +46,7 @@ For unresolved-ledger fixes or any case where human approval is still required: 
 ## Audit-Only Mode
 
 Follow `references/plan.md#audit-only-mode-plan` and the find/audit rules in
-`../references/gap-workflow.md`.
+`../references/gap-workflow/find-audit.md`.
 
 Read `references/audit-rules.md`; those doc-gap rules remain mandatory in
 audit-only mode.
@@ -79,7 +83,9 @@ entry warrants them.
   recording candidates.
 - Read `references/ledger-format.md` before creating, updating, or interpreting
   `DOCS.md`.
-- Read `../references/gap-workflow.md` for shared scoped-ledger, delegation, coverage, confidence, and approval gates.
+- Read `../references/gap-workflow.md` for shared scoped-ledger and delegation
+  gates; read `../references/gap-workflow/find-audit.md` for one-pass/audit-only
+  rules and `../references/gap-workflow/implementation.md` for entry fixes.
 - Use `../references/decision-card.md` to present the agreement-gate proposal as a self-contained decision card for unresolved-ledger fixes.
 - Use `../references/gap-lead-generation.md` during one-pass and audit-only
   modes to classify repo archetypes, generate documentation leads, and account

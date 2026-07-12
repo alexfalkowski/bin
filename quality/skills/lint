@@ -87,6 +87,17 @@ require_gitignore_pattern() {
   fi
 }
 
+require_reference() {
+  local source="$1"
+  local reference="$2"
+  local resolved="${source%/*}/$reference"
+
+  if [[ ! -f "$resolved" ]]; then
+    printf 'missing relative reference in %s: %s\n' "$source" "$reference" >&2
+    missing=1
+  fi
+}
+
 if ! ruby quality/skills/metadata; then
   missing=1
 fi
@@ -262,6 +273,14 @@ require_pattern skills/references/gap-workflow.md "separate supported reproducti
 require_pattern skills/references/gap-workflow.md "supported-usage evidence, and a reproduction path"
 require_pattern skills/references/gap-workflow.md "without requiring migration"
 require_pattern skills/references/gap-workflow.md "Make every ledger entry understandable without opening source files"
+require_pattern skills/references/gap-workflow/find-audit.md "../gap-workflow.md"
+require_pattern skills/references/gap-workflow/find-audit.md "../gap-lead-generation.md"
+require_pattern skills/references/gap-workflow/implementation.md "../gap-workflow.md"
+require_pattern skills/references/gap-workflow/implementation.md "../long-running-work.md"
+require_reference skills/references/gap-workflow/find-audit.md "../gap-workflow.md"
+require_reference skills/references/gap-workflow/find-audit.md "../gap-lead-generation.md"
+require_reference skills/references/gap-workflow/implementation.md "../gap-workflow.md"
+require_reference skills/references/gap-workflow/implementation.md "../long-running-work.md"
 require_pattern skills/references/gap-workflow.md "gap-lead-generation.md"
 require_pattern skills/references/gap-workflow.md "lead inventory"
 require_pattern skills/references/gap-workflow.md "rejected, routed, deferred, and blocked lead"
