@@ -1,4 +1,4 @@
 interface:
   display_name: "Test Gaps"
   short_description: "Find weak tests and harness gaps"
-  default_prompt: "Use $test-gaps for scoped missing, weak, misleading, flaky, wrong-layer, or harness coverage gaps. Follow repo archetype lead generation, apply the shared delegation gate, verify front-door behavior, answer test gap ID follow-ups such as TEST-1, and fix one agreed gap."
+  default_prompt: "Use $test-gaps for scoped missing, weak, misleading, flaky, wrong-layer, or harness coverage gaps. Default to Find mode when no mode is stated; follow repo archetype lead generation, apply the shared delegation gate, verify front-door behavior, answer test gap ID follow-ups such as TEST-1, and implement only after explicit agreement to a specific proposal."

@@ -1,4 +1,4 @@
 interface:
   display_name: "Feature Gaps"
   short_description: "Find product feature opportunities"
-  default_prompt: "Use $feature-gaps for scoped product-facing capability opportunities with explicit audience benefit. Follow repo archetype lead generation, apply the shared delegation gate, put Solution Shape first, answer feature ID follow-ups such as FEATURE-1, and route test/project gaps elsewhere."
+  default_prompt: "Use $feature-gaps for scoped product-facing capability opportunities with explicit audience benefit. Default to Find mode when no mode is stated; follow repo archetype lead generation, apply the shared delegation gate, put Solution Shape first, answer feature ID follow-ups such as FEATURE-1, implement only after explicit agreement to a specific proposal, and route test/project gaps elsewhere."

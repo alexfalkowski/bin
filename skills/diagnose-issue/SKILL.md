@@ -17,6 +17,10 @@ fixes. Keep the diagnosis grounded in source evidence; do not retry jobs,
 redeploy, mutate clusters, change monitors, push commits, or update PRs unless
 the user explicitly asks after the diagnosis.
 
+For a generic invocation, `SCOPE` is a CI, PR, deployment, rollout, Kubernetes,
+DigitalOcean, UptimeRobot, or released-version target, not necessarily a local
+folder.
+
 ## Workflow
 
 1. Identify the requested diagnosis mode.

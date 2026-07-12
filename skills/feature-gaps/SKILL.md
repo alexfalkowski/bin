@@ -5,7 +5,9 @@ description: Use when the user asks to find or implement $feature-gaps/feature g
 
 # Feature Gaps
 
-Use this skill in two distinct modes; do not combine them in one pass:
+Use Find mode by default when no mode is stated. Enter Implement mode only
+after the human explicitly agrees to a specific proposed solution, typically
+with `Approved FEATURE-N`. Do not combine modes in one pass:
 
 - **Find mode**: `Find $feature-gaps in PACKAGE_OR_FOLDER` or `Find feature gaps in PACKAGE_OR_FOLDER`.
 - **Implement mode**: `Implement $feature-gaps in PACKAGE_OR_FOLDER` or `Implement feature gaps in PACKAGE_OR_FOLDER`.
