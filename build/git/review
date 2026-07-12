@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Run the ordered review flow and clean up an opted-in description file.
+
+set -eo pipefail
+
+readonly review_make="${REVIEW_MAKE:-make}"
+readonly review_makefile="${REVIEW_MAKEFILE:-Makefile}"
+
+# Make executes recipes containing $(MAKE) during dry runs; preserve files then.
+dry_run() {
+  [[ ${MAKEFLAGS:-} =~ (^|[[:space:]])(-n|n|--just-print|--dry-run)([[:space:]]|$) ]]
+}
+
+# Remove an opted-in summary file after the complete review flow, including failures.
+cleanup() {
+  local exit_code=$?
+
+  if [[ ${cleanup_desc_file:-} == true && -n ${desc_file:-} ]] && ! dry_run; then
+    rm -f -- "$desc_file"
+  fi
+
+  exit "$exit_code"
+}
+
+trap cleanup EXIT
+
+"$review_make" --no-print-directory -f "$review_makefile" commit push draft

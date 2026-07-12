@@ -12,6 +12,7 @@ export PREFIX
 override export msg := $(value msg)
 override export desc := $(value desc)
 override export desc_file := $(value desc_file)
+override export cleanup_desc_file := $(value cleanup_desc_file)
 
 # Checkout the master branch.
 master:
@@ -128,8 +129,9 @@ pr:
 merge:
 	@gh pr merge --auto --squash
 
-# Commit, force-push with a lease, and open a draft PR.
-review: commit push draft
+# Commit, force-push with a lease, and open a draft PR (cleanup_desc_file=true removes desc_file).
+review:
+	@REVIEW_MAKEFILE="$(abspath $(firstword $(MAKEFILE_LIST)))" REVIEW_MAKE="$(MAKE)" $(BIN_ROOT)/build/git/review
 
 # Commit, force-push with a lease, open PR, and enable auto-merge.
 ready: commit push pr merge
