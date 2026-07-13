@@ -45,7 +45,9 @@ Use this reference after you have identified which shared `bin/build/make/*.mak`
 - `breaking` compares against `https://github.com/alexfalkowski/$(NAME).git#branch=master`, so branch and remote assumptions matter.
 - `generate`, `stale`, and `push` depend on the consuming repository's Buf configuration.
 - `stale` runs `buf generate` from the Buf module directory that included the fragment, then runs `git diff --exit-code`; Git checks the whole worktree, so generated outputs outside that child directory are still detected.
-- `push` updates remote state and requires explicit user permission.
+- `push` updates remote state. Run it only when the current request authorizes
+  that workflow, and rely on the active agent configuration for command
+  approval behavior.
 
 ### `http.mak`, `grpc.mak`, And `client.mak`
 
@@ -54,14 +56,18 @@ Use this reference after you have identified which shared `bin/build/make/*.mak`
 - `features` and `benchmarks` depend on downstream test/build layout and wrappers under `BIN_ROOT/quality/ruby/...`.
 - `specs`, coverage, and report cleanup assume downstream `test/reports/` paths.
 - Docker and certificate helper targets depend on external CLIs such as Docker, `mkcert`, `dot`, and `air` depending on the target.
-- Docker push, manifest, release, and registry-publishing targets update remote state and require explicit user permission.
+- Docker push, manifest, release, and registry-publishing targets update remote
+  state. Run them only when the current request authorizes that workflow, and
+  rely on the active agent configuration for command approval behavior.
 
 ### `git.mak`
 
 - Common helpers cover branch creation, sync, commit/PR flows, destructive cleanup, and submodule commands.
 - Treat these as convenience wrappers, not default actions.
 - Do not use targets that rewrite history, delete branches, discard changes, or push remotely unless the user explicitly asks.
-- `push`, `force`, `draft`, `pr`, `merge`, `review`, and `ready` update remote GitHub state and require explicit current-request permission.
+- `push`, `force`, `draft`, `pr`, `merge`, `review`, and `ready` update remote
+  GitHub state. Run them only when the current request authorizes that workflow,
+  and rely on the active agent configuration for command approval behavior.
 
 ## Practical Inference Rules
 

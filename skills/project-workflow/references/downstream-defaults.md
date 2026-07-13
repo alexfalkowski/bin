@@ -85,8 +85,9 @@ Target-specific rules:
   `PATH`; do not flag the local no-op unless CI lacks the tool, the task is
   about strict local lint parity, or the repository decided missing local
   `golangci-lint` must fail.
-- `proto-push` updates remote state and requires explicit current-request
-  permission.
+- `proto-push` updates remote state. Run it only when the current request
+  authorizes that workflow, and rely on the active agent configuration for
+  command approval behavior.
 - `proto-breaking` derives the GitHub repository name from the checkout
   directory basename. Do not require a local `NAME := <repo>` override for
   canonical checkouts.

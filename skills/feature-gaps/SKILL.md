@@ -49,9 +49,10 @@ surface.
 Use external product or library research when it would materially improve the
 proposal and the runtime provides an allowed research tool. Prefer official
 docs, project repositories, release notes, and mature tool behavior over blog
-posts or generic trend lists. Ask for human permission before running commands
-that require network, SSH, GitHub auth, registry auth, remote writes, cloning,
-or other approval-gated access.
+posts or generic trend lists. Identify whether research commands use SSH,
+GitHub auth, registry auth, cloning, or remote writes. Rely on the active agent
+configuration for command approval behavior; do not add a separate model-level
+permission request.
 
 ## Acceptance Gate
 

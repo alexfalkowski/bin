@@ -98,8 +98,9 @@ outside the sandbox without prompting. Direct cleanup inside writable sandbox
 roots is allowed, direct recognized remote and external-system changes require
 approval, and catastrophic commands are forbidden. Root `.env` and `.env.*`
 files remain protected, while nested dependency environment files and `.envrc`
-files are allowed for native dependency workflows. Explicit workflow permission
-gates in `AGENTS.md` remain in force.
+files are allowed for native dependency workflows. The active agent
+configuration provides runtime approval guardrails; `AGENTS.md` continues to
+define task scope and workflow authorization.
 
 > [!WARNING]
 > The shared profile is only for trusted repositories. Make targets run outside
@@ -162,8 +163,9 @@ forbidden. The unsandboxed escape hatch is disabled. The sandbox grants the
 standard Go, RuboCop, golangci-lint, and Trivy cache writes used by project
 commands, plus standard system temporary directories. Every `make` invocation
 is excluded from the sandbox and allowed without prompting. Built-in file edits
-stay scoped to the workspace, and explicit workflow permission gates in
-`AGENTS.md` remain in force.
+stay scoped to the workspace, and the active agent configuration provides
+runtime approval guardrails while `AGENTS.md` defines task scope and workflow
+authorization.
 
 > [!WARNING]
 > The shared baseline is only for trusted repositories. Make targets run outside
