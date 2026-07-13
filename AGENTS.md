@@ -211,11 +211,15 @@ Runtime goals and sub-agents require current-request authorization and never
 bypass approval, validation, or confidence gates. Use `testing-standards`
 before adding, reviewing, refactoring, or planning tests.
 
-Before commands requiring SSH, GitHub, registry credentials, cloning,
-publishing, or remote state changes, make the requirement explicit and get
-permission. For consuming repositories, read local instructions first, then
-the relevant `bin/skills/**` references; exclude unrelated `bin/**` content
-from searches and reason about shared Make behavior from the consumer root.
+Before direct commands requiring SSH, GitHub, registry credentials, cloning,
+publishing, or remote state changes, make the requirement explicit and verify
+that the current request authorizes the effect; get permission when it does
+not. A repository Make target may perform those actions without a separate
+command prompt, but it does not expand the current request or bypass a selected
+skill's permission gates. For consuming repositories, read local instructions
+first, then the relevant `bin/skills/**` references; exclude unrelated `bin/**`
+content from searches and reason about shared Make behavior from the consumer
+root.
 
 ## Downstream repository defaults
 
@@ -256,6 +260,13 @@ Do not infer the test language from the implementation language alone.
   review commands.
 - Run from the repository root and prefer exposed `make` targets over direct
   tools. Show command discovery with `make` or `make help`.
+- Treat repository Make targets as the trusted prompt-free execution interface,
+  including targets that are destructive, access external services, or update
+  remote state. Run them only when their outcome is authorized by the current
+  request and the selected workflow.
+- When a recurring supported action has no Make target, mention the smallest
+  useful `*.mak` addition at handoff; do not add unrelated Make targets during
+  the current task without approval.
 - For code or test changes, use the narrowest supported selector first; use
   `make dep` when Ruby, generated, or vendored state requires setup.
 - Use `make scripts-lint` for shell changes, `make skills-lint` for skills or
@@ -316,13 +327,17 @@ Do not infer the test language from the implementation language alone.
   execution guardrails; repo-owned real config and rule files are left
   untouched. The project must be trusted before Codex loads project config and
   rules, and permission profiles require Codex 0.138.0 or later. The shared
-  profile selects `:danger-full-access`, so commands run without filesystem or
-  network sandbox restrictions. Approval remains `on-request`; shared rules
-  require approval for recognized remote writes and destructive operations and
-  forbid catastrophic commands. Use the profile only in trusted repositories
-  because every command, hook, and dependency script inherits the user's host
-  access. The shared rules and explicit workflow permission gates remain in
-  force, but the rules are not a filesystem or network sandbox.
+  profile extends `:workspace`, makes workspace Git metadata and standard Go,
+  RuboCop, golangci-lint, and Trivy caches writable, grants read access to common
+  host credential locations, allows writes to standard system temporary
+  directories, and allows outbound network access. Every `make` invocation is
+  allowed outside the sandbox without prompting; cleanup inside writable roots
+  is prompt-free, direct remote and external-service commands remain
+  approval-gated, and catastrophic commands remain forbidden. Use the profile
+  only in trusted
+  repositories because Make targets inherit the user's host access and
+  sandboxed commands can read credentials and use the network. The shared rules
+  and explicit workflow permission gates remain in force.
   Per-machine additions belong in `~/.codex/config.toml` and `~/.codex/rules/`.
   `build/claude/init` (via `make claude-init`)
   wires Claude Code by symlinking `.claude/skills` to `skills/`, symlinking
@@ -330,19 +345,20 @@ Do not infer the test language from the implementation language alone.
   permissions baseline (unless the repo owns a real, non-symlink
   `settings.json`), and importing `AGENTS.md` from `CLAUDE.md`; the symlinks
   target shared paths, so updating skills or the permissions baseline needs no
-  downstream re-wiring, only a `git submodule update`. The baseline sets
-  `sandbox.enabled: false` to match the Codex `:danger-full-access` posture, so
-  commands run without Claude Code's bash sandbox; the `permissions`
-  allow/ask/deny arrays are the guardrails (equivalent to the Codex
-  `default.rules`), where `allow` lets Claude read, write, and run anything
-  locally without prompts (`Bash(*)` plus unrestricted `Read`/`Edit`/`Write`),
-  `ask` gates recognized remote writes and destructive operations, and `deny`
-  forbids catastrophic commands. Like Codex `:danger-full-access`, the baseline
-  applies no filesystem sandbox and no secret-read restrictions; only the
-  named remote-write and destructive command shapes prompt or are refused. Use
-  the baseline only in trusted repositories because every command and hook
-  inherits the user's host access, including local credential files. Per-repo or
-  per-machine permission tweaks belong in the gitignored
+  downstream re-wiring, only a `git submodule update`. The baseline starts in
+  Claude Code's default permission mode, enables the Bash sandbox, and routes
+  direct Bash through the `permissions` allow/ask/deny guardrails. Direct Bash is
+  broadly allowed without prompting while sandboxed; project-local operations
+  stay autonomous, recognized remote and external-service changes require
+  approval, and catastrophic commands remain forbidden. The unsandboxed escape
+  hatch is disabled. The sandbox grants the standard Go, RuboCop,
+  golangci-lint, and Trivy cache writes needed by project commands plus standard
+  system temporary directories. Every `make` invocation is excluded from the
+  sandbox and allowed without prompting. Built-in file edits stay scoped to the
+  workspace. Use the baseline
+  only in trusted repositories because Make targets inherit the user's host
+  access, and the sandbox does not impose blanket secret-read restrictions.
+  Per-repo or per-machine permission tweaks belong in the gitignored
   `.claude/settings.local.json`, which Claude Code merges over the baseline.
 - Treat skills as maintained artifacts and review them when project workflow,
   tooling, model behavior, or team conventions change.

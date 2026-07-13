@@ -1,49 +1,18 @@
 # Shared execution guardrails for repositories wired through `make codex-init`.
-# Commands run without sandbox restrictions by default; remote-write,
-# destructive, and external-service commands remain approval-gated.
+# Routine commands run within the shared workspace profile. Make targets run
+# outside the sandbox without prompting; direct remote-write, destructive, and
+# external-service commands remain approval-gated.
 
 prefix_rule(
-    pattern = [
-        "make",
-        [
-            "push",
-            "push-docker",
-            "proto-push",
-            "release-docker",
-            "new-release",
-            "manifest-docker",
-            "sync",
-            "force",
-            "reset",
-            "purge",
-            "purge-local",
-            "purge-remote",
-            "delete",
-            "done",
-            "delete-version",
-            "start",
-            "stop",
-            "pr",
-            "review",
-            "ready",
-            "draft",
-            "merge",
-        ],
-    ],
-    decision = "prompt",
-    justification = "Remote-write, destructive, and external-service Make targets require explicit authorization.",
+    pattern = ["make"],
+    decision = "allow",
+    justification = "Repository Make targets are the trusted execution interface and may run outside the sandbox without prompting.",
     match = [
-        "make push",
-        "make proto-push",
-        "make reset",
-        "make done",
-        "make review",
-        "make start",
-    ],
-    not_match = [
+        "make",
         "make lint",
-        "make specs",
-        "make features",
+        "make push",
+        "make reset",
+        "make review",
     ],
 )
 
@@ -212,54 +181,38 @@ prefix_rule(
 )
 
 prefix_rule(
-    pattern = ["rm", ["-rf", "-fr", "-r", "-R"]],
-    decision = "prompt",
-    justification = "Recursive deletion can permanently remove files.",
-    match = [
-        "rm -rf build",
-        "rm -R reports",
-    ],
-    not_match = [
-        "rm file.txt",
-    ],
-)
-
-prefix_rule(
-    pattern = ["rm", "-f", ["-r", "-R", "-rf", "-fr"]],
-    decision = "prompt",
-    justification = "Forced recursive deletion can permanently remove files.",
-    match = [
-        "rm -f -r",
-        "rm -f -R",
-        "rm -f -rf",
-        "rm -f -fr",
-    ],
-)
-
-prefix_rule(
-    pattern = ["rm", "-f"],
-    decision = "allow",
-    justification = "Non-recursive forced removal is permitted without prompting; recursive and catastrophic deletion remain guarded.",
-    match = [
-        "rm -f",
-    ],
-    not_match = [
-        "rm -rf test/reports",
-        "rm -r test/reports",
-    ],
-)
-
-prefix_rule(
-    pattern = ["rm", ["-rf", "-fr"], ["/", "~", "$HOME"]],
+    pattern = ["rm", ["-rf", "-fr", "-r", "-R"], ["/", "~", "$HOME"]],
     decision = "forbidden",
     justification = "Refuse catastrophic root or home-directory deletion.",
     match = [
         "rm -rf /",
         "rm -fr ~",
+        "rm -r $HOME",
         "rm -rf $HOME",
     ],
     not_match = [
         "rm -rf build",
+    ],
+)
+
+prefix_rule(
+    pattern = ["rm", "-f", ["-r", "-R", "-rf", "-fr"], ["/", "~", "$HOME"]],
+    decision = "forbidden",
+    justification = "Refuse catastrophic root or home-directory deletion.",
+    match = [
+        "rm -f -r /",
+        "rm -f -R ~",
+        "rm -f -rf $HOME",
+    ],
+)
+
+prefix_rule(
+    pattern = ["rm", ["-r", "-R"], "-f", ["/", "~", "$HOME"]],
+    decision = "forbidden",
+    justification = "Refuse catastrophic root or home-directory deletion.",
+    match = [
+        "rm -r -f /",
+        "rm -R -f $HOME",
     ],
 )
 
