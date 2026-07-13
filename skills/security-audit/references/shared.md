@@ -44,7 +44,10 @@ For each security-sensitive slice, trace concrete sources to concrete sinks:
 ## Validation
 
 - Prefer repository-defined targets before ad hoc scanners.
-- Ask for permission before running scanners or dependency checks that need network, SSH, GitHub auth, registry auth, or remote writes.
+- Identify scanners or dependency checks that need network, SSH, GitHub auth,
+  registry auth, or remote writes. Rely on the active agent configuration for
+  command approval behavior; do not add a separate model-level permission
+  request.
 - In this repository, relevant checks include:
   - `make sec` for Trivy repository scanning.
   - `make scripts-lint` for ShellCheck coverage of shared scripts.

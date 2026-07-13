@@ -32,7 +32,10 @@ to documentation instead.
    - `references/skills.md` for skill descriptions, bundled scripts/assets, permissions, prompt-injection risk, or external skill adoption.
    - `references/shared.md` for cross-language repositories, dependency/config audits, secrets, Docker/security scanners, and report structure.
 3. Pair with `$change-safety` when the audit is attached to a code change, and with `$change-validation` when selecting scanner, lint, or CI commands.
-4. Ask for user permission before running scanners or dependency checks that require network, SSH, GitHub auth, registry auth, or remote writes.
+4. Identify whether scanners or dependency checks require network, SSH, GitHub
+   auth, registry auth, or remote writes. Rely on the active agent
+   configuration for command approval behavior; do not add a separate
+   model-level permission request.
 5. Inspect concrete data/control flow before reporting a risk. Prefer file and line references over general advice.
 6. When a candidate depends on prose contradicting implementation, first prove the implementation is insecure or wrong with non-prose evidence. If current code, tests, runtime behavior, scanner output, or history support the implementation, do not report a security finding; use `$doc-gaps` for the stale prose.
 7. Report exploitable findings first.

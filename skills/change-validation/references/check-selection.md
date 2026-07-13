@@ -21,7 +21,10 @@ Use this reference when choosing which checks to run.
   layer or skips required setup.
 - Use CI configuration as a strong signal for which checks matter most.
 - Run the repository's setup target, such as `make dep`, when checks depend on installed dependencies, generated files, or vendored state.
-- Ask for permission before running checks that require SSH credentials, GitHub auth, registry auth, cloning, pushing, publishing, opening PRs, or updating remote state.
+- Identify checks that require SSH credentials, GitHub auth, registry auth,
+  cloning, pushing, publishing, opening PRs, or updating remote state. Rely on
+  the active agent configuration for command approval behavior; do not add a
+  separate model-level permission request.
 - Expand from targeted checks to broader checks only when the task or risk justifies it.
 - Never imply a check ran if the wrapper no-op'd because a dependency was missing.
 - Report network, credential, shell environment, `PATH`, or tool-version failures as environment or validation gaps rather than code failures.
@@ -100,7 +103,10 @@ For standalone validation reports, use exactly this Markdown structure and do no
 - If a repo exposes `dep`, `lint`, `specs`, `features`, `benchmarks`, `coverage`, or `sec`, prefer those names over ad hoc tool invocations.
 - For this shared `bin` repo itself, CI currently runs `make dep`, `make clean-dep`, `make scripts-lint`, `make skills-lint`, `make docker-lint`, `make lint`, and `make sec`.
 - Dependency setup, scanners, Docker commands, Buf commands, and Go module commands may require network access; identify that before relying on them.
-- Push, publish, release, Docker manifest push, Buf push, and PR open/update flows require explicit user permission.
+- Push, publish, release, Docker manifest push, Buf push, and PR open/update
+  flows update remote state. Run them only when the current request authorizes
+  that workflow, and rely on the active agent configuration for command
+  approval behavior.
 
 ## `./bin`-Specific Caution
 

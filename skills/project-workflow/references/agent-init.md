@@ -28,8 +28,9 @@ writable roots is prompt-free, direct remote and external-service commands
 remain approval-gated, and catastrophic commands remain forbidden. Root `.env`
 and `.env.*` files remain protected, while nested dependency environment files
 and `.envrc` files are allowed for native dependency workflows. The shared
-rules and explicit workflow permission gates remain in force. Per-machine
-additions belong in `~/.codex/config.toml` and `~/.codex/rules/`.
+rules provide runtime approval guardrails, while `AGENTS.md` defines task scope
+and workflow authorization. Per-machine additions belong in
+`~/.codex/config.toml` and `~/.codex/rules/`.
 
 ## Claude Code (`build/claude/init`, via `make claude-init`)
 

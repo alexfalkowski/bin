@@ -217,15 +217,14 @@ Runtime goals and sub-agents require current-request authorization and never
 bypass approval, validation, or confidence gates. Use `testing-standards`
 before adding, reviewing, refactoring, or planning tests.
 
-Before direct commands requiring SSH, GitHub, registry credentials, cloning,
-publishing, or remote state changes, make the requirement explicit and verify
-that the current request authorizes the effect; get permission when it does
-not. A repository Make target may perform those actions without a separate
-command prompt, but it does not expand the current request or bypass a selected
-skill's permission gates. For consuming repositories, read local instructions
-first, then the relevant `bin/skills/**` references; exclude unrelated `bin/**`
-content from searches and reason about shared Make behavior from the consumer
-root.
+Before direct commands that may use SSH, GitHub or registry credentials,
+cloning, publishing, or remote state, make the external effect explicit and
+rely on the active agent configuration for command approval behavior. A
+repository Make target may perform those actions without a separate command
+prompt, but it does not expand the current request's scope. For consuming
+repositories, read local instructions first, then the relevant `bin/skills/**`
+references; exclude unrelated `bin/**` content from searches and reason about
+shared Make behavior from the consumer root.
 
 ## Downstream repository defaults
 
@@ -331,7 +330,7 @@ Do not infer the test language from the implementation language alone.
   `make claude-init` (`build/claude/init`) wire the two assistants by symlinking
   `skills/` and the shared permission profiles into place; see
   `skills/project-workflow/references/agent-init.md` for the exact symlinks,
-  sandbox posture, permission gates, and trusted-repository caveats. Use those
+  sandbox posture, runtime approval guardrails, and trusted-repository caveats. Use those
   profiles only in trusted repositories, because Make targets inherit the user's
   host access and sandboxed commands can read credentials and use the network.
 - Treat skills as maintained artifacts and review them when project workflow,

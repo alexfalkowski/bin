@@ -151,9 +151,10 @@ confirmed, fixed, or remaining entries to summarize.
   delegation requirement plus runtime limitation.
 - Do not silently downgrade to local-only review or present a single-agent
   substitute as equivalent.
-- Ask for permission before local reviewers or authorized agents run network,
-  auth, SSH, registry, cloning, destructive, remote-write, or non-read-only
-  validation commands.
+- Identify whether review commands use authentication, SSH, registries,
+  cloning, pushing, publishing, remote writes, or destructive effects. Rely on
+  the active agent configuration for command approval behavior; do not add a
+  separate model-level permission request.
 
 ## Candidate Integrity
 

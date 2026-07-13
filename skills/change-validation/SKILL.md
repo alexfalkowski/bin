@@ -11,7 +11,10 @@ description: Use when running or selecting validation after code, docs, Makefile
 2. Read `references/check-selection.md` when choosing between targeted tests, lint commands, make targets, CI mirrors, benchmarks, or security checks.
 3. Before running, retrying, replacing, or recommending validation commands, establish the execution environment: repository root, documented entrypoint, CI analogue, initialized user shell, and any macOS/Homebrew tool-path assumptions. Do not invent direct commands or bypass Make targets just because the agent shell cannot find the right tool.
 4. Run the repository's setup or dependency target first when validation depends on installed dependencies or generated/vendor state.
-5. Ask for user permission before running validation commands that require SSH credentials, GitHub auth, registry auth, cloning, pushing, publishing, opening PRs, or updating remote state.
+5. Identify whether validation commands use network access, credentials, SSH,
+   registries, cloning, pushing, publishing, opening PRs, or remote state. Rely
+   on the active agent configuration for command approval behavior; do not add
+   a separate model-level permission request.
 6. Run the narrowest check that credibly exercises the changed behavior, then expand only when risk justifies it.
 7. Treat validation as valid only for the file state it tested. If files change while a validation command is still running or after it completes, report that result as stale and rerun the relevant checks after final edits.
 8. Notice wrappers that no-op because optional tools are missing, and do not report them as full validation.

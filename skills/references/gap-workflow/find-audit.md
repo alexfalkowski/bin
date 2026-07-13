@@ -21,9 +21,10 @@ For find, audit-only, and one-pass modes:
    `deep`, `skimmed`, `excluded`, and `deferred` coverage with exact follow-up
    scopes. A confidence closure audit may close only when every relevant slice
    is `deep` or `excluded`.
-6. Ask permission before local reviewers or authorized agents run non-read-only,
-   network, auth, remote-write, destructive, or otherwise approval-gated
-   commands.
+6. Identify whether review commands use authentication, SSH, registries,
+   cloning, pushing, publishing, remote writes, or destructive effects. Rely on
+   the active agent configuration for command approval behavior; do not add a
+   separate model-level permission request.
 7. Apply the shared gap-workflow delegation gate before review work.
 8. Wait for review work, update coverage for every slice, and deduplicate or
    directly re-check conflicting candidates.
