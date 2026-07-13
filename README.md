@@ -89,20 +89,21 @@ can invoke shared skills with `$`, for example `$code-review`, and receives the
 shared permissions after the one-time project trust prompt. Repositories with
 an existing real config can merge the shared settings explicitly.
 
-The permission profile requires Codex 0.138.0 or later. It selects the built-in
-`:danger-full-access` profile, so commands run without filesystem or network
-sandbox restrictions. Approval remains `on-request`; the shared rules require
-approval for recognized remote writes and recursive destructive operations,
-allow direct non-recursive `rm -f` cleanup, and forbid catastrophic commands.
-Explicit workflow permission gates in `AGENTS.md` also remain in force.
+The permission profile requires Codex 0.138.0 or later. It confines routine
+commands to the workspace while making workspace Git metadata and the standard
+Go, RuboCop, golangci-lint, and Trivy caches writable. It grants read access to
+common host credential locations, permits outbound network access, and allows
+writes to standard system temporary directories. Every `make` invocation runs
+outside the sandbox without prompting. Direct cleanup inside writable sandbox
+roots is allowed, direct recognized remote and external-system changes require
+approval, and catastrophic commands are forbidden. Explicit workflow permission
+gates in `AGENTS.md` remain in force.
 
 > [!WARNING]
-> The shared profile is only for trusted repositories. Every command, Make
-> target, hook, and dependency script inherits the user's host access: it can
-> read or modify files outside the workspace, access credentials, and send data
-> over the internet. The shared rules cover named risky command shapes; they are
-> not a filesystem or network sandbox. Review executable repository content
-> before running it with this profile.
+> The shared profile is only for trusted repositories. Make targets run outside
+> the sandbox and inherit the user's host access, while sandboxed commands can
+> read configured credentials and send data over the internet. Review executable
+> repository content, Makefiles, and dependency scripts before using it.
 
 Legacy `sandbox_mode` settings and the `--sandbox` CLI flag take precedence over
 permission profiles. Remove those overrides when the shared profile should be
@@ -150,25 +151,24 @@ one-time workspace trust prompt. Invoke a skill as a slash command, for example
 moves; adding a new skill or updating the permissions baseline needs no
 downstream change because the symlinks target shared paths that follow `bin`.
 
-The baseline sets `sandbox.enabled: false` to match the Codex
-`:danger-full-access` posture, so commands run without Claude Code's bash
-sandbox. The `permissions` allow, ask, and deny arrays are the guardrails:
-`allow` lets Claude read, write, and run anything locally without prompts
-(`Bash(*)` plus unrestricted `Read`/`Edit`/`Write`), `ask` gates recognized
-remote writes and recursive destructive operations, and `deny` forbids
-catastrophic commands. Non-recursive `rm -f` cleanup is allowed. Like Codex
-`:danger-full-access`, the baseline applies no filesystem sandbox and no
-secret-read restrictions; only the named remote-write and destructive command
-shapes prompt or are refused. Explicit workflow permission gates in `AGENTS.md`
-also remain in force.
+The baseline starts in Claude Code's default permission mode, enables the Bash
+sandbox, and routes direct Bash commands through the `permissions` allow, ask,
+and deny guardrails. Direct Bash is broadly allowed without prompting while it
+remains sandboxed; project-local operations stay autonomous, recognized remote
+and external-system changes require approval, and catastrophic commands are
+forbidden. The unsandboxed escape hatch is disabled. The sandbox grants the
+standard Go, RuboCop, golangci-lint, and Trivy cache writes used by project
+commands, plus standard system temporary directories. Every `make` invocation
+is excluded from the sandbox and allowed without prompting. Built-in file edits
+stay scoped to the workspace, and explicit workflow permission gates in
+`AGENTS.md` remain in force.
 
 > [!WARNING]
-> The shared baseline is only for trusted repositories. Every command, Make
-> target, hook, and dependency script inherits the user's host access: it can
-> read or modify files outside the workspace, access credentials, and send data
-> over the internet. The permissions arrays cover named risky command shapes;
-> they are not a filesystem or network sandbox. Review executable repository
-> content before running it with this baseline.
+> The shared baseline is only for trusted repositories. Make targets run outside
+> the sandbox and inherit the user's host access. The Bash sandbox permits broad
+> reads and configured cache writes, and it does not impose blanket secret-read
+> restrictions. Review executable repository content, Makefiles, and dependency
+> scripts before using it.
 
 Put per-repository or per-machine permission tweaks in the gitignored
 `.claude/settings.local.json`, which Claude Code merges over the baseline.
