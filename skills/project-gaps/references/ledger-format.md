@@ -30,7 +30,7 @@ Use this structure for every entry:
 | Status | Proposed \| Accepted \| In progress \| Rejected |
 | Type | Project Gap |
 | Priority | High \| Medium \| Low |
-| Confidence | 93% — one-line reason; minimum 90%, or 95% for high-risk acceptance. |
+| Confidence | 93% — one-line reason; active threshold is the explicit request, otherwise 90% (or 95% for high-risk acceptance). |
 | Scope | path/to/file-or-folder |
 | Audience | Developer \| Maintainer \| Operator \| Package consumer \| Service author |
 | Implementation home | current repo \| shared bin \| external repo \| mixed |
@@ -150,16 +150,20 @@ Keep optional follow-up notes separate from proposals:
 
 ## Priority And Confidence
 
-Use confidence as a hard actionability gate: record only proposals at 90%
-confidence or higher. Below 90%, gather more evidence or discard the candidate.
-Confidence means the inspected evidence makes it very likely that the project
-workflow is repository-owned, not already supported, valuable to the named
-audience, and implementable without violating local patterns.
+Use confidence as the active actionability gate: record only proposals at or
+above the active threshold. The active threshold is the explicit confidence
+target in the current request when provided; otherwise use 90% (or 95% for
+high-risk acceptance). Below the active threshold, gather more evidence or
+discard the candidate. Confidence means the inspected evidence supports that
+the project workflow is repository-owned, not already supported, valuable to
+the named audience, and implementable without violating local patterns. If an
+explicit target lowers the default, state the reduced assurance and residual
+risks.
 
-Do not assign 90% or higher confidence to a reusable-library or shared-tooling
-proposal whose support is limited to package-local possibility, synthetic
-fakes, manual construction, or unsupported downstream usage. Inspect supported
-usage evidence first.
+Do not assign confidence at or above the active threshold to a reusable-library
+or shared-tooling proposal whose support is limited to package-local
+possibility, synthetic fakes, manual construction, or unsupported downstream
+usage. Inspect supported usage evidence first.
 
 Assign priority by workflow value and fit, not implementation ease:
 

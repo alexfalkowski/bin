@@ -32,9 +32,12 @@ Then include these sections:
 Use 1-3 bullets. State only conclusions supported by the selected pipeline or
 deployment target. If evidence is insufficient, say that and name the missing
 source. Include the actual confidence percentage, for example `Confidence: 96%`,
-for each stated likely-cause finding; if confidence is lower than 95%, move the
-item to `Data Gaps` or phrase it as evidence to collect instead of a likely
-cause.
+for each stated likely-cause finding. Use an explicit confidence target from
+the current request when provided; otherwise use the 95% default. If confidence
+is below the active threshold, move the item to `Data Gaps` or phrase it as
+evidence to collect instead of a likely cause. When a lower explicit target is
+used, label the result as a lower-confidence hypothesis and state the residual
+uncertainty.
 
 ## Evidence
 

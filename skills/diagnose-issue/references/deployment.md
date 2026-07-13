@@ -41,9 +41,12 @@ file exists at the repository root.
 
 ## Fix Suggestions
 
-Order suggestions by confidence. State a fix as a likely cause only when the
-selected target evidence supports at least 95% confidence, and state the actual
-percentage; otherwise suggest the next evidence to collect.
+Order suggestions by confidence. Use an explicit confidence target from the
+current request when provided; otherwise use the 95% default. State a fix as a
+likely cause only when the selected target evidence meets the active threshold,
+and state the actual percentage. If a lower explicit target is used, label the
+result as a lower-confidence hypothesis and state the residual uncertainty;
+otherwise suggest the next evidence to collect.
 
 1. Failed deploy job or rollout fix supported by collected evidence.
 2. Runtime fix supported by image mismatch, unready deployments, failing pods,

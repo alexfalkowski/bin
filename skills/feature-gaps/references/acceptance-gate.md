@@ -1,9 +1,13 @@
 # Feature-Gap Acceptance Gate
 
 Apply this gate before recording any candidate in `FEATURES.md`. A feature
-proposal must satisfy every item below at 90% confidence or higher. If any item
-cannot be answered from concrete evidence, gather more evidence or reject the
-candidate instead of recording it as low priority.
+proposal must satisfy every item below at or above the active confidence
+threshold. The active threshold is the explicit confidence target in the
+current request when one is provided; otherwise it is 90% by default (or 95%
+for high-risk acceptance). A lower explicit target changes the actionability
+threshold, not the evidence required by this gate. If any item cannot be
+answered from concrete evidence, gather more evidence or reject the candidate
+instead of recording it as low priority.
 
 - **Audience**: Name the user, developer, maintainer, operator, package
   consumer, or service author who benefits.
@@ -25,7 +29,7 @@ candidate instead of recording it as low priority.
   dependencies, configuration defaults, command behavior, docs, examples, and
   tests. If the behavior is delegated to a framework, shared helper, generated
   surface, or vendored dependency, inspect that delegated implementation before
-  assigning 90% or higher confidence.
+  assigning confidence at or above the active threshold.
 - **Benefit**: Explain why this matters to the named audience and the concrete
   outcome they gain, such as saved time, fewer mistakes, clearer decisions,
   unlocked use cases, safer operation, or reduced support burden. Reject the

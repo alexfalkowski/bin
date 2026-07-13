@@ -83,8 +83,12 @@ For each security-sensitive slice, trace concrete sources to concrete sinks:
 Use these security-specific examples after filtering out low-confidence or
 unsupported candidates. They align with `../../references/finding-severity.md`.
 Recorded security findings must include the agent's actual confidence
-percentage, for example `confidence: 96%`; if the audited evidence cannot
-support at least 95% confidence, gather more evidence or discard the candidate.
+percentage, for example `confidence: 96%`. Use an explicit confidence target
+from the current request when provided; otherwise use the 95% default for
+security findings. If the audited evidence cannot support the active threshold,
+gather more evidence or discard the candidate. A lower explicit target does not
+waive the security evidence, authorization, or validation requirements; state
+the reduced assurance and residual risks.
 
 - Critical: near-certain remote code execution, credential exposure, auth bypass, data loss or corruption, or exploitable critical dependency issue with broad severe impact.
 - High: likely exploitable command injection, arbitrary file write/delete, path traversal to sensitive files, sensitive information disclosure, or other serious security issue with narrower impact.
@@ -118,7 +122,9 @@ support at least 95% confidence, gather more evidence or discard the candidate.
 ```
 
 - Use only these severity values for findings: `Critical`, `High`, `Medium`, `Low`. Use `None` only for the required no-findings entry.
-- Use an actual percentage of at least 95% for finding confidence. Use `n/a` only for the required no-findings entry.
+- Use an actual percentage at or above the active confidence threshold for
+  finding confidence; when no explicit target is provided, that threshold is
+  95%. Use `n/a` only for the required no-findings entry.
 - Use only these validation results: `passed`, `failed`, `not run`, `no-op`.
 - Use `file: n/a` only for repository-wide dependency, configuration, or validation findings that do not have a precise source line.
 - If there are no findings, write exactly one finding entry with `severity: None`, `confidence: n/a`, `file: n/a`, `risk: No findings.`, `trigger: n/a`, `impact: n/a`, and `remediation: n/a`.
