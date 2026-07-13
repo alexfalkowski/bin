@@ -1,4 +1,40 @@
 # Shared Codex permissions for repositories wired through `make codex-init`.
 approval_policy = "on-request"
 approvals_reviewer = "user"
-default_permissions = ":danger-full-access"
+default_permissions = "shared-development"
+
+[permissions.shared-development]
+description = "Autonomous workspace development with host credentials and internet access."
+extends = ":workspace"
+
+[permissions.shared-development.filesystem]
+glob_scan_max_depth = 12
+"/tmp" = "write"
+"/private/tmp" = "write"
+"/var/tmp" = "write"
+"/var/folders" = "write"
+"~/.ssh" = "read"
+"~/.aws" = "read"
+"~/.netrc" = "read"
+"~/.docker/config.json" = "read"
+"~/.kube/config" = "read"
+"~/.config/gh" = "read"
+"~/.cache/go-build" = "write"
+"~/.cache/rubocop_cache" = "write"
+"~/.cache/trivy" = "write"
+"~/Library/Caches/go-build" = "write"
+"~/Library/Caches/golangci-lint" = "write"
+"~/Library/Caches/trivy" = "write"
+"~/go/pkg/mod" = "write"
+
+[permissions.shared-development.filesystem.":workspace_roots"]
+".git" = "write"
+".env" = "deny"
+".env.*" = "deny"
+".envrc" = "deny"
+"**/.env" = "deny"
+"**/.env.*" = "deny"
+"**/.envrc" = "deny"
+
+[permissions.shared-development.network]
+enabled = true
