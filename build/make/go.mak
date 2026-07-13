@@ -23,7 +23,7 @@ tidy:
 	@go mod tidy
 
 vendor:
-	@$(BIN_ROOT)/build/go/vendor
+	@go mod vendor
 
 get:
 	@go get "$$module"

@@ -96,7 +96,9 @@ common host credential locations, permits outbound network access, and allows
 writes to standard system temporary directories. Every `make` invocation runs
 outside the sandbox without prompting. Direct cleanup inside writable sandbox
 roots is allowed, direct recognized remote and external-system changes require
-approval, and catastrophic commands are forbidden. Explicit workflow permission
+approval, and catastrophic commands are forbidden. Root `.env` and `.env.*`
+files remain protected, while nested dependency environment files and `.envrc`
+files are allowed for native dependency workflows. Explicit workflow permission
 gates in `AGENTS.md` remain in force.
 
 > [!WARNING]
