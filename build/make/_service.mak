@@ -26,7 +26,7 @@ tidy:
 	@go mod tidy
 
 vendor:
-	@$(BIN_ROOT)/build/go/vendor
+	@go mod vendor
 
 # Run fieldalignment; .gofa may list comma-separated packages, default ./...
 field-alignment:

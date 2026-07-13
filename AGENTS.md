@@ -333,7 +333,9 @@ Do not infer the test language from the implementation language alone.
   directories, and allows outbound network access. Every `make` invocation is
   allowed outside the sandbox without prompting; cleanup inside writable roots
   is prompt-free, direct remote and external-service commands remain
-  approval-gated, and catastrophic commands remain forbidden. Use the profile
+  approval-gated, and catastrophic commands remain forbidden. Root `.env` and
+  `.env.*` files remain protected, while nested dependency environment files
+  and `.envrc` files are allowed for native dependency workflows. Use the profile
   only in trusted
   repositories because Make targets inherit the user's host access and
   sandboxed commands can read credentials and use the network. The shared rules
