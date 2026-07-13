@@ -363,11 +363,18 @@ Do not infer the test language from the implementation language alone.
   approval, and catastrophic commands remain forbidden. The unsandboxed escape
   hatch is disabled. The sandbox grants the standard Go, RuboCop,
   golangci-lint, and Trivy cache writes needed by project commands plus standard
-  system temporary directories. Every `make` invocation is excluded from the
-  sandbox and allowed without prompting. Built-in file edits stay scoped to the
-  workspace. Use the baseline
+  system temporary directories, and allows unrestricted outbound network access
+  to match the Codex profile, with macOS `trustd` access enabled so Go-based
+  CLI tools (`gh`, `gcloud`, `terraform`) can verify TLS through the sandbox
+  network proxy. Every `make` invocation is excluded from the
+  sandbox and allowed without prompting. Built-in file reads and edits are
+  scoped to the workspace plus the standard system temporary directories
+  (`/tmp`, `/private/tmp`, `/var/tmp`, `/var/folders`), which are readable and
+  writable without prompting. Use the baseline
   only in trusted repositories because Make targets inherit the user's host
-  access, and the sandbox does not impose blanket secret-read restrictions.
+  access, outbound network access is unrestricted, enabling `trustd` widens the
+  exfiltration surface, and the sandbox does not impose blanket secret-read
+  restrictions.
   Per-repo or per-machine permission tweaks belong in the gitignored
   `.claude/settings.local.json`, which Claude Code merges over the baseline.
 - Treat skills as maintained artifacts and review them when project workflow,
