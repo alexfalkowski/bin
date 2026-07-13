@@ -5,6 +5,12 @@
     "failIfUnavailable": true,
     "autoAllowBashIfSandboxed": false,
     "allowUnsandboxedCommands": false,
+    "network": {
+      "allowedDomains": [
+        "*"
+      ]
+    },
+    "enableWeakerNetworkIsolation": true,
     "excludedCommands": [
       "make",
       "make *"
@@ -33,6 +39,18 @@
       "Read(**)",
       "Edit(**)",
       "Write(**)",
+      "Read(//tmp/**)",
+      "Read(//private/tmp/**)",
+      "Read(//var/tmp/**)",
+      "Read(//var/folders/**)",
+      "Edit(//tmp/**)",
+      "Edit(//private/tmp/**)",
+      "Edit(//var/tmp/**)",
+      "Edit(//var/folders/**)",
+      "Write(//tmp/**)",
+      "Write(//private/tmp/**)",
+      "Write(//var/tmp/**)",
+      "Write(//var/folders/**)",
       "WebFetch",
       "WebSearch"
     ],
