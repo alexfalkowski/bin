@@ -1,4 +1,4 @@
 interface:
   display_name: "Code Issues"
   short_description: "Find scoped code defects and risks"
-  default_prompt: "Use $code-issues for scoped bug, security, compatibility, and public-contract findings. Default to Find mode when no mode is stated; follow repo archetype lead generation, apply the shared delegation gate, preserve its evidence and approval workflow, answer issue ID follow-ups such as ISSUE-1, and implement only after explicit agreement to a specific proposal."
+  default_prompt: "Use $code-issues for scoped bug, security, compatibility, and public-contract findings. Default to Find mode when no mode is stated; follow repo archetype lead generation, apply the shared delegation gate, summarize ledger entries in a compact Title/What/Why table, preserve the evidence and approval workflow, answer issue ID follow-ups such as ISSUE-1, and implement only after explicit agreement to a specific proposal."
