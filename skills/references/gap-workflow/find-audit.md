@@ -183,9 +183,11 @@ closeouts must report all three, using `n/a` for finding confidence when there
 are no findings.
 
 - For broad repository, package-tree, or multi-component scopes, use a
-  no-finding outcome only at 95% scope no-finding confidence with every relevant
-  slice deep-reviewed or explicitly excluded. Otherwise use the incomplete
-  outcome.
+  no-finding outcome only when scope no-finding confidence reaches the active
+  threshold, with every relevant slice deep-reviewed or explicitly excluded.
+  When no explicit target is given, the broad-scope default is 95%. Otherwise
+  use the incomplete outcome and state the reduced assurance when an explicit
+  target lowers that default.
 - Confidence closure additionally requires current clean validation,
   coverage/rejected-lead/validation/follow-up evidence for each delegated slice,
   every candidate reproduced or rejected/routed, and a final challenge pass

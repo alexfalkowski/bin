@@ -25,7 +25,7 @@ Use this structure:
 | How | Proposed change, what remains unchanged, and how success will be proved. |
 | Scope | ID-N and the smallest surfaces the change needs. |
 | Compatibility | Additive \| Breaking \| Mixed, with the concrete reason. |
-| Confidence | 94% — one-line reason; minimum 90%, or 95% for high-risk acceptance. |
+| Confidence | 94% — one-line reason; active threshold is the explicit request, otherwise 90% (or 95% for high-risk acceptance). |
 | Watch | The main compatibility, maintenance, security, test-layer, or operational cost to weigh. |
 
 Source RFC: ID-N in its ledger. This locator is for deeper verification; the

@@ -36,24 +36,29 @@ summary shape.
 - Before starting find, audit, one-pass, or implement mode, read the selected
   skill's `references/plan.md` and keep it as runtime state. Do not write it to
   the repository unless the human explicitly asks for a durable plan file.
-- If the human asks for an explicit or broad no-finding confidence target, such
-  as "95% confidence", "99% closure", "max confidence", "full closure", "no
-  issues anywhere", or equivalent broad assurance, treat the run as a
-  **confidence closure audit**. Use the requested percentage as the scope
-  no-finding confidence threshold, subject to mandatory repository confidence
-  floors such as the 95% floor for broad no-finding claims. When no explicit
-  percentage is given, use the broad no-finding default threshold of 95%. If the
-  requested percentage is below the mandatory floor, apply the mandatory floor
-  and say the lower request cannot waive repository confidence rules. Do not
-  accept 100% as an achievable threshold for repository review; if the human
-  asks for 100% certainty, explain that the workflow can pursue a lower explicit
-  target or continue gathering evidence, but cannot truthfully close at 100%.
-- Treat a confidence closure audit as **high-assurance closure** when the
-  requested threshold is higher than the broad no-finding default threshold, or
-  when the human asks for "max confidence", "full closure", "no issues
-  anywhere", "no possible bugs", or equivalent broad assurance. High-assurance
-  closure scales evidence to the requested threshold; do not hard-code one
-  percentage as the only trigger for stronger review.
+- Determine the active confidence threshold before reviewing. Use an explicit
+  confidence target from the current request, such as "50% confidence", for
+  the selected finding, proposal, or audit scope. When no explicit target is
+  given, use 90% for an individual finding or proposal and 95% for a broad
+  no-finding claim or other high-risk acceptance. An explicit percentage may be
+  lower or higher than those defaults; when it is lower, state the reduced
+  assurance and residual risks rather than silently raising it. This threshold
+  choice does not waive evidence, challenge-pass, approval, validation,
+  security, compatibility, or truthful-reporting requirements.
+- If the human asks for a broad no-finding target, such as "95% confidence",
+  "99% closure", "max confidence", "full closure", "no issues anywhere", or
+  equivalent broad assurance, treat the run as a **confidence closure audit**.
+  Use the requested percentage as the active scope no-finding confidence
+  threshold. When no explicit percentage is given for a broad audit, use the
+  95% default. Do not accept 100% as an achievable threshold for repository
+  review; if the human asks for 100% certainty, explain that the workflow can
+  pursue that target but cannot truthfully claim 100% closure.
+- Treat a confidence closure audit as **high-assurance closure** when the active
+  threshold is higher than the broad no-finding default threshold, or when the
+  human asks for "max confidence", "full closure", "no issues anywhere", "no
+  possible bugs", or equivalent broad assurance. High-assurance closure scales
+  evidence to the active threshold; do not hard-code one percentage as the only
+  trigger for stronger review.
 - Distinguish scope no-finding confidence from a literal no-possible-bugs
   claim. Close only on reportable findings under the selected skill's evidence
   rules and state residual risks from unsupported paths, environments, future

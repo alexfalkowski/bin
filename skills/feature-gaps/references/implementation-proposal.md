@@ -44,7 +44,7 @@ validation:
 | How | This solution shape, what remains unchanged, and how success will be proved. |
 | Scope | FEATURE-N and the smallest package/config/doc surfaces needed. |
 | Compatibility | Additive \| Breaking \| Mixed, with the concrete reason. |
-| Confidence | 94% — one-line reason; minimum 90%, or 95% for high-risk acceptance. |
+| Confidence | 94% — one-line reason; active threshold is the explicit request, otherwise 90% (or 95% for high-risk acceptance). |
 | Watch | The main compatibility, maintenance, dependency, security, or config-surface cost to weigh. |
 
 Source mini-PRD: FEATURE-N in `FEATURES.md`. This locator is for deeper

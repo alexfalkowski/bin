@@ -30,7 +30,7 @@ Use this structure for every entry:
 | Status | Proposed \| Accepted \| In progress \| Rejected |
 | Type | Test Gap |
 | Severity | Critical \| High \| Medium \| Low |
-| Confidence | 93% — one-line reason; minimum 90%, or 95% for high-risk acceptance. |
+| Confidence | 93% — one-line reason; active threshold is the explicit request, otherwise 90% (or 95% for high-risk acceptance). |
 | Scope | path/to/file-or-folder |
 | Impact | Risk created by the missing, weak, misleading, flaky, or wrong-layer coverage. |
 

@@ -1,9 +1,13 @@
 # Project-Gap Acceptance Gate
 
 Apply this gate before recording any candidate in `PROJECTS.md`. A project
-proposal must satisfy every item below at 90% confidence or higher. If any item
-cannot be answered from concrete evidence, gather more evidence or reject the
-candidate instead of recording it as low priority.
+proposal must satisfy every item below at or above the active confidence
+threshold. The active threshold is the explicit confidence target in the
+current request when one is provided; otherwise it is 90% by default (or 95%
+for high-risk acceptance). A lower explicit target changes the actionability
+threshold, not the evidence required by this gate. If any item cannot be
+answered from concrete evidence, gather more evidence or reject the candidate
+instead of recording it as low priority.
 
 - **Audience**: Name the developer, maintainer, operator, service author, or
   package consumer who benefits from the project workflow improvement.

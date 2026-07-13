@@ -98,8 +98,9 @@ Before accepting substantial work as complete, run a fresh review gate:
 - Resolve blocking review findings or get explicit human approval to leave them
   unresolved before claiming the task is complete.
 - If sub-agents were authorized and available but the independent review was not
-  run, do not claim substantial work is complete at or above 90% confidence.
-  State the missed gate as a workflow blocker or validation gap.
+  run, do not claim substantial work is complete at or above the active
+  confidence threshold. State the missed gate as a workflow blocker or
+  validation gap.
 
 The reviewer checks whether the implementation satisfies the approved objective,
 preserves local contracts, follows the selected skill, and has credible

@@ -35,15 +35,22 @@ Agents MUST:
   equivalent, as the default next step, or as acceptable merely because the
   repository looks small.
 - Report an explicit confidence percentage before treating any result, finding,
-  validation conclusion, or task as accepted or complete. Default minimum is
-  90%; require 95% for high-risk acceptance: security findings, destructive
-  actions, public-interface or compatibility conclusions, release or PR
-  readiness, CI/deployment root-cause conclusions, broad no-findings claims, and
-  claims that a problem is definitely fixed. Back every number with concrete
-  evidence — source inspection, tests, logs, scanner output, official
-  documentation, runtime behavior, or repository history. Below the required
-  threshold, gather more evidence or state the blocker instead of accepting
-  completion.
+  validation conclusion, or task as accepted or complete. Use an explicit
+  confidence target from the current request when one is provided; otherwise,
+  use a 90% default minimum and a 95% default for high-risk acceptance:
+  security findings, destructive actions, public-interface or compatibility
+  conclusions, release or PR readiness, CI/deployment root-cause conclusions,
+  broad no-findings claims, and claims that a problem is definitely fixed. An
+  explicit target may be lower or higher than those defaults, but it does not
+  waive evidence, challenge-pass, approval, validation, security, or
+  compatibility requirements. Back every number with concrete evidence — source
+  inspection, tests, logs, scanner output, official documentation, runtime
+  behavior, or repository history. Below the active threshold, gather more
+  evidence or state the blocker instead of accepting completion, and state the
+  reduced assurance and residual risks when an explicit target lowers a default.
+  Do not claim 100% certainty for any repository result; if requested, continue
+  gathering evidence where useful but report residual uncertainty instead of
+  stating that the result is certain.
 - For ledger findings and validation conclusions, prefer reproducible local
   evidence from the smallest supported command, test, scenario, trace, lookup,
   or negative search that demonstrates the claim. CI running later is not
@@ -56,12 +63,13 @@ Agents MUST:
 - Calibrate durable findings against supported usage evidence. In reusable
   libraries, helpers, or shared tooling, package-local synthetic tests, fakes,
   manual construction, and unsupported downstream patterns are leads, not enough
-  evidence for a >=90% finding by themselves. Before recording a high-confidence
-  issue, inspect a supported consumer, executable example, integration test,
-  module wiring path, documented contract, CI workflow, or comparable real usage
-  path that can trigger the candidate. If supported usage evidence cannot be
-  found, lower confidence below the recording threshold, route the concern to
-  the correct workflow, or state the evidence gap instead of recording it.
+  evidence for a durable finding by themselves. Before recording a high-
+  confidence issue, inspect a supported consumer, executable example,
+  integration test, module wiring path, documented contract, CI workflow, or
+  comparable real usage path that can trigger the candidate. If supported usage
+  evidence cannot be found, lower confidence below the active recording
+  threshold, route the concern to the correct workflow, or state the evidence
+  gap instead of recording it.
 - Route findings about third-party libraries, frameworks, tools, or project-owned
   upstream libraries to the owner of the fix. Use `project-gaps` only for the
   repository-owned dependency/tooling response; route project-owned upstream

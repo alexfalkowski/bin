@@ -56,8 +56,12 @@ or other approval-gated access.
 ## Acceptance Gate
 
 Before recording any `FEATURES.md` candidate, read
-`references/acceptance-gate.md`. A proposal must satisfy that gate at 90%
-confidence or higher; otherwise gather more evidence or reject it.
+`references/acceptance-gate.md`. A proposal must satisfy that gate at the
+active confidence threshold or higher. Use an explicit confidence target from
+the current request when provided; otherwise use the 90% default (or the 95%
+high-risk default when applicable). A lower explicit target changes the
+actionability threshold but does not waive the gate's evidence requirements.
+Otherwise gather more evidence or reject the proposal.
 
 ## Find Mode
 

@@ -8,21 +8,23 @@ test, doc, reliability, diagnostic, or security findings.
 Filter candidates before assigning severity. A finding should have concrete
 evidence, a trigger condition, credible impact, and a plausible fix direction.
 Recorded findings must state the agent's actual confidence percentage, for
-example `Confidence: 93%`. Use 90% as the default minimum threshold. Use 95%
-for high-risk findings and acceptance, including security findings, destructive
-actions, public interface or compatibility conclusions, release or PR readiness,
-CI/deployment root-cause conclusions, broad no-findings claims, and claims that
-a problem is definitely fixed. Treat this percentage as an evidence-calibration
-threshold, not a statistical claim: after trying to disprove the candidate and
-asking the strongest reasonable challenge question, the inspected evidence
-should make it at least roughly as likely as the required threshold that the
-finding is real, repository-owned, and actionable.
+example `Confidence: 93%`. Use an explicit confidence target from the current
+request when one is provided. Otherwise use 90% as the default threshold and
+95% for high-risk findings and acceptance, including security findings,
+destructive actions, public interface or compatibility conclusions, release or
+PR readiness, CI/deployment root-cause conclusions, broad no-findings claims,
+and claims that a problem is definitely fixed. An explicit target may lower or
+raise those defaults, but does not waive the evidence or challenge-pass
+requirements. Treat this percentage as an evidence-calibration threshold, not a
+statistical claim: after trying to disprove the candidate and asking the
+strongest reasonable challenge question, the inspected evidence should meet
+the active threshold for the finding to be recorded.
 Confidence must account for both the concrete failure path and the likelihood
 that supported current operation admits the trigger. A technically real failure
 path that depends on an unusual future bad commit, missed review, deliberately
-invalid fixture, or unsupported manual construction is a lead, not a >=90%
-finding, unless repository evidence shows that path is plausibly exercised
-today.
+invalid fixture, or unsupported manual construction is a lead, not an
+active-threshold finding, unless repository evidence shows that path is
+plausibly exercised today.
 
 Do not collapse different confidence claims into one number. Use:
 
@@ -61,13 +63,13 @@ candidate.
 For reusable libraries, helpers, and shared tooling, calibrate confidence
 against supported usage evidence, not package-local possibility alone. Synthetic
 tests, fakes, manual construction, unsupported downstream patterns, or private
-implementation reachability are useful leads, but they do not justify a >=90%
-durable finding unless a supported consumer, executable example, integration
-test, module wiring path, documented contract, CI workflow, or comparable real
-usage path can trigger the candidate. If that evidence is missing, gather it,
-lower confidence below the recording threshold, route the concern to a better
-workflow, or record only the evidence gap when the selected workflow has a
-place for unresolved questions.
+implementation reachability are useful leads, but they do not justify an
+active-threshold durable finding unless a supported consumer, executable
+example, integration test, module wiring path, documented contract, CI workflow,
+or comparable real usage path can trigger the candidate. If that evidence is
+missing, gather it, lower confidence below the recording threshold, route the
+concern to a better workflow, or record only the evidence gap when the selected
+workflow has a place for unresolved questions.
 
 For third-party tools or project-owned upstream libraries, separate defect
 evidence from fix ownership. A finding is local only when repository-owned
@@ -89,8 +91,9 @@ a code, test, reliability, or security finding.
 Use confidence as a compact statement of completed evidence, not optimism. The
 same percentage can mean different work in a small package and a broad repo
 audit, so state the evidence behind it. For broad no-findings claims, release or
-PR readiness, compatibility conclusions, and definitely-fixed claims, require
-95% confidence or state the remaining blocker.
+PR readiness, compatibility conclusions, and definitely-fixed claims, use the
+active threshold; when no explicit target is provided, that default is 95%, or
+state the remaining blocker.
 
 - **Static/manual pass**: supports a scoped candidate or no-findings claim only
   for the files, packages, modules, components, commands, services, or areas
@@ -145,8 +148,9 @@ For no-findings results, distinguish `No findings and validation clean`,
 concrete terms: unrun targets, no-op wrappers, skipped slices, unsupported
 paths, missing sidecars, unavailable scanners, or evidence that was limited to
 static review. Do not use a clean no-findings outcome for a broad scope unless
-scope no-finding confidence reaches the required threshold and no relevant
-slice remains skimmed, deferred, or blocked.
+scope no-finding confidence reaches the active threshold and no relevant slice
+remains skimmed, deferred, or blocked. If an explicit target lowers the default,
+state that reduced assurance and the residual risks.
 
 ## Severity
 

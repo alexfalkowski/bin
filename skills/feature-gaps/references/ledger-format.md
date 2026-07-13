@@ -31,7 +31,7 @@ Use this structure for every entry:
 | Status | Proposed \| Accepted \| In progress \| Rejected |
 | Type | Feature Gap |
 | Priority | High \| Medium \| Low |
-| Confidence | 93% — one-line reason; minimum 90%, or 95% for high-risk acceptance. |
+| Confidence | 93% — one-line reason; active threshold is the explicit request, otherwise 90% (or 95% for high-risk acceptance). |
 | Scope | path/to/file-or-folder |
 | Audience | User \| Developer \| Maintainer \| Operator \| Package consumer \| Service author |
 | Product surface | Public command \| API \| library behavior \| service/operator behavior \| package-consumer workflow \| integration \| template \| extension point. |
@@ -145,22 +145,25 @@ Keep optional follow-up notes separate from proposals:
 
 ## Priority And Confidence
 
-Use confidence as a hard actionability gate: record only proposals at 90%
-confidence or higher. Below 90%, gather more evidence or discard the candidate.
-Confidence means the inspected evidence makes it very likely that the feature
-is repository-owned, not already supported, valuable to the named audience, and
-implementable without violating local patterns.
+Use confidence as the active actionability gate: record only proposals at or
+above the active threshold. The active threshold is the explicit confidence
+target in the current request when provided; otherwise use 90% (or 95% for
+high-risk acceptance). Below the active threshold, gather more evidence or
+discard the candidate. Confidence means the inspected evidence supports that
+the feature is repository-owned, not already supported, valuable to the named
+audience, and implementable without violating local patterns. If an explicit
+target lowers the default, state the reduced assurance and residual risks.
 
-Do not assign 90% or higher confidence to a missing-feature proposal when the
-current behavior may be provided by an included framework, shared helper,
-generated surface, vendored dependency, or default configuration that has not
-been inspected. Keep the candidate below threshold, gather that evidence, or
-discard it.
+Do not assign confidence at or above the active threshold to a missing-feature
+proposal when the current behavior may be provided by an included framework,
+shared helper, generated surface, vendored dependency, or default
+configuration that has not been inspected. Keep the candidate below threshold,
+gather that evidence, or discard it.
 
-Do not assign 90% or higher confidence to a reusable-library or shared-tooling
-proposal whose support is limited to package-local possibility, synthetic
-fakes, manual construction, or unsupported downstream usage. Inspect supported
-usage evidence first.
+Do not assign confidence at or above the active threshold to a reusable-library
+or shared-tooling proposal whose support is limited to package-local
+possibility, synthetic fakes, manual construction, or unsupported downstream
+usage. Inspect supported usage evidence first.
 
 Do not add a separate percentage for idea quality, strength, value, impact, or
 priority. Use `Priority` to express the strength of the audience benefit and

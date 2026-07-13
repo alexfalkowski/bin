@@ -66,7 +66,7 @@ while implementing an agreed gap-ledger entry.
   `../long-running-work.md`. Without authorized agents, perform a named local
   challenge pass and do not call it independent review. If agents were
   authorized and available but independent review did not run, do not report
-  completion at or above 90% confidence.
+  completion at or above the active confidence threshold.
 - During automatic continuations while waiting for approval or `Done ID`, state
   the waiting gate once without repeating the full proposal.
 - Do not move to the next entry until the human confirms `Done ID`. After that
