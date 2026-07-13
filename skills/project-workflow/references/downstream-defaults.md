@@ -192,6 +192,19 @@ Target-specific rules:
   targets do not automatically run `make clean-reports`; CI uses fresh
   workspaces and local users have an explicit cleanup target.
 
+### Containerized Go-service defaults
+
+- For containerized `go-service` applications, standalone `validate-config`,
+  `check-config`, `server --check-config`, Make, or CI configuration validators
+  are not desired by default. Runtime configuration is validated during normal
+  server startup.
+- Schema-only checks provide little value because they cannot validate
+  referenced secrets, certificates, policies, migration sources, database URLs,
+  dependencies, or deployment readiness.
+- Do not report the absence of a standalone configuration validator as a gap
+  without a supported non-container consumer, observed failure, or explicit
+  project decision.
+
 ### Shared service health defaults
 
 - Services using the shared health wiring can intentionally connect `healthz`
@@ -199,4 +212,3 @@ Target-specific rules:
   a reliability gap unless the task concerns changing the health contract,
   environments that must run without public egress, or a documented operator
   workflow where `healthz` must mean local-process-only health.
-
