@@ -1,8 +1,9 @@
 # Gap Workflow
 
 Use this reference for scoped gap-finding and gap-implementation skills. The
-selected skill owns domain judgment, ledger format, mode names, and final output.
-These shared rules own workflow mechanics.
+selected skill owns domain judgment, ledger format, mode names, and mode-specific
+final output. These shared rules own workflow mechanics and the common session
+summary shape.
 
 ## Mode And Plan State
 
@@ -104,6 +105,26 @@ rejected, routed, deferred, and blocked leads.
 - Record durable findings or proposals only in the selected scoped ledger and
   assign IDs using its prefix, such as `ISSUE-N`, `TEST-N`, `DOC-N`,
   `FEATURE-N`, `PROJECT-N`, or `REL-N`.
+
+## Session Summary
+
+When the final response reports one or more confirmed, fixed, or remaining
+ledger entries, use exactly this compact summary shape:
+
+```markdown
+## Summary
+
+| Title | What | Why |
+| --- | --- | --- |
+| ID: Short concrete title | One short sentence describing the gap or completed change. | One short sentence describing why it matters to the affected audience. |
+```
+
+Use the selected ledger ID and entry title in `Title`. Keep `What` and `Why` to
+one short, plain sentence each. Do not replace this table with bullets or prose,
+and do not add columns. Keep evidence, proposals, status, confidence,
+validation, coverage, and follow-up detail in their required sections outside
+the summary; do not repeat them in the table. Omit the table when there are no
+confirmed, fixed, or remaining entries to summarize.
 
 ## Delegation And Permissions
 
