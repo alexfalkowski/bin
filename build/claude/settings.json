@@ -43,6 +43,7 @@
       "Read(//private/tmp/**)",
       "Read(//var/tmp/**)",
       "Read(//var/folders/**)",
+      "Read(~/go/pkg/mod/**)",
       "Edit(//tmp/**)",
       "Edit(//private/tmp/**)",
       "Edit(//var/tmp/**)",
