@@ -23,9 +23,12 @@ The shared profile extends `:workspace`, makes workspace Git metadata and
 standard Go, RuboCop, golangci-lint, and Trivy caches writable, grants read
 access to common host credential locations, allows writes to standard system
 temporary directories, and allows outbound network access. Every `make`
-invocation is allowed outside the sandbox without prompting; cleanup inside
-writable roots is prompt-free, direct remote and external-service commands
-remain approval-gated, and catastrophic commands remain forbidden. Root `.env`
+invocation is allowed outside the sandbox without prompting, except `make
+pr`, `make draft`, `make merge`, `make ready`, and `make review`, which
+remain approval-gated because they create, merge, or force-push a pull
+request; cleanup inside writable roots is prompt-free, direct remote and
+external-service commands remain approval-gated, and catastrophic commands
+remain forbidden. Root `.env`
 and `.env.*` files remain protected, while nested dependency environment files
 and `.envrc` files are allowed for native dependency workflows. The shared
 rules provide runtime approval guardrails, while `AGENTS.md` defines task scope
@@ -52,7 +55,9 @@ commands plus standard system temporary directories, and allows unrestricted
 outbound network access to match the Codex profile, with macOS `trustd` access
 enabled so Go-based CLI tools (`gh`, `gcloud`, `terraform`) can verify TLS
 through the sandbox network proxy. Every `make` invocation is excluded from the
-sandbox and allowed without prompting. Built-in file reads and edits are scoped
+sandbox and allowed without prompting, except `make pr`, `make draft`, `make
+merge`, `make ready`, and `make review`, which require approval because they
+create, merge, or force-push a pull request. Built-in file reads and edits are scoped
 to the workspace plus the standard system temporary directories (`/tmp`,
 `/private/tmp`, `/var/tmp`, `/var/folders`), which are readable and writable
 without prompting. Per-repo or per-machine permission tweaks belong in the

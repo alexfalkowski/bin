@@ -12,6 +12,18 @@ prefix_rule(
         "make lint",
         "make push",
         "make reset",
+    ],
+)
+
+prefix_rule(
+    pattern = ["make", ["pr", "draft", "merge", "ready", "review"]],
+    decision = "prompt",
+    justification = "These targets create, merge, or force-push a pull request on GitHub even though they run through make; the engine resolves overlapping rules by strictest decision, not declaration order.",
+    match = [
+        "make pr",
+        "make draft",
+        "make merge",
+        "make ready",
         "make review",
     ],
 )

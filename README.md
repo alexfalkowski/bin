@@ -94,9 +94,11 @@ commands to the workspace while making workspace Git metadata and the standard
 Go, RuboCop, golangci-lint, and Trivy caches writable. It grants read access to
 common host credential locations, permits outbound network access, and allows
 writes to standard system temporary directories. Every `make` invocation runs
-outside the sandbox without prompting. Direct cleanup inside writable sandbox
-roots is allowed, direct recognized remote and external-system changes require
-approval, and catastrophic commands are forbidden. Root `.env` and `.env.*`
+outside the sandbox without prompting, except `make pr`, `make draft`, `make
+merge`, `make ready`, and `make review`, which stay approval-gated because
+they create, merge, or force-push a pull request. Direct cleanup inside
+writable sandbox roots is allowed, direct recognized remote and external-system
+changes require approval, and catastrophic commands are forbidden. Root `.env` and `.env.*`
 files remain protected, while nested dependency environment files and `.envrc`
 files are allowed for native dependency workflows. The active agent
 configuration provides runtime approval guardrails; `AGENTS.md` continues to
@@ -117,8 +119,9 @@ per-machine additions in `~/.codex/config.toml` and
 `~/.codex/rules/default.rules`; Codex also records accepted persistent command
 prefixes in that user rules file. Re-run `make codex-init` only when the shared
 paths move. Updates to the shared profile or rules propagate with the next
-`bin` submodule update; start a new Codex session afterward so it uses the
-updated permissions.
+`bin` submodule update; fully restart the Codex CLI process afterward, since
+Codex loads rules at process startup and a new session or prompt within an
+already-running process does not pick up the change.
 
 Codex reads `AGENTS.md` separately for repository instructions. Downstream
 repositories should still point agents at the shared instructions instead of
@@ -162,10 +165,17 @@ and external-system changes require approval, and catastrophic commands are
 forbidden. The unsandboxed escape hatch is disabled. The sandbox grants the
 standard Go, RuboCop, golangci-lint, and Trivy cache writes used by project
 commands, plus standard system temporary directories. Every `make` invocation
-is excluded from the sandbox and allowed without prompting. Built-in file edits
-stay scoped to the workspace, and the active agent configuration provides
-runtime approval guardrails while `AGENTS.md` defines task scope and workflow
-authorization.
+is excluded from the sandbox and allowed without prompting, except `make pr`,
+`make draft`, `make merge`, `make ready`, and `make review`, which require
+approval because they create, merge, or force-push a pull request. Built-in
+file edits stay scoped to the workspace, and the active agent configuration
+provides runtime approval guardrails while `AGENTS.md` defines task scope and
+workflow authorization.
+
+Permission-baseline updates propagate with the next `bin` submodule update;
+fully restart the Claude Code process afterward, since `settings.json` is read
+at process startup and a new conversation within an already-running process
+does not pick up the change.
 
 > [!WARNING]
 > The shared baseline is only for trusted repositories. Make targets run outside
