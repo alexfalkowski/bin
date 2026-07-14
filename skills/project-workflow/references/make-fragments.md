@@ -42,7 +42,7 @@ Use this reference after you have identified which shared `bin/build/make/*.mak`
 ### `buf.mak`
 
 - Especially relevant targets: `lint`, `fix-lint`, `format`, `generate`, `stale`, `breaking`, `push`, `update-all-dep`.
-- `breaking` compares against `https://github.com/alexfalkowski/$(NAME).git#branch=master`, so branch and remote assumptions matter.
+- `breaking` compares against `https://github.com/alexfalkowski/$(NAME).git#branch=master,subdir=api`, so branch, remote, and subdir assumptions matter.
 - `generate`, `stale`, and `push` depend on the consuming repository's Buf configuration.
 - `stale` runs `buf generate` from the Buf module directory that included the fragment, then runs `git diff --exit-code`; Git checks the whole worktree, so generated outputs outside that child directory are still detected.
 - `push` updates remote state. Run it only when the current request authorizes

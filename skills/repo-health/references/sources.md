@@ -143,13 +143,15 @@ Useful read-only API pattern:
    failures.
 5. Calculate workflow duration from `created_at` to `stopped_at`.
 6. Check flaky tests with
-   `/api/v2/insights/gh/<owner>/<repo>/flaky-tests?branch=<branch>`.
+   `/api/v2/insights/gh/<owner>/<repo>/flaky-tests` (branch-agnostic; the
+   endpoint takes no branch parameter).
 7. For service repos, collect job-level data with
    `/api/v2/workflow/<workflow-id>/job` and report deploy health from jobs named
    `deploy` rather than inferring deploys from tags alone.
 
-Use a successful completed workflow count as the denominator for success rate
-only after excluding running, on-hold, and not-run workflows.
+Use the completed workflow count — workflows with a `stopped_at` timestamp,
+excluding `running`, `on_hold`, and `not_run` — as the denominator for success
+rate; the numerator is the count with status `success`.
 Report releases/tags separately from successful deploy jobs when both exist.
 When `max_auto_reruns` is configured, state that CircleCI workflow totals are
 API-visible completed workflow records after rerun behavior, not necessarily
@@ -191,7 +193,7 @@ Common environment variables:
 
 - `UPTIMEROBOT_API_KEY`
 - `UPTIMEROBOT_MONITOR_IDS`
-- `UPTIMEROBOT_STATUS_PAGE_URL`
+- `UPTIMEROBOT_STATUS_PAGE_URL` (manual status-page source; not read by the collector)
 
 Prefer sources in this order:
 

@@ -21,7 +21,8 @@ reporting period and comparison period, not necessarily a local folder.
    - Default to the current working repository when the user does not name one.
    - Default to weekly summary for the last complete 7 days when no period is
      provided.
-   - Use the local timezone unless the user specifies another timezone.
+   - Use the local timezone (via `TZ`) unless the user specifies another; the
+     collector falls back to `Europe/Berlin` when `TZ` is unset.
    - Compare weekly summaries with the preceding 7 days; compare daily summaries
      with the preceding 24 hours or preceding calendar day, matching the
      requested window.
