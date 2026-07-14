@@ -54,6 +54,17 @@ folder.
   timestamp evidence over broad health summaries.
 - If evidence is missing because credentials, CLIs, or mappings are unavailable,
   report that as a data gap and provide the next best local diagnostic step.
+- Before treating a related or upstream repository as unavailable, check
+  whether it exists as a sibling checkout (e.g. `../<repo-name>` relative to
+  the current repo root) and read it locally first. If no local checkout
+  exists, derive `<owner>` from the current repo's own origin remote (`git
+  remote get-url origin`, taking the account/org segment) and assume sibling
+  repositories share that owner unless local evidence says otherwise, then
+  fall back to read-only `gh` access before concluding the evidence is
+  unavailable: `gh repo clone <owner>/<repo> <scratch-dir> -- --depth 1` when
+  several files need exploring, or
+  `gh api repos/<owner>/<repo>/contents/<path>` to fetch one known file
+  directly. Only report a cross-repo data gap after both checks fail.
 
 ## References
 
