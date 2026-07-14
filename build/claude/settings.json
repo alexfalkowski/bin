@@ -57,6 +57,11 @@
     ],
     "ask": [
       "Bash(git push*)",
+      "Bash(make pr *)",
+      "Bash(make draft *)",
+      "Bash(make merge *)",
+      "Bash(make ready *)",
+      "Bash(make review *)",
       "Bash(gh pr create*)",
       "Bash(gh pr merge*)",
       "Bash(gh pr close*)",
