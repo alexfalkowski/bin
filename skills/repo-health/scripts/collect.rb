@@ -239,7 +239,7 @@ class RepoHealthCollector
     pipelines = circleci_pipelines(owner_repo, branch, token)
     workflows = circleci_workflows(pipelines, token)
     jobs = @include_jobs || mode == 'service' ? circleci_jobs(workflows, token) : []
-    flaky = circleci_get("/insights/gh/#{owner_repo}/flaky-tests?branch=#{url_query(branch)}", token)
+    flaky = circleci_get("/insights/gh/#{owner_repo}/flaky-tests", token)
     trend = period_windows.map { |window| circleci_period(workflows, jobs, window.fetch(:start), window.fetch(:end)) }
 
     {
