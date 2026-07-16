@@ -8,7 +8,9 @@
     "network": {
       "allowedDomains": [
         "*"
-      ]
+      ],
+      "allowLocalBinding": true,
+      "allowAllUnixSockets": true
     },
     "enableWeakerNetworkIsolation": true,
     "excludedCommands": [
