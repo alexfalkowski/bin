@@ -23,13 +23,15 @@ finding to documentation instead of changing code.
 
 ## Steps
 
-1. Identify the changed files or requested review scope.
+1. Identify the changed files or requested review scope. Include README,
+   docs, examples, and other prose files in this inventory; do not filter the
+   changed-file list to source-code extensions.
 2. Read `references/findings-format.md` before producing review output.
 3. Inspect behavior, tests, compatibility, security, docs, and maintenance risk before style preferences.
 4. First identify high-risk review leads, especially deletions, cross-boundary drift, silent behavior changes, changed contracts, unhandled sibling cases, and error-path changes. Then verify concrete findings instead of reviewing every line uniformly.
 5. Prefer precision over recall. Do not report plausible concerns unless they survive attempts to disprove them and are grounded in changed code, concrete evidence, supported usage, correct ownership, and credible user, compatibility, security, maintenance, or test risk.
 6. When a candidate depends on prose contradicting code, first disprove the implementation with non-prose evidence. If the code, tests, helper names, commit history, or runtime behavior support the implementation, do not report a code finding; use `$doc-standards` or `$doc-gaps` for the stale prose.
-7. Use `$doc-standards` when the review scope includes README files, user-facing docs, examples, command/config docs, public API comments, docstrings, or changed behavior that may make nearby existing documentation stale. Keep review scope to the current change and directly affected nearby docs unless the user explicitly asks for `$doc-gaps` or a broader documentation audit.
+7. If any changed path from step 1 is a README, user-facing doc, example, or command/config doc, you MUST apply `$doc-standards` to that file as part of this review; this is not optional based on scope size. Also use `$doc-standards` for public API comments, docstrings, or changed behavior that may make nearby existing documentation stale. Keep review scope to the current change and directly affected nearby docs unless the user explicitly asks for `$doc-gaps` or a broader documentation audit.
 8. Pair with relevant language standards (`$go-standards`, `$ruby-standards`, `$shell-standards`) when reviewing language-specific code, APIs, docs, tests, or tooling behavior. Pair with `$naming-standards` when names create concrete ambiguity, misuse risk, public contract confusion, inconsistent vocabulary, or maintenance cost. Treat idiomatic style concerns as findings only when they create concrete readability, maintenance, correctness, compatibility, or public API risk; use `$style-review` instead for non-blocking polish when the user asks for style nits or a readability pass.
 9. Use `$testing-standards` when judging whether tests are missing, weak, overfit to internals, hard to read, cryptic, or at the wrong layer.
 10. Route dependency, tool, framework, and upstream-library defects to the owner

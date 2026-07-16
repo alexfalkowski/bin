@@ -54,7 +54,11 @@ standard Go, RuboCop, golangci-lint, and Trivy cache writes needed by project
 commands plus standard system temporary directories, and allows unrestricted
 outbound network access to match the Codex profile, with macOS `trustd` access
 enabled so Go-based CLI tools (`gh`, `gcloud`, `terraform`) can verify TLS
-through the sandbox network proxy. Every `make` invocation is excluded from the
+through the sandbox network proxy. It also allows binding to local ports (for
+local dev servers and tests) and all Unix domain socket connections (for
+Docker, ssh-agent, and local database sockets); the latter can grant effective
+host access through sockets like `/var/run/docker.sock`, so keep using these
+profiles only in trusted repositories. Every `make` invocation is excluded from the
 sandbox and allowed without prompting, except `make pr`, `make draft`, `make
 merge`, `make ready`, and `make review`, which require approval because they
 create, merge, or force-push a pull request. Built-in file reads and edits are scoped

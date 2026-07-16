@@ -73,11 +73,19 @@ Use this reference when the user asks for a review.
 
 - None.
 
+## Documentation
+
+- None.
+
 ## Summary
 
 Brief one- or two-sentence summary.
 ```
 
+- In `Documentation`, state whether any changed README, doc, example, or
+  command/config doc from the changed-file inventory needed an update for
+  this change, and whether it got one. Report this even when the answer is
+  "no doc changes were needed" — do not omit the section.
 - Use only these severities: `critical`, `high`, `medium`, `low`.
 - Order findings by severity.
 - Include file and line references for each finding when possible.
@@ -85,7 +93,7 @@ Brief one- or two-sentence summary.
 - Keep the summary brief and secondary to the findings.
 - When useful, state the condition or scenario that triggers the problem so the risk is easy to verify.
 - If a section has no entries, write exactly `- None.`
-- When another skill embeds the review, keep the same finding severity, confidence, evidence, impact, recommendation, open-question, and testing-gap facts but use the caller's required output sections.
+- When another skill embeds the review, keep the same finding severity, confidence, evidence, impact, recommendation, open-question, testing-gap, and documentation facts but use the caller's required output sections.
 
 ## If No Findings
 
