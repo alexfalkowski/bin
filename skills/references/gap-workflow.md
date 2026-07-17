@@ -159,6 +159,14 @@ confirmed, fixed, or remaining entries to summarize.
   are authorized and does not lower any evidence, confidence, or challenge gate;
   if a cheaper model cannot reach the required evidence, escalate the model
   instead of accepting the weaker result.
+- When the active runtime supports per-agent model selection, set the model
+  explicitly for mechanical, disjoint, or read-only sub-tasks such as lookup,
+  file discovery, lead generation, and non-mutating reproduction; an unset
+  model silently inherits the parent session's model and defeats this
+  section's cost intent. When a lighter read-only agent type is available and
+  sufficient, prefer it over a full-toolset general-purpose agent. This
+  changes only agent selection; it never relaxes scope, evidence,
+  reproduction, confidence, challenge, or approval requirements.
 - Brief each sub-agent with the minimum references and context its sub-task
   needs, including all mandatory instructions and current evidence for that
   slice, rather than the full skill reference chain, so parallel sub-agents

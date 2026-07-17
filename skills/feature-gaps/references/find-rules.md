@@ -26,28 +26,20 @@ These rules remain mandatory:
   and `$project-workflow` to route test-harness, build, CI, Makefile, release,
   validation, command-discovery, or repository-workflow candidates away from
   `FEATURES.md` before returning feature proposals.
-- Confirm each candidate feature against the acceptance gate, code, generated
+- Confirm each candidate feature against `acceptance-gate.md`, code, generated
   surfaces, framework wrappers, shared helpers, vendored dependency behavior
   when delegated, docs, tests, examples, command behavior, current
-  architecture, and available comparable-tool evidence before recording it. Try
-  to disprove the candidate by asking whether the workflow is already
-  supported, whether the repository owns the behavior, whether the likely
-  audience exists, whether existing product surfaces already cover enough of the
-  workflow, whether the residual gap is still meaningful after that coverage,
-  whether the operation is common enough for the audience, and whether the
-  feature can be added incrementally using local patterns.
+  architecture, and available comparable-tool evidence before recording it.
+  Use the gate's questions to try to disprove the candidate before recording
+  it.
 - When sub-agents are authorized and candidate volume justifies delegation,
   assign at least one disprover slice when practical. The disprover should look
   for existing APIs, commands, endpoints, health/metrics, generated contracts,
   docs, examples, tests, shared helpers, framework behavior, or workflow routing
   that already covers each proposed feature, and should try to route weak leads
   to another gap workflow or optional follow-up.
-- Record feature gaps only when the proposal names the audience, current
-  product workflow limitation, existing coverage, residual gap, practical
-  audience benefit, common-operation evidence, repository-owned product surface,
-  evidence of user, operator, service-author, package-consumer, CLI, API, or
-  library value, fit with existing patterns, smallest plausible implementation
-  path, compatibility risk, and validation path.
+- Record feature gaps only when the proposal satisfies every item in
+  `acceptance-gate.md`.
 - Do not record confirmed bugs, security issues, compatibility breaks,
   reliability gaps, missing tests, test-harness quality issues, stale docs,
   project workflow gaps, or unclear naming as feature gaps. Route them to
