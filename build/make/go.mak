@@ -56,11 +56,11 @@ clean-lint:
 clean:
 	@$(BIN_ROOT)/build/go/clean
 
-# Run fieldalignment; .gofa may list comma-separated packages, default ./...
+# Run betteralign; .gofa may list comma-separated packages, default ./...
 field-alignment:
 	@$(BIN_ROOT)/build/go/fa
 
-# Auto-fix fieldalignment; .gofa may list comma-separated packages, default ./...
+# Auto-fix betteralign; .gofa may list comma-separated packages, default ./...
 fix-field-alignment:
 	@$(BIN_ROOT)/build/go/fa -fix
 
@@ -72,10 +72,10 @@ golangci-lint:
 fix-golangci-lint:
 	@$(BIN_ROOT)/build/go/lint run --timeout 5m --fix
 
-# Run fieldalignment and golangci-lint.
+# Run betteralign and golangci-lint.
 lint: field-alignment golangci-lint
 
-# Auto-fix fieldalignment and golangci-lint issues (best effort).
+# Auto-fix betteralign and golangci-lint issues (best effort).
 fix-lint: fix-field-alignment fix-golangci-lint
 
 # Format Go packages (go fmt ./...).

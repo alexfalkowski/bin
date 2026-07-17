@@ -109,9 +109,9 @@ Use this reference when working in Go repositories.
   health/debug/time/id/helpers when those groups exist in the repository.
 - Preflight Go tool availability only when repository Make targets, CI,
   scripts, or tests require it. Common tools in this ecosystem include the Go
-  toolchain, `fieldalignment`, `golangci-lint`, `buf`, `govulncheck`, Trivy,
+  toolchain, `betteralign`, `golangci-lint`, `buf`, `govulncheck`, Trivy,
   sidecars, and service dependencies.
-- Preserve Go tooling nuance in audit notes: `fieldalignment` may report
+- Preserve Go tooling nuance in audit notes: `betteralign` may report
   `./... matched no packages` in a restricted sandbox or stale tool context;
   `go test`, `make specs`, and `httptest` may need localhost listener
   permissions; and `govulncheck`, Trivy, and Buf may need cache writes under

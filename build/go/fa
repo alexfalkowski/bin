@@ -9,5 +9,5 @@ packages = if File.exist?(file)
              ['./...']
            end
 
-system('fieldalignment', *ARGV, *packages)
+system('betteralign', *ARGV, *packages)
 exit(Process.last_status&.exitstatus || 1)
