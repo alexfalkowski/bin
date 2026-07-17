@@ -151,6 +151,18 @@ confirmed, fixed, or remaining entries to summarize.
   delegation requirement plus runtime limitation.
 - Do not silently downgrade to local-only review or present a single-agent
   substitute as equivalent.
+- When the runtime supports per-sub-agent model selection, match the model to
+  the sub-task: use a cheaper or faster model for mechanical, disjoint, or
+  read-only sub-agents such as search, file discovery, and reproduction, and
+  reserve the strongest model for synthesis, acceptance and confidence
+  judgment, and adversarial verification. This does not change when sub-agents
+  are authorized and does not lower any evidence, confidence, or challenge gate;
+  if a cheaper model cannot reach the required evidence, escalate the model
+  instead of accepting the weaker result.
+- Brief each sub-agent with the minimum references and context its sub-task
+  needs, including all mandatory instructions and current evidence for that
+  slice, rather than the full skill reference chain, so parallel sub-agents
+  stay cheaper.
 - Identify whether review commands use authentication, SSH, registries,
   cloning, pushing, publishing, remote writes, or destructive effects. Rely on
   the active agent configuration for command approval behavior; do not add a
