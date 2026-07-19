@@ -155,10 +155,16 @@ confirmed, fixed, or remaining entries to summarize.
   the sub-task: use a cheaper or faster model for mechanical, disjoint, or
   read-only sub-agents such as search, file discovery, and reproduction, and
   reserve the strongest model for synthesis, acceptance and confidence
-  judgment, and adversarial verification. This does not change when sub-agents
-  are authorized and does not lower any evidence, confidence, or challenge gate;
-  if a cheaper model cannot reach the required evidence, escalate the model
-  instead of accepting the weaker result.
+  judgment, and adversarial verification. In a finder-plus-verifier pattern,
+  where a strong orchestrator or a dedicated verifier independently
+  re-verifies each delegated finding, the delegated review finders may also
+  run one tier cheaper than the session model even when their sub-task is
+  judgment-heavy, such as a slice-scoped `$code-review` or `$security-audit`;
+  reserve the strongest tier for that final acceptance, confidence, and
+  adversarial-verification pass, not for every finder. This does not change
+  when sub-agents are authorized and does not lower any evidence, confidence,
+  or challenge gate; if a cheaper model cannot reach the required evidence,
+  escalate the model instead of accepting the weaker result.
 - When the active runtime supports per-agent model selection, set the model
   explicitly for mechanical, disjoint, or read-only sub-tasks such as lookup,
   file discovery, lead generation, and non-mutating reproduction; an unset
