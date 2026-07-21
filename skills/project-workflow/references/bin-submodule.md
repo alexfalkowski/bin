@@ -26,11 +26,11 @@ Use this reference when you need to establish context quickly and discover how a
 ## Command Execution Environment
 
 - Treat the repository Makefile and CI configuration as the source of truth for setup, lint, test, security, benchmark, and review commands.
-- On developer machines, especially macOS, assume required tools may come from Homebrew or another user-shell setup rather than the OS defaults.
+- Account for platform-specific tool-path setup rather than assuming OS defaults.
 - Prefer `make` targets and documented repository entry points over direct tool invocations, even when a direct command appears equivalent.
 - Run commands from the repository root unless the Makefile, script, or task explicitly requires another working directory.
-- Use the user's configured shell environment for command execution. If a command fails because a tool is missing, an old version is found, or `PATH` differs from the user's normal terminal, treat that as an environment mismatch or validation gap, not as evidence that the repository command is wrong.
-- Run repository commands through the user's initialized shell when tool resolution matters, for example `zsh -lic 'make lint'`.
+- Use the configured command environment for command execution. If a command fails because a tool is missing, an old version is found, or `PATH` differs from the configured environment, treat that as an environment mismatch or validation gap, not as evidence that the repository command is wrong.
+- Run repository commands in the configured command environment when tool resolution matters.
 - Do not invent direct commands, replace a Makefile target, install alternate tools, or keep retrying variants merely to get something to run in the agent environment.
 - When diagnosing command-environment mismatches, check the command surface first, then inspect `command -v <tool>`, `<tool> --version`, `SHELL`, and `PATH` as diagnostics only.
 
@@ -74,5 +74,5 @@ When workflow discovery is the final response, use exactly this Markdown structu
 - Validate path-sensitive behavior from the consuming repository root when downstream layout affects target behavior.
 - Preserve downstream local code, test, documentation, configuration, and validation patterns unless the user explicitly asks to change them.
 - Be careful with targets that resolve helper paths through `BIN_ROOT`; they should work in downstream repos and inside the `bin` repo itself, but downstream test/build layouts may still differ.
-- If a Make target reports an unexpected tool or version problem in the agent environment but works in the user's shell, report the mismatch and keep the Makefile target as the intended command.
+- If a Make target reports an unexpected tool or version problem in the agent environment but works in the configured command environment, report the mismatch and keep the Makefile target as the intended command.
 - Be careful with `start` and `stop` helpers because they may depend on a sibling `../docker` checkout or SSH access.

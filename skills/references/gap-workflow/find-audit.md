@@ -61,13 +61,13 @@ For find, audit-only, and one-pass modes:
 
 - Before a long audit, run tool and environment preflight through
   `$project-workflow` and `$change-validation`: repository root, documented
-  entrypoints, CI analogue, initialized user shell, and applicable tool
+  entrypoints, CI analogue, configured command environment, and applicable tool
   availability. Check runtimes, analyzers, linters, scanners, generation tools,
   sidecars, or services only when repository workflow needs them.
 - Preflight plans evidence; it does not replace repository Make targets. Run
   checks normally first. If a failure is clearly sandbox, cache-permission,
   localhost, network, credential, service, or shell-environment related, retry
-  only through the approved escalation or initialized-shell path.
+  only through the approved escalation or configured command environment.
 - After a repository-defined command, Make target, dominant harness, or
   skill-required workflow fails, classify it before considering any retry. Do
   not switch to an ad hoc command, validation layer, or alternate workflow just
