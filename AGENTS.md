@@ -286,6 +286,15 @@ Do not infer the test language from the implementation language alone.
 - After a repository-defined command fails, classify the failure before retrying.
   Do not replace a failed target with an ad hoc command, alternate layer, or
   alternate tool just to make progress.
+- Do not manually background a long-lived process with a bare `&`/`nohup`
+  expecting to stop it from a later command; each assistant's sandbox handles
+  signal delivery differently, and a mishandled one can leak or interfere
+  with subsequent runs. If the active assistant exposes a documented,
+  verified tracked background-task mechanism, use it; otherwise keep process
+  startup, use, and cleanup within one tool call — see
+  `skills/project-workflow/references/agent-init.md` for the exact per-assistant
+  behavior.
+
 ## Local contracts
 
 - Public shared surfaces live in `build/make/`, `build/docker/`, `build/go/`,
