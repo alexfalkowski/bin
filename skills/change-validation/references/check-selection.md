@@ -11,7 +11,7 @@ Use this reference when choosing which checks to run.
 - Use direct commands only when they are an established repository or harness
   selector that is clearly narrower or better aligned with the task than a
   broader repo wrapper.
-- Before running, retrying, replacing, or recommending commands, establish the repository root, documented entrypoint, CI analogue, initialized user shell, and any macOS/Homebrew tool-path assumptions.
+- Before running, retrying, replacing, or recommending commands, establish the repository root, documented entrypoint, CI analogue, non-interactive login shell, and any macOS/Homebrew tool-path assumptions.
 - Before selecting tests, identify the dominant relevant test harness and repository-defined entry point for the affected behavior.
 - Do not add or select an ad hoc language-native test command when the repository's established harness owns the behavior, unless the user explicitly asked for that layer or the behavior cannot be covered through the established harness.
 - If bypassing the dominant harness is necessary, stop before editing or validating and state why the established harness cannot cover the behavior.
@@ -29,7 +29,7 @@ Use this reference when choosing which checks to run.
 - Never imply a check ran if the wrapper no-op'd because a dependency was missing.
 - Report network, credential, shell environment, `PATH`, or tool-version failures as environment or validation gaps rather than code failures.
 - Keep the repository-defined command as the intended validation command when the agent environment differs from the user's normal shell.
-- After a repository-defined command, Make target, dominant test harness, or skill-required workflow fails, do not switch to an ad hoc command, different validation layer, or alternate workflow merely to make progress. First classify the failure using the repository's validation categories; then retry only through the initialized-shell or approved escalation path, or report the blocker.
+- After a repository-defined command, Make target, dominant test harness, or skill-required workflow fails, do not switch to an ad hoc command, different validation layer, or alternate workflow merely to make progress. First classify the failure using the repository's validation categories; then retry only through the non-interactive login-shell or approved escalation path, or report the blocker.
 
 ## Command Execution Environment
 
@@ -38,7 +38,7 @@ Use this reference when choosing which checks to run.
 - Prefer `make` targets and documented repository entry points over direct tool invocations, even when a direct command appears equivalent.
 - Run commands from the repository root unless the Makefile, script, or task explicitly requires another working directory.
 - Use the user's configured shell environment for command execution. If a command fails because a tool is missing, an old version is found, or `PATH` differs from the user's normal terminal, treat that as an environment mismatch or validation gap, not as evidence that the repository command is wrong.
-- Run repository commands through the user's initialized shell when tool resolution matters, for example `zsh -lic 'make lint'`.
+- Run repository commands through the user's non-interactive login shell when tool resolution matters, for example `zsh -lc 'make lint'`.
 - Do not invent direct commands, replace a Makefile target, install alternate tools, or keep retrying variants merely to get something to run in the agent environment.
 - When diagnosing command-environment mismatches, check the command surface first, then inspect `command -v <tool>`, `<tool> --version`, `SHELL`, and `PATH` as diagnostics only.
 - In this shared `bin` repo and downstream repos that vendor it as `./bin`, `make` targets are the preferred validation interface. If `make` reports an unexpected tool or version problem in the agent environment but works in the user's shell, report the mismatch and keep the Makefile target as the intended command.

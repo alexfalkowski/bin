@@ -313,11 +313,12 @@ Do not infer the test language from the implementation language alone.
   agent-policy changes, `make docker-lint` for Dockerfiles, `make lint` for
   Ruby, and `make sec` for security-sensitive changes.
 - Before any selected skill runs, retries, replaces, or recommends a command,
-  establish the command surface, initialized shell, CI analogue, and
+  establish the command surface, non-interactive login shell (`zsh -lc '<command>'`
+  for zsh), CI analogue, and
   credential/network requirements.
-- Compare tool resolution with `zsh -lic` when PATH or Homebrew differences
-  matter. If resolution differs, rerun Make targets through the initialized
-  shell before treating the failure as real.
+- Compare tool resolution with non-interactive login zsh (`zsh -lc '<command>'`) when PATH or Homebrew differences
+  matter. If resolution differs, rerun Make targets through the non-interactive
+  login shell before treating the failure as real.
 - After a repository-defined command fails, classify the failure before retrying.
   Do not replace a failed target with an ad hoc command, alternate layer, or
   alternate tool just to make progress.

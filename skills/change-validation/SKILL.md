@@ -9,7 +9,7 @@ description: Use when running or selecting validation after code, docs, Makefile
 
 1. Discover the repository's validation entrypoints before running checks.
 2. Read `references/check-selection.md` when choosing between targeted tests, lint commands, make targets, CI mirrors, benchmarks, or security checks.
-3. Before running, retrying, replacing, or recommending validation commands, establish the execution environment: repository root, documented entrypoint, CI analogue, initialized user shell, and any macOS/Homebrew tool-path assumptions. Do not invent direct commands or bypass Make targets just because the agent shell cannot find the right tool.
+3. Before running, retrying, replacing, or recommending validation commands, establish the execution environment: repository root, documented entrypoint, CI analogue, non-interactive login shell, and any macOS/Homebrew tool-path assumptions. Do not invent direct commands or bypass Make targets just because the agent shell cannot find the right tool.
 4. Run the repository's setup or dependency target first when validation depends on installed dependencies or generated/vendor state.
 5. Identify whether validation commands use network access, credentials, SSH,
    registries, cloning, pushing, publishing, opening PRs, or remote state. Rely

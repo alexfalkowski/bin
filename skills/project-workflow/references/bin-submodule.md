@@ -30,7 +30,7 @@ Use this reference when you need to establish context quickly and discover how a
 - Prefer `make` targets and documented repository entry points over direct tool invocations, even when a direct command appears equivalent.
 - Run commands from the repository root unless the Makefile, script, or task explicitly requires another working directory.
 - Use the user's configured shell environment for command execution. If a command fails because a tool is missing, an old version is found, or `PATH` differs from the user's normal terminal, treat that as an environment mismatch or validation gap, not as evidence that the repository command is wrong.
-- Run repository commands through the user's initialized shell when tool resolution matters, for example `zsh -lic 'make lint'`.
+- Run repository commands through the user's non-interactive login shell when tool resolution matters, for example `zsh -lc 'make lint'`.
 - Do not invent direct commands, replace a Makefile target, install alternate tools, or keep retrying variants merely to get something to run in the agent environment.
 - When diagnosing command-environment mismatches, check the command surface first, then inspect `command -v <tool>`, `<tool> --version`, `SHELL`, and `PATH` as diagnostics only.
 
