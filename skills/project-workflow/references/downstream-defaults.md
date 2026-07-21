@@ -51,10 +51,10 @@ evidence such as `.gitmodules`, a root `Makefile`, `.circleci/config.yml`,
 - Do not flag the absence of a root `verify` or `ci-checks` target unless the
   consuming repository explicitly owns one or current workflow evidence shows
   the missing target breaks users.
-- Treat shared Make fragments as GNU Make 4+; use `gmake` on macOS when
-  `/usr/bin/make` cannot parse them.
-- Do not flag GNU Make 3.81 parsing failures unless the task is explicitly
-  about legacy make compatibility in shared `bin` tooling.
+- Run Make targets in the configured command environment. Treat parsing
+  failures caused by an unavailable or unsupported Make implementation as
+  environment mismatches unless the task explicitly concerns Make compatibility
+  in shared `bin` tooling.
 - Treat `make start` and `make stop` as potentially network/SSH-affecting:
   shared helpers can call `bin/build/docker/env`, which clones or updates
   sibling `../docker` over SSH and delegates there.
