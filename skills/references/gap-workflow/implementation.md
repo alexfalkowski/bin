@@ -5,8 +5,10 @@ while implementing an agreed gap-ledger entry.
 
 ## Implement Mechanics
 
-1. Confirm scope and read the selected scoped ledger, or stop and ask whether to
-   run the matching find mode first.
+1. Confirm scope and selected ledger skill, read its `ledger.yaml`, resolve the
+   exact scoped ledger path, and read only that path. Do not search the
+   workspace for possible ledgers. If the resolved ledger is missing, stop and
+   ask whether to run the matching find mode first.
 2. Run `$project-workflow` discovery for current entrypoints, CI, documented
    commands, relevant public surfaces, and `./bin` wiring.
 3. Select the named entry or next entry and re-check its evidence against

@@ -2,8 +2,7 @@
 
 These rules remain mandatory:
 
-- Use `RELIABILITY.md` in the requested package or folder as the review ledger,
-  for example `PACKAGE_OR_FOLDER/RELIABILITY.md`.
+- Read `../ledger.yaml` and use its resolved scoped path as the review ledger.
 - Prefer slices based on repository-owned reliability and operational risk: public commands/APIs, changed or recently touched areas, retries/timeouts/backpressure, config/CI/release paths, observability/runbook surfaces, documented workflows, and nearby tests. Use depth only as a discovery aid, not as the review boundary.
 - For delegated review, each assigned agent owns recursive review only within its bounded slice. Each agent must perform a thorough `$reliability-standards` review for that slice, pairing with `$change-safety`, `$security-audit`, `$testing-standards`, and `$change-validation` as the surface requires.
 - Confirm each candidate gap against current evidence before recording it. Try to disprove the candidate by tracing the current code path, reading the documented workflow, checking the relevant config, inspecting existing tests, or running an allowed local command. A gap must name the affected reliability promise or operational expectation, the trigger condition, the failure mode, the missing or weak control, and the likely user or operator impact.

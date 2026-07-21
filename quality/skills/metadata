@@ -3,14 +3,21 @@
 
 require 'yaml'
 
-GAP_CONTRACTS = {
-  'code-issues' => { ledger: 'ISSUES.md', id: 'ISSUE' },
-  'test-gaps' => { ledger: 'TESTS.md', id: 'TEST' },
-  'doc-gaps' => { ledger: 'DOCS.md', id: 'DOC' },
-  'feature-gaps' => { ledger: 'FEATURES.md', id: 'FEATURE' },
-  'project-gaps' => { ledger: 'PROJECTS.md', id: 'PROJECT' },
-  'reliability-gaps' => { ledger: 'RELIABILITY.md', id: 'REL' }
-}.freeze
+GAP_SKILLS = %w[
+  code-issues
+  test-gaps
+  doc-gaps
+  feature-gaps
+  project-gaps
+  reliability-gaps
+].freeze
+LEDGER_CONTRACT_KEYS = %w[
+  version
+  id_prefix
+  ledger_filename
+  ledger_path_template
+].freeze
+LEDGER_PATH_TEMPLATE = '{scope}/{ledger_filename}'
 REFERENCE_PATTERN = %r{(?<!/)(?:\.\./)*references/[A-Za-z0-9._/-]+\.md(?:#[^\s`)]+)?}
 
 def present_string?(value)
@@ -199,17 +206,25 @@ def valid_pairs?(names, message)
   false
 end
 
-def valid_gap_contract?(skill_name, contract)
-  skill_path = "skills/#{skill_name}/SKILL.md"
-  plan_path = "skills/#{skill_name}/references/plan.md"
-  agent_path = "skills/#{skill_name}/agents/openai.yaml"
+def valid_gap_contract?(skill_name)
+  paths = gap_contract_paths(skill_name)
 
   [
-    valid_gap_file?(skill_path, skill_name),
-    valid_gap_file?(plan_path, skill_name),
-    valid_gap_file?(agent_path, skill_name),
-    valid_gap_text?(skill_path, plan_path, agent_path, contract)
+    paths.values.map { |path| valid_gap_file?(path, skill_name) }.all?,
+    valid_ledger_contract?(paths[:contract]),
+    valid_gap_text?(paths)
   ].all?
+end
+
+def gap_contract_paths(skill_name)
+  root = "skills/#{skill_name}"
+
+  {
+    skill: "#{root}/SKILL.md",
+    plan: "#{root}/references/plan.md",
+    agent: "#{root}/agents/openai.yaml",
+    contract: "#{root}/ledger.yaml"
+  }
 end
 
 def valid_gap_file?(path, skill_name)
@@ -218,17 +233,86 @@ def valid_gap_file?(path, skill_name)
   report_failure("missing gap workflow file for #{skill_name}: #{path}")
 end
 
-def valid_gap_text?(skill_path, plan_path, agent_path, contract)
-  return false unless [skill_path, plan_path, agent_path].all? { |path| File.file?(path) }
+def valid_ledger_contract?(path)
+  data = safe_load_file(path)
+  return false unless mapping?(data, path, 'ledger contract must be a mapping')
 
-  skill_text = File.read(skill_path)
-  plan_text = File.read(plan_path)
-  agent_text = File.read(agent_path)
-  combined_text = [skill_text, plan_text, agent_text].join("\n")
+  [
+    valid_contract_keys?(data, path),
+    valid_contract_values?(data, path),
+    ledger_filename_ignored?(data['ledger_filename'], path)
+  ].all?
+end
 
-  valid_gap_skill_text?(skill_text, skill_path) &&
-    valid_gap_plan_text?(plan_text, plan_path) &&
-    valid_gap_contract_text?(combined_text, skill_path, contract)
+def valid_contract_keys?(data, path)
+  extra = data.keys - LEDGER_CONTRACT_KEYS
+  missing = LEDGER_CONTRACT_KEYS - data.keys
+
+  [
+    extra.empty? || report_failure("unexpected ledger contract keys in #{path}: #{extra.join(', ')}"),
+    missing.empty? || report_failure("missing ledger contract keys in #{path}: #{missing.join(', ')}")
+  ].all?
+end
+
+def valid_contract_values?(data, path)
+  [
+    data['version'] == 1 || report_failure("ledger contract version must be 1 in #{path}"),
+    valid_id_prefix?(data['id_prefix'], path),
+    valid_ledger_filename?(data['ledger_filename'], path),
+    valid_ledger_path_template?(data['ledger_path_template'], path)
+  ].all?
+end
+
+def valid_id_prefix?(value, path)
+  return true if value.is_a?(String) && value.match?(/\A[A-Z][A-Z0-9]*\z/)
+
+  report_failure("invalid id_prefix in #{path}")
+end
+
+def valid_ledger_filename?(value, path)
+  return true if value.is_a?(String) && value.match?(/\A[A-Z][A-Z0-9_]*\.md\z/)
+
+  report_failure("invalid ledger_filename in #{path}")
+end
+
+def valid_ledger_path_template?(value, path)
+  return true if value == LEDGER_PATH_TEMPLATE
+
+  report_failure("ledger_path_template must be #{LEDGER_PATH_TEMPLATE.inspect} in #{path}")
+end
+
+def ledger_filename_ignored?(filename, contract_path)
+  return true unless present_string?(filename)
+  return report_failure('missing file: .gitignore') unless File.file?('.gitignore')
+  return true if File.readlines('.gitignore', chomp: true).include?(filename)
+
+  report_failure("ledger filename from #{contract_path} is missing from .gitignore: #{filename}")
+end
+
+def valid_gap_text?(paths)
+  return false unless paths.values.all? { |path| File.file?(path) }
+
+  valid_gap_text_content?(gap_text(paths), paths)
+end
+
+def gap_text(paths)
+  {
+    skill: File.read(paths[:skill]),
+    plan: File.read(paths[:plan]),
+    agent: File.read(paths[:agent]),
+    contract: safe_load_file(paths[:contract])
+  }
+end
+
+def valid_gap_text_content?(text, paths)
+  contract = text[:contract]
+  return false unless contract
+
+  combined_text = text.values_at(:skill, :plan, :agent).join("\n")
+
+  valid_gap_skill_text?(text[:skill], paths[:skill]) &&
+    valid_gap_plan_text?(text[:plan], paths[:plan]) &&
+    valid_gap_contract_text?(combined_text, paths[:skill], paths[:contract], contract)
 end
 
 def valid_gap_skill_text?(skill_text, skill_path)
@@ -242,10 +326,10 @@ def valid_gap_plan_text?(plan_text, plan_path)
   required_text?(plan_text, plan_path, 'shared gap workflow')
 end
 
-def valid_gap_contract_text?(combined_text, skill_path, contract)
+def valid_gap_contract_text?(combined_text, skill_path, contract_path, contract)
   [
-    required_text?(combined_text, skill_path, contract.fetch(:ledger)),
-    required_gap_id?(combined_text, skill_path, contract.fetch(:id))
+    required_text?(combined_text, skill_path, 'ledger.yaml'),
+    no_legacy_ledger_metadata?(skill_path, contract_path, contract)
   ].all?
 end
 
@@ -255,10 +339,40 @@ def required_text?(text, path, expected)
   report_failure("missing required text in #{path}: #{expected}")
 end
 
-def required_gap_id?(text, path, id)
-  return true if text.match?(/\b#{Regexp.escape(id)}-(?:1|N|<number>)/)
+def no_legacy_ledger_metadata?(skill_path, contract_path, contract)
+  ledger_filename = contract.fetch('ledger_filename')
+  id_pattern = /\b#{Regexp.escape(contract.fetch('id_prefix'))}-(?:1|N|<number>)/
 
-  report_failure("missing gap ID pattern in #{path}: #{id}-1, #{id}-N, or #{id}-<number>")
+  gap_skill_files(skill_path, contract_path).map do |path|
+    no_legacy_ledger_metadata_in_file?(path, contract_path, ledger_filename, id_pattern)
+  end.all?
+end
+
+def gap_skill_files(skill_path, contract_path)
+  Dir[File.join(File.dirname(skill_path), '**', '*')].select do |path|
+    File.file?(path) && path != contract_path
+  end
+end
+
+def no_legacy_ledger_metadata_in_file?(path, contract_path, filename, id_pattern)
+  text = File.read(path)
+
+  [
+    no_legacy_ledger_filename?(text, path, contract_path, filename),
+    no_legacy_ledger_id_prefix?(text, path, contract_path, id_pattern)
+  ].all?
+end
+
+def no_legacy_ledger_filename?(text, path, contract_path, filename)
+  return true unless text.include?(filename)
+
+  report_failure("ledger filename must be read from #{contract_path}, not repeated in #{path}")
+end
+
+def no_legacy_ledger_id_prefix?(text, path, contract_path, id_pattern)
+  return true unless text.match?(id_pattern)
+
+  report_failure("ledger ID prefix must be read from #{contract_path}, not repeated in #{path}")
 end
 
 ok = true
@@ -266,6 +380,6 @@ Dir['skills/*/SKILL.md'].each { |path| ok = false unless valid_skill?(path) }
 Dir['skills/*/agents/openai.yaml'].each { |path| ok = false unless valid_agent?(path) }
 Dir['skills/**/*.md'].each { |path| ok = false unless valid_markdown_references?(path) }
 ok = false unless valid_skill_agent_pairs?
-GAP_CONTRACTS.each { |skill_name, contract| ok = false unless valid_gap_contract?(skill_name, contract) }
+GAP_SKILLS.each { |skill_name| ok = false unless valid_gap_contract?(skill_name) }
 
 exit(ok ? 0 : 1)

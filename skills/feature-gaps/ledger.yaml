@@ -1,0 +1,4 @@
+version: 1
+id_prefix: FEATURE
+ledger_filename: FEATURES.md
+ledger_path_template: "{scope}/{ledger_filename}"

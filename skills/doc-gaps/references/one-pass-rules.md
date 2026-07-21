@@ -4,8 +4,8 @@ These rules remain mandatory:
 
 - Treat `Run $doc-gaps in PACKAGE_OR_FOLDER`, `Find doc gaps in PACKAGE_OR_FOLDER`, or `Fix doc gaps in PACKAGE_OR_FOLDER` as permission to edit documentation in scope, run appropriate validation, and summarize the result in one pass.
 - Use audit-only mode only when the user explicitly asks not to edit or asks only for an audit or ledger. When a stop gate prevents a correct documentation fix during one-pass mode, record unresolved confirmed findings instead of switching modes.
-- Use `DOCS.md` in the requested package or folder as the scoped ledger.
-- If scoped `DOCS.md` already exists, read it before reviewing. If it is a doc-gap ledger, include unresolved findings in the candidate set and update or delete the ledger after fixing them. If it is unrelated or ambiguous active work, stop and ask before editing it.
+- Read `../ledger.yaml` and use its resolved scoped path as the scoped ledger.
+- If the resolved scoped ledger already exists, read it before reviewing. If it is a doc-gap ledger, include unresolved findings in the candidate set and update or delete the ledger after fixing them. If it is unrelated or ambiguous active work, stop and ask before editing it.
 - Before assigning review agents or starting local review, build a recursive documentation inventory for the requested package or folder: README files, docs, examples, command help surfaces, package docs, public API comments, code-comment/docstring surfaces, first-level subfolders, nested packages, generated/vendor/build/cache exclusions, and relevant validation entrypoints.
 - Prefer slices based on authoritative documentation owner and user risk: README or user docs, command help, examples, public API/package docs, documented workflows, changed or recently touched areas, and code areas with public interfaces. Use depth only as a discovery aid, not as the review boundary.
 - For delegated review, each assigned agent owns recursive review only within its bounded slice. Each agent must perform a thorough documentation review for that slice, pairing with `$doc-standards`, relevant language standards, `$naming-standards` when terminology is unclear or inconsistent, and `$change-validation` for likely validation commands.
@@ -19,7 +19,7 @@ These rules remain mandatory:
 - For unresolved-ledger fixes or any case where human approval is still required: After the human agrees and before editing, state the selected local documentation pattern, dominant relevant validation path, planned validation command, and any deviation from `AGENTS.md` or selected skills. If a deviation is needed, stop and ask before editing.
 - Implement confirmed doc gaps with the smallest clear documentation change using the established documentation location and style.
 - Stop and ask before editing when behavior, audience, documentation location, public-contract wording, examples, validation, or user intent is ambiguous enough that a correct documentation change cannot be inferred from local context.
-- Write unresolved confirmed findings to the scoped `DOCS.md` only when they cannot be fixed in the same pass, the user requested audit-only mode, validation or permission is blocked, or the scope is too large to complete.
+- Write unresolved confirmed findings to the resolved scoped ledger only when they cannot be fixed in the same pass, the user requested audit-only mode, validation or permission is blocked, or the scope is too large to complete.
 - Validate documentation changes with commands appropriate to the changed files.
-- If all confirmed doc gaps are fixed, do not leave a new `DOCS.md` behind. If an existing doc-gap ledger is fully resolved, delete it.
-- Final output must summarize fixed gaps, dismissed or out-of-scope candidates when relevant, broad-scope coverage notes when the requested scope was too broad for complete deep review, unresolved findings written to `DOCS.md` if any, and validation results.
+- If all confirmed doc gaps are fixed, do not leave a new scoped ledger behind. If an existing doc-gap ledger is fully resolved, delete it.
+- Final output must summarize fixed gaps, dismissed or out-of-scope candidates when relevant, broad-scope coverage notes when the requested scope was too broad for complete deep review, unresolved findings written to the resolved scoped ledger if any, and validation results.

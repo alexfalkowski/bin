@@ -1,4 +1,4 @@
-# `PROJECTS.md` Format
+# Ledger Format
 
 Each entry is a self-contained, debatable mini-RFC. A reviewer must be able to
 understand the workflow gap, the evidence, and the proposed direction without
@@ -23,7 +23,7 @@ Use this structure for every entry:
 ````markdown
 # Projects
 
-## PROJECT-1: Short concrete title
+## <ID>-1: Short concrete title
 
 | Field | Value |
 | --- | --- |

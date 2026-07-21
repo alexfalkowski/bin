@@ -1,4 +1,4 @@
 interface:
   display_name: "Reliability Gaps"
   short_description: "Find scoped SRE readiness gaps"
-  default_prompt: "Use $reliability-gaps for scoped SRE, operability, overload, observability, release-safety, recovery, and data-integrity gaps. Default to Find mode when no mode is stated; follow repo archetype lead generation, apply the shared delegation gate, summarize ledger entries in a compact Title/What/Why table, verify concrete failure paths, answer reliability gap ID follow-ups such as REL-1, and implement only after explicit agreement to a specific proposal."
+  default_prompt: "Use $reliability-gaps for scoped SRE, operability, overload, observability, release-safety, recovery, and data-integrity gaps. Default to Find mode when no mode is stated; follow repo archetype lead generation, apply the shared delegation gate, summarize ledger entries in a compact Title/What/Why table, verify concrete failure paths, resolve entry ID follow-ups through ledger.yaml, and implement only after explicit agreement to a specific proposal."

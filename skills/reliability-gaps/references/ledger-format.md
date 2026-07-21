@@ -1,4 +1,4 @@
-# `RELIABILITY.md` Format
+# Ledger Format
 
 Each entry is a self-contained, debatable mini-RFC. A reviewer must be able to
 understand the failure mode, the evidence, and the proposed control without
@@ -23,7 +23,7 @@ Use this structure for every entry:
 ````markdown
 # Reliability
 
-## REL-1: Short concrete title
+## <ID>-1: Short concrete title
 
 | Field | Value |
 | --- | --- |

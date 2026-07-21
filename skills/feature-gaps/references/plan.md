@@ -12,7 +12,7 @@ validation, delegation, external research, ledger state, and workflow routing.
 
 1. Follow `../../references/gap-workflow.md#common-plan-mechanics` for shared
    find-mode sequencing. Apply the shared gap-workflow delegation gate before review work.
-2. Use `FEATURES.md` as the scoped ledger and `FEATURE-<number>` IDs.
+2. Read `../ledger.yaml`; use its scoped ledger path and ID prefix.
 3. Read `../../references/gap-lead-generation.md`, classify the repository
    archetype, and build a lead inventory for product-facing capabilities,
    package-consumer workflows, service-author workflows, operator surfaces, and
@@ -45,7 +45,7 @@ validation, delegation, external research, ledger state, and workflow routing.
    workflows, public commands/APIs or package-consumer paths, comparable-tool
    research decisions, rejected and routed leads, validation evidence, and
    policy exclusions checked.
-10. If confirmed gaps remain, write scoped `FEATURES.md`, present the ledger,
+10. If confirmed gaps remain, write the resolved scoped ledger, present it,
    coverage state, proposed implementation plan, and runnable follow-up scopes,
    then stop before implementing features.
 
@@ -61,7 +61,7 @@ validation, delegation, external research, ledger state, and workflow routing.
    asking for agreement. It must lead with `## Solution Shape`, make the
    proposed design visually scannable before confidence or evidence details,
    show tradeoffs visually, name intended validation, and end by pointing to
-   the canonical `Approved FEATURE-N` and `Approved FEATURE-N with agents`
+   the canonical `Approved <ID>-N` and `Approved <ID>-N with agents` forms
    approval commands.
 4. After agreement, state local code/config/docs pattern, dominant relevant
    test harness, planned validation, and deviations. For behavior-changing

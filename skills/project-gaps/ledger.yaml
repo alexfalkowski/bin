@@ -1,0 +1,4 @@
+version: 1
+id_prefix: PROJECT
+ledger_filename: PROJECTS.md
+ledger_path_template: "{scope}/{ledger_filename}"

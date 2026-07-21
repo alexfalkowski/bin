@@ -1,6 +1,6 @@
 # Feature-Gap Acceptance Gate
 
-Apply this gate before recording any candidate in `FEATURES.md`. A feature
+Apply this gate before recording any candidate in the resolved scoped ledger. A feature
 proposal must satisfy every item below at or above the active confidence
 threshold. The active threshold is the explicit confidence target in the
 current request when one is provided; otherwise it is 90% by default (or 95%

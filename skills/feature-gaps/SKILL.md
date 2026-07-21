@@ -1,18 +1,18 @@
 ---
 name: feature-gaps
-description: Use when the user asks to find or implement $feature-gaps/feature gaps in a package or folder, set a confidence closure target such as 95% or 99%, find main product capability gaps, find product-owned user/operator/service-author/package-consumer/CLI/API/library opportunities, uses Start FEATURE-1 or Approved FEATURE-1 with agents and a goal, asks about feature IDs such as FEATURE-1, asks what the proposal is for FEATURE-1, asks to fix or verify FEATURE-1, or uses Done FEATURE-1. Find repository-fit feature opportunities with explicit audience benefit; record scoped FEATURES.md proposals; later propose and implement agreed changes one at a time. Do not use for standalone test, CI, build, Makefile, release, validation, or repository workflow gaps.
+description: Use when the user asks to find or implement $feature-gaps/feature gaps in a package or folder, set a confidence closure target such as 95% or 99%, find main product capability gaps, find product-owned user/operator/service-author/package-consumer/CLI/API/library opportunities, uses Start, Approved, or Done with ledger entry IDs and optional agents or a goal, or asks what the proposal is for a feature-gap ledger entry. Find repository-fit feature opportunities with explicit audience benefit; record scoped ledger proposals; later propose and implement agreed changes one at a time. Do not use for standalone test, CI, build, Makefile, release, validation, or repository workflow gaps.
 ---
 
 # Feature Gaps
 
 Use Find mode by default when no mode is stated. Enter Implement mode only
 after the human explicitly agrees to a specific proposed solution, typically
-with `Approved FEATURE-N`. Do not combine modes in one pass:
+with `Approved <ID>-N` using the prefix from `ledger.yaml`. Do not combine modes in one pass:
 
 - **Find mode**: `Find $feature-gaps in PACKAGE_OR_FOLDER` or `Find feature gaps in PACKAGE_OR_FOLDER`.
 - **Implement mode**: `Implement $feature-gaps in PACKAGE_OR_FOLDER` or `Implement feature gaps in PACKAGE_OR_FOLDER`.
 
-Before either mode, read `references/plan.md` and
+Before either mode, read `ledger.yaml`, `references/plan.md`, and
 `../references/gap-workflow.md` and the mode-specific reference below own
 runtime state, ledger, delegation,
 scope, coverage, confidence, and approval gates. Before Find mode, also read
@@ -56,7 +56,7 @@ permission request.
 
 ## Acceptance Gate
 
-Before recording any `FEATURES.md` candidate, read
+Before recording any scoped-ledger candidate, read
 `references/acceptance-gate.md`. A proposal must satisfy that gate at the
 active confidence threshold or higher. Use an explicit confidence target from
 the current request when provided; otherwise use the 90% default (or the 95%
@@ -72,9 +72,9 @@ Follow `references/plan.md#find-mode-plan` and the find/audit rules in
 Read `references/find-rules.md`; those feature-gap rules remain mandatory in
 Find mode.
 
-## `FEATURES.md` Format
+## Ledger Format
 
-Before creating, updating, or interpreting `FEATURES.md`, read
+Before creating, updating, or interpreting the scoped ledger, read `ledger.yaml` and
 `references/ledger-format.md`. Each entry is a self-contained mini-PRD organized
 like the shared mini-RFC: `What -> Why -> How`. The required core must keep
 `| Field | Value |`, `| Status |`, and `**Summary.**`; `### What` with
@@ -96,7 +96,7 @@ Follow `references/plan.md#implement-mode-plan` and the implementation rules in
 Before asking for agreement to edit a feature, read
 `references/implementation-proposal.md` and present that decision packet. It
 must lead with `## Solution Shape` and include a self-contained `What`, `Why`,
-and `How` decision summary. `Approved FEATURE-N` approves this solution shape and starts implementation. `Approved FEATURE-N with agents` approves this solution shape and authorizes sub-agents for implementation or fresh review when useful. The `with a goal` and `with agents and a goal` tails apply here too.
+and `How` decision summary. `Approved <ID>-N` using the prefix from `ledger.yaml` approves this solution shape and starts implementation. `Approved <ID>-N with agents` approves this solution shape and authorizes sub-agents for implementation or fresh review when useful. The `with a goal` and `with agents and a goal` tails apply here too.
 
 These feature implementation rules remain mandatory:
 
@@ -141,17 +141,17 @@ These feature implementation rules remain mandatory:
 - Use `$doc-standards` when the feature changes public commands, APIs, examples,
   configuration, or documented workflows.
 - Use `$change-validation` when selecting validation commands.
-- Report `Red`, `Green`, `Refactor`, and `Validation` entries. `Red` and `Green` must each paste the actual command and its real output using the same command/selector; a label without pasted output is not acceptable, and work where red was never observed before implementation must be labeled `test-after (not TDD)` with the reason instead of a TDD cycle. Use `Refactor: none (<reason>)` when no cleanup was needed after green. Ask the human to verify and say `Done FEATURE-N`.
+- Report `Red`, `Green`, `Refactor`, and `Validation` entries. `Red` and `Green` must each paste the actual command and its real output using the same command/selector; a label without pasted output is not acceptable, and work where red was never observed before implementation must be labeled `test-after (not TDD)` with the reason instead of a TDD cycle. Use `Refactor: none (<reason>)` when no cleanup was needed after green. Ask the human to verify and say `Done <ID>-N` using the prefix from `ledger.yaml`.
 
 ## References
 
 - Read `references/plan.md` before starting Find mode or Implement mode.
 - Read `references/find-rules.md` during Find mode before reviewing or
   recording candidates.
-- Read `references/acceptance-gate.md` before recording any `FEATURES.md`
+- Read `references/acceptance-gate.md` before recording any scoped-ledger
   candidate.
-- Read `references/ledger-format.md` before creating, updating, or interpreting
-  `FEATURES.md`.
+- Read `ledger.yaml` and `references/ledger-format.md` before creating,
+  updating, or interpreting the scoped ledger.
 - Read `references/implementation-proposal.md` before asking for agreement to
   edit a feature.
 - Read `../references/gap-workflow.md` for shared scoped-ledger and delegation

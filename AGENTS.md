@@ -188,9 +188,9 @@ Treat this `AGENTS.md` as the repo-specific companion to those skills.
 ## Remembered workflow commands
 
 Treat these short commands as binding workflow shorthands, not casual prose.
-They select the matching skill and its gates before any edits. Supported gap
-IDs include `FEATURE-*`, `ISSUE-*`, `TEST-*`, `DOC-*`, `PROJECT-*`, and
-`RELIABILITY-*`; route each ID to the matching gap skill and ledger.
+They select the matching skill and its gates before any edits. Each ledger
+skill's `ledger.yaml` declares its accepted ID prefix and canonical ledger
+path; route each ID through that contract.
 
 `Start` begins the workflow, `Approved` accepts the presented solution, and
 `Done` confirms an entry is verified. After any verb, name the ID and add
@@ -210,16 +210,17 @@ bare current-request invocation targets the current repository and means the
 full review, validation, commit, force-push, and draft-PR workflow; it does not
 use a path scope.
 
-- `Start FEATURE-3 in path/FEATURES.md`: select the matching gap skill,
-  refresh evidence, present the solution, and stop at the agreement gate
-  before editing. `Start ISSUE-3 in path/ISSUES.md` follows the same shape.
-- `Approved FEATURE-3 with agents`: approve the presented solution and
+- `Start ID in SCOPE`: select the matching gap skill, resolve the exact scoped
+  ledger path from its `ledger.yaml`, refresh evidence, present the solution,
+  and stop at the agreement gate before editing. Use `in LEDGER_PATH` only when
+  the skill or scope is ambiguous.
+- `Approved ID with agents`: approve the presented solution and
   authorize sub-agents for implementation or fresh review when useful.
-- `Start FEATURE-3 with a goal`: authorize a runtime goal when goals are
+- `Start ID with a goal`: authorize a runtime goal when goals are
   available and useful.
-- `Start FEATURE-3 with agents and a goal`: authorize both sub-agents and a
+- `Start ID with agents and a goal`: authorize both sub-agents and a
   runtime goal.
-- `Done FEATURE-3`: confirm the entry is verified and complete; the selected
+- `Done ID`: confirm the entry is verified and complete; the selected
   skill continues with the next entry. The `with a goal` and `with agents and
   a goal` tails apply here too.
 
