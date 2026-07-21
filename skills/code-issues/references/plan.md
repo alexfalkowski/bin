@@ -21,7 +21,7 @@ state, code/security/compatibility evidence, and public contract evidence.
    Prefer a read-only agent type when one is available, because Find-mode
    reviewers do not edit. Never leave a sub-agent's model unset; an unset
    model silently inherits the session model.
-3. Use `ISSUES.md` as the scoped ledger and `ISSUE-<number>` IDs.
+3. Read `../ledger.yaml`; use its scoped ledger path and ID prefix.
 4. Run `$project-workflow` discovery and the shared audit preflight, including
    applicable tools, service dependencies, validation ladder, and command
    failure classification.
@@ -48,7 +48,7 @@ state, code/security/compatibility evidence, and public contract evidence.
    report it as a confidence limiter or route it to the right workflow; do not
    record it as a code issue unless a concrete bug or violated contract is
    confirmed.
-10. If confirmed issues remain, write scoped `ISSUES.md`, present the ledger,
+10. If confirmed issues remain, write the resolved scoped ledger, present it,
     coverage state, proposed fix plan, and runnable follow-up scopes, then stop
     before fixing.
 

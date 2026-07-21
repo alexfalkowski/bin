@@ -41,7 +41,7 @@ security, compatibility, testing, or documentation findings.
 8. Prefer concrete suggestions over taste. Each note should explain why the
    change would make the code easier to read, maintain, or align with local
    patterns.
-9. Do not create or update `ISSUES.md`; style notes are not ledger findings.
+9. Do not create or update a code-issue ledger; style notes are not ledger findings.
 10. For standalone output, use `references/output-format.md`.
 11. When another skill embeds style notes, preserve the non-blocking nature,
    file references, suggestions, and rationale in the caller's output format.

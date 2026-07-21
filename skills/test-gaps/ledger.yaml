@@ -1,0 +1,4 @@
+version: 1
+id_prefix: TEST
+ledger_filename: TESTS.md
+ledger_path_template: "{scope}/{ledger_filename}"

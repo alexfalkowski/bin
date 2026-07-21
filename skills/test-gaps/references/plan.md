@@ -12,7 +12,7 @@ surface, validation, delegation, ledger state, and repository-owned behavior.
 
 1. Follow `../../references/gap-workflow.md#common-plan-mechanics` for shared
    find-mode sequencing. Apply the shared gap-workflow delegation gate before review work.
-2. Use `TESTS.md` as the scoped ledger and `TEST-<number>` IDs.
+2. Read `../ledger.yaml`; use its scoped ledger path and ID prefix.
 3. Read `../../references/gap-lead-generation.md`, classify the repository
    archetype, and build a lead inventory for public behavior, dominant harness,
    fixtures, generated stubs, service-feature coverage, failure paths,
@@ -32,7 +32,7 @@ surface, validation, delegation, ledger state, and repository-owned behavior.
    documented workflows, dominant harnesses, nearby tests, test-support
    surfaces, rejected and routed leads, validation evidence, and policy
    exclusions checked.
-9. If confirmed gaps remain, write scoped `TESTS.md`, present the ledger,
+9. If confirmed gaps remain, write the resolved scoped ledger, present it,
    coverage state, proposed test-fix plan, and runnable follow-up scopes, then
    stop before fixing.
 

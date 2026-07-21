@@ -13,7 +13,7 @@ evidence.
 
 1. Follow `../../references/gap-workflow.md#common-plan-mechanics` for shared
    find-mode sequencing. Apply the shared gap-workflow delegation gate before review work.
-2. Use `RELIABILITY.md` as the scoped ledger and `REL-<number>` IDs.
+2. Read `../ledger.yaml`; use its scoped ledger path and ID prefix.
 3. Run `$project-workflow` discovery and the shared audit preflight, including
    applicable tools, service dependencies, validation ladder, and command
    failure classification.
@@ -49,7 +49,7 @@ evidence.
    representative stress, race, outage, fault-injection, sidecar, integration,
    freshness, or operator-scenario evidence is a confidence limiter or routed
    follow-up unless a current repository-owned failure mode is confirmed.
-11. If confirmed gaps remain, write scoped `RELIABILITY.md`, present the ledger,
+11. If confirmed gaps remain, write the resolved scoped ledger, present it,
     coverage state, proposed reliability-fix plan, and runnable follow-up
     scopes, then stop before fixing.
 

@@ -13,9 +13,9 @@ documentation surface.
 
 1. Follow `../../references/gap-workflow.md#common-plan-mechanics` for shared
    one-pass sequencing. Apply the shared gap-workflow delegation gate before review work.
-2. Read an existing scoped `DOCS.md` when it is a doc-gap ledger; stop if the
-   file is unrelated or ambiguous active work. Use `DOC-<number>` IDs for
-   unresolved gaps.
+2. Read `../ledger.yaml`, then read the resolved scoped ledger when it is a
+   doc-gap ledger; stop if the file is unrelated or ambiguous active work. Use
+   its ID prefix for unresolved gaps.
 3. Read `../../references/gap-lead-generation.md`, classify the repository
    archetype, and build a lead inventory for README, examples, command help,
    package docs, API comments, config docs, operational docs, generated-schema
@@ -41,7 +41,7 @@ documentation surface.
    missing-contract categories, rejected and routed leads, validation evidence,
    and policy exclusions checked.
 9. Implement confirmed doc gaps with the smallest clear documentation changes.
-   If a confirmed gap cannot be fixed correctly, write or update `DOCS.md`; if
+   If a confirmed gap cannot be fixed correctly, write or update the resolved scoped ledger; if
    an existing doc-gap ledger is fully resolved, delete it.
 10. Validate changed docs and present fixed gaps, dismissed or out-of-scope
    candidates when relevant, coverage state, unresolved ledger entries if any,
@@ -50,10 +50,10 @@ documentation surface.
 ## Audit-Only Mode Plan
 
 1. Follow the one-pass review and closeout rules, but check whether scoped
-   `DOCS.md` already exists and stop unless the human explicitly asked to
+   the resolved scoped ledger already exists and stop unless the human explicitly asked to
    refresh or overwrite that ledger.
 2. Do not edit documentation. If no confirmed gaps remain, report coverage and
-   do not create `DOCS.md`; if confirmed gaps remain, write the scoped audit
-   ledger with `DOC-<number>` IDs.
+   do not create a scoped ledger; if confirmed gaps remain, write the resolved
+   scoped audit ledger with its ID prefix.
 3. Present the scoped audit ledger, coverage state, and runnable follow-up
    scopes, then stop before making fixes.

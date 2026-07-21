@@ -1,0 +1,4 @@
+version: 1
+id_prefix: ISSUE
+ledger_filename: ISSUES.md
+ledger_path_template: "{scope}/{ledger_filename}"

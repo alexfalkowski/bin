@@ -1,4 +1,4 @@
-# Candidate And `DOCS.md` Format
+# Candidate And Ledger Format
 
 Each review candidate and each unresolved or audit-only ledger entry is a
 self-contained, debatable mini-RFC. A reviewer must be able to understand the
@@ -24,7 +24,7 @@ Use this structure for every entry:
 ````markdown
 # Docs
 
-## DOC-1: Short concrete title
+## <ID>-1: Short concrete title
 
 | Field | Value |
 | --- | --- |

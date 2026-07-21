@@ -10,8 +10,9 @@ summary shape.
 - If no scope is provided, stop and ask for the package or folder.
 - Treat remembered commands as gap-workflow shorthand. `Start` begins the
   workflow, `Approved` accepts the presented solution, and `Done` confirms an
-  entry is verified. Each takes the optional tail `in LEDGER_PATH` when an ID
-  is ambiguous, and `with agents`, `with a goal`, or `with agents and a goal`:
+  entry is verified. Each takes the optional tail `in LEDGER_PATH` only when a
+  selected ledger skill and scope cannot resolve the entry, and `with agents`,
+  `with a goal`, or `with agents and a goal`:
   - `Start ID` selects the matching gap skill and enters implement mode for the
     entry. `Start ID1/ID2 in LEDGER_PATH` selects multiple entries.
   - `Start ID with agents` explicitly authorizes sub-agents for the current
@@ -76,7 +77,21 @@ summary shape.
 
 Use these mechanics with the selected skill's `references/plan.md`. The plan
 names the domain-specific inventory surfaces, candidate tests, closeout
-questions, ledger filename, ID prefix, and implementation pairings.
+questions, and implementation pairings.
+
+## Ledger Contract Resolution
+
+- Each ledger skill owns `ledger.yaml`. It is the authoritative source of its
+  `id_prefix`, `ledger_filename`, and `ledger_path_template` values.
+- When the selected ledger skill and scope are known, read that contract and
+  resolve the exact ledger path by substituting the scope and ledger filename
+  into `ledger_path_template`. The version-1 template is
+  `{scope}/{ledger_filename}`.
+- For `Start`, `Approved`, and `Done`, validate the ID against the resolved
+  contract prefix, then read or update only the resolved ledger path. Do not
+  search the workspace for possible ledgers or infer a different ledger path.
+- An explicit `in LEDGER_PATH` tail remains available only when the selected
+  skill or scope is ambiguous. Once both are known, the contract path wins.
 
 ## Mode-Specific References
 
@@ -94,12 +109,12 @@ rejected, routed, deferred, and blocked leads.
 
 ## Scoped Ledgers
 
-- Before creating or updating a scoped ledger, ensure the consuming repository
-  root `.gitignore` exists and contains that ledger filename as a standalone
+- Before creating or updating a scoped ledger, read the selected skill's
+  `ledger.yaml`; ensure the consuming repository root `.gitignore` exists and
+  contains its `ledger_filename` as a standalone
   pattern. Checking or reading an existing ledger must not modify `.gitignore`.
-- Use the selected skill's ledger filename in the requested package or folder,
-  such as `PACKAGE_OR_FOLDER/ISSUES.md`, `TESTS.md`, `DOCS.md`, `FEATURES.md`,
-  `PROJECTS.md`, or `RELIABILITY.md`.
+- Use the exact path resolved from the selected skill's `ledger.yaml` and the
+  requested scope.
 - In find or audit-only modes, stop when an existing scoped ledger blocks review
   unless the selected skill explicitly allows reading or refreshing it. In
   implement mode, read it first; if it does not exist, ask whether to run find
@@ -108,8 +123,7 @@ rejected, routed, deferred, and blocked leads.
   without requiring migration. Rewrite them to the current `What` / `Why` /
   `How` shape only when creating or updating that entry.
 - Record durable findings or proposals only in the selected scoped ledger and
-  assign IDs using its prefix, such as `ISSUE-N`, `TEST-N`, `DOC-N`,
-  `FEATURE-N`, `PROJECT-N`, or `REL-N`.
+  assign IDs using the contract's `id_prefix`.
 
 ## Session Summary
 

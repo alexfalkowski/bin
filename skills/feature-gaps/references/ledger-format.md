@@ -1,4 +1,4 @@
-# `FEATURES.md` Format
+# Ledger Format
 
 Each entry is a self-contained, debatable mini-PRD: the product form of the
 shared mini-RFC. A reviewer must be able to understand the opportunity, the
@@ -24,7 +24,7 @@ Use this structure for every entry:
 ````markdown
 # Features
 
-## FEATURE-1: Short concrete title
+## <ID>-1: Short concrete title
 
 | Field | Value |
 | --- | --- |

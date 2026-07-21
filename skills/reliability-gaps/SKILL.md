@@ -1,18 +1,18 @@
 ---
 name: reliability-gaps
-description: Use when the user asks to find or implement $reliability-gaps/reliability gaps in a package or folder, review production readiness, set a confidence closure target such as 95% or 99%, uses Start REL-1 or Approved REL-1 with agents and a goal, asks about reliability gap IDs such as REL-1, asks what the fix is for REL-1, asks to fix or verify REL-1, or uses Done REL-1. Find verified reliability, operability, SLO, overload, observability, release-safety, recovery, data-integrity, disaster-readiness, or NALSD gaps; record scoped RELIABILITY.md entries; implement agreed fixes gap by gap.
+description: Use when the user asks to find or implement $reliability-gaps/reliability gaps in a package or folder, review production readiness, set a confidence closure target such as 95% or 99%, uses Start, Approved, or Done with ledger entry IDs and optional agents or a goal, or asks what the fix is for a reliability-gap ledger entry. Find verified reliability, operability, SLO, overload, observability, release-safety, recovery, data-integrity, disaster-readiness, or NALSD gaps; record scoped ledger entries; implement agreed fixes gap by gap.
 ---
 
 # Reliability Gaps
 
 Use Find mode by default when no mode is stated. Enter Implement mode only
 after the human explicitly agrees to a specific proposed solution, typically
-with `Approved REL-N`. Do not combine modes in one pass:
+with `Approved <ID>-N` using the prefix from `ledger.yaml`. Do not combine modes in one pass:
 
 - **Find mode**: `Find $reliability-gaps in PACKAGE_OR_FOLDER` or `Find reliability gaps in PACKAGE_OR_FOLDER`.
 - **Implement mode**: `Implement $reliability-gaps in PACKAGE_OR_FOLDER` or `Implement reliability gaps in PACKAGE_OR_FOLDER`.
 
-Before either mode, read `references/plan.md` and
+Before either mode, read `ledger.yaml`, `references/plan.md`, and
 `../references/gap-workflow.md` and the mode-specific reference below own
 runtime state, ledger, delegation,
 scope, coverage, confidence, and approval gates. Before Find mode, also read
@@ -50,9 +50,9 @@ Follow `references/plan.md#find-mode-plan` and the find/audit rules in
 Read `references/find-rules.md`; those reliability-gap rules remain mandatory
 in Find mode.
 
-## `RELIABILITY.md` Format
+## Ledger Format
 
-Before creating, updating, or interpreting `RELIABILITY.md`, read
+Before creating, updating, or interpreting the scoped ledger, read `ledger.yaml` and
 `references/ledger-format.md`. Each entry is a self-contained mini-RFC using
 `What -> Why -> How`. The required core must keep `| Field | Value |`,
 `| Status |`, and `**Summary.**`; `### What` with `**Current.**` and
@@ -78,15 +78,15 @@ These reliability implementation rules remain mandatory:
 - For behavior-changing fixes, state the reliability execution checklist before editing: `TDD decision`, `First test/scenario`, `Expected red`, `Intended green change`, `Refactor checkpoint`, and `Validation`. When the harness is runnable, observe and paste the red (command + failing output) before implementation edits; if it is not runnable, stop and request agreement to proceed test-after with the reason rather than skipping red silently.
 - Implement only the agreed finding with the smallest clear reliability change.
 - Use `$reliability-standards` for reliability design, `$change-safety` for public or operational compatibility, `$testing-standards` for failure-path tests, and `$change-validation` for checks. Pair with `$security-audit` when the fix touches auth, secrets, privilege, DoS, logs, supply chain, or incident containment.
-- Report `Red`, `Green`, `Refactor`, and `Validation` entries. `Red` and `Green` must each paste the actual command and its real output using the same command/selector; a label without pasted output is not acceptable, and work where red was never observed before implementation must be labeled `test-after (not TDD)` with the reason instead of a TDD cycle. Use `Refactor: none (<reason>)` when no cleanup was needed after green. Ask the human to verify and say `Done REL-N`.
+- Report `Red`, `Green`, `Refactor`, and `Validation` entries. `Red` and `Green` must each paste the actual command and its real output using the same command/selector; a label without pasted output is not acceptable, and work where red was never observed before implementation must be labeled `test-after (not TDD)` with the reason instead of a TDD cycle. Use `Refactor: none (<reason>)` when no cleanup was needed after green. Ask the human to verify and say `Done <ID>-N` using the prefix from `ledger.yaml`.
 
 ## References
 
 - Read `references/plan.md` before starting Find mode or Implement mode.
 - Read `references/find-rules.md` during Find mode before reviewing or
   recording candidates.
-- Read `references/ledger-format.md` before creating, updating, or interpreting
-  `RELIABILITY.md`.
+- Read `ledger.yaml` and `references/ledger-format.md` before creating,
+  updating, or interpreting the scoped ledger.
 - Read `../references/gap-workflow.md` for shared scoped-ledger and delegation
   gates; read `../references/gap-workflow/find-audit.md` for Find-mode rules and
   `../references/gap-workflow/implementation.md` for Implement-mode rules.

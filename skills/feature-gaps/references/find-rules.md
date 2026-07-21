@@ -2,8 +2,7 @@
 
 These rules remain mandatory:
 
-- Use `FEATURES.md` in the requested package or folder as the proposal ledger,
-  for example `PACKAGE_OR_FOLDER/FEATURES.md`.
+- Read `../ledger.yaml` and use its resolved scoped path as the proposal ledger.
 - Before assigning review agents or starting local review, build a recursive
   scope inventory for the requested package or folder: relevant file count,
   first-level subfolders, nested packages, dominant languages, tests, public
@@ -25,7 +24,7 @@ These rules remain mandatory:
   as the proposed feature surface requires. Agents must use `$testing-standards`
   and `$project-workflow` to route test-harness, build, CI, Makefile, release,
   validation, command-discovery, or repository-workflow candidates away from
-  `FEATURES.md` before returning feature proposals.
+  the resolved scoped ledger before returning feature proposals.
 - Confirm each candidate feature against `acceptance-gate.md`, code, generated
   surfaces, framework wrappers, shared helpers, vendored dependency behavior
   when delegated, docs, tests, examples, command behavior, current

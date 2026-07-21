@@ -1,6 +1,6 @@
 ---
 name: doc-gaps
-description: Use when the user asks to run $doc-gaps, find/fix doc gaps in a package or folder, set a confidence closure target such as 95% or 99%, review docs for gaps, run audit-only doc gaps, uses Start DOC-1 or Approved DOC-1 with agents and a goal, asks about doc gap IDs such as DOC-1, asks what the fix is for DOC-1, asks to fix or verify DOC-1, or uses Done DOC-1. Find and fix concrete missing, weak, stale, or misleading README, docs, examples, command help, package docs, public API comments, code comments, and docstrings.
+description: Use when the user asks to run $doc-gaps, find/fix doc gaps in a package or folder, set a confidence closure target such as 95% or 99%, review docs for gaps, run audit-only doc gaps, uses Start, Approved, or Done with ledger entry IDs and optional agents or a goal, or asks what the fix is for a doc-gap ledger entry. Find and fix concrete missing, weak, stale, or misleading README, docs, examples, command help, package docs, public API comments, code comments, and docstrings.
 ---
 
 # Doc Gaps
@@ -10,7 +10,7 @@ Use one-pass mode by default; use audit-only mode only when explicitly asked:
 - **One-pass mode**: `Run $doc-gaps in PACKAGE_OR_FOLDER`, `Find doc gaps in PACKAGE_OR_FOLDER`, or `Fix doc gaps in PACKAGE_OR_FOLDER`.
 - **Audit-only mode**: `Audit-only $doc-gaps in PACKAGE_OR_FOLDER` or `Find doc gaps in PACKAGE_OR_FOLDER without editing`.
 
-Before either mode, read `references/plan.md` and
+Before either mode, read `ledger.yaml`, `references/plan.md`, and
 `../references/gap-workflow.md` and the mode-specific reference below own
 runtime state, ledger, delegation,
 scope, coverage, confidence, and approval gates. Before one-pass or audit-only
@@ -60,9 +60,9 @@ recording findings. Keep GoDoc details in `$go-standards`, RDoc details in
 `$ruby-standards`, and shell script/function comment rules in
 `$shell-standards`.
 
-## Candidate And `DOCS.md` Format
+## Candidate And Ledger Format
 
-Before creating, updating, or interpreting `DOCS.md`, read
+Before creating, updating, or interpreting the scoped ledger, read `ledger.yaml` and
 `references/ledger-format.md`. Each entry is a self-contained mini-RFC using
 `What -> Why -> How`. The required core must keep `| Field | Value |`,
 `| Status |`, and `**Summary.**`; `### What` with `**Current.**` and
@@ -81,8 +81,8 @@ entry warrants them.
   editing, or recording candidates.
 - Read `references/audit-rules.md` during audit-only mode before reviewing or
   recording candidates.
-- Read `references/ledger-format.md` before creating, updating, or interpreting
-  `DOCS.md`.
+- Read `ledger.yaml` and `references/ledger-format.md` before creating,
+  updating, or interpreting the scoped ledger.
 - Read `../references/gap-workflow.md` for shared scoped-ledger and delegation
   gates; read `../references/gap-workflow/find-audit.md` for one-pass/audit-only
   rules and `../references/gap-workflow/implementation.md` for entry fixes.

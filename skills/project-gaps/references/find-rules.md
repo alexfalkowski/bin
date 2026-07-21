@@ -2,8 +2,7 @@
 
 These rules remain mandatory:
 
-- Use `PROJECTS.md` in the requested package or folder as the proposal ledger,
-  for example `PACKAGE_OR_FOLDER/PROJECTS.md`.
+- Read `../ledger.yaml` and use its resolved scoped path as the proposal ledger.
 - Classify every candidate's implementation home before recording it. Use:
   `current repo` when the requested scope owns the fix; `shared bin` when
   reusable `bin` tooling owns the fix; `external repo` when another repository,
@@ -13,7 +12,7 @@ These rules remain mandatory:
   both necessary.
 - Treat third-party library, framework, tool, and image defects as project
   workflow candidates only for the repository-owned response. The upstream
-  defect itself is not a normal `PROJECT-N` for the current scope.
+  defect itself is not a normal scoped ledger entry for the current scope.
 - Before assigning review agents or starting local review, build a recursive
   scope inventory for the requested package or folder: relevant file count,
   first-level subfolders, nested packages, dominant languages, Makefiles, CI
@@ -52,7 +51,7 @@ These rules remain mandatory:
   `$feature-gaps`.
 - If a candidate mostly documents existing behavior, route it to `$doc-gaps`.
 - If a candidate's implementation home is outside the requested scope, do not
-  record it as a normal `PROJECT-N` for that scope. Record it under
+  record it as a normal scoped ledger entry for that scope. Record it under
   `Routed Project Follow-Ups` with the owning home and local evidence, or route
   it to a separate project-gaps run in the owning repository or shared tooling
   scope.

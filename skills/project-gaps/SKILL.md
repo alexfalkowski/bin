@@ -1,18 +1,18 @@
 ---
 name: project-gaps
-description: Use when the user asks to find or implement $project-gaps/project gaps in a package or folder, set a confidence closure target such as 95% or 99%, find build, CI, Makefile, release, setup, validation, command discovery, or repository workflow gaps, uses Start PROJECT-1 or Approved PROJECT-1 with agents and a goal, asks about project gap IDs such as PROJECT-1, asks what the fix is for PROJECT-1, asks to fix or verify PROJECT-1, or uses Done PROJECT-1. Find concrete repository workflow and project plumbing improvements; record scoped PROJECTS.md entries; later propose and implement agreed fixes one at a time.
+description: Use when the user asks to find or implement $project-gaps/project gaps in a package or folder, set a confidence closure target such as 95% or 99%, find build, CI, Makefile, release, setup, validation, command discovery, or repository workflow gaps, uses Start, Approved, or Done with ledger entry IDs and optional agents or a goal, or asks what the fix is for a project-gap ledger entry. Find concrete repository workflow and project plumbing improvements; record scoped ledger entries; later propose and implement agreed fixes one at a time.
 ---
 
 # Project Gaps
 
 Use Find mode by default when no mode is stated. Enter Implement mode only
 after the human explicitly agrees to a specific proposed solution, typically
-with `Approved PROJECT-N`. Do not combine modes in one pass:
+with `Approved <ID>-N` using the prefix from `ledger.yaml`. Do not combine modes in one pass:
 
 - **Find mode**: `Find $project-gaps in PACKAGE_OR_FOLDER` or `Find project gaps in PACKAGE_OR_FOLDER`.
 - **Implement mode**: `Implement $project-gaps in PACKAGE_OR_FOLDER` or `Implement project gaps in PACKAGE_OR_FOLDER`.
 
-Before either mode, read `references/plan.md` and
+Before either mode, read `ledger.yaml`, `references/plan.md`, and
 `../references/gap-workflow.md` and the mode-specific reference below own
 runtime state, ledger, delegation,
 scope, coverage, confidence, and approval gates. Before Find mode, also read
@@ -41,7 +41,7 @@ to this repository's workflow ownership, audience, and maintenance posture.
 
 ## Acceptance Gate
 
-Before recording any `PROJECTS.md` candidate, read
+Before recording any scoped-ledger candidate, read
 `references/acceptance-gate.md`. A proposal must satisfy that gate at the
 active confidence threshold or higher. Use an explicit confidence target from
 the current request when provided; otherwise use the 90% default (or the 95%
@@ -61,9 +61,9 @@ If a candidate's implementation home is outside the requested scope, route it
 according to `references/find-rules.md` instead of recording it as a normal
 local project gap.
 
-## `PROJECTS.md` Format
+## Ledger Format
 
-Before creating, updating, or interpreting `PROJECTS.md`, read
+Before creating, updating, or interpreting the scoped ledger, read `ledger.yaml` and
 `references/ledger-format.md`. Each entry is a self-contained mini-RFC using
 `What -> Why -> How`. The required core must keep `| Field | Value |`,
 `| Status |`, and `**Summary.**`; `### What` with `**Current.**` and
@@ -109,17 +109,17 @@ These project-gap implementation rules remain mandatory:
 - Use `$doc-standards` when the project change affects public commands, Make
   targets, setup, validation, release, configuration, or documented workflows.
 - Use `$change-validation` when selecting validation commands.
-- Report `Red`, `Green`, `Refactor`, and `Validation` entries. `Red` and `Green` must each paste the actual command and its real output using the same command/selector; a label without pasted output is not acceptable, and work where red was never observed before implementation must be labeled `test-after (not TDD)` with the reason instead of a TDD cycle. Use `Refactor: none (<reason>)` when no cleanup was needed after green. Ask the human to verify and say `Done PROJECT-N`.
+- Report `Red`, `Green`, `Refactor`, and `Validation` entries. `Red` and `Green` must each paste the actual command and its real output using the same command/selector; a label without pasted output is not acceptable, and work where red was never observed before implementation must be labeled `test-after (not TDD)` with the reason instead of a TDD cycle. Use `Refactor: none (<reason>)` when no cleanup was needed after green. Ask the human to verify and say `Done <ID>-N` using the prefix from `ledger.yaml`.
 
 ## References
 
 - Read `references/plan.md` before starting Find mode or Implement mode.
 - Read `references/find-rules.md` during Find mode before reviewing or
   recording candidates.
-- Read `references/acceptance-gate.md` before recording any `PROJECTS.md`
+- Read `references/acceptance-gate.md` before recording any scoped-ledger
   candidate.
-- Read `references/ledger-format.md` before creating, updating, or interpreting
-  `PROJECTS.md`.
+- Read `ledger.yaml` and `references/ledger-format.md` before creating,
+  updating, or interpreting the scoped ledger.
 - Read `../references/gap-workflow.md` for shared scoped-ledger and delegation
   gates; read `../references/gap-workflow/find-audit.md` for Find-mode rules and
   `../references/gap-workflow/implementation.md` for Implement-mode rules.

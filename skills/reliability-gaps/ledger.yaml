@@ -1,0 +1,4 @@
+version: 1
+id_prefix: REL
+ledger_filename: RELIABILITY.md
+ledger_path_template: "{scope}/{ledger_filename}"

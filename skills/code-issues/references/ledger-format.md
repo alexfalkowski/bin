@@ -1,4 +1,4 @@
-# `ISSUES.md` Format
+# Ledger Format
 
 Each entry is a self-contained, debatable mini-RFC. A reviewer must be able to
 understand the problem, the evidence, and the proposed direction without opening
@@ -23,7 +23,7 @@ Use this structure for every entry:
 ````markdown
 # Issues
 
-## ISSUE-1: Short concrete title
+## <ID>-1: Short concrete title
 
 | Field | Value |
 | --- | --- |
