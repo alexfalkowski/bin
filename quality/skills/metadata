@@ -18,6 +18,7 @@ LEDGER_CONTRACT_KEYS = %w[
   ledger_path_template
 ].freeze
 LEDGER_PATH_TEMPLATE = '{scope}/{ledger_filename}'
+APPROVAL_BATCH_SYNTAX = 'Approved <ID>-N[/N...]'
 REFERENCE_PATTERN = %r{(?<!/)(?:\.\./)*references/[A-Za-z0-9._/-]+\.md(?:#[^\s`)]+)?}
 
 def present_string?(value)
@@ -318,7 +319,10 @@ end
 def valid_gap_skill_text?(skill_text, skill_path)
   [
     required_text?(skill_text, skill_path, 'references/plan.md'),
-    required_text?(skill_text, skill_path, '../references/gap-workflow.md')
+    required_text?(skill_text, skill_path, '../references/gap-workflow.md'),
+    required_text?(skill_text, skill_path, APPROVAL_BATCH_SYNTAX),
+    required_text?(skill_text, skill_path, 'same-prefix batch'),
+    required_text?(skill_text, skill_path, 'ledger.yaml')
   ].all?
 end
 

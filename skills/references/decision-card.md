@@ -34,9 +34,13 @@ decision above must stand on its own.
 Approval command:
 
 - `Approved ID-N` approves this proposal and starts implementation.
+- `Approved PREFIX-N[/N...]` approves the already-presented proposals for an
+  ordered, same-prefix batch from one ledger. Each item is still re-read and
+  must remain current before its edit; the batch stops if a later item is no
+  longer safely actionable.
 - `Approved ID-N with agents` approves this proposal and authorizes sub-agents
   for implementation or fresh review when useful. The `with a goal` and
-  `with agents and a goal` tails apply here too.
+  `with agents and a goal` tails apply to a single entry or the entire batch.
 ````
 
 ## Add When Warranted

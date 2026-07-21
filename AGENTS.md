@@ -193,8 +193,10 @@ skill's `ledger.yaml` declares its accepted ID prefix and canonical ledger
 path; route each ID through that contract.
 
 `Start` begins the workflow, `Approved` accepts the presented solution, and
-`Done` confirms an entry is verified. After any verb, name the ID and add
-`in path/LEDGER.md` when the ID is ambiguous. The optional `with agents`,
+`Done` confirms an entry is verified. After any verb, name the ID; `Approved`
+also accepts a same-prefix batch in the form `PREFIX-N[/N...]`. Resolve its
+prefix and ledger path from the selected skill's `ledger.yaml`, not a registry
+or hard-coded type map. Add `in path/LEDGER.md` when the ID is ambiguous. The optional `with agents`,
 `with a goal`, and `with agents and a goal` tails carry current-request
 authorization.
 
@@ -216,6 +218,13 @@ use a path scope.
   the skill or scope is ambiguous.
 - `Approved ID with agents`: approve the presented solution and
   authorize sub-agents for implementation or fresh review when useful.
+- `Approved PREFIX-N[/N...]`: approve the listed entries from one resolved ledger
+  as a sequential batch. Re-read that ledger and every requested entry
+  before the first edit; implement and validate in the listed order, re-check
+  the next entry after each completed item, and stop with completed versus
+  remaining entries if a later proposal becomes stale, conflicting,
+  unnecessary, or unsafe. The authorization tail applies to the entire batch;
+  it does not permit parallel implementation or bypass any gate.
 - `Start ID with a goal`: authorize a runtime goal when goals are
   available and useful.
 - `Start ID with agents and a goal`: authorize both sub-agents and a

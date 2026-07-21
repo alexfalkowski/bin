@@ -18,6 +18,10 @@ mode, also read `../references/gap-workflow/find-audit.md`.
 Before implementation of a scoped entry, also read
 `../references/gap-workflow/implementation.md`.
 
+Approve a scoped entry with `Approved <ID>-N`, or approve an ordered,
+same-prefix batch with `Approved <ID>-N[/N...]`, using the prefix from
+`ledger.yaml`. The shared workflow processes an approved batch sequentially.
+
 ## Operating Stance
 
 Operate as a scoped documentation maintainer: use `$doc-standards` for

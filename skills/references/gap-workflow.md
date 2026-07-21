@@ -21,7 +21,13 @@ summary shape.
     available and useful.
   - `Start ID with agents and a goal` explicitly authorizes both.
   - `Approved ID` approves the presented solution and permits implementation.
-    The `with agents`, `with a goal`, and `with agents and a goal` tails apply.
+  - `Approved PREFIX-N[/N...]` approves a same-prefix sequential batch, for
+    example `Approved ISSUE-1/2/3`. Resolve `PREFIX` and the single ledger path
+    from the selected skill's `ledger.yaml`; each suffix after the first slash
+    is an entry number in that same ledger. Reject a repeated or mixed prefix,
+    such as `ISSUE-1/FEATURE-2`, rather than treating it as one ID or resolving
+    multiple ledgers. The `with agents`, `with a goal`, and `with agents and a
+    goal` tails apply to the entire batch.
   - `Done ID` confirms the entry is verified and complete. Its authorization
     tail carries forward to the next entry.
   These shorthands do not bypass solution agreement, scoped ledgers, validation
@@ -88,8 +94,12 @@ questions, and implementation pairings.
   into `ledger_path_template`. The version-1 template is
   `{scope}/{ledger_filename}`.
 - For `Start`, `Approved`, and `Done`, validate the ID against the resolved
-  contract prefix, then read or update only the resolved ledger path. Do not
-  search the workspace for possible ledgers or infer a different ledger path.
+  contract prefix, then read or update only the resolved ledger path. For an
+  `Approved PREFIX-N[/N...]` batch, validate the first prefix and every
+  slash-delimited entry number against that one contract before interpreting it
+  as approvals for those entries. Do not treat the batch as one malformed ID,
+  search the workspace for possible ledgers, infer a different ledger path, or
+  accept a mixed-prefix batch.
 - An explicit `in LEDGER_PATH` tail remains available only when the selected
   skill or scope is ambiguous. Once both are known, the contract path wins.
 

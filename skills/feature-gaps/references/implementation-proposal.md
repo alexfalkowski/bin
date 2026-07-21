@@ -53,9 +53,13 @@ verification; the decision above must stand on its own.
 Approval command:
 
 - `Approved <ID>-N` using the prefix from `../ledger.yaml` approves this solution shape and starts implementation.
+- `Approved <ID>-N[/N...]` using the prefix from `../ledger.yaml` approves
+  already-presented solution shapes as one ordered, same-prefix batch from the
+  resolved ledger. Re-check every item before its edit and stop if a later
+  proposal is no longer safely actionable.
 - `Approved <ID>-N with agents` using the prefix from `../ledger.yaml` approves this solution shape and authorizes
   sub-agents for implementation or fresh review when useful. The `with a goal`
-  and `with agents and a goal` tails apply here too.
+  and `with agents and a goal` tails apply to a single entry or the entire batch.
 ````
 
 Add this section only when a real fork exists in *how* to implement the feature;

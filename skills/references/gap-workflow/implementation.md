@@ -11,8 +11,12 @@ while implementing an agreed gap-ledger entry.
    ask whether to run the matching find mode first.
 2. Run `$project-workflow` discovery for current entrypoints, CI, documented
    commands, relevant public surfaces, and `./bin` wiring.
-3. Select the named entry or next entry and re-check its evidence against
-   current code, docs, tests, commands, and generated/workflow surfaces.
+3. For a single approval, select the named entry. For an approved batch,
+   preserve the listed order, re-read the resolved ledger, and confirm every
+   requested entry exists with a current approved decision or proposal before
+   the first edit. Then select only the first entry and re-check its evidence
+   against current code, docs, tests, commands, and generated/workflow
+   surfaces.
 4. If it is resolved, stale, duplicated, out of scope, or owned elsewhere,
    explain the routing and propose removing, moving, or reclassifying it before
    editing.
@@ -27,22 +31,29 @@ while implementing an agreed gap-ledger entry.
    repository instructions, the selected skill, or local workflow.
 7. Implement only the agreed entry with the smallest clear change, using paired
    standards and validation skills from the selected plan.
-8. Validate through repository Make targets or documented entrypoints, then ask
-   the human to verify with `Done ID`.
-9. Stop until confirmation. After confirmation, remove or revise the entry and
-   continue with the next, or delete the scoped ledger when all entries are
-   confirmed resolved.
+8. Validate through repository Make targets or documented entrypoints. For a
+   batch, re-read the resolved ledger and re-check the next requested entry
+   before editing it; otherwise ask the human to verify with `Done ID`.
+9. For a single entry, stop until confirmation. For an approved batch, continue
+   only after the previous entry is implemented and validated, without
+   parallelizing entries. Batch approval does not confirm an entry `Done` or
+   authorize removing it from the ledger. After confirmation, remove or revise
+   the entry and continue with the next, or delete the scoped ledger when all
+   entries are confirmed resolved.
 
 ## Implementation Gates
 
 - Work through scoped entries sequentially by ID unless the human names a
-  different entry.
+  different entry. An approved same-prefix batch is an ordered exception: work
+  through only its listed entries, one at a time, in the order given.
 - Before proposing a fix, re-check current code, docs, tests, config, CI,
   command behavior, and nearby patterns. Treat ledgers as stale and dismiss or
   revise entries that are resolved, duplicated, invalid, or owned elsewhere.
 - Stop after proposing a solution. Do not edit files, update the ledger, or
   start validation until the human explicitly agrees to that solution. A request
-  naming multiple entries does not permit editing the first one.
+  naming multiple entries does not permit editing the first one unless it is a
+  valid `Approved PREFIX-N[/N...]` batch and every requested entry still has a
+  current approved decision or proposal.
 - Ask when behavior, compatibility, documentation location, test layer,
   implementation home, validation, operator workflow, or intent is too
   ambiguous to infer safely.
@@ -64,6 +75,11 @@ while implementing an agreed gap-ledger entry.
   coverage, confidence, or implementation safety. Keep one active entry owner
   and preserve all validation, review, and human-confirmation gates.
 - Implement only the agreed entry using existing local patterns.
+- After each implemented and validated batch item, re-read the resolved ledger
+  and re-check the next entry before editing it. Stop the batch before editing
+  that entry if the preceding change makes its proposal stale, conflicting,
+  unnecessary, invalid, or otherwise unsafe; report the implemented and
+  validated entries separately from the remaining entries and the stop reason.
 - Before accepting substantial work as complete, run the fresh review gate from
   `../long-running-work.md`. Without authorized agents, perform a named local
   challenge pass and do not call it independent review. If agents were
@@ -71,7 +87,9 @@ while implementing an agreed gap-ledger entry.
   completion at or above the active confidence threshold.
 - During automatic continuations while waiting for approval or `Done ID`, state
   the waiting gate once without repeating the full proposal.
-- Do not move to the next entry until the human confirms `Done ID`. After that
-  confirmation, remove or revise the entry; remove it only after explaining an
-  invalidation and getting agreement. Delete the scoped ledger when all entries
-  are confirmed done.
+- Do not move to the next single entry until the human confirms `Done ID`.
+  Within a valid approved batch, move to the next listed entry only after the
+  preceding one is implemented and validated and its successor passes the
+  re-check above. After confirmation, remove or revise an entry; remove it only
+  after explaining an invalidation and getting agreement. Delete the scoped
+  ledger when all entries are confirmed done.

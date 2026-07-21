@@ -1,13 +1,15 @@
 ---
 name: code-issues
-description: Use when the user asks to find or implement $code-issues/code issues in a package or folder, set a confidence closure target such as 95% or 99%, uses Start, Approved, or Done with ledger entry IDs and optional agents or a goal, or asks what the fix is for a code-issue ledger entry. Find concrete bugs, security issues, compatibility breaks, and public contract violations; record scoped ledger entries; later propose and implement agreed fixes one at a time.
+description: Use when the user asks to find or implement $code-issues/code issues in a package or folder, set a confidence closure target such as 95% or 99%, uses Start, Approved, or Done with ledger entry IDs and optional agents or a goal, or asks what the fix is for a code-issue ledger entry. Find concrete bugs, security issues, compatibility breaks, and public contract violations; record scoped ledger entries; later propose and implement agreed entries sequentially, including contract-driven same-prefix approved batches.
 ---
 
 # Code Issues
 
 Use Find mode by default when no mode is stated. Enter Implement mode only
 after the human explicitly agrees to a specific proposed solution, typically
-with `Approved <ID>-N` using the prefix from `ledger.yaml`. Do not combine modes in one pass:
+with `Approved <ID>-N`, or a same-prefix batch
+`Approved <ID>-N[/N...]`, using the prefix from `ledger.yaml`. The shared
+workflow processes an approved batch sequentially. Do not combine modes in one pass:
 
 - **Find mode**: `Find $code-issues in PACKAGE_OR_FOLDER` or `Find code issues in PACKAGE_OR_FOLDER`.
 - **Implement mode**: `Implement $code-issues in PACKAGE_OR_FOLDER` or `Implement code issues in PACKAGE_OR_FOLDER`.
@@ -67,7 +69,7 @@ These code-issue implementation rules remain mandatory:
 - After the human agrees and before editing, state the selected local code pattern, dominant relevant test harness, planned validation command, and any deviation from `AGENTS.md` or selected skills. If a deviation is needed, stop and ask before editing.
 - Use `$testing-standards` when deciding whether to add or update regression tests for the fix, and prefer its test-first or scenario-first loop when a behavior-changing fix has a credible test or BDD layer.
 - For behavior-changing fixes, state the issue execution checklist before editing: `TDD decision`, `First test/scenario`, `Expected red`, `Intended green change`, `Refactor checkpoint`, and `Validation`. When the harness is runnable, observe and paste the red (command + failing output) before implementation edits; if it is not runnable, stop and request agreement to proceed test-after with the reason rather than skipping red silently.
-- Report `Red`, `Green`, `Refactor`, and `Validation` entries. `Red` and `Green` must each paste the actual command and its real output using the same command/selector; a label without pasted output is not acceptable, and work where red was never observed before implementation must be labeled `test-after (not TDD)` with the reason instead of a TDD cycle. Use `Refactor: none (<reason>)` when no cleanup was needed after green. Ask the human to verify and say `Done <ID>-N` using the prefix from `ledger.yaml`.
+- Report `Red`, `Green`, `Refactor`, and `Validation` entries. `Red` and `Green` must each paste the actual command and its real output using the same command/selector; a label without pasted output is not acceptable, and work where red was never observed before implementation must be labeled `test-after (not TDD)` with the reason instead of a TDD cycle. Use `Refactor: none (<reason>)` when no cleanup was needed after green. For a single approval, ask the human to verify and say `Done <ID>-N` using the prefix from `ledger.yaml`; an approved batch follows the shared sequential re-check and stop rules.
 
 ## References
 
