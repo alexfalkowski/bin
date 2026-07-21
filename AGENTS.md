@@ -118,6 +118,31 @@ Agents MUST NOT:
 - Present work as test-driven when the failing test was never observed before
   implementation; label such work "test-after (not TDD)" with the reason.
 
+## Inherited credential handling
+
+Credentials exported by an operator shell and inherited by trusted-repository
+Make targets are intentional. This policy preserves that workflow while
+preventing accidental disclosure in agent-visible output.
+
+Agents MUST:
+
+- Treat inherited environment values and credential material as secrets. Redact
+  any such value encountered accidentally and do not repeat it in a response.
+- Keep approved credential-dependent Make targets usable in trusted
+  repositories; this policy does not prohibit those targets from inheriting
+  credentials.
+
+Agents MUST NOT:
+
+- Print, enumerate, serialize, copy, commit, or include inherited environment
+  values or credential material in command output, logs, patches, or responses.
+- Run generic environment dumps (`env`, `printenv`, `set`, `export -p`,
+  `declare -x`, or `typeset -x`), shell tracing (`set -x`, `zsh -x`, or
+  `bash -x`), or Make database/debug modes that can expose inherited values.
+- Source shell startup files solely to obtain credentials for an agent command.
+
+## Instruction precedence
+
 If there is a conflict, precedence is:
 
 1. System/developer instructions.
