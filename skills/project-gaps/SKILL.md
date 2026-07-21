@@ -1,13 +1,15 @@
 ---
 name: project-gaps
-description: Use when the user asks to find or implement $project-gaps/project gaps in a package or folder, set a confidence closure target such as 95% or 99%, find build, CI, Makefile, release, setup, validation, command discovery, or repository workflow gaps, uses Start, Approved, or Done with ledger entry IDs and optional agents or a goal, or asks what the fix is for a project-gap ledger entry. Find concrete repository workflow and project plumbing improvements; record scoped ledger entries; later propose and implement agreed fixes one at a time.
+description: Use when the user asks to find or implement $project-gaps/project gaps in a package or folder, set a confidence closure target such as 95% or 99%, find build, CI, Makefile, release, setup, validation, command discovery, or repository workflow gaps, uses Start, Approved, or Done with ledger entry IDs and optional agents or a goal, or asks what the fix is for a project-gap ledger entry. Find concrete repository workflow and project plumbing improvements; record scoped ledger entries; later propose and implement agreed entries sequentially, including contract-driven same-prefix approved batches.
 ---
 
 # Project Gaps
 
 Use Find mode by default when no mode is stated. Enter Implement mode only
 after the human explicitly agrees to a specific proposed solution, typically
-with `Approved <ID>-N` using the prefix from `ledger.yaml`. Do not combine modes in one pass:
+with `Approved <ID>-N`, or a same-prefix batch
+`Approved <ID>-N[/N...]`, using the prefix from `ledger.yaml`. The shared
+workflow processes an approved batch sequentially. Do not combine modes in one pass:
 
 - **Find mode**: `Find $project-gaps in PACKAGE_OR_FOLDER` or `Find project gaps in PACKAGE_OR_FOLDER`.
 - **Implement mode**: `Implement $project-gaps in PACKAGE_OR_FOLDER` or `Implement project gaps in PACKAGE_OR_FOLDER`.
@@ -109,7 +111,7 @@ These project-gap implementation rules remain mandatory:
 - Use `$doc-standards` when the project change affects public commands, Make
   targets, setup, validation, release, configuration, or documented workflows.
 - Use `$change-validation` when selecting validation commands.
-- Report `Red`, `Green`, `Refactor`, and `Validation` entries. `Red` and `Green` must each paste the actual command and its real output using the same command/selector; a label without pasted output is not acceptable, and work where red was never observed before implementation must be labeled `test-after (not TDD)` with the reason instead of a TDD cycle. Use `Refactor: none (<reason>)` when no cleanup was needed after green. Ask the human to verify and say `Done <ID>-N` using the prefix from `ledger.yaml`.
+- Report `Red`, `Green`, `Refactor`, and `Validation` entries. `Red` and `Green` must each paste the actual command and its real output using the same command/selector; a label without pasted output is not acceptable, and work where red was never observed before implementation must be labeled `test-after (not TDD)` with the reason instead of a TDD cycle. Use `Refactor: none (<reason>)` when no cleanup was needed after green. For a single approval, ask the human to verify and say `Done <ID>-N` using the prefix from `ledger.yaml`; an approved batch follows the shared sequential re-check and stop rules.
 
 ## References
 

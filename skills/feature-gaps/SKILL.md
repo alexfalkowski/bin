@@ -1,13 +1,15 @@
 ---
 name: feature-gaps
-description: Use when the user asks to find or implement $feature-gaps/feature gaps in a package or folder, set a confidence closure target such as 95% or 99%, find main product capability gaps, find product-owned user/operator/service-author/package-consumer/CLI/API/library opportunities, uses Start, Approved, or Done with ledger entry IDs and optional agents or a goal, or asks what the proposal is for a feature-gap ledger entry. Find repository-fit feature opportunities with explicit audience benefit; record scoped ledger proposals; later propose and implement agreed changes one at a time. Do not use for standalone test, CI, build, Makefile, release, validation, or repository workflow gaps.
+description: Use when the user asks to find or implement $feature-gaps/feature gaps in a package or folder, set a confidence closure target such as 95% or 99%, find main product capability gaps, find product-owned user/operator/service-author/package-consumer/CLI/API/library opportunities, uses Start, Approved, or Done with ledger entry IDs and optional agents or a goal, or asks what the proposal is for a feature-gap ledger entry. Find repository-fit feature opportunities with explicit audience benefit; record scoped ledger proposals; later propose and implement agreed entries sequentially, including contract-driven same-prefix approved batches. Do not use for standalone test, CI, build, Makefile, release, validation, or repository workflow gaps.
 ---
 
 # Feature Gaps
 
 Use Find mode by default when no mode is stated. Enter Implement mode only
 after the human explicitly agrees to a specific proposed solution, typically
-with `Approved <ID>-N` using the prefix from `ledger.yaml`. Do not combine modes in one pass:
+with `Approved <ID>-N`, or a same-prefix batch
+`Approved <ID>-N[/N...]`, using the prefix from `ledger.yaml`. The shared
+workflow processes an approved batch sequentially. Do not combine modes in one pass:
 
 - **Find mode**: `Find $feature-gaps in PACKAGE_OR_FOLDER` or `Find feature gaps in PACKAGE_OR_FOLDER`.
 - **Implement mode**: `Implement $feature-gaps in PACKAGE_OR_FOLDER` or `Implement feature gaps in PACKAGE_OR_FOLDER`.
@@ -96,7 +98,7 @@ Follow `references/plan.md#implement-mode-plan` and the implementation rules in
 Before asking for agreement to edit a feature, read
 `references/implementation-proposal.md` and present that decision packet. It
 must lead with `## Solution Shape` and include a self-contained `What`, `Why`,
-and `How` decision summary. `Approved <ID>-N` using the prefix from `ledger.yaml` approves this solution shape and starts implementation. `Approved <ID>-N with agents` approves this solution shape and authorizes sub-agents for implementation or fresh review when useful. The `with a goal` and `with agents and a goal` tails apply here too.
+and `How` decision summary. `Approved <ID>-N` using the prefix from `ledger.yaml` approves this solution shape and starts implementation. `Approved <ID>-N[/N...]` approves already-presented solution shapes as one ordered, same-prefix batch from the resolved ledger. `Approved <ID>-N with agents` approves this solution shape and authorizes sub-agents for implementation or fresh review when useful. The `with a goal` and `with agents and a goal` tails apply to a single entry or the entire batch.
 
 These feature implementation rules remain mandatory:
 
@@ -141,7 +143,7 @@ These feature implementation rules remain mandatory:
 - Use `$doc-standards` when the feature changes public commands, APIs, examples,
   configuration, or documented workflows.
 - Use `$change-validation` when selecting validation commands.
-- Report `Red`, `Green`, `Refactor`, and `Validation` entries. `Red` and `Green` must each paste the actual command and its real output using the same command/selector; a label without pasted output is not acceptable, and work where red was never observed before implementation must be labeled `test-after (not TDD)` with the reason instead of a TDD cycle. Use `Refactor: none (<reason>)` when no cleanup was needed after green. Ask the human to verify and say `Done <ID>-N` using the prefix from `ledger.yaml`.
+- Report `Red`, `Green`, `Refactor`, and `Validation` entries. `Red` and `Green` must each paste the actual command and its real output using the same command/selector; a label without pasted output is not acceptable, and work where red was never observed before implementation must be labeled `test-after (not TDD)` with the reason instead of a TDD cycle. Use `Refactor: none (<reason>)` when no cleanup was needed after green. For a single approval, ask the human to verify and say `Done <ID>-N` using the prefix from `ledger.yaml`; an approved batch follows the shared sequential re-check and stop rules.
 
 ## References
 

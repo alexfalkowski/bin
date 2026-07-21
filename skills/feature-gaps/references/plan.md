@@ -61,8 +61,8 @@ validation, delegation, external research, ledger state, and workflow routing.
    asking for agreement. It must lead with `## Solution Shape`, make the
    proposed design visually scannable before confidence or evidence details,
    show tradeoffs visually, name intended validation, and end by pointing to
-   the canonical `Approved <ID>-N` and `Approved <ID>-N with agents` forms
-   approval commands.
+   the canonical `Approved <ID>-N`, `Approved <ID>-N[/N...]`, and
+   `Approved <ID>-N with agents` approval commands.
 4. After agreement, state local code/config/docs pattern, dominant relevant
    test harness, planned validation, and deviations. For behavior-changing
    features, also state the feature execution checklist: TDD decision, first
