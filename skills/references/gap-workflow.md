@@ -8,40 +8,19 @@ summary shape.
 ## Mode And Plan State
 
 - If no scope is provided, stop and ask for the package or folder.
-- Treat remembered commands as gap-workflow shorthand. `Start` begins the
-  workflow, `Approved` accepts the presented solution, and `Done` confirms an
-  entry is verified. Each takes the optional tail `in LEDGER_PATH` only when a
-  selected ledger skill and scope cannot resolve the entry, and `with agents`,
-  `with a goal`, or `with agents and a goal`:
-  - `Start ID` selects the matching gap skill and enters implement mode for the
-    entry. `Start ID1/ID2 in LEDGER_PATH` selects multiple entries.
-  - `Start ID with agents` explicitly authorizes sub-agents for the current
-    request.
-  - `Start ID with a goal` explicitly authorizes a runtime goal when goals are
-    available and useful.
-  - `Start ID with agents and a goal` explicitly authorizes both.
-  - `Approved ID` approves the presented solution and permits implementation.
-  - `Approved PREFIX-N[/N...]` approves a same-prefix sequential batch, for
-    example `Approved ISSUE-1/2/3`. Resolve `PREFIX` and the single ledger path
-    from the selected skill's `ledger.yaml`; each suffix after the first slash
-    is an entry number in that same ledger. Reject a repeated or mixed prefix,
-    such as `ISSUE-1/FEATURE-2`, rather than treating it as one ID or resolving
-    multiple ledgers. The `with agents`, `with a goal`, and `with agents and a
-    goal` tails apply to the entire batch.
-  - `Done ID` confirms the entry is verified and complete. Its authorization
-    tail carries forward to the next entry.
-  These shorthands do not bypass solution agreement, scoped ledgers, validation
-  freshness, confidence thresholds, remote-write permission, or output format.
-
-- A generic invocation such as `$skill-name in SCOPE` invokes exactly one
+- A direct invocation such as `$skill-name in SCOPE` invokes exactly one
   skill directly. Mode is determined by which skill was invoked, not inferred
   from phrasing: a find/implement (or audit/fix) pair is two single-purpose
   skills, each named for the job it does (for example `$code-issues-find` and
   `$code-issues-implement`), and only the implement/fix half acts on an
-  `Approved <ID>-N`. The `with agents`, `with a goal`, and `with agents and a
-  goal` tails may follow any of these invocations and carry the same
+  entry after re-checking that the ledger item still stands. An implement
+  request may name one entry or an ordered same-prefix batch such as
+  `ISSUE-1/2/3`; resolve the prefix and single ledger path from
+  `ledger.yaml`, and reject a repeated or mixed prefix such as
+  `ISSUE-1/FEATURE-2`. The `with agents`, `with a goal`, and `with agents and a
+  goal` tails may follow any direct invocation and carry the same
   current-request authorization without changing which skill runs or
-  bypassing approval gates.
+  bypassing implementation gates.
 - Before starting find, audit, one-pass, or implement mode, read the selected
   skill's `references/plan.md` and keep it as runtime state. Do not write it to
   the repository unless the human explicitly asks for a durable plan file.
@@ -97,13 +76,13 @@ questions, and implementation pairings.
   resolve the exact ledger path by substituting the scope and ledger filename
   into `ledger_path_template`. The version-1 template is
   `{scope}/{ledger_filename}`.
-- For `Start`, `Approved`, and `Done`, validate the ID against the resolved
-  contract prefix, then read or update only the resolved ledger path. For an
-  `Approved PREFIX-N[/N...]` batch, validate the first prefix and every
+- When an implement/fix request names an ID, validate it against
+  the resolved contract prefix, then read or update only the resolved ledger
+  path. For a `PREFIX-N[/N...]` batch, validate the first prefix and every
   slash-delimited entry number against that one contract before interpreting it
-  as approvals for those entries. Do not treat the batch as one malformed ID,
-  search the workspace for possible ledgers, infer a different ledger path, or
-  accept a mixed-prefix batch.
+  as a batch. Do not treat the batch as one malformed ID, search the workspace
+  for possible ledgers, infer a different ledger path, or accept a mixed-prefix
+  batch. Do not search the workspace for possible ledgers.
 - An explicit `in LEDGER_PATH` tail remains available only when the selected
   skill or scope is ambiguous. Once both are known, the contract path wins.
 - A find/implement (or audit/fix) pair split from one shared ledger has a
@@ -124,7 +103,7 @@ questions, and implementation pairings.
   `gap-workflow/find-audit.md`. It owns inventory, validation, candidate
   handling, coverage accounting, and closeout outcomes.
 - Before Implement work, also read `gap-workflow/implementation.md`. It owns
-  ledger re-checks, agreement gates, implementation sequencing, and fresh
+  ledger re-checks, implementation sequencing, and fresh
   review.
 
 Use `gap-lead-generation.md` during find, audit-only, and one-pass modes to

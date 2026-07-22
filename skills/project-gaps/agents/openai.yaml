@@ -1,4 +1,0 @@
-interface:
-  display_name: "Project Gaps (Deprecated)"
-  short_description: "Deprecated alias for finding project gaps"
-  default_prompt: "Use $project-gaps as a deprecated alias for $project-gaps-find; prefer the canonical find workflow in new prompts."

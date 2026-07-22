@@ -20,7 +20,7 @@ selected skill applies its evidence gate.
    closeout so a quiet audit still shows what was checked.
 
 Lead generation finds candidates; it does not lower confidence, ownership,
-reproduction, validation, or approval gates.
+  reproduction, validation, or implementation gates.
 Comparable systems are recall evidence only: do not record a finding merely
 because a sibling repository, GitHub inventory item, or external framework has a
 pattern the target lacks.

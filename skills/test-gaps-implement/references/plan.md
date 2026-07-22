@@ -12,10 +12,10 @@ delegation, and ledger state.
    implement-mode sequencing.
 2. Re-check the selected gap against current code, tests, fixtures, harnesses,
    and test-support surfaces.
-3. Present finding evidence, proposed test solution, repository-owned behavior,
-   existing coverage gap, tradeoffs, and intended validation before asking for
-   agreement.
-4. After agreement, state the local test pattern, dominant relevant test
+3. Confirm the ledger entry's evidence, proposed test solution,
+   repository-owned behavior, existing coverage gap, tradeoffs, and intended
+   validation still fit the current repository.
+4. Before editing, state the local test pattern, dominant relevant test
    harness, planned validation, and deviations.
 5. Use `$testing-standards` and relevant language standards for test design,
    then validate with commands appropriate to the changed tests.

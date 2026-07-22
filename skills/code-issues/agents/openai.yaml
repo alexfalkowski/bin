@@ -1,4 +1,0 @@
-interface:
-  display_name: "Code Issues (Deprecated)"
-  short_description: "Deprecated alias for finding code issues"
-  default_prompt: "Use $code-issues as a deprecated alias for $code-issues-find; prefer the canonical find workflow in new prompts."

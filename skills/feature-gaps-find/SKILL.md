@@ -1,14 +1,14 @@
 ---
 name: feature-gaps-find
-description: Use when the user asks to find $feature-gaps-find/feature gaps in a package or folder, set a confidence closure target such as 95% or 99%, find main product capability gaps, find product-owned user/operator/service-author/package-consumer/CLI/API/library opportunities, or asks what evidence backs a feature-gap ledger entry. Find repository-fit feature opportunities with explicit audience benefit and record scoped ledger proposals; never edits code. Use $feature-gaps-implement to act on an entry after explicit agreement. Do not use for standalone test, CI, build, Makefile, release, validation, or repository workflow gaps.
+description: Use when the user asks to find $feature-gaps-find/feature gaps in a package or folder, set a confidence closure target such as 95% or 99%, find main product capability gaps, find product-owned user/operator/service-author/package-consumer/CLI/API/library opportunities, or asks what evidence backs a feature-gap ledger entry. Find repository-fit feature opportunities with explicit audience benefit and record scoped ledger proposals; never edits code. Use $feature-gaps-implement to act on a confirmed entry. Do not use for standalone test, CI, build, Makefile, release, validation, or repository workflow gaps.
 ---
 
 # Feature Gaps Find
 
 Trigger phrases: `Find $feature-gaps-find in PACKAGE_OR_FOLDER` or
 `Find feature gaps in PACKAGE_OR_FOLDER`. This skill only discovers and
-records candidates; it never edits code. `Start <ID>` and `Approved <ID>-N`
-select `$feature-gaps-implement` instead, using the ledger contract in
+records candidates; it never edits code. Use `$feature-gaps-implement` to
+re-check and implement a specific ledger entry, using the contract in
 `../feature-gaps-implement/ledger.yaml`.
 
 Before starting, read `../feature-gaps-implement/ledger.yaml`,

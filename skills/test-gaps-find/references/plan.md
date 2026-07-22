@@ -33,5 +33,5 @@ surface, delegation, ledger state, and repository-owned behavior.
    exclusions checked.
 9. If confirmed gaps remain, write the resolved scoped ledger, present it,
    coverage state, proposed test-fix plan, and runnable follow-up scopes, then
-   stop before fixing. Fixing happens only in `$test-gaps-implement`, after
-   explicit agreement.
+   stop before fixing. Fixing happens only in `$test-gaps-implement` after its
+   ledger re-check.

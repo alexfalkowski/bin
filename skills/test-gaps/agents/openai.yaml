@@ -1,4 +1,0 @@
-interface:
-  display_name: "Test Gaps (Deprecated)"
-  short_description: "Deprecated alias for finding test gaps"
-  default_prompt: "Use $test-gaps as a deprecated alias for $test-gaps-find; prefer the canonical find workflow in new prompts."

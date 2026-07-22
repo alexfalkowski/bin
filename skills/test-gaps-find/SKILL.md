@@ -1,14 +1,14 @@
 ---
 name: test-gaps-find
-description: Use when the user asks to find $test-gaps-find/test gaps in a package or folder, set a confidence closure target such as 95% or 99% for a test-gap audit, find flaky tests, wrong-layer tests, weak harnesses, or test-support-code gaps, or asks what evidence backs a test-gap ledger entry. Find concrete missing, weak, misleading, flaky, wrong-layer, or brittle coverage and record scoped ledger entries; never edits tests. Use $test-gaps-implement to act on an entry after explicit agreement.
+description: Use when the user asks to find $test-gaps-find/test gaps in a package or folder, set a confidence closure target such as 95% or 99% for a test-gap audit, find flaky tests, wrong-layer tests, weak harnesses, or test-support-code gaps, or asks what evidence backs a test-gap ledger entry. Find concrete missing, weak, misleading, flaky, wrong-layer, or brittle coverage and record scoped ledger entries; never edits tests. Use $test-gaps-implement to act on a confirmed entry.
 ---
 
 # Test Gaps Find
 
 Trigger phrases: `Find $test-gaps-find in PACKAGE_OR_FOLDER` or
 `Find test gaps in PACKAGE_OR_FOLDER`. This skill only discovers and records
-candidates; it never edits tests. `Start <ID>` and `Approved <ID>-N` select
-`$test-gaps-implement` instead, using the ledger contract in
+candidates; it never edits tests. Use `$test-gaps-implement` to re-check and
+implement a specific ledger entry, using the contract in
 `../test-gaps-implement/ledger.yaml`.
 
 Before starting, read `../test-gaps-implement/ledger.yaml`, `references/plan.md`,

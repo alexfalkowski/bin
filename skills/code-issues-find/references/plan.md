@@ -49,5 +49,5 @@ security/compatibility evidence, and public contract evidence.
    confirmed.
 10. If confirmed issues remain, write the resolved scoped ledger, present it,
     coverage state, proposed fix plan, and runnable follow-up scopes, then stop
-    before fixing. Fixing happens only in `$code-issues-implement`, after
-    explicit agreement.
+    before fixing. Fixing happens only in `$code-issues-implement` after its
+    ledger re-check.

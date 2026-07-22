@@ -18,10 +18,8 @@ scope, coverage, and confidence gates. Also read
 `../references/gap-workflow/implementation.md` for fixing an existing
 unresolved ledger entry.
 
-Approve a scoped entry left unresolved from a previous pass with
-`Approved <ID>-N`, or approve an ordered, same-prefix batch with
-`Approved <ID>-N[/N...]`, using the prefix from `ledger.yaml`. The shared
-workflow processes an approved batch sequentially.
+To revisit an unresolved scoped entry, invoke this skill with its ID. Re-check
+that it still stands before editing, then fix it. Name an ordered same-prefix batch as `PREFIX-N[/N...]`, using the prefix from `ledger.yaml`.
 
 ## Operating Stance
 
@@ -44,7 +42,7 @@ Read `references/fix-rules.md`; those doc-gap rules remain mandatory. Before
 editing, state the selected local documentation pattern, dominant relevant
 validation path, planned validation command, and any deviation from
 `AGENTS.md` or selected skills.
-For unresolved-ledger fixes or any case where human approval is still required: After the human agrees and before editing, state the selected local documentation pattern, dominant relevant validation path, planned validation command, and any deviation from `AGENTS.md` or selected skills.
+Before editing an unresolved-ledger fix, state the selected local documentation pattern, dominant relevant validation path, planned validation command, and any deviation from `AGENTS.md` or selected skills.
 
 ## Documentation Review Standards
 
@@ -82,7 +80,6 @@ entry warrants them.
   gates; read `../references/gap-workflow/find-audit.md` for review rules and
   `../references/gap-workflow/implementation.md` for fixing an unresolved
   entry.
-- Use `../references/decision-card.md` to present the agreement-gate proposal as a self-contained decision card for unresolved-ledger fixes.
 - Use `../references/gap-lead-generation.md` to classify repo archetypes,
   generate documentation leads, and account for rejected or routed candidates.
 - Use `$doc-standards` as the documentation quality bar and routing threshold.

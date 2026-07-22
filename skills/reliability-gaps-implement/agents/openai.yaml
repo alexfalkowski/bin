@@ -1,4 +1,4 @@
 interface:
   display_name: "Reliability Gaps Implement"
-  short_description: "Implement agreed reliability fixes"
-  default_prompt: "Use $reliability-gaps-implement only after Start <ID> or Approved <ID>-N (or a same-prefix batch) for a scoped reliability-gap ledger entry. Re-check the entry against current code before proposing a fix, present the decision card, apply the shared delegation gate, resolve entry ID follow-ups through ledger.yaml, and implement only after explicit agreement to a specific proposal."
+  short_description: "Implement confirmed reliability fixes"
+  default_prompt: "Use $reliability-gaps-implement for a scoped reliability-gap ledger entry. Re-check the entry against current code, apply the shared delegation gate, resolve entry ID follow-ups through ledger.yaml, and implement it when the confirmed finding still stands."

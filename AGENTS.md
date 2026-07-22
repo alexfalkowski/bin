@@ -180,64 +180,32 @@ main cross-cutting concerns:
   scopes.
 - `testing-standards` before adding, reviewing, refactoring, or planning tests.
 - Use API, reliability, Go, Ruby, and shell standards when those scopes apply.
-- `Start`, `Approved`, and `Done` IDs route to the matching gap skill by
-  prefix.
 
 Treat this `AGENTS.md` as the repo-specific companion to those skills.
 
-## Remembered workflow commands
+## Gap workflow
 
-Treat these short commands as binding workflow shorthands, not casual prose.
-They select the matching skill and its gates before any edits. Each ledger
-skill's `ledger.yaml` declares its accepted ID prefix and canonical ledger
-path; route each ID through that contract.
+Gap skills are single-purpose. Invoke a `*-find` or `*-audit` skill to record
+evidence-backed entries without editing, then invoke its paired `*-implement`
+or `*-fix` skill with a ledger entry ID. The ledger is the source of truth: the
+implementing skill re-checks the selected entry against current evidence and
+implements it when it still stands.
 
-`Start` begins the workflow, `Approved` accepts the presented solution, and
-`Done` confirms an entry is verified. After any verb, name the ID; `Approved`
-also accepts a same-prefix batch in the form `PREFIX-N[/N...]`. Resolve its
-prefix and ledger path from the selected skill's `ledger.yaml`, not a registry
-or hard-coded type map. Add `in path/LEDGER.md` when the ID is ambiguous. The optional `with agents`,
-`with a goal`, and `with agents and a goal` tails carry current-request
-authorization.
+An implementation request may name an ordered same-prefix batch as
+`PREFIX-N[/N...]`. The skill resolves its prefix and canonical path from the
+selected skill's `ledger.yaml`, re-checks every entry in order, and stops if a
+later proposal becomes stale, conflicting, unnecessary, or unsafe. After each
+validated change, the skill updates the ledger and reports completed versus
+remaining entries. Do not infer a different ledger path; use `in
+path/LEDGER.md` only when the selected skill or scope is ambiguous.
 
-These authorization tails also apply after a generic skill invocation, such as
-`$skill-name in SCOPE`. A gap skill that finds and one that implements are
-separate, single-purpose skills invoked directly by name (for example
-`$code-issues-find` and `$code-issues-implement`); which one runs is
-determined by the invocation, not inferred from phrasing, so these tails carry
-the same current-request authorization without changing which skill runs or
-bypassing approval gates. `SCOPE` is interpreted by the selected skill: normally a package or
-folder, but it may be a CI/deployment target, repository and reporting period,
-or another skill-defined target. Skills that do not accept a generic scope
-remain explicit-request exceptions. `review-pr` is one such exception: its
-bare current-request invocation targets the current repository and means the
-full review, validation, commit, force-push, and draft-PR workflow; it does not
-use a path scope.
-
-- `Start ID in SCOPE`: select the matching gap skill, resolve the exact scoped
-  ledger path from its `ledger.yaml`, refresh evidence, present the solution,
-  and stop at the agreement gate before editing. Use `in LEDGER_PATH` only when
-  the skill or scope is ambiguous.
-- `Approved ID with agents`: approve the presented solution and
-  authorize sub-agents for implementation or fresh review when useful.
-- `Approved PREFIX-N[/N...]`: approve the listed entries from one resolved ledger
-  as a sequential batch. Re-read that ledger and every requested entry
-  before the first edit; implement and validate in the listed order, re-check
-  the next entry after each completed item, and stop with completed versus
-  remaining entries if a later proposal becomes stale, conflicting,
-  unnecessary, or unsafe. The authorization tail applies to the entire batch;
-  it does not permit parallel implementation or bypass any gate.
-- `Start ID with a goal`: authorize a runtime goal when goals are
-  available and useful.
-- `Start ID with agents and a goal`: authorize both sub-agents and a
-  runtime goal.
-- `Done ID`: confirm the entry is verified and complete; the selected
-  skill continues with the next entry. The `with a goal` and `with agents and
-  a goal` tails apply here too.
-
-These commands are shorthand only. They do not bypass solution agreement,
-scoped ledger rules, validation freshness, confidence thresholds, remote-write
-permission, or the selected skill's output format.
+The optional `with agents`, `with a goal`, and `with agents and a goal` tails
+carry current-request authorization after a direct skill invocation, such as
+`$code-issues-implement in SCOPE`. They do not change which skill runs or
+bypass ledger authority, scoped-ledger, validation, confidence, remote-write, or
+output gates. `SCOPE` is normally a package or folder, but the selected skill
+may define another scope. `review-pr` remains an explicit-request exception:
+its bare invocation targets the current repository and runs its full workflow.
 
 ## Skill workflow mechanics
 

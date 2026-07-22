@@ -50,4 +50,4 @@ delegation, ledger state, operational expectation, and failure-mode evidence.
 11. If confirmed gaps remain, write the resolved scoped ledger, present it,
     coverage state, proposed reliability-fix plan, and runnable follow-up
     scopes, then stop before fixing. Fixing happens only in
-    `$reliability-gaps-implement`, after explicit agreement.
+    `$reliability-gaps-implement` after its ledger re-check.

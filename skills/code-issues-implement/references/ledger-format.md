@@ -27,7 +27,7 @@ Use this structure for every entry:
 
 | Field | Value |
 | --- | --- |
-| Status | Proposed \| Accepted \| In progress \| Rejected |
+| Status | Confirmed \| In progress \| Rejected |
 | Type | Code Issue |
 | Severity | Critical \| High \| Medium \| Low |
 | Confidence | 93% — one-line reason; active threshold is the explicit request, otherwise 90% (or 95% for high-risk acceptance). |
@@ -111,8 +111,6 @@ turn the entry into an architecture document.
 ### Open Questions
 - A decision that needs the human before or during the fix.
 
-### Decision
-> Accepted 2026-07-07 — chose <option> because <reason>.
 ````
 
 ## Status And Lifecycle
@@ -120,14 +118,12 @@ turn the entry into an architecture document.
 `Status` is a lightweight hint for where the entry stands in the current
 conversation, not a durable record:
 
-- `Proposed`: recorded by `$code-issues-find`, not yet agreed.
-- `Accepted`: the human agreed to the proposal at the agreement gate.
-- `In progress`: the agreed fix is being implemented.
+- `Confirmed`: recorded by `$code-issues-find` and ready for re-check.
+- `In progress`: the fix is being implemented.
 - `Rejected`: ruled out but kept for context.
 
-The `### Decision` line is an optional one-line record of the agreement-gate
-outcome, not a permanent log. Per the shared gap workflow, remove the entry once
-the fix is confirmed done and delete the ledger once every entry is resolved.
+Per the shared gap workflow, remove the entry after validation and delete the
+ledger once every entry is resolved.
 
 Keep optional follow-up notes separate from findings:
 
