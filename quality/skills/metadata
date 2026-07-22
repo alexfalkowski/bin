@@ -3,13 +3,13 @@
 
 require 'yaml'
 
-GAP_SKILLS = %w[
-  code-issues
-  test-gaps
-  doc-gaps
-  feature-gaps
-  project-gaps
-  reliability-gaps
+GAP_PAIRS = [
+  { find: 'code-issues-find', implement: 'code-issues-implement' },
+  { find: 'test-gaps-find', implement: 'test-gaps-implement' },
+  { find: 'doc-gaps-audit', implement: 'doc-gaps-fix' },
+  { find: 'feature-gaps-find', implement: 'feature-gaps-implement' },
+  { find: 'project-gaps-find', implement: 'project-gaps-implement' },
+  { find: 'reliability-gaps-find', implement: 'reliability-gaps-implement' }
 ].freeze
 LEDGER_CONTRACT_KEYS = %w[
   version
@@ -207,25 +207,59 @@ def valid_pairs?(names, message)
   false
 end
 
-def valid_gap_contract?(skill_name)
-  paths = gap_contract_paths(skill_name)
+def valid_gap_pair?(pair)
+  find_paths = gap_half_paths(pair[:find])
+  implement_paths = gap_half_paths(pair[:implement])
+  ledger_paths = gap_ledger_paths(pair[:implement])
 
+  valid_gap_pair_files?(pair, find_paths, implement_paths, ledger_paths) &&
+    valid_gap_pair_content?(pair, find_paths, implement_paths, ledger_paths)
+end
+
+def valid_gap_pair_files?(pair, find_paths, implement_paths, ledger_paths)
   [
-    paths.values.map { |path| valid_gap_file?(path, skill_name) }.all?,
-    valid_ledger_contract?(paths[:contract]),
-    valid_gap_text?(paths)
+    valid_gap_half_files?(find_paths, pair[:find]),
+    valid_gap_half_files?(implement_paths, pair[:implement]),
+    valid_gap_half_files?(ledger_paths, pair[:implement])
   ].all?
 end
 
-def gap_contract_paths(skill_name)
+def valid_gap_half_files?(paths, skill_name)
+  paths.values.all? { |path| valid_gap_file?(path, skill_name) }
+end
+
+def valid_gap_pair_content?(pair, find_paths, implement_paths, ledger_paths)
+  no_ledger_contract_in_find_half?(pair[:find]) &&
+    valid_ledger_contract?(ledger_paths[:contract]) &&
+    valid_gap_pair_text?(pair, find_paths, implement_paths, ledger_paths)
+end
+
+def gap_half_paths(skill_name)
   root = "skills/#{skill_name}"
 
   {
     skill: "#{root}/SKILL.md",
     plan: "#{root}/references/plan.md",
-    agent: "#{root}/agents/openai.yaml",
-    contract: "#{root}/ledger.yaml"
+    agent: "#{root}/agents/openai.yaml"
   }
+end
+
+def gap_ledger_paths(implement_skill_name)
+  root = "skills/#{implement_skill_name}"
+
+  {
+    contract: "#{root}/ledger.yaml",
+    format: "#{root}/references/ledger-format.md"
+  }
+end
+
+def no_ledger_contract_in_find_half?(find_skill_name)
+  path = "skills/#{find_skill_name}/ledger.yaml"
+  return true unless File.file?(path)
+
+  report_failure(
+    "find/audit skill must not own ledger.yaml (cross-reference the implement/fix half's contract instead): #{path}"
+  )
 end
 
 def valid_gap_file?(path, skill_name)
@@ -290,33 +324,55 @@ def ledger_filename_ignored?(filename, contract_path)
   report_failure("ledger filename from #{contract_path} is missing from .gitignore: #{filename}")
 end
 
-def valid_gap_text?(paths)
-  return false unless paths.values.all? { |path| File.file?(path) }
+def valid_gap_pair_text?(pair, find_paths, implement_paths, ledger_paths)
+  return false unless valid_gap_pair_text_paths?(find_paths, implement_paths, ledger_paths)
 
-  valid_gap_text_content?(gap_text(paths), paths)
-end
-
-def gap_text(paths)
-  {
-    skill: File.read(paths[:skill]),
-    plan: File.read(paths[:plan]),
-    agent: File.read(paths[:agent]),
-    contract: safe_load_file(paths[:contract])
-  }
-end
-
-def valid_gap_text_content?(text, paths)
-  contract = text[:contract]
+  contract = safe_load_file(ledger_paths[:contract])
   return false unless contract
 
-  combined_text = text.values_at(:skill, :plan, :agent).join("\n")
-
-  valid_gap_skill_text?(text[:skill], paths[:skill]) &&
-    valid_gap_plan_text?(text[:plan], paths[:plan]) &&
-    valid_gap_contract_text?(combined_text, paths[:skill], paths[:contract], contract)
+  valid_gap_pair_text_content?(pair, find_paths, implement_paths, ledger_paths, contract)
 end
 
-def valid_gap_skill_text?(skill_text, skill_path)
+def valid_gap_pair_text_paths?(find_paths, implement_paths, ledger_paths)
+  (find_paths.values + implement_paths.values + ledger_paths.values).all? do |path|
+    File.file?(path)
+  end
+end
+
+def valid_gap_pair_text_content?(pair, find_paths, implement_paths, ledger_paths, contract)
+  find_skill_text = File.read(find_paths[:skill])
+  implement_skill_text = File.read(implement_paths[:skill])
+
+  valid_gap_pair_plan_text?(find_paths, implement_paths) &&
+    valid_gap_pair_skill_text?(find_skill_text, implement_skill_text, find_paths, implement_paths) &&
+    no_legacy_ledger_metadata?(pair, ledger_paths[:contract], contract)
+end
+
+def valid_gap_pair_plan_text?(find_paths, implement_paths)
+  [
+    valid_gap_plan_text?(File.read(find_paths[:plan]), find_paths[:plan]),
+    valid_gap_plan_text?(File.read(implement_paths[:plan]), implement_paths[:plan])
+  ].all?
+end
+
+def valid_gap_pair_skill_text?(find_skill_text, implement_skill_text, find_paths, implement_paths)
+  [
+    valid_gap_find_skill_text?(find_skill_text, find_paths[:skill]),
+    valid_gap_implement_skill_text?(implement_skill_text, implement_paths[:skill])
+  ].all?
+end
+
+def valid_gap_find_skill_text?(skill_text, skill_path)
+  [
+    required_text?(skill_text, skill_path, 'references/plan.md'),
+    required_text?(skill_text, skill_path, '../references/gap-workflow.md'),
+    required_text?(skill_text, skill_path, 'ledger.yaml'),
+    rejected_text?(skill_text, skill_path, APPROVAL_BATCH_SYNTAX),
+    rejected_text?(skill_text, skill_path, 'same-prefix batch')
+  ].all?
+end
+
+def valid_gap_implement_skill_text?(skill_text, skill_path)
   [
     required_text?(skill_text, skill_path, 'references/plan.md'),
     required_text?(skill_text, skill_path, '../references/gap-workflow.md'),
@@ -330,30 +386,31 @@ def valid_gap_plan_text?(plan_text, plan_path)
   required_text?(plan_text, plan_path, 'shared gap workflow')
 end
 
-def valid_gap_contract_text?(combined_text, skill_path, contract_path, contract)
-  [
-    required_text?(combined_text, skill_path, 'ledger.yaml'),
-    no_legacy_ledger_metadata?(skill_path, contract_path, contract)
-  ].all?
-end
-
 def required_text?(text, path, expected)
   return true if text.include?(expected)
 
   report_failure("missing required text in #{path}: #{expected}")
 end
 
-def no_legacy_ledger_metadata?(skill_path, contract_path, contract)
+def rejected_text?(text, path, forbidden)
+  return true unless text.include?(forbidden)
+
+  report_failure("implement-only text must not appear in find/audit skill #{path}: #{forbidden}")
+end
+
+def no_legacy_ledger_metadata?(pair, contract_path, contract)
   ledger_filename = contract.fetch('ledger_filename')
   id_pattern = /\b#{Regexp.escape(contract.fetch('id_prefix'))}-(?:1|N|<number>)/
 
-  gap_skill_files(skill_path, contract_path).map do |path|
+  gap_pair_files(pair, contract_path).map do |path|
     no_legacy_ledger_metadata_in_file?(path, contract_path, ledger_filename, id_pattern)
   end.all?
 end
 
-def gap_skill_files(skill_path, contract_path)
-  Dir[File.join(File.dirname(skill_path), '**', '*')].select do |path|
+def gap_pair_files(pair, contract_path)
+  dirs = ["skills/#{pair[:find]}", "skills/#{pair[:implement]}"]
+
+  dirs.flat_map { |dir| Dir[File.join(dir, '**', '*')] }.select do |path|
     File.file?(path) && path != contract_path
   end
 end
@@ -384,6 +441,6 @@ Dir['skills/*/SKILL.md'].each { |path| ok = false unless valid_skill?(path) }
 Dir['skills/*/agents/openai.yaml'].each { |path| ok = false unless valid_agent?(path) }
 Dir['skills/**/*.md'].each { |path| ok = false unless valid_markdown_references?(path) }
 ok = false unless valid_skill_agent_pairs?
-GAP_SKILLS.each { |skill_name| ok = false unless valid_gap_contract?(skill_name) }
+GAP_PAIRS.each { |pair| ok = false unless valid_gap_pair?(pair) }
 
 exit(ok ? 0 : 1)

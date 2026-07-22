@@ -1,4 +1,4 @@
 interface:
-  display_name: "Test Gaps"
-  short_description: "Find weak tests and harness gaps"
-  default_prompt: "Use $test-gaps for scoped missing, weak, misleading, flaky, wrong-layer, or harness coverage gaps. Default to Find mode when no mode is stated; follow repo archetype lead generation, apply the shared delegation gate, summarize ledger entries in a compact Title/What/Why table, verify front-door behavior, resolve entry ID follow-ups through ledger.yaml, and implement only after explicit agreement to a specific proposal."
+  display_name: "Test Gaps (Deprecated)"
+  short_description: "Deprecated alias for finding test gaps"
+  default_prompt: "Use $test-gaps as a deprecated alias for $test-gaps-find; prefer the canonical find workflow in new prompts."

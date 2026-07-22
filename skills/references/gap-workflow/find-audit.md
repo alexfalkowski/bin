@@ -91,8 +91,8 @@ For find, audit-only, and one-pass modes:
   assurance such as property/fuzz tests, round trips, boundary/default cases,
   race/stress tests, lifecycle repetition, fault injection, generated-contract
   freshness, security scanners, or sidecar integration. Missing evidence lowers
-  confidence or routes to `$test-gaps` or `$project-gaps`; it is not silently
-  converted into a finding.
+  confidence or routes to `$test-gaps-find` or `$project-gaps-find`; it is not
+  silently converted into a finding.
 
 ## Candidate Handling
 
@@ -156,7 +156,7 @@ For find, audit-only, and one-pass modes:
   non-prose evidence before routing the candidate to code, security,
   reliability, or test workflows. If code, tests, runtime, generated
   contracts, CI, or history support implementation, route stale prose to
-  `$doc-gaps`.
+  `$doc-gaps-audit` or `$doc-gaps-fix`.
 - Dismiss candidates already covered by the authoritative surface, below
   threshold, duplicative, out of scope, or owned by another workflow. Preserve
   rejected, routed, deferred, and blocked lead notes for local and delegated

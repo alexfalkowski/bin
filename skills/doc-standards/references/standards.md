@@ -51,7 +51,7 @@ Route documentation to the surface that owns the reader's next action:
   implementation state, or surprising behavior. Comments explain why the code
   exists or what contract it protects, not what each line does. If a clear
   comment cannot be written because the code is confused, recommend
-  `$code-issues`.
+  `$code-issues-find`.
 - **Terminology**: Use consistent names for concepts, commands, config keys, API
   fields, and roles across docs, code, examples, and tests. Use
   `$naming-standards` when unclear terminology creates misuse or maintenance

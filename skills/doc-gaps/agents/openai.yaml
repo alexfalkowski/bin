@@ -1,4 +1,4 @@
 interface:
-  display_name: "Doc Gaps"
-  short_description: "Find and fix scoped doc adequacy gaps"
-  default_prompt: "Use $doc-gaps with $doc-standards for scoped documentation adequacy gaps. Follow repo archetype lead generation, apply the shared delegation gate, summarize ledger entries in a compact Title/What/Why table, resolve entry ID follow-ups through ledger.yaml, and fix confirmed gaps in one pass."
+  display_name: "Doc Gaps (Deprecated)"
+  short_description: "Deprecated alias for fixing doc gaps"
+  default_prompt: "Use $doc-gaps as a deprecated alias for $doc-gaps-fix; prefer the canonical fix workflow in new prompts."

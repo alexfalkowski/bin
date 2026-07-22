@@ -33,13 +33,15 @@ summary shape.
   These shorthands do not bypass solution agreement, scoped ledgers, validation
   freshness, confidence thresholds, remote-write permission, or output format.
 
-- A generic invocation such as `$skill-name in SCOPE` uses the selected skill's
-  declared default mode. One-pass skills execute that pass; two-phase gap
-  skills default to Find mode and must present a proposal before entering
-  Implement mode. The `with agents`, `with a goal`, and `with agents and a goal`
-  tails may follow generic, Find, or Implement invocations and carry the same
-  current-request authorization without changing mode selection or bypassing
-  approval gates.
+- A generic invocation such as `$skill-name in SCOPE` invokes exactly one
+  skill directly. Mode is determined by which skill was invoked, not inferred
+  from phrasing: a find/implement (or audit/fix) pair is two single-purpose
+  skills, each named for the job it does (for example `$code-issues-find` and
+  `$code-issues-implement`), and only the implement/fix half acts on an
+  `Approved <ID>-N`. The `with agents`, `with a goal`, and `with agents and a
+  goal` tails may follow any of these invocations and carry the same
+  current-request authorization without changing which skill runs or
+  bypassing approval gates.
 - Before starting find, audit, one-pass, or implement mode, read the selected
   skill's `references/plan.md` and keep it as runtime state. Do not write it to
   the repository unless the human explicitly asks for a durable plan file.
@@ -75,8 +77,10 @@ summary shape.
   tool plan for state.
 - For substantial, ambiguous, or multi-iteration work, read
   `long-running-work.md` before the first slice and keep its progress artifact
-  in runtime state only. Do not combine find and implement modes unless the
-  selected skill defines a one-pass mode. Preserve stop gates as boundaries.
+  in runtime state only. A find/implement (or audit/fix) skill only performs
+  its own job, so combining find and implement in one turn is structurally
+  impossible except for the documented `doc-gaps-fix` exception, which finds
+  and fixes in the same pass by design. Preserve stop gates as boundaries.
 - Treat validation as stale when files change after a command runs.
 
 ## Common Plan Mechanics
@@ -102,6 +106,17 @@ questions, and implementation pairings.
   accept a mixed-prefix batch.
 - An explicit `in LEDGER_PATH` tail remains available only when the selected
   skill or scope is ambiguous. Once both are known, the contract path wins.
+- A find/implement (or audit/fix) pair split from one shared ledger has a
+  single owner: only the implement (or fix) half's directory contains
+  `ledger.yaml` and `references/ledger-format.md`. The find (or audit) half
+  does not duplicate them; it cross-references the implement/fix half's
+  copies by relative path (for example
+  `../code-issues-implement/ledger.yaml`). This keeps exactly one
+  `ledger.yaml` per `id_prefix`, which downstream tooling that scans
+  `skills/*/ledger.yaml` for a prefix match relies on. Resolve the contract
+  from whichever skill in the pair actually owns the file; never search the
+  workspace for a second copy or treat an absent `ledger.yaml` in the
+  find/audit half as an error.
 
 ## Mode-Specific References
 

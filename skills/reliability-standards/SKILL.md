@@ -1,6 +1,6 @@
 ---
 name: reliability-standards
-description: Use when reviewing or changing reliability-sensitive behavior, retries, timeouts, backpressure, SLOs, SLIs, error budgets, monitoring, alerting, runbooks, release safety, overload handling, cascading failures, data integrity, disaster recovery, or concrete NALSD design estimates. Apply SRE, NALSD, and secure/reliable systems standards to code, designs, scripts, Make targets, services, jobs, deployment/config, observability, incident, recovery, capacity, and production-readiness work; pair with $reliability-gaps for scoped reliability-gap discovery.
+description: Use when reviewing or changing reliability-sensitive behavior, retries, timeouts, backpressure, SLOs, SLIs, error budgets, monitoring, alerting, runbooks, release safety, overload handling, cascading failures, data integrity, disaster recovery, or concrete NALSD design estimates. Apply SRE, NALSD, and secure/reliable systems standards to code, designs, scripts, Make targets, services, jobs, deployment/config, observability, incident, recovery, capacity, and production-readiness work; pair with $reliability-gaps-find for scoped reliability-gap discovery.
 ---
 
 # Reliability Standards
@@ -73,16 +73,17 @@ evidence.
 
 ## Boundaries
 
-- Use `$reliability-gaps` when the user asks to find or implement scoped
-  reliability gaps through that skill's contract-resolved ledger.
-- Use `$code-review` or `$code-issues` when the finding is a concrete bug,
+- Use `$reliability-gaps-find` or `$reliability-gaps-implement` when the user
+  asks to find or implement scoped reliability gaps through that skill pair's
+  contract-resolved ledger.
+- Use `$code-review` or `$code-issues-find` when the finding is a concrete bug,
   violated contract, or broken behavior rather than a missing reliability
   control.
 - Use `$security-audit` when exploitability, secrets, auth, privilege, or
   attacker-driven behavior is the primary concern.
-- Use `$test-gaps` when the only confirmed issue is missing failure-path or
+- Use `$test-gaps-find` when the only confirmed issue is missing failure-path or
   reliability test coverage.
-- Use `$doc-gaps` when the only confirmed issue is missing, stale, or misleading
+- Use `$doc-gaps-audit` or `$doc-gaps-fix` when the only confirmed issue is missing, stale, or misleading
   operational documentation.
 - Do not report repository preferences, transport choices, hosting choices,
   private implementation preferences, or environment setup assumptions as

@@ -37,7 +37,7 @@ to documentation instead.
    configuration for command approval behavior; do not add a separate
    model-level permission request.
 5. Inspect concrete data/control flow before reporting a risk. Prefer file and line references over general advice.
-6. When a candidate depends on prose contradicting implementation, first prove the implementation is insecure or wrong with non-prose evidence. If current code, tests, runtime behavior, scanner output, or history support the implementation, do not report a security finding; use `$doc-gaps` for the stale prose.
+6. When a candidate depends on prose contradicting implementation, first prove the implementation is insecure or wrong with non-prose evidence. If current code, tests, runtime behavior, scanner output, or history support the implementation, do not report a security finding; use `$doc-gaps-audit` or `$doc-gaps-fix` for the stale prose.
 7. Report exploitable findings first.
 8. For standalone output, use `references/shared.md`; when embedded, preserve
    findings, validation, and gaps in the caller's format.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Doc Gaps Audit"
+  short_description: "Audit scoped doc adequacy gaps only"
+  default_prompt: "Use $doc-gaps-audit with $doc-standards for a scoped documentation adequacy audit that only records findings. Follow repo archetype lead generation, apply the shared delegation gate, summarize ledger entries in a compact Title/What/Why table, resolve entry ID follow-ups through ../doc-gaps-fix/ledger.yaml, and never edit documentation — hand confirmed entries to $doc-gaps-fix."

@@ -1,6 +1,6 @@
 ---
 name: doc-standards
-description: Use when writing, reviewing, or updating documentation; when changed code affects documented behavior; when $code-review or $review-pr needs documentation judgment; or when $doc-gaps needs criteria for scoped documentation triage. Apply strict documentation adequacy standards for README files, user-facing docs, examples, command/config docs, public API comments, docstrings, and stale-doc review.
+description: Use when writing, reviewing, or updating documentation; when changed code affects documented behavior; when $code-review or $review-pr needs documentation judgment; or when $doc-gaps-audit or $doc-gaps-fix needs criteria for scoped documentation triage. Apply strict documentation adequacy standards for README files, user-facing docs, examples, command/config docs, public API comments, docstrings, and stale-doc review.
 ---
 
 # Doc Standards
@@ -18,7 +18,7 @@ and in the authoritative location for the audience and action at risk.
 When documentation contradicts implementation, do not assume documentation is
 the source of truth. Treat code, tests, schemas, generated contracts, runtime
 behavior, and external standards as the evidence for current behavior. Route the
-mismatch to `$code-issues` only when non-prose evidence proves the
+mismatch to `$code-issues-find` only when non-prose evidence proves the
 implementation is wrong; otherwise fix the documentation to describe the
 behavior the repository actually implements.
 
@@ -40,8 +40,8 @@ behavior the repository actually implements.
 6. For `$code-review` and `$review-pr`, inspect changed documentation and nearby
    documentation directly affected by the current change. Do not perform a
    package-wide documentation audit unless the user explicitly asks for
-   `$doc-gaps` or a broader docs pass.
-7. For `$doc-gaps`, use these standards as the quality bar for fixing or
+   `$doc-gaps-fix` or a broader docs pass.
+7. For `$doc-gaps-audit` and `$doc-gaps-fix`, use these standards as the quality bar for fixing or
    recording confirmed missing, weak, stale, misleading, or wrong-location
    documentation.
 8. Pair with relevant language standards for language-specific public API
@@ -100,16 +100,16 @@ findings.
 
 When the confirmed problem is broken behavior, a security issue, a compatibility
 break, or a violated public contract, report it through `$code-review`,
-`$code-issues`, or `$security-audit` instead of treating it as a documentation
+`$code-issues-find`, or `$security-audit` instead of treating it as a documentation
 gap. When the confirmed problem is missing or weak test coverage, use
-`$testing-standards` or `$test-gaps`.
+`$testing-standards` or `$test-gaps-find`.
 
 ## Review Scope
 
 - `$code-review` and `$review-pr`: changed docs plus directly affected nearby
   docs.
-- `$doc-gaps`: the requested package or folder, recursively, using that skill's
-  one-pass, audit-only, and delegation rules.
+- `$doc-gaps-fix`/`$doc-gaps-audit`: the requested package or folder,
+  recursively, using those skills' find/fix and delegation rules.
 - Direct user request: the scope the user named. If no scope is clear and the
   decision affects edit size or review cost, ask for the intended documentation
   surface before auditing broadly.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Reliability Gaps Find"
+  short_description: "Find scoped SRE readiness gaps"
+  default_prompt: "Use $reliability-gaps-find for scoped SRE, operability, overload, observability, release-safety, recovery, and data-integrity gaps. Follow repo archetype lead generation, apply the shared delegation gate, summarize ledger entries in a compact Title/What/Why table, verify concrete failure paths, resolve entry ID follow-ups through ../reliability-gaps-implement/ledger.yaml, and never edit code — hand agreed entries to $reliability-gaps-implement."

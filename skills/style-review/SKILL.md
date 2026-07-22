@@ -31,13 +31,13 @@ security, compatibility, testing, or documentation findings.
    pattern.
 6. Do not report bugs, regressions, security risks, compatibility breaks,
    missing tests, missing docs, or broken public contracts as style notes.
-   Recommend `$code-review`, `$security-audit`, `$test-gaps`, or `$doc-gaps`
-   instead when those are the real issue.
+   Recommend `$code-review`, `$security-audit`, `$test-gaps-find`, `$doc-gaps-audit`,
+   or `$doc-gaps-fix` instead when those are the real issue.
 7. Treat GoDoc link syntax, comment wording, and local readability as style
    notes only when the existing documentation is accurate enough. If the note
    would add, remove, or materially change public API behavior, safety
    constraints, panic/error behavior, lifecycle semantics, defaults, or
-   operational guidance, route it to `$doc-gaps` or `$code-review` instead.
+   operational guidance, route it to `$doc-gaps-fix` or `$code-review` instead.
 8. Prefer concrete suggestions over taste. Each note should explain why the
    change would make the code easier to read, maintain, or align with local
    patterns.

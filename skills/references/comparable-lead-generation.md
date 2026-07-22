@@ -83,19 +83,19 @@ also record relevant comparables that were skipped, blocked, or deferred.
 
 Use comparables to generate leads for the selected skill:
 
-- `code-issues`: contract drift, sibling error cases, adapter mappings,
+- `code-issues-find`: contract drift, sibling error cases, adapter mappings,
   generated/provider values, compatibility behavior, and supported call paths.
-- `test-gaps`: dominant harness shape, feature/scenario coverage, failure-path
+- `test-gaps-find`: dominant harness shape, feature/scenario coverage, failure-path
   coverage, fixtures, flaky-test controls, fuzz/benchmark/race/property tests,
   and wrong-layer tests.
-- `doc-gaps`: README shape, command help, API examples, operational notes,
-  migration notes, configuration docs, and discoverability.
-- `feature-gaps`: product-facing capabilities, service-author ergonomics,
+- `doc-gaps-audit`/`doc-gaps-fix`: README shape, command help, API examples,
+  operational notes, migration notes, configuration docs, and discoverability.
+- `feature-gaps-find`: product-facing capabilities, service-author ergonomics,
   operator diagnostics, extension points, and first-use workflows.
-- `project-gaps`: Make targets, CI jobs, setup, command discovery,
+- `project-gaps-find`: Make targets, CI jobs, setup, command discovery,
   validation preflight, release/versioning, generated checks, and shared
   tooling ownership.
-- `reliability-gaps`: health/readiness, startup/shutdown/drain, overload,
+- `reliability-gaps-find`: health/readiness, startup/shutdown/drain, overload,
   timeout/retry/backpressure, observability, rollback, recovery, and
   deployment controls.
 

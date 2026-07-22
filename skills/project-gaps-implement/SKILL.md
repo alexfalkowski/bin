@@ -1,0 +1,101 @@
+---
+name: project-gaps-implement
+description: Use when the human says Approved <ID>-N or Start <ID> for a project-gap ledger entry, approves a same-prefix batch such as Approved <ID>-N[/N...], or asks what the fix is for a project-gap ledger entry. Implement agreed project-gap fixes sequentially after explicit agreement, including contract-driven same-prefix approved batches; never starts work without that agreement.
+---
+
+# Project Gaps Implement
+
+Enter only after the human explicitly agrees to a specific proposed solution,
+typically with `Approved <ID>-N`, or a same-prefix batch
+`Approved <ID>-N[/N...]`, using the prefix from `ledger.yaml`. The shared
+workflow processes an approved batch sequentially. Use `$project-gaps-find`
+first if no scoped ledger entry exists yet for this scope.
+
+Before starting, read `ledger.yaml`, `references/plan.md`,
+`../references/gap-workflow.md`, and `../references/gap-workflow/implementation.md`;
+they own runtime state, ledger, delegation, scope, and approval gates.
+
+## Operating Stance
+
+Operate as a repository workflow triager: implement only project workflow
+improvements to build, CI, release, setup, validation, command discovery,
+Makefile, script, or reusable tooling surfaces.
+
+Before proposing an implementation for each project gap, re-check current
+Makefiles, CI config, scripts, docs, tests, examples, command behavior, and
+comparable workflow evidence. Treat the ledger as something that can go
+stale: dismiss or revise proposals that are already supported, duplicate
+another project workflow, no longer fit the repository, belong in another
+workflow, or have an implementation home outside the requested scope. If the
+proposal's implementation home is outside the requested scope, stop and
+propose moving or reclassifying it instead of implementing it locally.
+
+Follow `references/plan.md` and the implementation rules in
+`../references/gap-workflow/implementation.md`.
+
+These project-gap implementation rules remain mandatory:
+
+- Ask questions when audience, workflow ownership, compatibility, dependency
+  policy, validation, or user intent is ambiguous. Treat silence or a broad
+  "implement project gaps" request as permission to start the proposal
+  workflow, not as permission to edit.
+- After the human agrees and before editing, state the selected local project workflow pattern, dominant relevant validation path, planned validation command, and any deviation from `AGENTS.md` or selected skills. If a deviation is needed, stop and ask before editing.
+- For behavior-changing project workflow changes, state the project execution checklist before editing: `TDD decision`, `First test/scenario`, `Expected red`, `Intended green change`, `Refactor checkpoint`, and `Validation`. When the harness is runnable, observe and paste the red (command + failing output) before implementation edits; if it is not runnable, stop and request agreement to proceed test-after with the reason rather than skipping red silently.
+- Implement only the agreed project gap with the smallest clear change that
+  preserves existing public behavior unless the human explicitly approved a
+  compatibility break.
+- Use `$change-safety` for public targets, compatibility, migrations, generated
+  files, config, dependencies, deployment, release behavior, or
+  security-sensitive workflow changes.
+- Use `$testing-standards` only when adding or changing executable tests for
+  project workflow behavior; do not invent a language-native test layer for
+  Makefile, CI, shell, Docker, policy, metadata, or formatting-only changes.
+- Use `$doc-standards` when the project change affects public commands, Make
+  targets, setup, validation, release, configuration, or documented workflows.
+- Use `$change-validation` when selecting validation commands.
+- Report `Red`, `Green`, `Refactor`, and `Validation` entries. `Red` and `Green` must each paste the actual command and its real output using the same command/selector; a label without pasted output is not acceptable, and work where red was never observed before implementation must be labeled `test-after (not TDD)` with the reason instead of a TDD cycle. Use `Refactor: none (<reason>)` when no cleanup was needed after green. For a single approval, ask the human to verify and say `Done <ID>-N` using the prefix from `ledger.yaml`; an approved batch follows the shared sequential re-check and stop rules.
+
+## Ledger Format
+
+Before creating, updating, or interpreting the scoped ledger, read `ledger.yaml`
+and `references/ledger-format.md`. This skill is the canonical owner of the
+ledger contract; `$project-gaps-find` cross-references these same files by
+relative path rather than duplicating them. Each entry is a self-contained
+mini-RFC using `What -> Why -> How`. The required core must keep
+`| Field | Value |`, `| Status |`, and `**Summary.**`; `### What` with
+`**Current.**` and `**Expected.**`; `### Why` with `**Impact.**` and
+`#### Evidence` containing `**Claim:**`, `**Observed:**`,
+`**Reproduction:** Smallest supported maintainer`, and `**Source:**`; and
+`### How` with `#### Proposal`, `**Keep.**`, `#### Alternatives Considered`,
+and `#### Definition of Success` containing `**Validation:**`. Keep
+`| Implementation home | current repo \| shared bin \| external repo \| mixed |`,
+and add `#### Situation Map`, `### Goals / Non-goals`, `### Open Questions`,
+and `### Decision` only when the entry warrants them.
+
+## References
+
+- Read `references/plan.md` before starting.
+- Read `ledger.yaml` and `references/ledger-format.md` before creating,
+  updating, or interpreting the scoped ledger.
+- Read `../references/gap-workflow.md` for shared scoped-ledger and delegation
+  gates; read `../references/gap-workflow/implementation.md` for
+  implementation sequencing and fresh review.
+- Use `../references/decision-card.md` to present the agreement-gate proposal
+  as a self-contained decision card.
+- Use `$project-workflow` for repository command discovery, documented
+  entrypoints, CI expectations, examples, and `./bin` wiring before validation.
+- Use `$change-safety` when a proposed project change affects public targets,
+  compatibility, migrations, config, generated files, dependencies, deployment,
+  security expectations, or documented operational behavior.
+- Use `$testing-standards` when deciding whether a project workflow change has
+  an established executable test layer, and use `$test-gaps-implement`
+  instead when the concern is test harness quality or missing/weak tests.
+- Use `$doc-standards` when project workflow behavior needs README, docs,
+  examples, command help, package docs, comments, or docstrings.
+- Use `$naming-standards` when a project change creates or changes target
+  names, commands, flags, files, test fixtures, public terminology, or
+  documentation terms.
+- Use `$change-validation` when selecting validation commands for implemented
+  project changes.
+- Use `$project-gaps-find` when no scoped ledger entry exists yet for this
+  scope.

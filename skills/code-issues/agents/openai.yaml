@@ -1,4 +1,4 @@
 interface:
-  display_name: "Code Issues"
-  short_description: "Find scoped code defects and risks"
-  default_prompt: "Use $code-issues for scoped bug, security, compatibility, and public-contract findings. Default to Find mode when no mode is stated; follow repo archetype lead generation, apply the shared delegation gate, summarize ledger entries in a compact Title/What/Why table, preserve the evidence and approval workflow, resolve entry ID follow-ups through ledger.yaml, and implement only after explicit agreement to a specific proposal."
+  display_name: "Code Issues (Deprecated)"
+  short_description: "Deprecated alias for finding code issues"
+  default_prompt: "Use $code-issues as a deprecated alias for $code-issues-find; prefer the canonical find workflow in new prompts."

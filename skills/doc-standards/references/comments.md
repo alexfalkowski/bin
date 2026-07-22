@@ -35,10 +35,10 @@ https://stackoverflow.blog/2021/12/23/best-practices-for-writing-code-comments/
   restate a name, describe a visible assignment, list obvious parameters, or say
   what a nearby line already says.
 - Do not use comments to compensate for unclear code. Prefer clearer names,
-  smaller structure, or a documented `$code-issues` finding when the code cannot
+  smaller structure, or a documented `$code-issues-find` finding when the code cannot
   be made understandable with the local pattern.
 - If a clear comment cannot be written, treat that as evidence that the code,
-  naming, or abstraction may be wrong; use `$code-issues` rather than adding
+  naming, or abstraction may be wrong; use `$code-issues-find` rather than adding
   vague explanation.
 - Comments must reduce confusion. Remove or rewrite comments that are stale,
   cute, ambiguous, speculative, or more confusing than the code.
