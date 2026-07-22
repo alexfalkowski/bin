@@ -20,7 +20,7 @@ Use this reference when the user asks for a review.
 - Do not report a third-party library, framework, tool, or upstream
   project-owned library bug as a local code finding unless local code violates
   its own documented adapter, mapping, compatibility, validation, or fallback
-  contract. Route dependency/tooling follow-up to `$project-gaps`; route bugs in
+  contract. Route dependency/tooling follow-up to `$project-gaps-find`; route bugs in
   another project-owned library to that library's agent or ledger, using the
   current repository only as evidence of supported usage.
 - Do not flag a missing regression test when the fix preserves observable

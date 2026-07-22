@@ -162,59 +162,65 @@ require_pattern skills/go-standards/SKILL.md "Agents MUST NOT add an import alia
 require_pattern skills/go-standards/SKILL.md "Agents MUST stop and explain before creating Go tests when another harness owns the behavior."
 require_pattern skills/go-standards/references/conventions.md "Being cautious is not a valid import-alias reason"
 
-require_pattern skills/code-issues/SKILL.md "After the human agrees and before editing, state the selected local code pattern"
-require_pattern skills/test-gaps/SKILL.md "After the human agrees and before editing, state the selected local test pattern"
-require_pattern skills/doc-gaps/SKILL.md "After the human agrees and before editing, state the selected local documentation pattern"
-require_pattern skills/feature-gaps/SKILL.md "After the human agrees and before editing, state the selected local code/config/docs pattern"
-require_pattern skills/project-gaps/SKILL.md "After the human agrees and before editing, state the selected local project workflow pattern"
-require_pattern skills/project-gaps/SKILL.md "| Implementation home | current repo \| shared bin \| external repo \| mixed |"
-require_pattern skills/project-gaps/SKILL.md "If a candidate's implementation home is outside the requested scope"
-require_pattern skills/reliability-gaps/SKILL.md "After the human agrees and before editing, state the selected local code/config/docs pattern"
-require_pattern skills/feature-gaps/SKILL.md "state the feature execution checklist before"
-require_pattern skills/feature-gaps/SKILL.md "Use \`Refactor: none (<reason>)\`"
-require_pattern skills/feature-gaps/SKILL.md "## Implementation Proposal Gate"
-require_pattern skills/feature-gaps/SKILL.md "## Solution Shape"
-require_pattern skills/feature-gaps/SKILL.md "\`Approved <ID>-N\` using the prefix from \`ledger.yaml\` approves this solution shape"
-require_pattern skills/feature-gaps/SKILL.md "\`Approved <ID>-N[/N...]\`"
-require_pattern skills/feature-gaps/SKILL.md "\`Approved <ID>-N with agents\` approves this solution shape"
-require_pattern skills/feature-gaps/SKILL.md "tails apply to a single entry or the entire batch"
-require_pattern skills/feature-gaps/agents/openai.yaml "Solution Shape first"
-require_pattern skills/project-gaps/SKILL.md "state the project execution checklist before editing"
-require_pattern skills/project-gaps/SKILL.md "Use \`Refactor: none (<reason>)\`"
-require_pattern skills/reliability-gaps/SKILL.md "state the reliability execution checklist before editing"
-require_pattern skills/reliability-gaps/SKILL.md "\`Red\`, \`Green\`, \`Refactor\`"
-require_pattern skills/reliability-gaps/SKILL.md "\`Validation\` entries"
-require_pattern skills/reliability-gaps/SKILL.md "Use \`Refactor: none (<reason>)\`"
-require_pattern skills/code-issues/SKILL.md "state the issue execution checklist before editing"
-require_pattern skills/code-issues/SKILL.md "\`Red\`, \`Green\`, \`Refactor\`"
-require_pattern skills/code-issues/SKILL.md "Use \`Refactor: none (<reason>)\`"
-require_pattern skills/test-gaps/SKILL.md "state the test execution checklist before editing"
-require_pattern skills/test-gaps/SKILL.md "\`Red\`, \`Green\`, \`Refactor\`"
-require_pattern skills/test-gaps/SKILL.md "Use \`Refactor: none (<reason>)\`"
-require_pattern skills/code-issues/SKILL.md "**Reproduction:** Smallest supported command"
-require_pattern skills/test-gaps/SKILL.md "**Reproduction:** Smallest supported command"
-require_pattern skills/doc-gaps/SKILL.md "**Reproduction:** Smallest reader action"
-require_pattern skills/feature-gaps/SKILL.md "**Reproduction:** Smallest supported user"
-require_pattern skills/project-gaps/SKILL.md "**Reproduction:** Smallest supported maintainer"
-require_pattern skills/reliability-gaps/SKILL.md "**Reproduction:** Smallest supported trigger"
+require_pattern skills/code-issues-implement/SKILL.md "After the human agrees and before editing, state the selected local code pattern"
+require_pattern skills/test-gaps-implement/SKILL.md "After the human agrees and before editing, state the selected local test pattern"
+require_pattern skills/doc-gaps-fix/SKILL.md "After the human agrees and before editing, state the selected local documentation pattern"
+require_pattern skills/feature-gaps-implement/SKILL.md "After the human agrees and before editing, state the selected local code/config/docs pattern"
+require_pattern skills/project-gaps-implement/SKILL.md "After the human agrees and before editing, state the selected local project workflow pattern"
+require_pattern skills/project-gaps-implement/SKILL.md "| Implementation home | current repo \| shared bin \| external repo \| mixed |"
+require_pattern skills/project-gaps-find/SKILL.md "If a candidate's implementation home is outside the requested scope"
+require_pattern skills/reliability-gaps-implement/SKILL.md "After the human agrees and before editing, state the selected local code/config/docs pattern"
+require_pattern skills/feature-gaps-implement/SKILL.md "state the feature execution checklist before"
+require_pattern skills/feature-gaps-implement/SKILL.md "Use \`Refactor: none (<reason>)\`"
+require_pattern skills/feature-gaps-implement/SKILL.md "## Implementation Proposal Gate"
+require_pattern skills/feature-gaps-implement/SKILL.md "## Solution Shape"
+require_pattern skills/feature-gaps-implement/SKILL.md "\`Approved <ID>-N\` using the prefix from \`ledger.yaml\` approves this solution shape"
+require_pattern skills/feature-gaps-implement/SKILL.md "\`Approved <ID>-N[/N...]\`"
+require_pattern skills/feature-gaps-implement/SKILL.md "\`Approved <ID>-N with agents\` approves this solution shape"
+require_pattern skills/feature-gaps-implement/SKILL.md "tails apply to a single entry or the entire batch"
+require_pattern skills/feature-gaps-implement/agents/openai.yaml "Solution Shape first"
+require_pattern skills/project-gaps-implement/SKILL.md "state the project execution checklist before editing"
+require_pattern skills/project-gaps-implement/SKILL.md "Use \`Refactor: none (<reason>)\`"
+require_pattern skills/reliability-gaps-implement/SKILL.md "state the reliability execution checklist before editing"
+require_pattern skills/reliability-gaps-implement/SKILL.md "\`Red\`, \`Green\`, \`Refactor\`"
+require_pattern skills/reliability-gaps-implement/SKILL.md "\`Validation\` entries"
+require_pattern skills/reliability-gaps-implement/SKILL.md "Use \`Refactor: none (<reason>)\`"
+require_pattern skills/code-issues-implement/SKILL.md "state the issue execution checklist before editing"
+require_pattern skills/code-issues-implement/SKILL.md "\`Red\`, \`Green\`, \`Refactor\`"
+require_pattern skills/code-issues-implement/SKILL.md "Use \`Refactor: none (<reason>)\`"
+require_pattern skills/test-gaps-implement/SKILL.md "state the test execution checklist before editing"
+require_pattern skills/test-gaps-implement/SKILL.md "\`Red\`, \`Green\`, \`Refactor\`"
+require_pattern skills/test-gaps-implement/SKILL.md "Use \`Refactor: none (<reason>)\`"
+require_pattern skills/code-issues-implement/SKILL.md "**Reproduction:** Smallest supported command"
+require_pattern skills/test-gaps-implement/SKILL.md "**Reproduction:** Smallest supported command"
+require_pattern skills/doc-gaps-fix/SKILL.md "**Reproduction:** Smallest reader action"
+require_pattern skills/feature-gaps-implement/SKILL.md "**Reproduction:** Smallest supported user"
+require_pattern skills/project-gaps-implement/SKILL.md "**Reproduction:** Smallest supported maintainer"
+require_pattern skills/reliability-gaps-implement/SKILL.md "**Reproduction:** Smallest supported trigger"
 for gap_skill in \
-  skills/code-issues/SKILL.md \
-  skills/test-gaps/SKILL.md \
-  skills/doc-gaps/SKILL.md \
-  skills/feature-gaps/SKILL.md \
-  skills/project-gaps/SKILL.md \
-  skills/reliability-gaps/SKILL.md
+  skills/code-issues-find/SKILL.md \
+  skills/code-issues-implement/SKILL.md \
+  skills/test-gaps-find/SKILL.md \
+  skills/test-gaps-implement/SKILL.md \
+  skills/doc-gaps-audit/SKILL.md \
+  skills/doc-gaps-fix/SKILL.md \
+  skills/feature-gaps-find/SKILL.md \
+  skills/feature-gaps-implement/SKILL.md \
+  skills/project-gaps-find/SKILL.md \
+  skills/project-gaps-implement/SKILL.md \
+  skills/reliability-gaps-find/SKILL.md \
+  skills/reliability-gaps-implement/SKILL.md
 do
   require_ledger_core "$gap_skill"
 done
 
 for ledger_format in \
-  skills/code-issues/references/ledger-format.md \
-  skills/test-gaps/references/ledger-format.md \
-  skills/doc-gaps/references/ledger-format.md \
-  skills/feature-gaps/references/ledger-format.md \
-  skills/project-gaps/references/ledger-format.md \
-  skills/reliability-gaps/references/ledger-format.md
+  skills/code-issues-implement/references/ledger-format.md \
+  skills/test-gaps-implement/references/ledger-format.md \
+  skills/doc-gaps-fix/references/ledger-format.md \
+  skills/feature-gaps-implement/references/ledger-format.md \
+  skills/project-gaps-implement/references/ledger-format.md \
+  skills/reliability-gaps-implement/references/ledger-format.md
 do
   require_ledger_core "$ledger_format"
   require_pattern "$ledger_format" "self-contained"
@@ -233,15 +239,15 @@ require_pattern skills/references/decision-card.md "active threshold is the expl
 require_pattern skills/references/decision-card.md "decision above must stand on its own"
 require_pattern skills/references/decision-card.md "Approved PREFIX-N[/N...]"
 require_pattern skills/references/decision-card.md "ordered, same-prefix batch"
-require_pattern skills/feature-gaps/references/implementation-proposal.md "| What |"
-require_pattern skills/feature-gaps/references/implementation-proposal.md "| Why |"
-require_pattern skills/feature-gaps/references/implementation-proposal.md "| How |"
-require_pattern skills/feature-gaps/references/implementation-proposal.md "active threshold is the explicit request, otherwise 90%"
-require_pattern skills/feature-gaps/references/implementation-proposal.md "decision above must stand on its own"
-require_pattern skills/feature-gaps/references/implementation-proposal.md "Approved <ID>-N[/N...]"
-require_pattern skills/feature-gaps/references/implementation-proposal.md "ordered, same-prefix batch"
+require_pattern skills/feature-gaps-implement/references/implementation-proposal.md "| What |"
+require_pattern skills/feature-gaps-implement/references/implementation-proposal.md "| Why |"
+require_pattern skills/feature-gaps-implement/references/implementation-proposal.md "| How |"
+require_pattern skills/feature-gaps-implement/references/implementation-proposal.md "active threshold is the explicit request, otherwise 90%"
+require_pattern skills/feature-gaps-implement/references/implementation-proposal.md "decision above must stand on its own"
+require_pattern skills/feature-gaps-implement/references/implementation-proposal.md "Approved <ID>-N[/N...]"
+require_pattern skills/feature-gaps-implement/references/implementation-proposal.md "ordered, same-prefix batch"
 reject_pattern skills/references/decision-card.md "Full context, evidence, and alternatives: see"
-reject_pattern skills/feature-gaps/references/implementation-proposal.md "Full problem, evidence, and alternatives: see"
+reject_pattern skills/feature-gaps-implement/references/implementation-proposal.md "Full problem, evidence, and alternatives: see"
 
 require_pattern skills/references/gap-workflow.md "Do not silently downgrade to"
 require_pattern skills/references/gap-workflow.md "current user"
@@ -309,19 +315,39 @@ reject_policy_tree_pattern "If sub-agents are unavailable or forbidden by higher
 reject_policy_tree_pattern "perform the review locally unless credible completion depends on delegation"
 reject_policy_tree_pattern "single-agent and compensate"
 
+# doc-gaps-fix is the documented exception: it finds and fixes in the same
+# pass, so its own plan.md (not doc-gaps-audit's) carries the lead-generation,
+# delegation-gate, and rejected/routed accounting that every other pair keeps
+# in its -find half.
 for plan in \
-  skills/code-issues/references/plan.md \
-  skills/doc-gaps/references/plan.md \
-  skills/feature-gaps/references/plan.md \
-  skills/project-gaps/references/plan.md \
-  skills/reliability-gaps/references/plan.md \
-  skills/test-gaps/references/plan.md
+  skills/code-issues-find/references/plan.md \
+  skills/doc-gaps-fix/references/plan.md \
+  skills/feature-gaps-find/references/plan.md \
+  skills/project-gaps-find/references/plan.md \
+  skills/reliability-gaps-find/references/plan.md \
+  skills/test-gaps-find/references/plan.md
 do
   require_pattern "$plan" "Apply the shared gap-workflow delegation gate before review work"
-  require_pattern "$plan" "../ledger.yaml"
+  require_pattern "$plan" "ledger.yaml"
   require_pattern "$plan" "../../references/gap-lead-generation.md"
   require_pattern "$plan" "rejected"
   require_pattern "$plan" "routed"
+done
+
+for plan in \
+  skills/code-issues-find/references/plan.md \
+  skills/code-issues-implement/references/plan.md \
+  skills/doc-gaps-audit/references/plan.md \
+  skills/doc-gaps-fix/references/plan.md \
+  skills/feature-gaps-find/references/plan.md \
+  skills/feature-gaps-implement/references/plan.md \
+  skills/project-gaps-find/references/plan.md \
+  skills/project-gaps-implement/references/plan.md \
+  skills/reliability-gaps-find/references/plan.md \
+  skills/reliability-gaps-implement/references/plan.md \
+  skills/test-gaps-find/references/plan.md \
+  skills/test-gaps-implement/references/plan.md
+do
   reject_pattern "$plan" "Do not require separate delegation wording unless higher-priority runtime policy requires it"
   reject_pattern "$plan" "perform the review locally unless credible completion depends on delegation"
   reject_pattern "$plan" "requires explicit user delegation authorization"
@@ -336,34 +362,40 @@ require_pattern skills/testing-standards/agents/openai.yaml "stop on unexpected 
 require_pattern skills/testing-standards/agents/openai.yaml "run a two-pass Refactor assessment"
 require_pattern skills/testing-standards/agents/openai.yaml "use a third pass for shared, public"
 require_pattern skills/go-standards/agents/openai.yaml "MUST NOT invent import aliases for readability, caution, brevity, or personal clarity"
-require_pattern skills/reliability-gaps/agents/openai.yaml "resolve entry ID follow-ups through ledger.yaml"
-require_pattern skills/code-issues/agents/openai.yaml "resolve entry ID follow-ups through ledger.yaml"
-require_pattern skills/test-gaps/agents/openai.yaml "resolve entry ID follow-ups through ledger.yaml"
-require_pattern skills/doc-gaps/agents/openai.yaml "resolve entry ID follow-ups through ledger.yaml"
-require_pattern skills/feature-gaps/agents/openai.yaml "resolve entry ID follow-ups through ledger.yaml"
-require_pattern skills/project-gaps/agents/openai.yaml "resolve entry ID follow-ups through ledger.yaml"
-require_pattern skills/code-issues/agents/openai.yaml "apply the shared delegation gate"
-require_pattern skills/doc-gaps/agents/openai.yaml "apply the shared delegation gate"
-require_pattern skills/feature-gaps/agents/openai.yaml "apply the shared delegation gate"
-require_pattern skills/project-gaps/agents/openai.yaml "apply the shared delegation gate"
-require_pattern skills/reliability-gaps/agents/openai.yaml "apply the shared delegation gate"
-require_pattern skills/test-gaps/agents/openai.yaml "apply the shared delegation gate"
-require_pattern skills/code-issues/agents/openai.yaml "repo archetype lead generation"
-require_pattern skills/doc-gaps/agents/openai.yaml "repo archetype lead generation"
-require_pattern skills/feature-gaps/agents/openai.yaml "repo archetype lead generation"
-require_pattern skills/project-gaps/agents/openai.yaml "repo archetype lead generation"
-require_pattern skills/reliability-gaps/agents/openai.yaml "repo archetype lead generation"
-require_pattern skills/test-gaps/agents/openai.yaml "repo archetype lead generation"
+require_pattern skills/reliability-gaps-implement/agents/openai.yaml "resolve entry ID follow-ups through ledger.yaml"
+require_pattern skills/code-issues-implement/agents/openai.yaml "resolve entry ID follow-ups through ledger.yaml"
+require_pattern skills/test-gaps-implement/agents/openai.yaml "resolve entry ID follow-ups through ledger.yaml"
+require_pattern skills/doc-gaps-fix/agents/openai.yaml "resolve entry ID follow-ups through ledger.yaml"
+require_pattern skills/feature-gaps-implement/agents/openai.yaml "resolve entry ID follow-ups through ledger.yaml"
+require_pattern skills/project-gaps-implement/agents/openai.yaml "resolve entry ID follow-ups through ledger.yaml"
+require_pattern skills/code-issues-find/agents/openai.yaml "apply the shared delegation gate"
+require_pattern skills/doc-gaps-audit/agents/openai.yaml "apply the shared delegation gate"
+require_pattern skills/feature-gaps-find/agents/openai.yaml "apply the shared delegation gate"
+require_pattern skills/project-gaps-find/agents/openai.yaml "apply the shared delegation gate"
+require_pattern skills/reliability-gaps-find/agents/openai.yaml "apply the shared delegation gate"
+require_pattern skills/test-gaps-find/agents/openai.yaml "apply the shared delegation gate"
+require_pattern skills/code-issues-find/agents/openai.yaml "repo archetype lead generation"
+require_pattern skills/doc-gaps-audit/agents/openai.yaml "repo archetype lead generation"
+require_pattern skills/feature-gaps-find/agents/openai.yaml "repo archetype lead generation"
+require_pattern skills/project-gaps-find/agents/openai.yaml "repo archetype lead generation"
+require_pattern skills/reliability-gaps-find/agents/openai.yaml "repo archetype lead generation"
+require_pattern skills/test-gaps-find/agents/openai.yaml "repo archetype lead generation"
 require_pattern skills/security-audit/agents/openai.yaml "repo archetype lead generation"
 require_pattern skills/security-audit/references/shared.md "Source-To-Sink Review"
 require_pattern skills/security-audit/references/shared.md "../../references/gap-lead-generation.md"
 reject_policy_tree_pattern "use local review only when delegation is unavailable, denied, or not needed for confidence"
-reject_pattern skills/code-issues/agents/openai.yaml "runtime permits it or local review"
-reject_pattern skills/doc-gaps/agents/openai.yaml "runtime permits it or local review"
-reject_pattern skills/feature-gaps/agents/openai.yaml "runtime permits it or local review"
-reject_pattern skills/project-gaps/agents/openai.yaml "runtime permits it or local review"
-reject_pattern skills/reliability-gaps/agents/openai.yaml "runtime permits it or local review"
-reject_pattern skills/test-gaps/agents/openai.yaml "runtime permits it or local review"
+reject_pattern skills/code-issues-find/agents/openai.yaml "runtime permits it or local review"
+reject_pattern skills/code-issues-implement/agents/openai.yaml "runtime permits it or local review"
+reject_pattern skills/doc-gaps-audit/agents/openai.yaml "runtime permits it or local review"
+reject_pattern skills/doc-gaps-fix/agents/openai.yaml "runtime permits it or local review"
+reject_pattern skills/feature-gaps-find/agents/openai.yaml "runtime permits it or local review"
+reject_pattern skills/feature-gaps-implement/agents/openai.yaml "runtime permits it or local review"
+reject_pattern skills/project-gaps-find/agents/openai.yaml "runtime permits it or local review"
+reject_pattern skills/project-gaps-implement/agents/openai.yaml "runtime permits it or local review"
+reject_pattern skills/reliability-gaps-find/agents/openai.yaml "runtime permits it or local review"
+reject_pattern skills/reliability-gaps-implement/agents/openai.yaml "runtime permits it or local review"
+reject_pattern skills/test-gaps-find/agents/openai.yaml "runtime permits it or local review"
+reject_pattern skills/test-gaps-implement/agents/openai.yaml "runtime permits it or local review"
 reject_policy_tree_pattern "and \$reliability-gaps in this repo"
 reject_policy_tree_pattern "human consent"
 reject_policy_tree_pattern "standing human"
@@ -373,7 +405,7 @@ reject_policy_tree_pattern "explicit current user authorization"
 reject_policy_tree_pattern "ask for explicit delegation permission"
 reject_policy_tree_pattern "Ask for the missing permission"
 reject_policy_tree_pattern "not ask again based on the requested skill combination"
-require_pattern skills/project-gaps/agents/openai.yaml "implementation home as current repo, shared bin, external repo, or mixed"
+require_pattern skills/project-gaps-find/agents/openai.yaml "implementation home as current repo, shared bin, external repo, or mixed"
 require_pattern skills/change-validation/agents/openai.yaml "file changes make prior validation stale"
 require_pattern skills/change-validation/agents/openai.yaml "configured command environment"
 

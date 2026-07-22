@@ -71,7 +71,7 @@ Agents MUST:
   threshold, route the concern to the correct workflow, or state the evidence
   gap instead of recording it.
 - Route findings about third-party libraries, frameworks, tools, or project-owned
-  upstream libraries to the owner of the fix. Use `project-gaps` only for the
+  upstream libraries to the owner of the fix. Use `project-gaps-find` only for the
   repository-owned dependency/tooling response; route project-owned upstream
   library bugs to that library's agent or ledger unless local adapter behavior is
   independently wrong.
@@ -201,10 +201,12 @@ or hard-coded type map. Add `in path/LEDGER.md` when the ID is ambiguous. The op
 authorization.
 
 These authorization tails also apply after a generic skill invocation, such as
-`$skill-name in SCOPE`, `Find $skill-name in SCOPE`, or
-`Implement $skill-name in SCOPE`. They carry the same current-request
-authorization without changing the skill's mode, default behavior, or approval
-gates. `SCOPE` is interpreted by the selected skill: normally a package or
+`$skill-name in SCOPE`. A gap skill that finds and one that implements are
+separate, single-purpose skills invoked directly by name (for example
+`$code-issues-find` and `$code-issues-implement`); which one runs is
+determined by the invocation, not inferred from phrasing, so these tails carry
+the same current-request authorization without changing which skill runs or
+bypassing approval gates. `SCOPE` is interpreted by the selected skill: normally a package or
 folder, but it may be a CI/deployment target, repository and reporting period,
 or another skill-defined target. Skills that do not accept a generic scope
 remain explicit-request exceptions. `review-pr` is one such exception: its

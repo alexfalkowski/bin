@@ -1,0 +1,4 @@
+interface:
+  display_name: "Feature Gaps Implement"
+  short_description: "Implement agreed feature proposals"
+  default_prompt: "Use $feature-gaps-implement only after Start <ID> or Approved <ID>-N (or a same-prefix batch) for a scoped feature-gap ledger entry. Re-check the entry against current code before proposing a solution shape, put Solution Shape first, apply the shared delegation gate, resolve entry ID follow-ups through ledger.yaml, and implement only after explicit agreement to a specific proposal."

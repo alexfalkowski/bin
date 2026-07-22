@@ -87,8 +87,8 @@ make review cleanup_desc_file=true msg="unprefixed subject" desc_file="/returned
 - Read `references/summary-format.md` before drafting the `msg` value and PR summary content.
 - Read `references/output-format.md` before producing the final review PR report.
 - Use `$project-workflow` for repository command discovery, CI expectations, and `./bin` wiring before validation and `make review`.
-- Use `$doc-standards` for review-time documentation judgment; use `$doc-gaps`
-  only when the user explicitly asks for a scoped documentation gap pass.
+- Use `$doc-standards` for review-time documentation judgment; use `$doc-gaps-fix`
+  or `$doc-gaps-audit` only when the user explicitly asks for a scoped documentation gap pass.
 - Use `$style-review` only when the user explicitly asks for non-blocking polish before the PR.
 
 ## Notes

@@ -1,4 +1,4 @@
 interface:
-  display_name: "Feature Gaps"
-  short_description: "Find product feature opportunities"
-  default_prompt: "Use $feature-gaps for scoped product-facing capability opportunities with explicit audience benefit. Default to Find mode when no mode is stated; follow repo archetype lead generation, apply the shared delegation gate, summarize ledger entries in a compact Title/What/Why table, put Solution Shape first, resolve entry ID follow-ups through ledger.yaml, implement only after explicit agreement to a specific proposal, and route test/project gaps elsewhere."
+  display_name: "Feature Gaps (Deprecated)"
+  short_description: "Deprecated alias for finding feature gaps"
+  default_prompt: "Use $feature-gaps as a deprecated alias for $feature-gaps-find; prefer the canonical find workflow in new prompts."

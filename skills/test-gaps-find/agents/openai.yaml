@@ -1,0 +1,4 @@
+interface:
+  display_name: "Test Gaps Find"
+  short_description: "Find weak tests and harness gaps"
+  default_prompt: "Use $test-gaps-find for scoped missing, weak, misleading, flaky, wrong-layer, or harness coverage gaps. Follow repo archetype lead generation, apply the shared delegation gate, summarize ledger entries in a compact Title/What/Why table, verify front-door behavior, resolve entry ID follow-ups through ../test-gaps-implement/ledger.yaml, and never edit tests — hand agreed entries to $test-gaps-implement."

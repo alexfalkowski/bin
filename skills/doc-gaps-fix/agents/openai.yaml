@@ -1,0 +1,4 @@
+interface:
+  display_name: "Doc Gaps Fix"
+  short_description: "Find and fix scoped doc adequacy gaps"
+  default_prompt: "Use $doc-gaps-fix with $doc-standards for scoped documentation adequacy gaps. Follow repo archetype lead generation, apply the shared delegation gate, summarize ledger entries in a compact Title/What/Why table, resolve entry ID follow-ups through ledger.yaml, and fix confirmed gaps in one pass. Use $doc-gaps-audit instead when the user explicitly asks not to edit."
