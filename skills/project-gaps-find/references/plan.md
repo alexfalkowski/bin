@@ -39,4 +39,4 @@ surface, implementation home, delegation, ledger state, and workflow routing.
 9. If confirmed gaps remain, write the resolved scoped ledger, present it,
    coverage state, proposed implementation plan, and runnable follow-up scopes,
    then stop before implementing project changes. Implementing happens only in
-   `$project-gaps-implement`, after explicit agreement.
+   `$project-gaps-implement` after its ledger re-check.

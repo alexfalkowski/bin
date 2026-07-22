@@ -14,7 +14,7 @@ gates, validation rules, and output format.
 - Do not introduce a new top-level workflow when an existing skill owns the
   task. Use this reference as an implementation aid inside that skill.
 - Do not use this reference to combine find and implement modes, bypass
-  approval gates, weaken confidence thresholds, skip validation, or replace
+  implementation gates, weaken confidence thresholds, skip validation, or replace
   repository-defined Make targets.
 - If the selected skill requires a proposed solution and human agreement before
   editing, a request that says "implement" is not enough by itself. Refresh the

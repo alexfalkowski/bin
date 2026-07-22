@@ -1,4 +1,0 @@
-interface:
-  display_name: "Feature Gaps (Deprecated)"
-  short_description: "Deprecated alias for finding feature gaps"
-  default_prompt: "Use $feature-gaps as a deprecated alias for $feature-gaps-find; prefer the canonical find workflow in new prompts."

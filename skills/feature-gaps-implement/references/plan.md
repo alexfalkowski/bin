@@ -14,13 +14,9 @@ validation, delegation, ledger state, and workflow routing.
    framework wrappers, shared helpers, vendored dependency behavior when
    delegated, docs, tests, examples, command behavior, architecture, and
    comparable-tool evidence.
-3. Present the `SKILL.md#implementation-proposal-gate` decision packet before
-   asking for agreement. It must lead with `## Solution Shape`, make the
-   proposed design visually scannable before confidence or evidence details,
-   show tradeoffs visually, name intended validation, and end by pointing to
-   the canonical `Approved <ID>-N`, `Approved <ID>-N[/N...]`, and
-   `Approved <ID>-N with agents` approval commands.
-4. After agreement, state local code/config/docs pattern, dominant relevant
+3. Confirm the ledger entry's product evidence, solution shape, tradeoffs, and
+   intended validation still fit the current repository.
+4. Before editing, state local code/config/docs pattern, dominant relevant
    test harness, planned validation, and deviations. For behavior-changing
    features, also state the feature execution checklist: TDD decision, first
    test/scenario, expected red, intended green change, refactor checkpoint, and

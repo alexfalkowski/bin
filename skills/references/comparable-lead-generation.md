@@ -4,7 +4,7 @@ Use this reference from `gap-lead-generation.md` when a ledger-style find,
 audit-only, or one-pass review would benefit from similar repositories,
 templates, or ecosystem frameworks. Comparable evidence improves recall only;
 it does not lower the selected skill's ownership, confidence, reproduction,
-validation, or approval gates.
+validation, or implementation gates.
 
 ## When To Use
 

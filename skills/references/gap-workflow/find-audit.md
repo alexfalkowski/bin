@@ -114,7 +114,7 @@ For find, audit-only, and one-pass modes:
 - Use `../finding-severity.md` to discard low-confidence candidates before
   assigning severity or confidence. Build a lead inventory with the selected
   plan and `../gap-lead-generation.md`; it is a recall aid and never lowers
-  ownership, reproduction, validation, confidence, or approval gates.
+  ownership, reproduction, validation, confidence, or implementation gates.
 - Treat comparable repositories, local checkout mappings, sibling repositories,
   and external frameworks as lead generation only. Reproduce any candidate
   through the selected skill's normal evidence path before recording it.

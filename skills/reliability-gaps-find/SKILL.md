@@ -1,14 +1,14 @@
 ---
 name: reliability-gaps-find
-description: Use when the user asks to find $reliability-gaps-find/reliability gaps in a package or folder, review production readiness, set a confidence closure target such as 95% or 99%, or asks what evidence backs a reliability-gap ledger entry. Find verified reliability, operability, SLO, overload, observability, release-safety, recovery, data-integrity, disaster-readiness, or NALSD gaps and record scoped ledger entries; never edits code. Use $reliability-gaps-implement to act on an entry after explicit agreement.
+description: Use when the user asks to find $reliability-gaps-find/reliability gaps in a package or folder, review production readiness, set a confidence closure target such as 95% or 99%, or asks what evidence backs a reliability-gap ledger entry. Find verified reliability, operability, SLO, overload, observability, release-safety, recovery, data-integrity, disaster-readiness, or NALSD gaps and record scoped ledger entries; never edits code. Use $reliability-gaps-implement to act on a confirmed entry.
 ---
 
 # Reliability Gaps Find
 
 Trigger phrases: `Find $reliability-gaps-find in PACKAGE_OR_FOLDER` or
 `Find reliability gaps in PACKAGE_OR_FOLDER`. This skill only discovers and
-records candidates; it never edits code. `Start <ID>` and `Approved <ID>-N`
-select `$reliability-gaps-implement` instead, using the ledger contract in
+records candidates; it never edits code. Use `$reliability-gaps-implement` to
+re-check and implement a specific ledger entry, using the contract in
 `../reliability-gaps-implement/ledger.yaml`.
 
 Before starting, read `../reliability-gaps-implement/ledger.yaml`,

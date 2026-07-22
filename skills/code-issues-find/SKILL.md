@@ -1,14 +1,14 @@
 ---
 name: code-issues-find
-description: Use when the user asks to find $code-issues-find/code issues in a package or folder, set a confidence closure target such as 95% or 99% for a code-issue audit, or asks what evidence backs a code-issue ledger entry. Find concrete bugs, security issues, compatibility breaks, and public contract violations and record scoped ledger entries; never edits code. Use $code-issues-implement to act on an entry after explicit agreement.
+description: Use when the user asks to find $code-issues-find/code issues in a package or folder, set a confidence closure target such as 95% or 99% for a code-issue audit, or asks what evidence backs a code-issue ledger entry. Find concrete bugs, security issues, compatibility breaks, and public contract violations and record scoped ledger entries; never edits code. Use $code-issues-implement to act on a confirmed entry.
 ---
 
 # Code Issues Find
 
 Trigger phrases: `Find $code-issues-find in PACKAGE_OR_FOLDER` or
 `Find code issues in PACKAGE_OR_FOLDER`. This skill only discovers and records
-candidates; it never edits code. `Start <ID>` and `Approved <ID>-N` select
-`$code-issues-implement` instead, using the ledger contract in
+candidates; it never edits code. Use `$code-issues-implement` to re-check and
+implement a specific ledger entry, using the contract in
 `../code-issues-implement/ledger.yaml`.
 
 Before starting, read `../code-issues-implement/ledger.yaml`, `references/plan.md`,
@@ -61,8 +61,6 @@ with `**Impact.**` and `#### Evidence` containing `**Claim:**`,
   updating the scoped ledger.
 - Read `../references/gap-workflow.md` for shared scoped-ledger and delegation
   gates; read `../references/gap-workflow/find-audit.md` for review mechanics.
-- Use `../references/decision-card.md` only if presenting a proposal inline;
-  normally that belongs to `$code-issues-implement`.
 - Use `../references/gap-lead-generation.md` to classify repo archetypes,
   generate high-risk leads, and account for rejected or routed candidates.
 - Use `../references/finding-severity.md` for confidence filtering, confidence

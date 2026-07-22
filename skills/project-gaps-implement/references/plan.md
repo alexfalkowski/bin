@@ -16,10 +16,10 @@ validation, delegation, and ledger state.
 3. If the proposal is already supported, stale, duplicate, belongs elsewhere, or
    has an implementation home outside scope, propose removing, moving, or
    reclassifying it before local implementation.
-4. Present project workflow evidence, audience, implementation home, repository
-   fit, proposed solution, compatibility and maintenance tradeoffs, and intended
-   validation before asking for agreement.
-5. After agreement, state local project workflow pattern, dominant relevant
+4. Confirm the project workflow evidence, audience, implementation home,
+   repository fit, proposal, compatibility and maintenance tradeoffs, and
+   intended validation still fit the current repository.
+5. Before editing, state local project workflow pattern, dominant relevant
    validation path, planned validation, and deviations. For behavior-changing
    project workflow changes, state the project execution checklist: TDD
    decision, first test/scenario or dry-run, expected red, intended green

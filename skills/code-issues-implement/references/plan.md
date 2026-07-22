@@ -14,9 +14,9 @@ state, and code/security/compatibility evidence.
    prose contradicting implementation, prove the code is wrong with non-prose
    evidence before proposing a code change; otherwise propose documentation
    reclassification or fix via `$doc-gaps-fix`.
-3. Present issue evidence, proposed solution, compatibility or behavior
-   tradeoffs, and intended validation before asking for agreement.
-4. After agreement, state the local code pattern, dominant relevant test
+3. Confirm the ledger entry's evidence, proposal, compatibility or behavior
+   tradeoffs, and intended validation still fit the current repository.
+4. Before editing, state the local code pattern, dominant relevant test
    harness, planned validation, and deviations.
 5. Use `$testing-standards` for regression coverage decisions and validate with
    commands appropriate to the changed files.

@@ -1,20 +1,19 @@
 ---
 name: reliability-gaps-implement
-description: Use when the human says Approved <ID>-N or Start <ID> for a reliability-gap ledger entry, approves a same-prefix batch such as Approved <ID>-N[/N...], or asks what the fix is for a reliability-gap ledger entry. Implement agreed reliability fixes sequentially after explicit agreement, including contract-driven same-prefix approved batches; never starts work without that agreement.
+description: Use when the human asks to work on or asks what the fix is for a reliability-gap ledger entry. Re-check that the confirmed entry still stands, then implement it; named same-prefix batches run sequentially.
 ---
 
 # Reliability Gaps Implement
 
-Enter only after the human explicitly agrees to a specific proposed solution,
-typically with `Approved <ID>-N`, or a same-prefix batch
-`Approved <ID>-N[/N...]`, using the prefix from `ledger.yaml`. The shared
-workflow processes an approved batch sequentially. Use
+Use this skill to work on an existing reliability-gap entry. Re-check that it
+still stands before editing, then implement it. Name an ordered same-prefix
+batch as `PREFIX-N[/N...]`, using the prefix from `ledger.yaml`. Use
 `$reliability-gaps-find` first if no scoped ledger entry exists yet for this
 scope.
 
 Before starting, read `ledger.yaml`, `references/plan.md`,
 `../references/gap-workflow.md`, and `../references/gap-workflow/implementation.md`;
-they own runtime state, ledger, delegation, scope, and approval gates.
+they own runtime state, ledger, delegation, scope, and implementation gates.
 
 ## Operating Stance
 
@@ -40,11 +39,11 @@ Follow `references/plan.md` and the implementation rules in
 These reliability implementation rules remain mandatory:
 
 - Ask questions when SLOs, expected failure behavior, operator workflow, compatibility, rollout, validation, or user intent is ambiguous. Treat silence or a broad "implement reliability gaps" request as permission to start the proposal workflow, not as permission to edit.
-- After the human agrees and before editing, state the selected local code/config/docs pattern, dominant relevant test harness, planned validation command, and any deviation from `AGENTS.md` or selected skills. If a deviation is needed, stop and ask before editing.
+- Before editing, state the selected local code/config/docs pattern, dominant relevant test harness, planned validation command, and any deviation from `AGENTS.md` or selected skills. If a deviation is needed, stop and ask before editing.
 - For behavior-changing fixes, state the reliability execution checklist before editing: `TDD decision`, `First test/scenario`, `Expected red`, `Intended green change`, `Refactor checkpoint`, and `Validation`. When the harness is runnable, observe and paste the red (command + failing output) before implementation edits; if it is not runnable, stop and request agreement to proceed test-after with the reason rather than skipping red silently.
-- Implement only the agreed finding with the smallest clear reliability change.
+- Implement only the confirmed finding with the smallest clear reliability change.
 - Use `$reliability-standards` for reliability design, `$change-safety` for public or operational compatibility, `$testing-standards` for failure-path tests, and `$change-validation` for checks. Pair with `$security-audit` when the fix touches auth, secrets, privilege, DoS, logs, supply chain, or incident containment.
-- Report `Red`, `Green`, `Refactor`, and `Validation` entries. `Red` and `Green` must each paste the actual command and its real output using the same command/selector; a label without pasted output is not acceptable, and work where red was never observed before implementation must be labeled `test-after (not TDD)` with the reason instead of a TDD cycle. Use `Refactor: none (<reason>)` when no cleanup was needed after green. For a single approval, ask the human to verify and say `Done <ID>-N` using the prefix from `ledger.yaml`; an approved batch follows the shared sequential re-check and stop rules.
+- Report `Red`, `Green`, `Refactor`, and `Validation` entries. `Red` and `Green` must each paste the actual command and its real output using the same command/selector; a label without pasted output is not acceptable, and work where red was never observed before implementation must be labeled `test-after (not TDD)` with the reason instead of a TDD cycle. Use `Refactor: none (<reason>)` when no cleanup was needed after green. After validation, update the selected ledger entry; a named batch follows the shared sequential re-check and stop rules.
 
 ## Ledger Format
 
@@ -70,8 +69,6 @@ and `#### Definition of Success` containing `**Validation:**`. Add
 - Read `../references/gap-workflow.md` for shared scoped-ledger and delegation
   gates; read `../references/gap-workflow/implementation.md` for
   implementation sequencing and fresh review.
-- Use `../references/decision-card.md` to present the agreement-gate proposal
-  as a self-contained decision card.
 - Use `../references/finding-severity.md` for confidence filtering, confidence
   labels, and severity.
 - Use `$reliability-standards` for SRE, NALSD, resilience, recovery, overload,

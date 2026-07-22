@@ -47,4 +47,4 @@ delegation, external research, ledger state, and workflow routing.
 10. If confirmed gaps remain, write the resolved scoped ledger, present it,
    coverage state, proposed implementation plan, and runnable follow-up scopes,
    then stop before implementing features. Implementing happens only in
-   `$feature-gaps-implement`, after explicit agreement.
+   `$feature-gaps-implement` after its ledger re-check.

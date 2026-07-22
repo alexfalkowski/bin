@@ -1,14 +1,14 @@
 ---
 name: project-gaps-find
-description: Use when the user asks to find $project-gaps-find/project gaps in a package or folder, set a confidence closure target such as 95% or 99%, find build, CI, Makefile, release, setup, validation, command discovery, or repository workflow gaps, or asks what evidence backs a project-gap ledger entry. Find concrete repository workflow and project plumbing improvements and record scoped ledger entries; never edits files. Use $project-gaps-implement to act on an entry after explicit agreement.
+description: Use when the user asks to find $project-gaps-find/project gaps in a package or folder, set a confidence closure target such as 95% or 99%, find build, CI, Makefile, release, setup, validation, command discovery, or repository workflow gaps, or asks what evidence backs a project-gap ledger entry. Find concrete repository workflow and project plumbing improvements and record scoped ledger entries; never edits files. Use $project-gaps-implement to act on a confirmed entry.
 ---
 
 # Project Gaps Find
 
 Trigger phrases: `Find $project-gaps-find in PACKAGE_OR_FOLDER` or
 `Find project gaps in PACKAGE_OR_FOLDER`. This skill only discovers and
-records candidates; it never edits files. `Start <ID>` and `Approved <ID>-N`
-select `$project-gaps-implement` instead, using the ledger contract in
+records candidates; it never edits files. Use `$project-gaps-implement` to
+re-check and implement a specific ledger entry, using the contract in
 `../project-gaps-implement/ledger.yaml`.
 
 Before starting, read `../project-gaps-implement/ledger.yaml`,

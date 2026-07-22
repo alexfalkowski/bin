@@ -28,7 +28,7 @@ Use this structure for every entry:
 
 | Field | Value |
 | --- | --- |
-| Status | Proposed \| Accepted \| In progress \| Rejected |
+| Status | Confirmed \| In progress \| Rejected |
 | Type | Feature Gap |
 | Priority | High \| Medium \| Low |
 | Confidence | 93% — one-line reason; active threshold is the explicit request, otherwise 90% (or 95% for high-risk acceptance). |
@@ -121,19 +121,15 @@ turn the entry into an architecture document.
 ### Open Questions
 - A product-direction, scope, or compatibility decision that needs the human.
 
-### Decision
-> Accepted 2026-07-07 — chose <option> because <reason>.
 ````
 
 ## Status And Lifecycle
 
 `Status` is a lightweight hint for where the entry stands in the current
-conversation, not a durable record: `Proposed` when first recorded, `Accepted`
-after the human agrees, `In progress` while implementing, and `Rejected` for an
-entry ruled out but kept for context. The `### Decision` line is an optional
-one-line record of the agreement-gate outcome. Per the shared gap workflow,
-remove the entry once the change is confirmed done and delete the ledger once
-every entry is resolved.
+conversation, not a durable record: `Confirmed` when recorded by
+`$feature-gaps-find`, `In progress` while implementing, and `Rejected` for an
+entry ruled out but kept for context. Per the shared gap workflow, remove the
+entry after validation and delete the ledger once every entry is resolved.
 
 Keep optional follow-up notes separate from proposals:
 

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Doc Gaps (Deprecated)"
-  short_description: "Deprecated alias for fixing doc gaps"
-  default_prompt: "Use $doc-gaps as a deprecated alias for $doc-gaps-fix; prefer the canonical fix workflow in new prompts."

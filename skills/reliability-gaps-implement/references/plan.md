@@ -16,10 +16,10 @@ state, operational expectation, and failure-mode evidence.
    implementation or reliability control is wrong with non-prose evidence
    before proposing a reliability change; otherwise propose documentation
    reclassification via `$doc-gaps-fix`.
-4. Present finding evidence, affected reliability promise or operational
-   expectation, proposed solution, tradeoffs, and intended validation before
-   asking for agreement.
-5. After agreement, state local code/config/docs pattern, dominant relevant
+4. Confirm the finding evidence, affected reliability promise or operational
+   expectation, proposal, tradeoffs, and intended validation still fit the
+   current repository.
+5. Before editing, state local code/config/docs pattern, dominant relevant
    test harness, planned validation, and deviations. For behavior-changing
    fixes, state the reliability execution checklist: TDD decision, first
    test/scenario, expected red, intended green change, refactor checkpoint, and
