@@ -219,6 +219,11 @@ curl -fsS -X POST https://api.uptimerobot.com/v2/getMonitors \
 Set `UPTIMEROBOT_MONITOR_IDS` to the comma-separated IDs for the services in
 scope.
 
+The collector accepts a monitor only when its `friendly_name` or `url` contains
+the repository basename. Configure the selected monitor accordingly. If the
+configured IDs do not yield a match, the collector retries once without the ID
+filter before reporting UptimeRobot as unavailable.
+
 Useful data:
 
 - current monitor status;
