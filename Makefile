@@ -4,13 +4,13 @@ include build/make/git.mak
 include build/make/claude.mak
 include build/make/codex.mak
 
-# Lint Bash scripts under build/, quality/, and lib/ with ShellCheck.
+# Lint Bash scripts under build/, quality/, lib/, and test/ with ShellCheck.
 scripts-lint:
-	@quality/shell/lint
+	@test/shell/lint
 
-# Lint skill frontmatter, OpenAI metadata, and shared policy markers.
+# Validate skill frontmatter, OpenAI metadata, and shared policy markers.
 skills-lint:
-	@quality/skills/lint
+	@test/skills/lint
 
 # Lint all docker files.
 docker-lint:

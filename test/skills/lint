@@ -1,0 +1,535 @@
+#!/usr/bin/env bash
+# Check that agent policy hardening markers remain in shared skills.
+
+set -eo pipefail
+
+missing=0
+
+require_pattern() {
+  local file="$1"
+  local pattern="$2"
+
+  if [[ ! -f "$file" ]]; then
+    printf 'missing file: %s\n' "$file" >&2
+    missing=1
+    return
+  fi
+
+  if ! grep -Fq -- "$pattern" "$file"; then
+    printf 'missing policy marker in %s: %s\n' "$file" "$pattern" >&2
+    missing=1
+  fi
+}
+
+require_patterns() {
+  local file="$1"
+  local pattern
+
+  while IFS= read -r pattern; do
+    [[ -z "$pattern" ]] && continue
+    require_pattern "$file" "$pattern"
+  done
+}
+
+require_pattern_in_files() {
+  local pattern="$1"
+  shift
+
+  local file
+  for file in "$@"; do
+    require_pattern "$file" "$pattern"
+  done
+}
+
+require_ledger_core() {
+  local file="$1"
+
+  require_patterns "$file" <<'PATTERNS'
+| Field | Value |
+| Status |
+**Summary.**
+### What
+**Current.**
+**Expected.**
+### Why
+**Impact.**
+#### Evidence
+**Claim:**
+**Observed:**
+**Reproduction:**
+**Source:**
+### How
+#### Proposal
+**Keep.**
+#### Alternatives Considered
+#### Definition of Success
+**Validation:**
+#### Situation Map
+PATTERNS
+}
+
+reject_pattern() {
+  local file="$1"
+  local pattern="$2"
+
+  if [[ ! -f "$file" ]]; then
+    printf 'missing file: %s\n' "$file" >&2
+    missing=1
+    return
+  fi
+
+  if grep -Fq -- "$pattern" "$file"; then
+    printf 'forbidden policy marker in %s: %s\n' "$file" "$pattern" >&2
+    missing=1
+  fi
+}
+
+reject_patterns() {
+  local file="$1"
+  local pattern
+
+  while IFS= read -r pattern; do
+    [[ -z "$pattern" ]] && continue
+    reject_pattern "$file" "$pattern"
+  done
+}
+
+reject_pattern_in_files() {
+  local pattern="$1"
+  shift
+
+  local file
+  for file in "$@"; do
+    reject_pattern "$file" "$pattern"
+  done
+}
+
+reject_policy_tree_pattern() {
+  local pattern="$1"
+
+  if grep -FRq -- "$pattern" AGENTS.md skills; then
+    printf 'forbidden policy marker in AGENTS.md or skills/: %s\n' "$pattern" >&2
+    grep -FRn -- "$pattern" AGENTS.md skills >&2
+    missing=1
+  fi
+}
+
+reject_policy_tree_patterns() {
+  local pattern
+
+  while IFS= read -r pattern; do
+    [[ -z "$pattern" ]] && continue
+    reject_policy_tree_pattern "$pattern"
+  done
+}
+
+require_reference() {
+  local source="$1"
+  local reference="$2"
+  local resolved="${source%/*}/$reference"
+
+  if [[ ! -f "$resolved" ]]; then
+    printf 'missing relative reference in %s: %s\n' "$source" "$reference" >&2
+    missing=1
+  fi
+}
+
+# Structural skill metadata validation.
+if ! ruby test/skills/validate; then
+  missing=1
+fi
+
+# Root policy and shared workflow contracts.
+require_patterns AGENTS.md <<'PATTERNS'
+mandatory operating rules, not advisory guidance
+## Local pattern binding
+Re-read the selected skill and identify the governing instruction
+Before any selected skill runs, retries, replaces, or recommends a command
+Make targets in that environment before treating
+90% default minimum and a 95% default for high-risk acceptance
+explicit target may be lower or higher than those defaults
+Do not claim 100% certainty for any repository result
+Back every number with concrete
+current user request explicitly asks for sub-agents
+When sub-agents are authorized
+confidence, throughput, or implementation safety
+Do not offer a local-only
+At the delegation gate, continue locally only when
+current-request sub-agent
+runtime limitation
+as the default next step
+state the blocked delegation
+## Gap workflow
+evidence-backed entries
+ledger is the source of truth
+PREFIX-N[/N...]
+selected skill's `ledger.yaml`
+completed versus
+with agents
+with a goal
+They do not change which skill runs
+## Skill workflow mechanics
+references/long-running-work.md
+When a skill owns the final response
+before adding, reviewing, refactoring, or planning
+cryptic tests that only prove internal call order
+skills/project-workflow/references/agent-init.md
+PATTERNS
+
+reject_patterns AGENTS.md <<'PATTERNS'
+Do not require the human to ask for agents
+Agent judgment is sufficient
+Use sub-agents in that case
+PATTERNS
+
+require_patterns skills/project-workflow/SKILL.md <<'PATTERNS'
+Before editing code, tests, docs, config, scripts, or validation paths, identify the local pattern
+configured command environment
+PATTERNS
+
+reject_pattern AGENTS.md "Compare tool resolution with \`zsh"
+
+require_patterns skills/project-workflow/references/bin-submodule.md <<'PATTERNS'
+Treat the consuming repository's `AGENTS.md` as binding local policy
+Account for platform-specific tool-path setup
+PATTERNS
+
+reject_pattern skills/project-workflow/references/bin-submodule.md "zsh -"
+require_pattern skills/project-workflow/references/agent-init.md "Agent init wiring and sandbox posture"
+
+require_patterns skills/change-validation/references/check-selection.md <<'PATTERNS'
+Before selecting tests, identify the dominant relevant test harness
+Do not add or select an ad hoc language-native test command
+Do not invent direct commands, replace a Makefile target, install alternate tools
+PATTERNS
+
+require_patterns skills/change-validation/SKILL.md <<'PATTERNS'
+Treat validation as valid only for the file state it tested
+configured command environment
+PATTERNS
+
+reject_pattern skills/change-validation/references/check-selection.md "zsh -"
+
+# Testing and language-standard contracts.
+require_patterns skills/testing-standards/SKILL.md <<'PATTERNS'
+## Mandatory Stop Gates
+MUST NOT add language-native tests
+If the human asks to remove, skip, or simplify a test during a behavior
+If the intended red test or scenario passes unexpectedly
+Refactor is a mandatory
+Run a two-pass refactor assessment after first green
+Use a third pass when
+code smells and test smells
+Use the Refactoring Guru catalog categories as checklist prompts
+composing methods, moving features, organizing data
+Use behavior-preserving
+If no cleanup is needed, record `Refactor: none (<reason>)`
+PATTERNS
+
+require_patterns skills/go-standards/SKILL.md <<'PATTERNS'
+Agents MUST NOT add an import alias
+Agents MUST stop and explain before creating Go tests when another harness owns the behavior.
+PATTERNS
+
+require_pattern skills/go-standards/references/conventions.md "Being cautious is not a valid import-alias reason"
+
+# Gap implementation contract markers.
+require_patterns skills/code-issues-implement/SKILL.md <<'PATTERNS'
+Before editing, state the selected local code pattern
+state the issue execution checklist before editing
+`Red`, `Green`, `Refactor`
+Use `Refactor: none (<reason>)`
+**Reproduction:** Smallest supported command
+PATTERNS
+
+require_patterns skills/test-gaps-implement/SKILL.md <<'PATTERNS'
+Before editing, state the selected local test pattern
+state the test execution checklist before editing
+`Red`, `Green`, `Refactor`
+Use `Refactor: none (<reason>)`
+**Reproduction:** Smallest supported command
+PATTERNS
+
+require_patterns skills/doc-gaps-fix/SKILL.md <<'PATTERNS'
+Before editing an unresolved-ledger fix
+**Reproduction:** Smallest reader action
+PATTERNS
+
+require_patterns skills/feature-gaps-implement/SKILL.md <<'PATTERNS'
+Before editing, state the selected local code/config/docs pattern
+state the feature execution checklist before
+Use `Refactor: none (<reason>)`
+`PREFIX-N[/N...]`
+**Reproduction:** Smallest supported user
+PATTERNS
+
+require_patterns skills/project-gaps-implement/SKILL.md <<'PATTERNS'
+Before editing, state the selected local project workflow pattern
+| Implementation home | current repo \| shared bin \| external repo \| mixed |
+state the project execution checklist before editing
+Use `Refactor: none (<reason>)`
+**Reproduction:** Smallest supported maintainer
+PATTERNS
+
+require_patterns skills/reliability-gaps-implement/SKILL.md <<'PATTERNS'
+Before editing, state the selected local code/config/docs pattern
+state the reliability execution checklist before editing
+`Red`, `Green`, `Refactor`
+`Validation` entries
+Use `Refactor: none (<reason>)`
+**Reproduction:** Smallest supported trigger
+PATTERNS
+
+require_pattern skills/project-gaps-find/SKILL.md "If a candidate's implementation home is outside the requested scope"
+for gap_skill in \
+  skills/code-issues-find/SKILL.md \
+  skills/code-issues-implement/SKILL.md \
+  skills/test-gaps-find/SKILL.md \
+  skills/test-gaps-implement/SKILL.md \
+  skills/doc-gaps-audit/SKILL.md \
+  skills/doc-gaps-fix/SKILL.md \
+  skills/feature-gaps-find/SKILL.md \
+  skills/feature-gaps-implement/SKILL.md \
+  skills/project-gaps-find/SKILL.md \
+  skills/project-gaps-implement/SKILL.md \
+  skills/reliability-gaps-find/SKILL.md \
+  skills/reliability-gaps-implement/SKILL.md
+do
+  require_ledger_core "$gap_skill"
+done
+
+# Gap-ledger format contracts.
+for ledger_format in \
+  skills/code-issues-implement/references/ledger-format.md \
+  skills/test-gaps-implement/references/ledger-format.md \
+  skills/doc-gaps-fix/references/ledger-format.md \
+  skills/feature-gaps-implement/references/ledger-format.md \
+  skills/project-gaps-implement/references/ledger-format.md \
+  skills/reliability-gaps-implement/references/ledger-format.md
+do
+  require_ledger_core "$ledger_format"
+  require_patterns "$ledger_format" <<'PATTERNS'
+self-contained
+What -> Why -> How
+Write short, direct sentences
+Source locations support verification; they do not carry the explanation
+line number only when
+active threshold is the explicit request, otherwise 90%
+architecture document
+PATTERNS
+done
+
+# Shared gap-workflow contracts.
+require_patterns skills/references/gap-workflow.md <<'PATTERNS'
+Do not silently downgrade to
+current user
+explicitly asks for sub-agents
+When sub-agents are authorized
+materially improve coverage, confidence, throughput
+independent validation
+current-request sub-agent authorization
+runtime limitation
+Reproduce each candidate before recording it as a confirmed ledger entry
+Record the reproduction path in the candidate and ledger entry
+do not record the candidate as confirmed unless a
+separate supported reproduction path proves it
+supported-usage evidence, and a reproduction path
+without requiring migration
+Make every ledger entry understandable without opening source files
+workflow mechanics and the common session
+## Ledger Contract Resolution
+search the workspace for possible ledgers
+PREFIX-N[/N...]
+ISSUE-1/FEATURE-2
+against that one contract before interpreting it
+PATTERNS
+
+require_patterns skills/references/gap-workflow/implementation.md <<'PATTERNS'
+If the resolved ledger is missing, stop and
+current, confirmed finding
+After each implemented and validated batch item
+Stop the batch before editing
+validated entries separately from the remaining entries
+PATTERNS
+require_patterns skills/references/gap-workflow/find-audit.md <<'PATTERNS'
+../gap-workflow.md
+../gap-lead-generation.md
+PATTERNS
+
+require_patterns skills/references/gap-workflow/implementation.md <<'PATTERNS'
+../gap-workflow.md
+../long-running-work.md
+PATTERNS
+
+require_patterns skills/references/gap-workflow.md <<'PATTERNS'
+| Title | What | Why |
+one short, plain sentence each
+Do not replace this table with bullets or prose
+and do not add columns
+gap-lead-generation.md
+lead inventory
+rejected, routed, deferred, and blocked lead
+PATTERNS
+
+require_reference skills/references/gap-workflow/find-audit.md "../gap-workflow.md"
+require_reference skills/references/gap-workflow/find-audit.md "../gap-lead-generation.md"
+require_reference skills/references/gap-workflow/implementation.md "../gap-workflow.md"
+require_reference skills/references/gap-workflow/implementation.md "../long-running-work.md"
+
+require_patterns skills/references/gap-lead-generation.md <<'PATTERNS'
+## Repository Archetypes
+### Shared Go Library Or Tool
+### gRPC Or HTTP Service
+### Infrastructure Or Docker Repository
+### Ruby Tooling, Gem, Or Static Site
+### Shared `bin` Tooling
+## Lead Accounting
+PATTERNS
+
+reject_patterns skills/references/gap-workflow.md <<'PATTERNS'
+Do not require the user to separately say "use sub-agents" unless
+do not require the human
+Agent judgment is sufficient
+higher-priority runtime policy requires explicit delegation wording
+perform the review locally unless the selected skill explicitly requires delegation
+If sub-agents are unavailable or forbidden by higher-priority policy, perform
+PATTERNS
+
+reject_policy_tree_patterns <<'PATTERNS'
+runtime permits it or local review
+Do not require separate delegation
+Do not require the human to ask for agents
+Agent judgment is sufficient
+higher-priority runtime policy requires
+explicit delegation wording
+perform the work locally unless the selected skill explicitly requires delegation
+If sub-agents are unavailable or forbidden by higher-priority policy, perform
+perform the review locally unless credible completion depends on delegation
+single-agent and compensate
+PATTERNS
+
+# Gap plan contracts.
+# doc-gaps-fix is the documented exception: it finds and fixes in the same
+# pass, so its own plan.md (not doc-gaps-audit's) carries the lead-generation,
+# delegation-gate, and rejected/routed accounting that every other pair keeps
+# in its -find half.
+for plan in \
+  skills/code-issues-find/references/plan.md \
+  skills/doc-gaps-fix/references/plan.md \
+  skills/feature-gaps-find/references/plan.md \
+  skills/project-gaps-find/references/plan.md \
+  skills/reliability-gaps-find/references/plan.md \
+  skills/test-gaps-find/references/plan.md
+do
+  require_patterns "$plan" <<'PATTERNS'
+Apply the shared gap-workflow delegation gate before review work
+ledger.yaml
+../../references/gap-lead-generation.md
+rejected
+routed
+PATTERNS
+done
+
+for plan in \
+  skills/code-issues-find/references/plan.md \
+  skills/code-issues-implement/references/plan.md \
+  skills/doc-gaps-audit/references/plan.md \
+  skills/doc-gaps-fix/references/plan.md \
+  skills/feature-gaps-find/references/plan.md \
+  skills/feature-gaps-implement/references/plan.md \
+  skills/project-gaps-find/references/plan.md \
+  skills/project-gaps-implement/references/plan.md \
+  skills/reliability-gaps-find/references/plan.md \
+  skills/reliability-gaps-implement/references/plan.md \
+  skills/test-gaps-find/references/plan.md \
+  skills/test-gaps-implement/references/plan.md
+do
+  reject_patterns "$plan" <<'PATTERNS'
+Do not require separate delegation wording unless higher-priority runtime policy requires it
+perform the review locally unless credible completion depends on delegation
+requires explicit user delegation authorization
+ask for permission instead of downgrading silently
+PATTERNS
+done
+
+# Agent metadata contracts.
+require_patterns skills/project-workflow/agents/openai.yaml <<'PATTERNS'
+Treat AGENTS.md and selected skills as mandatory rules.
+configured command environment
+PATTERNS
+
+reject_pattern skills/project-workflow/agents/openai.yaml "initialized user-shell"
+
+require_patterns skills/testing-standards/agents/openai.yaml <<'PATTERNS'
+MUST identify the dominant relevant existing test harness before editing
+stop on unexpected green tests
+run a two-pass Refactor assessment
+use a third pass for shared, public
+PATTERNS
+
+require_pattern skills/go-standards/agents/openai.yaml "MUST NOT invent import aliases for readability, caution, brevity, or personal clarity"
+
+require_pattern_in_files "resolve entry ID follow-ups through ledger.yaml" \
+  skills/reliability-gaps-implement/agents/openai.yaml \
+  skills/code-issues-implement/agents/openai.yaml \
+  skills/test-gaps-implement/agents/openai.yaml \
+  skills/doc-gaps-fix/agents/openai.yaml \
+  skills/feature-gaps-implement/agents/openai.yaml \
+  skills/project-gaps-implement/agents/openai.yaml
+
+require_pattern_in_files "apply the shared delegation gate" \
+  skills/code-issues-find/agents/openai.yaml \
+  skills/doc-gaps-audit/agents/openai.yaml \
+  skills/feature-gaps-find/agents/openai.yaml \
+  skills/project-gaps-find/agents/openai.yaml \
+  skills/reliability-gaps-find/agents/openai.yaml \
+  skills/test-gaps-find/agents/openai.yaml
+
+require_pattern_in_files "repo archetype lead generation" \
+  skills/code-issues-find/agents/openai.yaml \
+  skills/doc-gaps-audit/agents/openai.yaml \
+  skills/feature-gaps-find/agents/openai.yaml \
+  skills/project-gaps-find/agents/openai.yaml \
+  skills/reliability-gaps-find/agents/openai.yaml \
+  skills/test-gaps-find/agents/openai.yaml \
+  skills/security-audit/agents/openai.yaml
+
+require_patterns skills/security-audit/references/shared.md <<'PATTERNS'
+Source-To-Sink Review
+../../references/gap-lead-generation.md
+PATTERNS
+
+reject_policy_tree_patterns <<'PATTERNS'
+use local review only when delegation is unavailable, denied, or not needed for confidence
+and $reliability-gaps-find in this repo
+human consent
+standing human
+delegation authorization
+explicit user delegation authorization
+explicit current user authorization
+ask for explicit delegation permission
+Ask for the missing permission
+not ask again based on the requested skill combination
+PATTERNS
+
+reject_pattern_in_files "runtime permits it or local review" \
+  skills/code-issues-find/agents/openai.yaml \
+  skills/code-issues-implement/agents/openai.yaml \
+  skills/doc-gaps-audit/agents/openai.yaml \
+  skills/doc-gaps-fix/agents/openai.yaml \
+  skills/feature-gaps-find/agents/openai.yaml \
+  skills/feature-gaps-implement/agents/openai.yaml \
+  skills/project-gaps-find/agents/openai.yaml \
+  skills/project-gaps-implement/agents/openai.yaml \
+  skills/reliability-gaps-find/agents/openai.yaml \
+  skills/reliability-gaps-implement/agents/openai.yaml \
+  skills/test-gaps-find/agents/openai.yaml \
+  skills/test-gaps-implement/agents/openai.yaml
+require_pattern skills/project-gaps-find/agents/openai.yaml "implementation home as current repo, shared bin, external repo, or mixed"
+
+require_patterns skills/change-validation/agents/openai.yaml <<'PATTERNS'
+file changes make prior validation stale
+configured command environment
+PATTERNS
+
+exit "$missing"
