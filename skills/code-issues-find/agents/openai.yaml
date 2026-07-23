@@ -1,4 +1,4 @@
 interface:
   display_name: "Code Issues Find"
   short_description: "Find scoped code defects and risks"
-  default_prompt: "Use $code-issues-find for scoped bug, security, compatibility, and public-contract findings. Follow repo archetype lead generation, apply the shared delegation gate, summarize ledger entries in a compact Title/What/Why table, resolve entry ID follow-ups through ../code-issues-implement/ledger.yaml, and never edit code — hand confirmed entries to $code-issues-implement."
+  default_prompt: "Use $code-issues-find to find scoped code bugs, security, compatibility, and public-contract issues without editing. After scoping, use repo archetype lead generation, apply the shared delegation gate, and hand confirmed entries to $code-issues-implement."

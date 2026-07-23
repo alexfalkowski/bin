@@ -1,7 +1,8 @@
 # Gap Workflow: Implementation
 
-Read `../gap-workflow.md` first. This reference contains mechanics that apply only
-while implementing a confirmed gap-ledger entry.
+Navigation: `SKILL.md` already requires the complete `../gap-workflow.md` read
+before this reference. These mechanics apply only while implementing a
+confirmed gap-ledger entry.
 
 ## Implement Mechanics
 

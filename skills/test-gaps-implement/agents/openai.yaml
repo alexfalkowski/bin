@@ -1,4 +1,4 @@
 interface:
   display_name: "Test Gaps Implement"
-  short_description: "Implement confirmed test-gap fixes"
-  default_prompt: "Use $test-gaps-implement for a scoped test-gap ledger entry. Re-check the entry against current tests, apply the shared delegation gate, resolve entry ID follow-ups through ledger.yaml, and implement it when the confirmed finding still stands."
+  short_description: "Implement confirmed test coverage gaps"
+  default_prompt: "Use $test-gaps-implement to implement a confirmed test-gap entry only when explicitly requested; explain informational fixes read-only, resolve entry ID follow-ups through ledger.yaml, and use $test-gaps-find to find gaps."

@@ -1,6 +1,6 @@
 ---
 name: reliability-gaps-find
-description: Use when the user asks to find $reliability-gaps-find/reliability gaps in a package or folder, review production readiness, set a confidence closure target such as 95% or 99%, or asks what evidence backs a reliability-gap ledger entry. Find verified reliability, operability, SLO, overload, observability, release-safety, recovery, data-integrity, disaster-readiness, or NALSD gaps and record scoped ledger entries; never edits code. Use $reliability-gaps-implement to act on a confirmed entry.
+description: Find scoped reliability, operability, overload, observability, recovery, and data-integrity gaps without editing; use $reliability-gaps-implement for confirmed entries.
 ---
 
 # Reliability Gaps Find
@@ -11,10 +11,13 @@ records candidates; it never edits code. Use `$reliability-gaps-implement` to
 re-check and implement a specific ledger entry, using the contract in
 `../reliability-gaps-implement/ledger.yaml`.
 
-Before starting, read `../reliability-gaps-implement/ledger.yaml`,
-`references/plan.md`, `../references/gap-workflow.md`, and
-`../references/gap-workflow/find-audit.md`; they own runtime state, ledger,
-delegation, scope, coverage, and confidence gates.
+Before starting, read `../references/gap-workflow.md` completely, then
+`references/plan.md`; they own runtime state, delegation, scope, coverage, and
+confidence gates. Read `references/find-rules.md` when beginning review. Read
+`../references/gap-workflow/find-audit.md` when beginning review mechanics.
+Read `../reliability-gaps-implement/ledger.yaml` only when resolving the
+scoped ledger path or an entry ID, and its ledger format only before
+interpreting, creating, or updating an entry.
 
 ## Operating Stance
 
@@ -43,7 +46,7 @@ instead.
 Follow `references/plan.md` and the find/audit rules in
 `../references/gap-workflow/find-audit.md`.
 
-Read `references/find-rules.md`; those reliability-gap rules remain mandatory.
+Those reliability-gap rules remain mandatory.
 
 ## Ledger Format
 

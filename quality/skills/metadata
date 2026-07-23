@@ -19,6 +19,9 @@ LEDGER_CONTRACT_KEYS = %w[
 ].freeze
 LEDGER_PATH_TEMPLATE = '{scope}/{ledger_filename}'
 BATCH_ID_SYNTAX = 'PREFIX-N[/N...]'
+SKILL_NAME_PATTERN = /\A[a-z0-9]+(?:-[a-z0-9]+)*\z/
+SKILL_NAME_LENGTH = (1..64)
+SKILL_DESCRIPTION_LENGTH = (1..1024)
 REFERENCE_PATTERN = %r{(?<!/)(?:\.\./)*references/[A-Za-z0-9._/-]+\.md(?:#[^\s`)]+)?}
 
 def present_string?(value)
@@ -90,6 +93,9 @@ def valid_skill?(path)
   [
     valid_skill_keys?(data, path),
     valid_required_strings?(data, %w[name description], path),
+    valid_skill_name_length?(data, path),
+    valid_skill_name_format?(data, path),
+    valid_skill_description_length?(data, path),
     valid_skill_name?(data, path)
   ].all?
 end
@@ -120,6 +126,27 @@ def valid_skill_name?(data, path)
   return true if data['name'] == skill_name
 
   report_failure("frontmatter name must match directory in #{path}: #{data['name'].inspect}")
+end
+
+def valid_skill_name_length?(data, path)
+  name = data['name']
+  return true if name.is_a?(String) && SKILL_NAME_LENGTH.cover?(name.length)
+
+  report_failure("frontmatter name must be 1-64 chars in #{path}")
+end
+
+def valid_skill_name_format?(data, path)
+  name = data['name']
+  return true if name.is_a?(String) && SKILL_NAME_PATTERN.match?(name)
+
+  report_failure("frontmatter name must use lowercase alphanumeric segments separated by single hyphens in #{path}")
+end
+
+def valid_skill_description_length?(data, path)
+  description = data['description']
+  return true if description.is_a?(String) && SKILL_DESCRIPTION_LENGTH.cover?(description.length)
+
+  report_failure("frontmatter description must be 1-1024 chars in #{path}")
 end
 
 def valid_markdown_references?(path)

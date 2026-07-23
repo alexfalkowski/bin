@@ -1,4 +1,4 @@
 interface:
   display_name: "Code Issues Implement"
-  short_description: "Implement confirmed code-issue fixes"
-  default_prompt: "Use $code-issues-implement for a scoped code-issue ledger entry. Re-check the entry against current code, apply the shared delegation gate, resolve entry ID follow-ups through ledger.yaml, and implement it when the confirmed finding still stands."
+  short_description: "Implement confirmed code-issue entries"
+  default_prompt: "Use $code-issues-implement to implement a confirmed code issue only when explicitly requested; explain informational fix questions read-only, resolve entry ID follow-ups through ledger.yaml, and use $code-issues-find to find issues."

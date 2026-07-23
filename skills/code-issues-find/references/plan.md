@@ -19,14 +19,16 @@ security/compatibility evidence, and public contract evidence.
    Prefer a read-only agent type when one is available, because Find-mode
    reviewers do not edit. Never leave a sub-agent's model unset; an unset
    model silently inherits the session model.
-3. Read `../../code-issues-implement/ledger.yaml`; use its scoped ledger path
-   and ID prefix.
+3. When resolving a scoped ledger path or entry ID, read
+   `../../code-issues-implement/ledger.yaml`; use its scoped ledger path and ID
+   prefix.
 4. Run `$project-workflow` discovery and the shared audit preflight, including
    applicable tools, service dependencies, validation ladder, and command
    failure classification.
-5. Read `../../references/gap-lead-generation.md`, classify the repository
-   archetype, and build a lead inventory for code, compatibility, security,
-   mapping, generated-contract, and supported-usage risks in scope.
+5. After the repository archetype and audit scope make lead generation
+   relevant, read `../../references/gap-lead-generation.md` and build a lead
+   inventory for code, compatibility, security, mapping, generated-contract,
+   and supported-usage risks in scope.
 6. Inventory tests, public entrypoints, security-sensitive surfaces, supported
    construction/wiring paths, generated/provider mappings, and repository policy
    exclusions relevant to the requested scope.

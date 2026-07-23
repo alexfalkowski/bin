@@ -10,10 +10,12 @@ surface, implementation home, delegation, ledger state, and workflow routing.
 
 1. Follow `../../references/gap-workflow.md#common-plan-mechanics` for shared
    find-mode sequencing. Apply the shared gap-workflow delegation gate before review work.
-2. Read `../../project-gaps-implement/ledger.yaml`; use its scoped ledger path
-   and ID prefix.
-3. Read `../../references/gap-lead-generation.md`, classify the repository
-   archetype, and build a lead inventory for build, CI, release, setup,
+2. When resolving a scoped ledger path or entry ID, read
+   `../../project-gaps-implement/ledger.yaml`; use its scoped ledger path and
+   ID prefix.
+3. After the repository archetype and audit scope make lead generation
+   relevant, read `../../references/gap-lead-generation.md` and build a lead
+   inventory for build, CI, release, setup,
    validation, command-discovery, dependency/tooling, generated-artifact, and
    shared `./bin` workflow surfaces in scope.
 4. Inventory Make targets and fragments, CI jobs, setup flows, validation and

@@ -1,18 +1,23 @@
 ---
 name: feature-gaps-implement
-description: Use when the human asks to work on or asks what the proposal is for a feature-gap ledger entry. Re-check that the confirmed entry still stands, then implement it; named same-prefix batches run sequentially.
+description: Implement a confirmed feature-gap ledger entry when explicitly requested; explain a proposal read-only otherwise. Use $feature-gaps-find to find feature gaps.
 ---
 
 # Feature Gaps Implement
 
-Use this skill to work on an existing feature-gap entry. Re-check that it still
-stands before editing, then implement it. Name an ordered same-prefix batch as
+Use this skill to work on an existing feature-gap entry. An informational
+question about a proposal receives a read-only explanation and does not
+authorize edits. Re-check an entry and implement it only when the human
+explicitly asks for implementation. Name an ordered same-prefix batch as
 `PREFIX-N[/N...]`, using the prefix from `ledger.yaml`. Use
 `$feature-gaps-find` first if no scoped ledger entry exists yet for this scope.
 
-Before starting, read `ledger.yaml`, `references/plan.md`,
-`../references/gap-workflow.md`, and `../references/gap-workflow/implementation.md`;
-they own runtime state, ledger, delegation, scope, and implementation gates.
+Before starting, read `../references/gap-workflow.md` completely, then
+`references/plan.md`; they own runtime state, delegation, scope, and
+implementation gates. Read `ledger.yaml` when resolving the scoped ledger path
+or entry ID, `references/ledger-format.md` only before interpreting, creating,
+or updating an entry, and `../references/gap-workflow/implementation.md` when
+beginning an actual implementation path.
 
 ## Operating Stance
 

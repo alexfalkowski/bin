@@ -1,4 +1,4 @@
 interface:
   display_name: "Feature Gaps Find"
   short_description: "Find product feature opportunities"
-  default_prompt: "Use $feature-gaps-find for scoped product-facing capability opportunities with explicit audience benefit. Follow repo archetype lead generation, apply the shared delegation gate, summarize ledger entries in a compact Title/What/Why table, resolve entry ID follow-ups through ../feature-gaps-implement/ledger.yaml, route test/project gaps elsewhere, and never edit code — hand confirmed entries to $feature-gaps-implement."
+  default_prompt: "Use $feature-gaps-find to find scoped product capability gaps without editing. After scoping, use repo archetype lead generation, apply the shared delegation gate, route test and workflow gaps elsewhere, and hand confirmed entries to $feature-gaps-implement."

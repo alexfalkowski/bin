@@ -1,6 +1,6 @@
 ---
 name: test-gaps-find
-description: Use when the user asks to find $test-gaps-find/test gaps in a package or folder, set a confidence closure target such as 95% or 99% for a test-gap audit, find flaky tests, wrong-layer tests, weak harnesses, or test-support-code gaps, or asks what evidence backs a test-gap ledger entry. Find concrete missing, weak, misleading, flaky, wrong-layer, or brittle coverage and record scoped ledger entries; never edits tests. Use $test-gaps-implement to act on a confirmed entry.
+description: Find scoped missing, weak, flaky, wrong-layer, or brittle test coverage without editing; use $test-gaps-implement for confirmed entries.
 ---
 
 # Test Gaps Find
@@ -11,10 +11,13 @@ candidates; it never edits tests. Use `$test-gaps-implement` to re-check and
 implement a specific ledger entry, using the contract in
 `../test-gaps-implement/ledger.yaml`.
 
-Before starting, read `../test-gaps-implement/ledger.yaml`, `references/plan.md`,
-`../references/gap-workflow.md`, and `../references/gap-workflow/find-audit.md`;
-they own runtime state, ledger, delegation, scope, coverage, and confidence
-gates.
+Before starting, read `../references/gap-workflow.md` completely, then
+`references/plan.md`; they own runtime state, delegation, scope, coverage, and
+confidence gates. Read `references/find-rules.md` when beginning review. Read
+`../references/gap-workflow/find-audit.md` when beginning review mechanics.
+Read `../test-gaps-implement/ledger.yaml` only when resolving the scoped
+ledger path or an entry ID, and its ledger format only before interpreting,
+creating, or updating an entry.
 
 ## Operating Stance
 
@@ -45,7 +48,7 @@ improvements to `$project-gaps-find`.
 Follow `references/plan.md` and the find/audit rules in
 `../references/gap-workflow/find-audit.md`.
 
-Read `references/find-rules.md`; those test-gap rules remain mandatory.
+Those test-gap rules remain mandatory.
 
 ## Ledger Format
 
