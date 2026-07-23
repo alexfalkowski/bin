@@ -1,6 +1,6 @@
 ---
 name: change-validation
-description: Use when running or selecting validation after code, docs, Makefile, shell, Dockerfile, Go, Ruby, generated-output, CI, security, benchmark, or shared ./bin changes. Choose and report credible repository-defined checks.
+description: Use when a user asks how to verify a change, choose tests or lint checks, reproduce CI locally, or decide whether code, documentation, build, security, or shared-tooling work is ready. Select and report the smallest credible repository-defined validation.
 ---
 
 # Change Validation

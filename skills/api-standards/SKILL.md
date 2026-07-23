@@ -1,6 +1,6 @@
 ---
 name: api-standards
-description: Use when designing, reviewing, documenting, or changing API surfaces in repos that use this shared ./bin tooling, especially gRPC, Protocol Buffer, HTTP transcoding, REST, HTTP/JSON, generated clients, public request/response schemas, Go API handlers, Ruby API clients, and compatibility-sensitive API changes. Apply Google Cloud API Design Guide and Google AIP guidance as the default API design bar; apply REST best practices when the API is REST-oriented or exposes direct HTTP resources.
+description: Use when designing, reviewing, documenting, or changing an API contract in a repository using this shared tooling, including adding an endpoint or RPC, changing a request/response schema or client interface, or preserving API compatibility. Apply Google Cloud API Design Guide and Google AIP guidance by default; apply REST best practices to direct HTTP resources.
 ---
 
 # API Standards
