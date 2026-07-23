@@ -2,11 +2,11 @@
 
 BIN_ROOT ?= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))../..)
 
-USER:=$(shell ruby -e 'require "etc"; print Etc.getpwuid(Process.uid).name, "-", Random.rand(100_000)')
+USER:=$(shell $(BIN_ROOT)/build/git/user)
 BRANCH:=$(shell git branch --show-current)
 export BRANCH
 NEW_BRANCH:=$(subst $() ,-,$(name))
-PREFIX:=$(shell ruby -e '_, t, n = (ENV["BRANCH"] || "").split("/"); print "%s(%s):" % [t, n] unless t.nil?')
+PREFIX:=$(shell $(BIN_ROOT)/build/git/prefix)
 export PREFIX
 
 override export msg := $(value msg)

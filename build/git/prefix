@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+_, type, name = (ENV['BRANCH'] || '').split('/')
+
+print format('%<type>s(%<name>s):', type: type, name: name) unless type.nil?
