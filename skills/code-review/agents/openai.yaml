@@ -1,4 +1,4 @@
 interface:
   display_name: "Code Review"
-  short_description: "Review diffs for bugs and regressions"
-  default_prompt: "Use $code-review for a general bug, regression, missing-coverage, documentation, naming, and language-idiom risk review; pair docs judgment with $doc-standards and security-sensitive scope with $security-audit. Inventory changed README, doc, and example files alongside code, apply $doc-standards to any of them as a MUST rather than an optional pairing, and always report doc-staleness status in the Documentation output section even when no doc update was needed. Before reporting a finding, challenge confidence with the strongest reasonable counterquestion and confirm supported usage plus correct ownership. Route third-party/tooling defects to $project-gaps-find and project-owned upstream library bugs to that library's agent or ledger unless local adapter behavior is independently wrong. Flag unnecessary defensive complexity or abstraction only when it creates concrete maintenance risk without a supported failure mode, domain concept, boundary, compatibility need, or local pattern."
+  short_description: "Review changes for risks and regressions"
+  default_prompt: "Use $code-review to review this diff, branch, or PR for evidence-backed bugs, regressions, compatibility risks, test or documentation gaps, and maintainability concerns."

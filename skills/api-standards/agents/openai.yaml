@@ -1,4 +1,4 @@
 interface:
   display_name: "API Standards"
-  short_description: "Design gRPC and REST APIs consistently"
-  default_prompt: "Use $api-standards when designing, reviewing, or changing gRPC, Protocol Buffer, REST, HTTP/JSON, Go, or Ruby API surfaces; apply Google Cloud API design guidance first and REST-specific best practices when the API is REST-oriented."
+  short_description: "Design and review API contracts"
+  default_prompt: "Use $api-standards to design or review an API contract, including an endpoint or RPC, schema, client interface, or compatibility change."

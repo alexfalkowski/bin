@@ -1,6 +1,6 @@
 ---
 name: repo-health
-description: Use when the user asks for repo health, repository health report, delivery health report, weekly or daily engineering metrics, repo health comparison, service health summary, library maintenance summary, or period-over-period view for a specific GitHub repository. Produce daily or weekly summaries across delivery flow, CI quality, release/deploy activity, and service reliability using local git, GitHub, CircleCI, Kubernetes/DigitalOcean, and UptimeRobot evidence.
+description: Use when a user asks for a daily or weekly engineering, project, service, library, or repository health report; a delivery or reliability trend; or a period-over-period comparison for a GitHub repository. Summarize delivery flow, CI quality, release/deploy activity, and service reliability from available evidence.
 ---
 
 # Repo Health

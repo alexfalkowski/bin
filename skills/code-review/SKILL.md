@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: Use when the user asks for a general code review, diff review, PR check, or pre-merge issue pass. Review changed code for bugs, regressions, risky assumptions, missing tests, compatibility breaks, missing or stale documentation, and language-specific maintainability or idiom risks; pair documentation judgment with $doc-standards and delegate explicit security scope to $security-audit.
+description: Use when a user asks to review a diff, branch, PR, or pending change before merging. Find evidence-backed bugs, regressions, compatibility risks, test or documentation gaps, and maintainability concerns; use $style-review for non-blocking polish and $security-audit for explicit security review.
 ---
 
 # Code Review

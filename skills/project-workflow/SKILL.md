@@ -1,6 +1,6 @@
 ---
 name: project-workflow
-description: Use when starting in a project, inspecting how to run tasks, deciding trusted entrypoints, or editing/debugging shared Makefile fragments. Discover project-local workflow, command surfaces, CI expectations, shared ./bin submodule wiring, and reusable build/make/*.mak fragment behavior before work begins.
+description: Use when you need to discover how a repository is built, tested, linted, released, or configured; when choosing a supported command; or before changing shared Makefile tooling. Identify project commands, CI expectations, local patterns, and downstream ./bin behavior.
 ---
 
 # Project Workflow

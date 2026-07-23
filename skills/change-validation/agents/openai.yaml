@@ -1,4 +1,4 @@
 interface:
   display_name: "Change Validation"
-  short_description: "Choose tests, lint, and CI checks"
-  default_prompt: "Use $change-validation to choose and report validation for this change. Prefer repository-defined commands in the configured command environment, run supported area/package/file/scenario/example/test-name selectors before broad suites, classify failures before retrying, never replace a failed repo command with an ad hoc command merely to make progress, detect no-op wrappers, report tool/PATH mismatches as gaps, and rerun checks when file changes make prior validation stale."
+  short_description: "Verify changes with trusted checks"
+  default_prompt: "Use $change-validation to verify this change with the narrowest credible repository-defined test, lint, CI, or security check in the configured command environment; rerun checks when file changes make prior validation stale."
