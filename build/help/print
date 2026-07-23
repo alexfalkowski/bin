@@ -1,0 +1,42 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+GREEN = "\e[32m"
+CYAN = "\e[36m"
+RESET = "\e[0m"
+
+# Matches "# comment" line(s) immediately followed by a "target:" line, e.g.
+#   # Run the tests.
+#   test:
+COMMAND_PATTERN = /((?:^# .+\n)+)^([^:]+):/
+
+# Highlight `code` spans within a comment.
+def highlight_code(text)
+  text.gsub(/`.+?`/) { |code| "#{CYAN}#{code}#{RESET}" }
+end
+
+# Drop the leading "# " comment marker and trailing newline; the marker
+# documents the source, not the reader, and the newline is re-added when the
+# line is placed in the help output.
+def strip_marker(line)
+  line.sub(/\A#\s?/, '').chomp
+end
+
+# Render one "# comment(s)\ntarget:" match as an aligned, colorized help line.
+def format_command(comments, command, column_width)
+  summary, *details = comments.lines.map { |line| strip_marker(line) }
+  wrapped_details = details.map { |line| "\n #{' ' * column_width}#{line}" }.join
+
+  highlight_code("\n #{GREEN}#{command.ljust(column_width)}#{RESET}#{summary}#{wrapped_details}")
+end
+
+input = $stdin.read
+matches = input.scan(COMMAND_PATTERN)
+
+# Column width for aligning command names: the longest command name plus one
+# space, so the comment column starts right after it.
+column_width = matches.map { |_, command| command.size }.max + 1
+
+commands = matches.map { |comments, command| format_command(comments, command, column_width) }
+
+puts "\nUsage: make #{GREEN}<command>#{RESET} [arg1=value1] [arg2=value2]\n\nCommands:\n", commands, ''

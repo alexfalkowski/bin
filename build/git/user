@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'etc'
+
+print Etc.getpwuid(Process.uid).name, '-', Random.rand(100_000)
