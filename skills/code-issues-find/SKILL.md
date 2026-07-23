@@ -1,6 +1,6 @@
 ---
 name: code-issues-find
-description: Use when the user asks to find $code-issues-find/code issues in a package or folder, set a confidence closure target such as 95% or 99% for a code-issue audit, or asks what evidence backs a code-issue ledger entry. Find concrete bugs, security issues, compatibility breaks, and public contract violations and record scoped ledger entries; never edits code. Use $code-issues-implement to act on a confirmed entry.
+description: Find scoped code bugs, security issues, compatibility breaks, and public-contract violations without editing; use $code-issues-implement to implement a confirmed entry.
 ---
 
 # Code Issues Find
@@ -11,10 +11,13 @@ candidates; it never edits code. Use `$code-issues-implement` to re-check and
 implement a specific ledger entry, using the contract in
 `../code-issues-implement/ledger.yaml`.
 
-Before starting, read `../code-issues-implement/ledger.yaml`, `references/plan.md`,
-`../references/gap-workflow.md`, and `../references/gap-workflow/find-audit.md`;
-they own runtime state, ledger, delegation, scope, coverage, and confidence
-gates.
+Before starting, read `../references/gap-workflow.md` completely, then
+`references/plan.md`; they own runtime state, delegation, scope, coverage, and
+confidence gates. Read `references/find-rules.md` when beginning review. Read
+`../references/gap-workflow/find-audit.md` when beginning review mechanics.
+Read `../code-issues-implement/ledger.yaml` only when resolving the scoped
+ledger path or an entry ID, and its ledger format only before interpreting,
+creating, or updating an entry.
 
 ## Operating Stance
 
@@ -34,7 +37,7 @@ while prose disagrees, treat it as a documentation gap and route it to
 Follow `references/plan.md` and the find/audit rules in
 `../references/gap-workflow/find-audit.md`.
 
-Read `references/find-rules.md`; those code-issue rules remain mandatory.
+Those code-issue rules remain mandatory.
 
 ## Ledger Format
 

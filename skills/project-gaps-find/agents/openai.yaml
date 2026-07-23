@@ -1,4 +1,4 @@
 interface:
   display_name: "Project Gaps Find"
   short_description: "Find scoped project workflow gaps"
-  default_prompt: "Use $project-gaps-find for scoped build, CI, Makefile, release, setup, dependency, validation, and workflow gaps. Follow repo archetype lead generation, apply the shared delegation gate, summarize ledger entries in a compact Title/What/Why table, classify implementation home as current repo, shared bin, external repo, or mixed, resolve entry ID follow-ups through ../project-gaps-implement/ledger.yaml, and never edit files — hand confirmed entries to $project-gaps-implement."
+  default_prompt: "Use $project-gaps-find to find scoped build, CI, Makefile, release, setup, validation, and workflow gaps without edits. After scoping, use repo archetype lead generation, apply the shared delegation gate, classify implementation home as current repo, shared bin, external repo, or mixed, and hand confirmed entries to $project-gaps-implement."

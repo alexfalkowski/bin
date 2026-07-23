@@ -1,6 +1,6 @@
 ---
 name: doc-gaps-fix
-description: Use when the user asks to run $doc-gaps-fix, find/fix doc gaps in a package or folder, or fix doc gaps in a package or folder. Find and fix concrete missing, weak, stale, or misleading README, docs, examples, command help, package docs, public API comments, code comments, and docstrings in the same pass. Use $doc-gaps-audit instead when the user explicitly asks not to edit or asks only for an audit or ledger.
+description: Find and fix scoped documentation gaps when edits are requested; use $doc-gaps-audit for an audit-only or no-edit pass.
 ---
 
 # Doc Gaps Fix
@@ -11,12 +11,15 @@ and fixes documentation gaps in the same pass — it is the only skill in this
 pair that edits. Use `$doc-gaps-audit` instead when the user explicitly asks
 not to edit or asks only for an audit or ledger.
 
-Before starting, read `ledger.yaml`, `references/plan.md`, and
-`../references/gap-workflow.md`; they own runtime state, ledger, delegation,
-scope, coverage, and confidence gates. Also read
-`../references/gap-workflow/find-audit.md` for the find/review mechanics and
-`../references/gap-workflow/implementation.md` for fixing an existing
-unresolved ledger entry.
+Before starting, read `../references/gap-workflow.md` completely, then
+`references/plan.md`; they own runtime state, delegation, scope, coverage, and
+confidence gates. Read `references/fix-rules.md` and
+`../references/gap-workflow/find-audit.md` when beginning review. Read
+`ledger.yaml` when resolving the scoped ledger path or entry ID, and
+`references/ledger-format.md` only before interpreting, creating, or updating
+an entry. Read `../references/gap-workflow/implementation.md` only for an
+actual unresolved-ledger fix; a simple new documentation correction does not
+need that reference.
 
 To revisit an unresolved scoped entry, invoke this skill with its ID. Re-check
 that it still stands before editing, then fix it. Name an ordered same-prefix batch as `PREFIX-N[/N...]`, using the prefix from `ledger.yaml`.
@@ -38,7 +41,7 @@ the repository implements.
 Follow `references/plan.md` and the find/audit rules in
 `../references/gap-workflow/find-audit.md`.
 
-Read `references/fix-rules.md`; those doc-gap rules remain mandatory. Before
+Those doc-gap rules remain mandatory. Before
 editing, state the selected local documentation pattern, dominant relevant
 validation path, planned validation command, and any deviation from
 `AGENTS.md` or selected skills.

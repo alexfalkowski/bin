@@ -1,7 +1,8 @@
 # Gap Workflow: Find And Audit
 
-Read `../gap-workflow.md` first. This reference contains mechanics that apply only
-while finding, auditing, or running a skill's one-pass mode.
+Navigation: `SKILL.md` already requires the complete `../gap-workflow.md` read
+before this reference. These mechanics apply only while finding, auditing, or
+running a skill's one-pass mode.
 
 ## Review Mechanics
 
@@ -14,9 +15,10 @@ For find, audit-only, and one-pass modes:
    or ambiguous active work.
 3. Run `$project-workflow` discovery for entrypoints, CI, documented commands,
    relevant public surfaces, and `./bin` wiring.
-4. Use the selected plan and `../gap-lead-generation.md` to build a recursive
-   inventory and bounded review slices. Use depth only as a discovery aid, not
-   as the review boundary.
+4. Build a recursive inventory and bounded review slices from the selected
+   plan. After the repository archetype and audit scope make it relevant, read
+   `../gap-lead-generation.md` to build the lead inventory. Use depth only as
+   a discovery aid, not as the review boundary.
 5. For broad scopes, prioritize high-risk or high-value slices and record
    `deep`, `skimmed`, `excluded`, and `deferred` coverage with exact follow-up
    scopes. A confidence closure audit may close only when every relevant slice
@@ -111,9 +113,8 @@ For find, audit-only, and one-pass modes:
   Do not pass intended conclusions, rejected-lead rationale, or proposed
   confidence numbers to the adversarial reviewer unless the validation task
   specifically requires that context.
-- Use `../finding-severity.md` to discard low-confidence candidates before
-  assigning severity or confidence. Build a lead inventory with the selected
-  plan and `../gap-lead-generation.md`; it is a recall aid and never lowers
+- Read `../finding-severity.md` only when filtering or assigning a candidate's
+  confidence or severity. The lead inventory is a recall aid and never lowers
   ownership, reproduction, validation, confidence, or implementation gates.
 - Treat comparable repositories, local checkout mappings, sibling repositories,
   and external frameworks as lead generation only. Reproduce any candidate

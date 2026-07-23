@@ -11,11 +11,13 @@ documentation surface.
 
 1. Follow `../../references/gap-workflow.md#common-plan-mechanics` for shared
    sequencing. Apply the shared gap-workflow delegation gate before review work.
-2. Read `../ledger.yaml`, then read the resolved scoped ledger when it is a
-   doc-gap ledger; stop if the file is unrelated or ambiguous active work. Use
-   its ID prefix for unresolved gaps.
-3. Read `../../references/gap-lead-generation.md`, classify the repository
-   archetype, and build a lead inventory for README, examples, command help,
+2. When resolving an existing scoped ledger or entry ID, read `../ledger.yaml`,
+   then read the resolved scoped ledger when it is a doc-gap ledger; stop if
+   the file is unrelated or ambiguous active work. Use its ID prefix for
+   unresolved gaps.
+3. After the repository archetype and audit scope make lead generation
+   relevant, read `../../references/gap-lead-generation.md` and build a lead
+   inventory for README, examples, command help,
    package docs, API comments, config docs, operational docs, generated-schema
    docs, and first-use workflows in scope.
 4. Inventory documentation locations, examples, command help, package docs,

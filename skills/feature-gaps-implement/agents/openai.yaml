@@ -1,4 +1,4 @@
 interface:
   display_name: "Feature Gaps Implement"
   short_description: "Implement confirmed feature proposals"
-  default_prompt: "Use $feature-gaps-implement for a scoped feature-gap ledger entry. Re-check the entry against current code, apply the shared delegation gate, resolve entry ID follow-ups through ledger.yaml, and implement it when the confirmed finding still stands."
+  default_prompt: "Use $feature-gaps-implement to implement a confirmed feature entry only when explicitly requested; explain informational proposals read-only, resolve entry ID follow-ups through ledger.yaml, and use $feature-gaps-find to find gaps."

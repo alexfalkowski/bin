@@ -1,4 +1,4 @@
 interface:
   display_name: "Reliability Gaps Implement"
-  short_description: "Implement confirmed reliability fixes"
-  default_prompt: "Use $reliability-gaps-implement for a scoped reliability-gap ledger entry. Re-check the entry against current code, apply the shared delegation gate, resolve entry ID follow-ups through ledger.yaml, and implement it when the confirmed finding still stands."
+  short_description: "Implement confirmed reliability findings"
+  default_prompt: "Use $reliability-gaps-implement to implement a confirmed reliability entry only when explicitly requested; explain informational fixes read-only, resolve entry ID follow-ups through ledger.yaml, and use $reliability-gaps-find to find gaps."

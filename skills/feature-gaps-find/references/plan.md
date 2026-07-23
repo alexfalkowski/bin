@@ -10,10 +10,12 @@ delegation, external research, ledger state, and workflow routing.
 
 1. Follow `../../references/gap-workflow.md#common-plan-mechanics` for shared
    find-mode sequencing. Apply the shared gap-workflow delegation gate before review work.
-2. Read `../../feature-gaps-implement/ledger.yaml`; use its scoped ledger path
-   and ID prefix.
-3. Read `../../references/gap-lead-generation.md`, classify the repository
-   archetype, and build a lead inventory for product-facing capabilities,
+2. When resolving a scoped ledger path or entry ID, read
+   `../../feature-gaps-implement/ledger.yaml`; use its scoped ledger path and
+   ID prefix.
+3. After the repository archetype and audit scope make lead generation
+   relevant, read `../../references/gap-lead-generation.md` and build a lead
+   inventory for product-facing capabilities,
    package-consumer workflows, service-author workflows, operator surfaces, and
    shared-tooling capability when applicable.
 4. Inventory product-owned CLIs, APIs, libraries, service/operator behavior,

@@ -1,19 +1,24 @@
 ---
 name: reliability-gaps-implement
-description: Use when the human asks to work on or asks what the fix is for a reliability-gap ledger entry. Re-check that the confirmed entry still stands, then implement it; named same-prefix batches run sequentially.
+description: Implement a confirmed reliability-gap ledger entry when explicitly requested; explain a fix proposal read-only otherwise. Use $reliability-gaps-find to find reliability gaps.
 ---
 
 # Reliability Gaps Implement
 
-Use this skill to work on an existing reliability-gap entry. Re-check that it
-still stands before editing, then implement it. Name an ordered same-prefix
-batch as `PREFIX-N[/N...]`, using the prefix from `ledger.yaml`. Use
+Use this skill to work on an existing reliability-gap entry. An informational
+question about a fix receives a read-only explanation and does not authorize
+edits. Re-check an entry and implement it only when the human explicitly asks
+for implementation. A named same-prefix batch uses `PREFIX-N[/N...]`, using
+the prefix from `ledger.yaml`. Use
 `$reliability-gaps-find` first if no scoped ledger entry exists yet for this
 scope.
 
-Before starting, read `ledger.yaml`, `references/plan.md`,
-`../references/gap-workflow.md`, and `../references/gap-workflow/implementation.md`;
-they own runtime state, ledger, delegation, scope, and implementation gates.
+Before starting, read `../references/gap-workflow.md` completely, then
+`references/plan.md`; they own runtime state, delegation, scope, and
+implementation gates. Read `ledger.yaml` when resolving the scoped ledger path
+or entry ID, `references/ledger-format.md` only before interpreting, creating,
+or updating an entry, and `../references/gap-workflow/implementation.md` when
+beginning an actual implementation path.
 
 ## Operating Stance
 
@@ -33,8 +38,9 @@ non-prose evidence supports the implementation, explain that the ledger item
 is invalid as a reliability gap and propose reclassifying or fixing
 documentation instead.
 
-Follow `references/plan.md` and the implementation rules in
-`../references/gap-workflow/implementation.md`.
+Follow `references/plan.md`. For an actual implementation path, also follow
+the implementation rules in `../references/gap-workflow/implementation.md`;
+an informational explanation remains read-only.
 
 These reliability implementation rules remain mandatory:
 

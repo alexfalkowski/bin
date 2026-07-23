@@ -1,6 +1,6 @@
 ---
 name: project-gaps-find
-description: Use when the user asks to find $project-gaps-find/project gaps in a package or folder, set a confidence closure target such as 95% or 99%, find build, CI, Makefile, release, setup, validation, command discovery, or repository workflow gaps, or asks what evidence backs a project-gap ledger entry. Find concrete repository workflow and project plumbing improvements and record scoped ledger entries; never edits files. Use $project-gaps-implement to act on a confirmed entry.
+description: Find scoped build, CI, Makefile, release, setup, validation, command-discovery, and workflow gaps without edits; use $project-gaps-implement for confirmed entries.
 ---
 
 # Project Gaps Find
@@ -11,10 +11,14 @@ records candidates; it never edits files. Use `$project-gaps-implement` to
 re-check and implement a specific ledger entry, using the contract in
 `../project-gaps-implement/ledger.yaml`.
 
-Before starting, read `../project-gaps-implement/ledger.yaml`,
-`references/plan.md`, `../references/gap-workflow.md`, and
-`../references/gap-workflow/find-audit.md`; they own runtime state, ledger,
-delegation, scope, coverage, and confidence gates.
+Before starting, read `../references/gap-workflow.md` completely, then
+`references/plan.md`; they own runtime state, delegation, scope, coverage, and
+confidence gates. Read `references/find-rules.md` when beginning review and
+`references/acceptance-gate.md` before recording a candidate. Read
+`../references/gap-workflow/find-audit.md` when beginning review mechanics.
+Read `../project-gaps-implement/ledger.yaml` only when resolving the scoped
+ledger path or an entry ID, and its ledger format only before interpreting,
+creating, or updating an entry.
 
 ## Operating Stance
 
@@ -49,7 +53,7 @@ Otherwise gather more evidence or reject the proposal.
 Follow `references/plan.md` and the find/audit rules in
 `../references/gap-workflow/find-audit.md`.
 
-Read `references/find-rules.md`; those project-gap rules remain mandatory.
+Those project-gap rules remain mandatory.
 
 If a candidate's implementation home is outside the requested scope, route it
 according to `references/find-rules.md` instead of recording it as a normal

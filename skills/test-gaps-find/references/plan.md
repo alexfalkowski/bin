@@ -10,10 +10,12 @@ surface, delegation, ledger state, and repository-owned behavior.
 
 1. Follow `../../references/gap-workflow.md#common-plan-mechanics` for shared
    find-mode sequencing. Apply the shared gap-workflow delegation gate before review work.
-2. Read `../../test-gaps-implement/ledger.yaml`; use its scoped ledger path
-   and ID prefix.
-3. Read `../../references/gap-lead-generation.md`, classify the repository
-   archetype, and build a lead inventory for public behavior, dominant harness,
+2. When resolving a scoped ledger path or entry ID, read
+   `../../test-gaps-implement/ledger.yaml`; use its scoped ledger path and ID
+   prefix.
+3. After the repository archetype and audit scope make lead generation
+   relevant, read `../../references/gap-lead-generation.md` and build a lead
+   inventory for public behavior, dominant harness,
    fixtures, generated stubs, service-feature coverage, failure paths,
    determinism, and harness support in scope.
 4. Inventory existing tests, fixtures, helpers, test-support code, dominant

@@ -10,13 +10,15 @@ delegation, ledger state, operational expectation, and failure-mode evidence.
 
 1. Follow `../../references/gap-workflow.md#common-plan-mechanics` for shared
    find-mode sequencing. Apply the shared gap-workflow delegation gate before review work.
-2. Read `../../reliability-gaps-implement/ledger.yaml`; use its scoped ledger
-   path and ID prefix.
+2. When resolving a scoped ledger path or entry ID, read
+   `../../reliability-gaps-implement/ledger.yaml`; use its scoped ledger path
+   and ID prefix.
 3. Run `$project-workflow` discovery and the shared audit preflight, including
    applicable tools, service dependencies, validation ladder, and command
    failure classification.
-4. Read `../../references/gap-lead-generation.md`, classify the repository
-   archetype, and build a lead inventory for operational, overload, lifecycle,
+4. After the repository archetype and audit scope make lead generation
+   relevant, read `../../references/gap-lead-generation.md` and build a lead
+   inventory for operational, overload, lifecycle,
    release-safety, observability, recovery, data-integrity, and operator
    diagnostic risks in scope.
 5. Inventory services, APIs, CLIs, jobs, scripts, deployment/config,

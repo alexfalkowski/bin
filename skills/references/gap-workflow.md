@@ -99,24 +99,23 @@ questions, and implementation pairings.
 
 ## Mode-Specific References
 
-- Before Find, one-pass, or audit-only work, also read
+- When beginning review mechanics for find, one-pass, or audit-only work, read
   `gap-workflow/find-audit.md`. It owns inventory, validation, candidate
   handling, coverage accounting, and closeout outcomes.
-- Before Implement work, also read `gap-workflow/implementation.md`. It owns
-  ledger re-checks, implementation sequencing, and fresh
-  review.
-
-Use `gap-lead-generation.md` during find, audit-only, and one-pass modes to
-classify repository archetypes, build a lead inventory, use comparable
-repositories or framework checklists when useful, and account for confirmed,
-rejected, routed, deferred, and blocked leads.
+- When beginning an actual implementation path or unresolved-ledger fix, read
+  `gap-workflow/implementation.md`. It owns ledger re-checks, implementation
+  sequencing, and fresh review.
+- After the repository archetype and audit scope make lead generation relevant,
+  read `gap-lead-generation.md` to build a lead inventory and account for
+  confirmed, rejected, routed, deferred, and blocked leads.
 
 ## Scoped Ledgers
 
-- Before creating or updating a scoped ledger, read the selected skill's
-  `ledger.yaml`; ensure the consuming repository root `.gitignore` exists and
-  contains its `ledger_filename` as a standalone
-  pattern. Checking or reading an existing ledger must not modify `.gitignore`.
+- Before resolving a scoped ledger path or entry ID, read the selected skill's
+  `ledger.yaml`. Before creating or updating a scoped ledger, ensure the
+  consuming repository root `.gitignore` exists and contains its
+  `ledger_filename` as a standalone pattern. Checking or reading an existing
+  ledger must not modify `.gitignore`.
 - Use the exact path resolved from the selected skill's `ledger.yaml` and the
   requested scope.
 - In find or audit-only modes, stop when an existing scoped ledger blocks review

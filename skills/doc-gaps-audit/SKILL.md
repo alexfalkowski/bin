@@ -1,6 +1,6 @@
 ---
 name: doc-gaps-audit
-description: Use when the user explicitly asks for $doc-gaps-audit, an audit-only documentation-gap pass, or to find doc gaps in a package or folder without editing. Find and record concrete missing, weak, stale, or misleading README, docs, examples, command help, package docs, public API comments, code comments, and docstrings as scoped ledger entries; never edits documentation. Use $doc-gaps-fix instead for the default find-and-fix pass.
+description: Audit scoped documentation for concrete gaps without editing; use $doc-gaps-fix to find and fix documentation gaps.
 ---
 
 # Doc Gaps Audit
@@ -10,10 +10,13 @@ Trigger phrases: `Audit-only $doc-gaps-audit in PACKAGE_OR_FOLDER` or
 discovers and records candidates; it never edits documentation. Use
 `$doc-gaps-fix` for the default find-and-fix pass.
 
-Before starting, read `../doc-gaps-fix/ledger.yaml`, `references/plan.md`,
-`../references/gap-workflow.md`, and `../references/gap-workflow/find-audit.md`;
-they own runtime state, ledger, delegation, scope, coverage, and confidence
-gates.
+Before starting, read `../references/gap-workflow.md` completely, then
+`references/plan.md`; they own runtime state, delegation, scope, coverage, and
+confidence gates. Read `references/audit-rules.md` when beginning review.
+Read `../references/gap-workflow/find-audit.md` when beginning review
+mechanics. Read `../doc-gaps-fix/ledger.yaml` only when resolving the scoped
+ledger path or an entry ID, and its ledger format only before interpreting,
+creating, or updating an entry.
 
 ## Operating Stance
 
@@ -31,7 +34,7 @@ correct the documentation.
 Follow `references/plan.md` and the find/audit rules in
 `../references/gap-workflow/find-audit.md`.
 
-Read `references/audit-rules.md`; those doc-gap rules remain mandatory.
+Those doc-gap rules remain mandatory.
 
 ## Documentation Review Standards
 

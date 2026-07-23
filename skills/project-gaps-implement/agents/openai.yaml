@@ -1,4 +1,4 @@
 interface:
   display_name: "Project Gaps Implement"
-  short_description: "Implement confirmed project-gap fixes"
-  default_prompt: "Use $project-gaps-implement for a scoped project-gap ledger entry. Re-check the entry against current Makefiles and CI, apply the shared delegation gate, resolve entry ID follow-ups through ledger.yaml, and implement it when the confirmed finding still stands."
+  short_description: "Implement confirmed project workflow gaps"
+  default_prompt: "Use $project-gaps-implement to implement a confirmed project workflow entry only when explicitly requested; explain informational fixes read-only, resolve entry ID follow-ups through ledger.yaml, and use $project-gaps-find to find gaps."
