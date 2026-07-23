@@ -1,6 +1,9 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+# Validates skill frontmatter, agent metadata, gap-pair wiring, and ledger
+# contract markdown references across skills/.
+
 require 'yaml'
 
 GAP_PAIRS = [

@@ -303,8 +303,9 @@ Do not infer the test language from the implementation language alone.
 ## Local contracts
 
 - Public shared surfaces live in `build/make/`, `build/docker/`, `build/go/`,
-  `build/git/`, `build/sec/`, `build/claude/`, `quality/`, and `skills/`;
-  inspect the relevant files before editing.
+  `build/git/`, `build/sec/`, `build/shell/`, `build/claude/`, `build/codex/`,
+  `build/test/`, `lib/`, `quality/`, and `skills/`; inspect the relevant files
+  before editing.
 - Preserve formatting from `.editorconfig`, Ruby settings from `.rubocop.yml`,
   and nearby Bash/Ruby style. Do not duplicate those config files here.
 - Make fragments derive `BIN_ROOT` from their include location. For path-related
@@ -313,8 +314,9 @@ Do not infer the test language from the implementation language alone.
 - `build/docker/env` clones or updates `git@github.com:alexfalkowski/docker.git`
   in sibling `../docker`; `make start` and `make stop` paths can require SSH and
   network access.
-- `quality/go/*` helpers read and write under `test/reports/`; preserve that
-  downstream test-report contract.
+- `quality/go/*` coverage and benchmark-profile helpers read and write under
+  `test/reports/`; preserve that downstream test-report contract.
+  `quality/go/create-diagram` is the exception and writes to `assets/` instead.
 - `build/go/lint` is a no-op unless `golangci-lint` exists in `PATH`; do not
   report full lint coverage unless the binary ran.
 - `master` is the canonical branch in this repo and shared fragments. Hardcoded
@@ -350,6 +352,7 @@ Do not infer the test language from the implementation language alone.
 - Treat skills as maintained artifacts and review them when project workflow,
   tooling, model behavior, or team conventions change.
 - Treat external skills like third-party dependencies. Use `security-audit` with
-  `skills/references/skills.md` for skill-specific security review.
+  `skills/security-audit/references/skills.md` for skill-specific security
+  review.
 - After edits, run the narrowest repository-defined checks that cover the
   changed files, then expand to CI-equivalent targets when risk justifies it.
