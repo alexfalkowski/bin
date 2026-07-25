@@ -162,15 +162,18 @@ sandbox, and routes direct Bash commands through the `permissions` allow, ask,
 and deny guardrails. Direct Bash is broadly allowed without prompting while it
 remains sandboxed; project-local operations stay autonomous, recognized remote
 and external-system changes require approval, and catastrophic commands are
-forbidden. The unsandboxed escape hatch is disabled. The sandbox grants the
-standard Go, RuboCop, golangci-lint, and Trivy cache writes used by project
-commands, plus standard system temporary directories. Every `make` invocation
-is excluded from the sandbox and allowed without prompting, except `make pr`,
-`make draft`, `make merge`, `make ready`, and `make review`, which require
-approval because they create, merge, or force-push a pull request. Built-in
-file edits stay scoped to the workspace, and the active agent configuration
-provides runtime approval guardrails while `AGENTS.md` defines task scope and
-workflow authorization.
+forbidden. The unsandboxed escape hatch is disabled. The sandbox grants write
+access to the workspace, the standard Go, RuboCop, golangci-lint, and Trivy
+caches used by project commands, and standard system temporary directories.
+This means an allowed Bash redirect, `sed -i`, `rm`, or similar command can
+mutate workspace files without an Edit prompt; use this baseline only in trusted
+repositories and prefer diff-reviewable edits where practical. Every `make`
+invocation is excluded from the sandbox and allowed without prompting, except
+`make pr`, `make draft`, `make merge`, `make ready`, and `make review`, which
+require approval because they create, merge, or force-push a pull request.
+Built-in file edits stay scoped to the workspace, and the active agent
+configuration provides runtime approval guardrails while `AGENTS.md` defines
+task scope and workflow authorization.
 
 Permission-baseline updates propagate with the next `bin` submodule update;
 fully restart the Claude Code process afterward, since `settings.json` is read
@@ -221,6 +224,8 @@ Dockerfile lint targets depend on `shellcheck` and `hadolint`;
 - `build/docker/go/Dockerfile`: shared Go service Dockerfile template.
 - `build/docker/go/Dockerfile.dockerignore`: shared Docker build-context
   exclusions for the Go service Dockerfile.
+- `build/make/grpc.mak`: shared gRPC and protobuf targets, including
+  `proto-breaking`.
 - `quality/`: shared feature, benchmark, and coverage helpers.
 - `test/`: repository validation runners and report artifacts.
 - `AGENTS.md`: repository instructions, shared skills, and agent operating

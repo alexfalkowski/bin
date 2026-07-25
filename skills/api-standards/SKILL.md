@@ -1,6 +1,6 @@
 ---
 name: api-standards
-description: Use when designing, reviewing, documenting, or changing an API contract in a repository using this shared tooling, including adding an endpoint or RPC, changing a request/response schema or client interface, or preserving API compatibility. Apply Google Cloud API Design Guide and Google AIP guidance by default; apply REST best practices to direct HTTP resources.
+description: Use when designing, reviewing, documenting, or changing an API contract in a repository using this shared tooling, including adding an endpoint or RPC, changing a request/response schema or client interface, or preserving API compatibility. Apply Google Cloud API Design Guide and Google AIP guidance by default; identify the route's real `net/http/rpc`, `net/http/rest`, or `net/http/mvc` transport contract before applying REST rules.
 ---
 
 # API Standards
@@ -25,9 +25,7 @@ versioning risk, and with `$change-validation` for command selection.
    resource-oriented design, resource names, standard methods, custom methods,
    errors, inline documentation, proto3, versioning, backward compatibility,
    file layout, and naming.
-3. For REST-only or direct HTTP/JSON APIs, use REST best practices as secondary
-   REST-specific guidance: `https://restfulapi.net/rest-api-best-practices/`.
-4. When local repository contracts, generated protobuf contracts, OpenAPI specs,
+3. When local repository contracts, generated protobuf contracts, OpenAPI specs,
    or existing API docs are stricter than the external guides, preserve the
    local contract unless the task explicitly approves a migration.
 
@@ -36,8 +34,14 @@ versioning risk, and with `$change-validation` for command selection.
 1. Identify the API surface in scope: `.proto`, service method, resource name,
    HTTP mapping, request or response message, REST route, generated client,
    public Go or Ruby API wrapper, documentation, or compatibility policy.
-2. Identify the transport contract: gRPC-first, gRPC with HTTP transcoding,
-   REST-only, internal-only RPC, external public API, or generated client API.
+2. Read `references/conventions.md` and identify which of this ecosystem's
+   three real `go-service` HTTP transports the specific route or service
+   surface uses: `net/http/rpc`, `net/http/rest`, or `net/http/mvc`.
+   Identify per route or service surface, not per repository — a `net/http/rest`
+   route may serve the request directly or front a generated gRPC client, so
+   check the handler body, not just the repository. Treat `net/http/mvc` view
+   routes as outside this skill's API-contract scope; do not apply REST/AIP/CRUD
+   rules to them.
 3. Inspect nearby APIs, generated files, docs, tests, and consumers before
    proposing names, routes, fields, methods, or compatibility changes.
 4. Prefer resource-oriented design: stable resources, clear parent-child
@@ -57,12 +61,21 @@ versioning risk, and with `$change-validation` for command selection.
 8. Use consistent errors, pagination, filtering, sorting, idempotency, retry,
    timeout, authentication, authorization, rate-limit, and observability
    semantics across the API family.
-9. For REST APIs, use stable resource nouns, lowercase URI paths, standard HTTP
-   methods, standard status codes, stateless requests, clear versioning, and
-   documented deprecation or migration paths.
+9. For `net/http/rest` routes, follow the local contract in
+   `references/conventions.md`: verb-qualified routing with Go 1.22 path
+   templates, Accept/Content-Type negotiation falling back to JSON,
+   `status.SafeError` for error responses, and `Retry-After` only on
+   3xx/429/503 responses (RFC 9110 §10.2.3 for 3xx/503, RFC 6585 §4 for 429).
+   Treat any endpoint-specific `Location` restriction as a local contract, not
+   a general REST rule.
 10. Validate API changes through repository-defined Make targets and generated
     contract checks. Do not bypass existing protobuf, feature, lint, or
     compatibility workflows with ad hoc commands.
+
+## References
+
+- Read `references/conventions.md` for this ecosystem's three real
+  `net/http/rpc`, `net/http/rest`, and `net/http/mvc` transport contracts.
 
 ## Review Gate
 

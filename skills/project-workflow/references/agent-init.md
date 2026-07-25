@@ -49,25 +49,33 @@ sandbox, and routes direct Bash through the `permissions` allow/ask/deny
 guardrails. Direct Bash is broadly allowed without prompting while sandboxed;
 project-local operations stay autonomous, recognized remote and
 external-service changes require approval, and catastrophic commands remain
-forbidden. The unsandboxed escape hatch is disabled. The sandbox grants the
-standard Go, RuboCop, golangci-lint, and Trivy cache writes needed by project
-commands plus standard system temporary directories, and allows unrestricted
-outbound network access to match the Codex profile, with macOS `trustd` access
-enabled so Go-based CLI tools (`gh`, `gcloud`, `terraform`) can verify TLS
-through the sandbox network proxy. It also allows binding to local ports (for
-local dev servers and tests) and all Unix domain socket connections (for
-Docker, ssh-agent, and local database sockets); the latter can grant effective
-host access through sockets like `/var/run/docker.sock`, so keep using these
-profiles only in trusted repositories. Every `make` invocation is excluded from the
-sandbox and allowed without prompting, except `make pr`, `make draft`, `make
-merge`, `make ready`, and `make review`, which require approval because they
-create, merge, or force-push a pull request. Built-in file reads and edits are scoped
-to the workspace plus the standard system temporary directories (`/tmp`,
+forbidden. The unsandboxed escape hatch is disabled. The sandbox grants write
+access to the workspace (`.`) plus the standard Go, RuboCop, golangci-lint, and
+Trivy cache writes needed by project commands and standard system temporary
+directories, and allows unrestricted outbound network access to match the
+Codex profile, with macOS `trustd` access enabled so Go-based CLI tools (`gh`,
+`gcloud`, `terraform`) can verify TLS through the sandbox network proxy. It
+also allows binding to local ports (for local dev servers and tests) and all
+Unix domain socket connections (for Docker, ssh-agent, and local database
+sockets); the latter can grant effective host access through sockets like
+`/var/run/docker.sock`, so keep using these profiles only in trusted
+repositories. Every `make` invocation is excluded from the sandbox and allowed
+without prompting, except `make pr`, `make draft`, `make merge`, `make ready`,
+and `make review`, which require approval because they create, merge, or
+force-push a pull request. Built-in file reads and edits are scoped to the
+workspace plus the standard system temporary directories (`/tmp`,
 `/private/tmp`, `/var/tmp`, `/var/folders`), which are readable and editable
 without prompting; the Write tool has no auto-allow rule and always prompts.
-Per-repo or per-machine permission tweaks belong in the
-gitignored `.claude/settings.local.json`, which Claude Code merges over the
-baseline.
+Because ordinary Bash commands not matched by the `ask`/`deny` rules are
+auto-allowed, and the sandbox now permits workspace writes, a shell redirect,
+`sed -i`, `rm`, or similar local file mutation can create, overwrite, or
+delete workspace files with neither a prompt nor a diff-reviewable Edit — the
+same risk the Write-tool prompt exists to gate, reopened through Bash for
+commands the `ask`/`deny` rules do not already cover. This is a deliberate
+trusted-repository trade-off, not an oversight; route diff-reviewable content
+changes through Edit where practical. Per-repo or
+per-machine permission tweaks belong in the gitignored
+`.claude/settings.local.json`, which Claude Code merges over the baseline.
 
 ## Background process lifecycle and signal handling
 

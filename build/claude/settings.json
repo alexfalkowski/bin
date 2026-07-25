@@ -19,6 +19,7 @@
     ],
     "filesystem": {
       "allowWrite": [
+        ".",
         "/tmp",
         "/private/tmp",
         "/var/tmp",
