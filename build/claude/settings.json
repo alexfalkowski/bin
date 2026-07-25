@@ -40,7 +40,6 @@
       "Bash(make *)",
       "Read(**)",
       "Edit(**)",
-      "Write(**)",
       "Read(//tmp/**)",
       "Read(//private/tmp/**)",
       "Read(//var/tmp/**)",
@@ -50,10 +49,6 @@
       "Edit(//private/tmp/**)",
       "Edit(//var/tmp/**)",
       "Edit(//var/folders/**)",
-      "Write(//tmp/**)",
-      "Write(//private/tmp/**)",
-      "Write(//var/tmp/**)",
-      "Write(//var/folders/**)",
       "WebFetch",
       "WebSearch"
     ],
