@@ -1,0 +1,103 @@
+#!/usr/bin/env bash
+# Exercise the documented repo-health collector CLI against isolated local Git data.
+
+set -eo pipefail
+
+root="$(cd "$(dirname "$0")/../.." && pwd)"
+fixture="$(mktemp -d)"
+commands="$fixture/commands"
+report="$fixture/report.json"
+ruby_command="$(command -v ruby)"
+
+cleanup() {
+  rm -rf "$fixture"
+}
+
+commit() {
+  local date="$1"
+  local subject="$2"
+
+  printf '%s\n' "$subject" >> "$fixture/changes"
+  git -C "$fixture" add changes
+  GIT_AUTHOR_DATE="$date" GIT_COMMITTER_DATE="$date" git -C "$fixture" commit -qm "$subject"
+}
+
+trap cleanup EXIT
+
+mkdir "$commands"
+ln -s "$(command -v git)" "$commands/git"
+ln -s "$ruby_command" "$commands/ruby"
+
+git init -q "$fixture"
+git -C "$fixture" checkout -qb master
+git -C "$fixture" config user.email repo-health@example.test
+git -C "$fixture" config user.name 'Repo Health Test'
+git -C "$fixture" remote add origin https://github.com/example/repo-health-fixture.git
+
+commit '2025-01-01T00:00:00+00:00' 'Initial release'
+GIT_COMMITTER_DATE='2025-01-02T00:00:00+00:00' git -C "$fixture" tag -am 'Release v1.0.0' v1.0.0
+commit '2026-07-12T10:00:00+02:00' 'Previous window change'
+commit '2026-07-20T10:00:00+02:00' 'Current window change one'
+commit '2026-07-22T10:00:00+02:00' 'Current window change two'
+
+unset CIRCLE_TOKEN CIRCLECI_TOKEN
+TZ=UTC CIRCLECI_CLI_CONFIG="$fixture/missing-circleci-config.yml" PATH="$commands" \
+  "$ruby_command" "$root/skills/repo-health/scripts/collect.rb" \
+  --repo "$fixture" \
+  --timezone Europe/Berlin \
+  --current-start '2026-07-18 00:00:00 +02:00' \
+  --current-end '2026-07-25 00:00:00 +02:00' \
+  --previous-start '2026-07-11 00:00:00 +02:00' \
+  --branch master > "$report"
+
+"$ruby_command" -rjson - "$report" <<'RUBY'
+report = JSON.parse(File.read(ARGV.fetch(0)))
+
+def assert_equal(expected, actual, label)
+  return if expected == actual
+
+  abort "#{label}: expected #{expected.inspect}, got #{actual.inspect}"
+end
+
+assert_equal 'example/repo-health-fixture', report['repository'], 'repository'
+assert_equal 'master', report['branch'], 'branch'
+assert_equal 'library weekly summary', report['mode'], 'mode'
+assert_equal 'Europe/Berlin', report['timezone'], 'timezone'
+assert_equal(
+  { 'start' => '2026-07-18T00:00:00+02:00', 'end' => '2026-07-25T00:00:00+02:00' },
+  report['window'],
+  'window'
+)
+assert_equal(
+  { 'start' => '2026-07-11T00:00:00+02:00', 'end' => '2026-07-18T00:00:00+02:00' },
+  report['comparison_window'],
+  'comparison window'
+)
+assert_equal 'used', report.dig('sources', 'local', 'status'), 'local source status'
+assert_equal 'skipped', report.dig('sources', 'github', 'status'), 'GitHub source status'
+assert_equal 'gh is not installed', report.dig('sources', 'github', 'notes'), 'GitHub source notes'
+assert_equal 'skipped', report.dig('sources', 'circleci', 'status'), 'CircleCI source status'
+assert_equal 'no .circleci/config.yml', report.dig('sources', 'circleci', 'notes'), 'CircleCI source notes'
+assert_equal 'skipped', report.dig('sources', 'digitalocean', 'status'), 'DigitalOcean source status'
+assert_equal 'skipped', report.dig('sources', 'kubernetes', 'status'), 'Kubernetes source status'
+assert_equal 'skipped', report.dig('sources', 'uptimerobot', 'status'), 'UptimeRobot source status'
+assert_equal 2, report.dig('delivery_flow', 'current', 'commit_count'), 'current commit count'
+assert_equal 1, report.dig('delivery_flow', 'previous', 'commit_count'), 'previous commit count'
+assert_equal 4, report.dig('trend_context', 'window_count'), 'trend window count'
+assert_equal(
+  [
+    { 'label' => 'current', 'start' => '2026-07-18T00:00:00+02:00', 'end' => '2026-07-25T00:00:00+02:00' },
+    { 'label' => 'previous', 'start' => '2026-07-11T00:00:00+02:00', 'end' => '2026-07-18T00:00:00+02:00' },
+    { 'label' => 'minus_2', 'start' => '2026-07-04T00:00:00+02:00', 'end' => '2026-07-11T00:00:00+02:00' },
+    { 'label' => 'minus_3', 'start' => '2026-06-27T00:00:00+02:00', 'end' => '2026-07-04T00:00:00+02:00' }
+  ],
+  report.dig('trend_context', 'windows'),
+  'trend windows'
+)
+assert_equal 'v1.0.0', report.dig('release_and_deploy', 'release_state', 'latest_tag'), 'latest tag'
+assert_equal 3, report.dig('release_and_deploy', 'release_state', 'unreleased_commit_count'), 'unreleased commit count'
+assert_equal 'P2', report.dig('top_bottleneck', 'priority'), 'top bottleneck priority'
+assert_equal 'Release', report.dig('top_bottleneck', 'area'), 'top bottleneck area'
+assert_equal 'P2', report.dig('action_queue', 0, 'priority'), 'first action priority'
+assert_equal 'Release', report.dig('action_queue', 0, 'area'), 'first action area'
+RUBY

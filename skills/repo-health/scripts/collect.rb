@@ -922,7 +922,11 @@ class RepoHealthCollector
     ]
     while windows.length < TREND_WINDOW_COUNT
       end_time = windows.last.fetch(:start)
-      windows << { start: end_time - window_seconds, end: end_time }
+      start_time = with_timezone do
+        time = Time.at(end_time.to_i - window_seconds)
+        time.getlocal(time.utc_offset)
+      end
+      windows << { start: start_time, end: end_time }
     end
     windows
   end
