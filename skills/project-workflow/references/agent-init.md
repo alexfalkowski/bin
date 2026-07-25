@@ -63,8 +63,9 @@ sandbox and allowed without prompting, except `make pr`, `make draft`, `make
 merge`, `make ready`, and `make review`, which require approval because they
 create, merge, or force-push a pull request. Built-in file reads and edits are scoped
 to the workspace plus the standard system temporary directories (`/tmp`,
-`/private/tmp`, `/var/tmp`, `/var/folders`), which are readable and writable
-without prompting. Per-repo or per-machine permission tweaks belong in the
+`/private/tmp`, `/var/tmp`, `/var/folders`), which are readable and editable
+without prompting; the Write tool has no auto-allow rule and always prompts.
+Per-repo or per-machine permission tweaks belong in the
 gitignored `.claude/settings.local.json`, which Claude Code merges over the
 baseline.
 

@@ -354,6 +354,22 @@ def ledger_filename_ignored?(filename, contract_path)
   report_failure("ledger filename from #{contract_path} is missing from .gitignore: #{filename}")
 end
 
+def ledger_filenames
+  GAP_PAIRS.filter_map { |pair| ledger_filename_for(pair[:implement]) }
+end
+
+def ledger_filename_for(implement_skill_name)
+  path = "skills/#{implement_skill_name}/ledger.yaml"
+  return nil unless File.file?(path)
+
+  data = YAML.safe_load_file(path)
+  return nil unless data.is_a?(Hash)
+
+  data['ledger_filename']
+rescue Psych::SyntaxError
+  nil
+end
+
 def valid_gap_pair_text?(pair, find_paths, implement_paths, ledger_paths)
   return false unless valid_gap_pair_text_paths?(find_paths, implement_paths, ledger_paths)
 
@@ -469,7 +485,12 @@ end
 ok = true
 Dir['skills/*/SKILL.md'].each { |path| ok = false unless valid_skill?(path) }
 Dir['skills/*/agents/openai.yaml'].each { |path| ok = false unless valid_agent?(path) }
-Dir['skills/**/*.md'].each { |path| ok = false unless valid_markdown_references?(path) }
+ignored_ledger_filenames = ledger_filenames
+Dir['skills/**/*.md'].each do |path|
+  next if ignored_ledger_filenames.include?(File.basename(path))
+
+  ok = false unless valid_markdown_references?(path)
+end
 ok = false unless valid_skill_agent_pairs?
 GAP_PAIRS.each { |pair| ok = false unless valid_gap_pair?(pair) }
 
