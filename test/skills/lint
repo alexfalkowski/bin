@@ -139,6 +139,10 @@ if ! ruby test/skills/validate; then
   missing=1
 fi
 
+if ! test/skills/repo-health; then
+  missing=1
+fi
+
 # Root policy and shared workflow contracts.
 require_patterns AGENTS.md <<'PATTERNS'
 mandatory operating rules, not advisory guidance
