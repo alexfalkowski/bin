@@ -3,9 +3,11 @@
 
 # rubocop:disable Metrics/ClassLength, Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
+require 'date'
 require 'json'
 require 'net/http'
 require 'open3'
+require 'openssl'
 require 'optparse'
 require 'time'
 require 'uri'
@@ -17,6 +19,14 @@ class RepoHealthCollector
   HTTP_TIMEOUT_SECONDS = 15
   TREND_WINDOW_COUNT = 4
   STALE_PR_SECONDS = 7 * 24 * 60 * 60
+  GITHUB_PR_PAGE_LIMIT = 100
+  GITHUB_PR_PAGE_LIMIT_MAX = 6_400
+  HTTP_RETRY_MAX_ATTEMPTS = 3
+  HTTP_RETRY_BASE_DELAY_SECONDS = 0.2
+  TRANSIENT_HTTP_ERRORS = [
+    OpenSSL::SSL::SSLError, EOFError, Errno::ECONNRESET, Errno::EPIPE, Errno::ECONNREFUSED, Errno::ETIMEDOUT,
+    Errno::EHOSTUNREACH, Errno::ENETUNREACH, Net::OpenTimeout, Net::ReadTimeout
+  ].freeze
   CI_SUCCESS_RATE_ACTION_THRESHOLD = 0.90
   CHANGE_RATIO_ACTION_THRESHOLD = 0.25
   LIBRARY_RELEASE_AGE_ACTION_SECONDS = 90 * 24 * 60 * 60
@@ -28,9 +38,10 @@ class RepoHealthCollector
     @include_jobs = options.fetch(:include_jobs)
     @now = options[:now] ? parse_time(options[:now]) : Time.now
     @current_end = options[:current_end] ? parse_time(options[:current_end]) : day_start(@now)
-    @current_start = options[:current_start] ? parse_time(options[:current_start]) : @current_end - (7 * 24 * 60 * 60)
+    @current_start =
+      options[:current_start] ? parse_time(options[:current_start]) : subtract_local_days(@current_end, 7)
     @previous_end = @current_start
-    @previous_start = options[:previous_start] ? parse_time(options[:previous_start]) : @previous_end - window_seconds
+    @previous_start = options[:previous_start] ? parse_time(options[:previous_start]) : default_previous_start
   end
 
   def call
@@ -69,6 +80,52 @@ class RepoHealthCollector
     with_timezone do
       local = Time.local(time.year, time.month, time.day)
       Time.parse(local.strftime('%Y-%m-%d 00:00:00 %z'))
+    end
+  end
+
+  # Subtracts whole local calendar days while preserving wall-clock
+  # hour/minute/second, so the result lands on local midnight (or whatever
+  # time-of-day was given) even across a daylight-saving transition, instead
+  # of drifting by the transition's offset change like fixed-second
+  # subtraction would.
+  def subtract_local_days(time, days)
+    date = Date.new(time.year, time.month, time.day) - days
+    with_timezone do
+      local = Time.local(date.year, date.month, date.day, time.hour, time.min, time.sec)
+      Time.parse(local.strftime('%Y-%m-%d %H:%M:%S %z'))
+    end
+  end
+
+  # Whole calendar-day span between two local times, or nil when they do not
+  # share a time-of-day (an explicit arbitrary-instant window), in which case
+  # callers fall back to elapsed-second arithmetic.
+  def local_day_span(start_time, end_time)
+    same_time_of_day = [start_time.hour, start_time.min, start_time.sec] == [end_time.hour, end_time.min, end_time.sec]
+    return nil unless same_time_of_day
+
+    end_date = Date.new(end_time.year, end_time.month, end_time.day)
+    start_date = Date.new(start_time.year, start_time.month, start_time.day)
+    (end_date - start_date).to_i
+  end
+
+  def default_previous_start
+    days = local_day_span(@current_start, @current_end)
+    return @previous_end - window_seconds unless days
+
+    subtract_local_days(@previous_end, days)
+  end
+
+  def default_window_start(end_time)
+    days = local_day_span(@current_start, @current_end)
+    return elapsed_window_start(end_time) unless days
+
+    subtract_local_days(end_time, days)
+  end
+
+  def elapsed_window_start(end_time)
+    with_timezone do
+      time = Time.at(end_time.to_i - window_seconds)
+      time.getlocal(time.utc_offset)
     end
   end
 
@@ -163,44 +220,61 @@ class RepoHealthCollector
   def collect_github(owner_repo)
     return skipped('gh is not installed') unless command_available?('gh')
 
-    open_prs = gh_json(
-      'pr', 'list', '--repo', owner_repo, '--state', 'open',
-      '--json', 'number,title,createdAt,updatedAt,url'
-    )
-    stale_prs = open_prs.select do |pull_request|
-      updated = pull_request['updatedAt'] && Time.parse(pull_request.fetch('updatedAt'))
-      updated && updated < @current_end - STALE_PR_SECONDS
-    end
+    open_state = github_open_prs_at_end(owner_repo)
     trend = period_windows.map { |window| github_period(owner_repo, window.fetch(:start), window.fetch(:end)) }
 
     {
       current: trend[0],
       previous: trend[1],
       trend: trend,
-      open_pr_count: open_prs.length,
-      open_prs: open_prs,
-      stale_pr_count: stale_prs.length,
-      stale_prs: stale_prs
+      open_pr_count: open_state.fetch(:open).length,
+      open_prs: open_state.fetch(:open),
+      stale_pr_count: open_state.fetch(:stale)&.length,
+      stale_prs: open_state.fetch(:stale)
     }
   rescue StandardError => e
     unavailable(e.message)
   end
 
+  # Reconstructs which PRs were open at @current_end from complete creation
+  # and closed timestamps, since the live open-PR queue reflects collection
+  # time, not a historical period end. Stale classification is reliable only
+  # when a PR's last known activity is at or before @current_end; otherwise
+  # activity could have happened after the boundary, so staleness is reported
+  # as unavailable rather than reused from the live `updatedAt`.
+  def github_open_prs_at_end(owner_repo)
+    candidates = gh_pr_list(
+      'pr', 'list', '--repo', owner_repo, '--state', 'all',
+      '--search', "created:<=#{@current_end.getutc.strftime('%Y-%m-%d')}",
+      '--json', 'number,title,createdAt,updatedAt,closedAt,url'
+    )
+    open_prs = candidates.select do |pr|
+      Time.parse(pr.fetch('createdAt')) <= @current_end &&
+        (pr['closedAt'].nil? || Time.parse(pr.fetch('closedAt')) > @current_end)
+    end
+
+    known_activity = open_prs.map { |pr| pr['updatedAt'] && Time.parse(pr.fetch('updatedAt')) }
+    return { open: open_prs, stale: nil } if known_activity.any? { |updated| updated.nil? || updated > @current_end }
+
+    stale = open_prs.zip(known_activity).select { |_, updated| updated < @current_end - STALE_PR_SECONDS }.map(&:first)
+    { open: open_prs, stale: stale }
+  end
+
   def github_period(owner_repo, start_time, end_time)
-    date_range = "#{start_time.strftime('%Y-%m-%d')}..#{(end_time - 1).strftime('%Y-%m-%d')}"
-    merged = gh_json(
+    date_range = "#{start_time.getutc.strftime('%Y-%m-%d')}..#{(end_time - 1).getutc.strftime('%Y-%m-%d')}"
+    merged = gh_pr_list(
       'pr', 'list', '--repo', owner_repo, '--state', 'merged', '--search', "merged:#{date_range}",
-      '--limit', '300', '--json', 'number,title,createdAt,mergedAt,url,reviews'
+      '--json', 'number,title,createdAt,mergedAt,url,reviews'
     ).select { |pr| within?(Time.parse(pr.fetch('mergedAt')), start_time, end_time) }
 
-    created = gh_json(
+    created = gh_pr_list(
       'pr', 'list', '--repo', owner_repo, '--state', 'all', '--search', "created:#{date_range}",
-      '--limit', '300', '--json', 'number,createdAt'
+      '--json', 'number,createdAt'
     ).count { |pr| within?(Time.parse(pr.fetch('createdAt')), start_time, end_time) }
 
-    closed_unmerged = gh_json(
+    closed_unmerged = gh_pr_list(
       'pr', 'list', '--repo', owner_repo, '--state', 'closed',
-      '--search', "closed:#{date_range} -merged:#{date_range}", '--limit', '300', '--json', 'number,closedAt,mergedAt'
+      '--search', "closed:#{date_range} -merged:#{date_range}", '--json', 'number,closedAt,mergedAt'
     ).count do |pr|
       pr['mergedAt'].nil? && pr['closedAt'] && within?(Time.parse(pr.fetch('closedAt')), start_time,
                                                        end_time)
@@ -416,11 +490,13 @@ class RepoHealthCollector
 
   def pod_summary(pod)
     statuses = pod.dig('status', 'containerStatuses') || []
+    conditions = pod.dig('status', 'conditions') || []
+    ready_condition = conditions.find { |condition| condition['type'] == 'Ready' }
     {
       namespace: pod.dig('metadata', 'namespace'),
       name: pod.dig('metadata', 'name'),
       phase: pod.dig('status', 'phase'),
-      ready: statuses.all? { |status| status['ready'] },
+      ready: ready_condition ? ready_condition['status'] == 'True' : false,
       restarts: statuses.sum { |status| status['restartCount'].to_i },
       started_at: pod.dig('status', 'startTime')
     }
@@ -922,11 +998,7 @@ class RepoHealthCollector
     ]
     while windows.length < TREND_WINDOW_COUNT
       end_time = windows.last.fetch(:start)
-      start_time = with_timezone do
-        time = Time.at(end_time.to_i - window_seconds)
-        time.getlocal(time.utc_offset)
-      end
-      windows << { start: start_time, end: end_time }
+      windows << { start: default_window_start(end_time), end: end_time }
     end
     windows
   end
@@ -1086,11 +1158,20 @@ class RepoHealthCollector
   end
 
   def http_response(uri, request)
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
-    http.open_timeout = HTTP_TIMEOUT_SECONDS
-    http.read_timeout = HTTP_TIMEOUT_SECONDS
-    http.request(request)
+    attempt = 0
+    begin
+      attempt += 1
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      http.open_timeout = HTTP_TIMEOUT_SECONDS
+      http.read_timeout = HTTP_TIMEOUT_SECONDS
+      http.request(request)
+    rescue *TRANSIENT_HTTP_ERRORS
+      raise if attempt >= HTTP_RETRY_MAX_ATTEMPTS
+
+      sleep(HTTP_RETRY_BASE_DELAY_SECONDS * attempt)
+      retry
+    end
   end
 
   def kubectl_json(*)
@@ -1099,6 +1180,19 @@ class RepoHealthCollector
 
   def gh_json(*)
     JSON.parse(capture('gh', *))
+  end
+
+  def gh_pr_list(*args)
+    limit = GITHUB_PR_PAGE_LIMIT
+    loop do
+      results = gh_json(*args, '--limit', limit.to_s)
+      return results if results.length < limit
+      if limit >= GITHUB_PR_PAGE_LIMIT_MAX
+        raise "gh pr list saturated at --limit #{limit} without proving completeness: #{args.join(' ')}"
+      end
+
+      limit *= 2
+    end
   end
 
   def git_root
@@ -1121,13 +1215,18 @@ class RepoHealthCollector
              .sub(%r{\Aorigin/}, '')
     return branch unless branch.empty?
 
-    if command_available?('gh')
-      branch = gh_json('repo', 'view', owner_repo, '--json', 'defaultBranchRef')
-               .dig('defaultBranchRef', 'name')
-      return branch if branch && !branch.empty?
-    end
+    branch = github_default_branch(owner_repo)
+    return branch if branch && !branch.empty?
 
     git('branch', '--show-current').strip
+  end
+
+  def github_default_branch(owner_repo)
+    return nil unless command_available?('gh')
+
+    gh_json('repo', 'view', owner_repo, '--json', 'defaultBranchRef').dig('defaultBranchRef', 'name')
+  rescue StandardError
+    nil
   end
 
   def capture(*args, allow_failure: false)

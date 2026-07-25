@@ -75,6 +75,9 @@ Interpretation:
 - Rising open or stale PR counts are bottleneck signals.
 - Very small sample sizes should be labeled as low confidence.
 - If all sampled PRs lack review records, report review latency as `n/a`.
+- If pre-boundary activity evidence cannot prove whether an open PR was stale
+  at the current-period end, report stale PRs as unavailable rather than a
+  count derived from live activity.
 
 ## CI Quality
 
