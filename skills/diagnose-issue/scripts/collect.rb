@@ -4,23 +4,15 @@
 # rubocop:disable Metrics/ClassLength, Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
 require 'json'
-require 'net/http'
-require 'open3'
-require 'openssl'
 require 'optparse'
 require 'time'
-require 'uri'
 require 'yaml'
+
+require_relative '../../../lib/evidence_source_access'
 
 # Performs read-only CI and deployment diagnosis for one repository target.
 class IssueDiagnosisCollector
-  HTTP_TIMEOUT_SECONDS = 15
-  HTTP_RETRY_MAX_ATTEMPTS = 3
-  HTTP_RETRY_BASE_DELAY_SECONDS = 0.2
-  TRANSIENT_HTTP_ERRORS = [
-    OpenSSL::SSL::SSLError, EOFError, Errno::ECONNRESET, Errno::EPIPE, Errno::ECONNREFUSED, Errno::ETIMEDOUT,
-    Errno::EHOSTUNREACH, Errno::ENETUNREACH, Net::OpenTimeout, Net::ReadTimeout
-  ].freeze
+  include EvidenceSourceAccess
 
   def initialize(options)
     @mode = options.fetch(:mode)
@@ -508,10 +500,6 @@ class IssueDiagnosisCollector
     job['stopped_at'] && !%w[success running on_hold not_run].include?(job['status'])
   end
 
-  def circleci_get(path, token)
-    http_json("https://circleci.com/api/v2#{path}", 'Circle-Token' => token)
-  end
-
   def circleci_token
     token = ENV['CIRCLE_TOKEN'] || ENV['CIRCLECI_TOKEN'] || ENV.fetch('CIRCLECI_CLI_TOKEN', nil)
     return token unless token.nil? || token.empty?
@@ -522,71 +510,10 @@ class IssueDiagnosisCollector
     YAML.safe_load_file(path).fetch('token')
   end
 
-  def uptimerobot(params)
-    uri = URI('https://api.uptimerobot.com/v2/getMonitors')
-    request = Net::HTTP::Post.new(uri)
-    request.set_form_data(params)
-    response = http_response(uri, request)
-    raise "UptimeRobot #{response.code}: #{response.body}" unless response.is_a?(Net::HTTPSuccess)
-
-    data = JSON.parse(response.body)
-    error = data['error']
-    raise "UptimeRobot #{error['type']}: #{error['message']}" if data['stat'] == 'fail' && error
-
-    data
-  end
-
   def find_uptimerobot_monitor(data, name)
     data.fetch('monitors', []).find do |item|
       [item['friendly_name'], item['url']].compact.any? { |value| value.include?(name) }
     end
-  end
-
-  def http_json(url, headers = {})
-    uri = URI(url)
-    request = Net::HTTP::Get.new(uri)
-    headers.each { |key, value| request[key] = value }
-    response = http_response(uri, request)
-    raise "#{url} #{response.code}: #{response.body}" unless response.is_a?(Net::HTTPSuccess)
-
-    JSON.parse(response.body)
-  end
-
-  def http_response(uri, request)
-    attempt = 0
-    begin
-      attempt += 1
-      http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = true
-      http.open_timeout = HTTP_TIMEOUT_SECONDS
-      http.read_timeout = HTTP_TIMEOUT_SECONDS
-      http.request(request)
-    rescue *TRANSIENT_HTTP_ERRORS
-      raise if attempt >= HTTP_RETRY_MAX_ATTEMPTS
-
-      sleep(HTTP_RETRY_BASE_DELAY_SECONDS * attempt)
-      retry
-    end
-  end
-
-  def kubectl_json(*)
-    JSON.parse(capture('kubectl', *))
-  end
-
-  def gh_json(*)
-    JSON.parse(capture('gh', *))
-  end
-
-  def git_root
-    git('rev-parse', '--show-toplevel').strip
-  end
-
-  def git(*, allow_failure: false)
-    capture('git', '-C', @repo_path, *, allow_failure: allow_failure)
-  end
-
-  def git_lines(*)
-    git(*).lines.map(&:chomp).reject(&:empty?)
   end
 
   def current_branch
@@ -602,47 +529,8 @@ class IssueDiagnosisCollector
     github_default_branch(owner_repo) || current_branch
   end
 
-  def github_default_branch(owner_repo)
-    return nil unless command_available?('gh')
-
-    gh_json('repo', 'view', owner_repo, '--json', 'defaultBranchRef').dig('defaultBranchRef', 'name')
-  rescue StandardError
-    nil
-  end
-
-  def capture(*args, allow_failure: false)
-    output, error, status = Open3.capture3(*args)
-    raise "#{args.join(' ')} failed: #{error.strip}" if !allow_failure && !status.success?
-
-    output
-  end
-
-  def command_available?(name)
-    ENV.fetch('PATH', '').split(File::PATH_SEPARATOR).any? do |directory|
-      path = File.join(directory, name)
-      File.executable?(path) && !File.directory?(path)
-    end
-  end
-
-  def pick(hash, *keys)
-    keys.each_with_object({}) { |key, result| result[key] = hash[key] if hash.key?(key) }
-  end
-
   def symbolize(hash)
     hash.to_h { |key, value| [key.to_sym, value] }
-  end
-
-  def parse_owner_repo(remote)
-    clean = remote.delete_suffix('.git')
-    return Regexp.last_match(1) if clean.match(/\Agit@github\.com:(.+)\z/)
-    return Regexp.last_match(1) if clean.match(%r{\Assh://git@github\.com/(.+)\z})
-    return Regexp.last_match(1) if clean.match(%r{\Ahttps?://github\.com/(.+)\z})
-
-    clean
-  end
-
-  def url_query(value)
-    URI.encode_www_form_component(value)
   end
 end
 
