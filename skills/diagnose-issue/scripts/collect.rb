@@ -6,6 +6,7 @@
 require 'json'
 require 'net/http'
 require 'open3'
+require 'openssl'
 require 'optparse'
 require 'time'
 require 'uri'
@@ -14,6 +15,12 @@ require 'yaml'
 # Performs read-only CI and deployment diagnosis for one repository target.
 class IssueDiagnosisCollector
   HTTP_TIMEOUT_SECONDS = 15
+  HTTP_RETRY_MAX_ATTEMPTS = 3
+  HTTP_RETRY_BASE_DELAY_SECONDS = 0.2
+  TRANSIENT_HTTP_ERRORS = [
+    OpenSSL::SSL::SSLError, EOFError, Errno::ECONNRESET, Errno::EPIPE, Errno::ECONNREFUSED, Errno::ETIMEDOUT,
+    Errno::EHOSTUNREACH, Errno::ENETUNREACH, Net::OpenTimeout, Net::ReadTimeout
+  ].freeze
 
   def initialize(options)
     @mode = options.fetch(:mode)
@@ -367,7 +374,14 @@ class IssueDiagnosisCollector
     params = { 'api_key' => key, 'format' => 'json', 'logs' => '1', 'response_times' => '1' }
     monitor_ids = ENV.fetch('UPTIMEROBOT_MONITOR_IDS', '').split(',').map(&:strip).reject(&:empty?)
     params['monitors'] = monitor_ids.join('-') unless monitor_ids.empty?
-    monitor = find_uptimerobot_monitor(uptimerobot(params), name)
+    data = uptimerobot(params)
+    monitor = find_uptimerobot_monitor(data, name)
+
+    if monitor.nil? && !monitor_ids.empty?
+      params.delete('monitors')
+      data = uptimerobot(params)
+      monitor = find_uptimerobot_monitor(data, name)
+    end
     return unavailable("no UptimeRobot monitor matched #{name}") unless monitor
 
     { status: 'used', monitor: symbolize(pick(monitor, 'id', 'friendly_name', 'url', 'status')),
@@ -393,11 +407,13 @@ class IssueDiagnosisCollector
 
   def pod_summary(pod)
     statuses = pod.dig('status', 'containerStatuses') || []
+    conditions = pod.dig('status', 'conditions') || []
+    ready_condition = conditions.find { |condition| condition['type'] == 'Ready' }
     {
       namespace: pod.dig('metadata', 'namespace'),
       name: pod.dig('metadata', 'name'),
       phase: pod.dig('status', 'phase'),
-      ready: statuses.any? && statuses.all? { |status| status['ready'] },
+      ready: ready_condition ? ready_condition['status'] == 'True' : false,
       restarts: statuses.sum { |status| status['restartCount'].to_i },
       started_at: pod.dig('status', 'startTime')
     }
@@ -537,11 +553,20 @@ class IssueDiagnosisCollector
   end
 
   def http_response(uri, request)
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
-    http.open_timeout = HTTP_TIMEOUT_SECONDS
-    http.read_timeout = HTTP_TIMEOUT_SECONDS
-    http.request(request)
+    attempt = 0
+    begin
+      attempt += 1
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      http.open_timeout = HTTP_TIMEOUT_SECONDS
+      http.read_timeout = HTTP_TIMEOUT_SECONDS
+      http.request(request)
+    rescue *TRANSIENT_HTTP_ERRORS
+      raise if attempt >= HTTP_RETRY_MAX_ATTEMPTS
+
+      sleep(HTTP_RETRY_BASE_DELAY_SECONDS * attempt)
+      retry
+    end
   end
 
   def kubectl_json(*)
