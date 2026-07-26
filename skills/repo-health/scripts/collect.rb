@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/ClassLength, Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+# rubocop:disable Metrics/ClassLength, Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/BlockLength
 
 lib = File.expand_path('../../../lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
@@ -15,8 +15,10 @@ class RepoHealthCollector
 
   TREND_WINDOW_COUNT = 4
   STALE_PR_SECONDS = 7 * 24 * 60 * 60
-  GITHUB_PR_PAGE_LIMIT = 100
-  GITHUB_PR_PAGE_LIMIT_MAX = 6_400
+  SOURCE_NAMES = %i[local github circleci digitalocean kubernetes uptimerobot].freeze
+  DEFAULT_OVERALL_TIMEOUT_SECONDS = 240
+  GITHUB_PR_RESULT_LIMIT = 6_400
+  CIRCLECI_PAGE_LIMIT = 10
   CI_SUCCESS_RATE_ACTION_THRESHOLD = 0.90
   CHANGE_RATIO_ACTION_THRESHOLD = 0.25
   LIBRARY_RELEASE_AGE_ACTION_SECONDS = 90 * 24 * 60 * 60
@@ -26,6 +28,8 @@ class RepoHealthCollector
     @timezone = options.fetch(:timezone)
     @branch = options[:branch]
     @include_jobs = options.fetch(:include_jobs)
+    @source_names = source_names(options.fetch(:source_names))
+    @overall_timeout_seconds = options.fetch(:overall_timeout_seconds)
     @now = options[:now] ? parse_time(options[:now]) : Time.now
     @current_end = options[:current_end] ? parse_time(options[:current_end]) : day_start(@now)
     @current_start =
@@ -35,33 +39,36 @@ class RepoHealthCollector
   end
 
   def call
+    started_at = monotonic_time
+    progress('collector started')
     root = git_root
     owner_repo = parse_owner_repo(git('remote', 'get-url', 'origin').strip)
-    branch = summary_branch(owner_repo)
+    branch = summary_branch(owner_repo, @source_names.include?(:github))
     mode = File.exist?(File.join(root, '.cd')) ? 'service' : 'library'
     period = window_seconds <= 24 * 60 * 60 ? 'daily' : 'weekly'
-    sources = collect_sources([
-                                [:local, -> { collect_local(root) }],
-                                [:github, -> { collect_github(owner_repo) }],
-                                [:circleci, -> { collect_circleci(owner_repo, branch, mode, root) }],
-                                [:digitalocean, lambda do
-                                  mode == 'service' ? collect_digitalocean : skipped('not a service repo')
-                                end],
-                                [:kubernetes, lambda do
-                                  if mode == 'service'
-                                    collect_kubernetes(owner_repo.split('/').last)
-                                  else
-                                    skipped('not a service repo')
-                                  end
-                                end],
-                                [:uptimerobot, lambda do
-                                  if mode == 'service'
-                                    collect_uptimerobot(owner_repo.split('/').last)
-                                  else
-                                    skipped('not a service repo')
-                                  end
-                                end]
-                              ])
+    source_definitions = [
+      [:local, -> { collect_local(root) }],
+      [:github, -> { collect_github(owner_repo) }],
+      [:circleci, -> { collect_circleci(owner_repo, branch, mode, root) }],
+      [:digitalocean, lambda do
+        mode == 'service' ? collect_digitalocean : skipped('not a service repo')
+      end],
+      [:kubernetes, lambda do
+        if mode == 'service'
+          collect_kubernetes(owner_repo.split('/').last)
+        else
+          skipped('not a service repo')
+        end
+      end],
+      [:uptimerobot, lambda do
+        if mode == 'service'
+          collect_uptimerobot(owner_repo.split('/').last)
+        else
+          skipped('not a service repo')
+        end
+      end]
+    ]
+    sources = collect_selected_sources(source_definitions)
 
     result = {
       repository: owner_repo,
@@ -80,12 +87,60 @@ class RepoHealthCollector
     }
 
     JSON.pretty_generate(summary_result(result))
+  ensure
+    progress("collector completed after #{format_elapsed(monotonic_time - started_at)}") if started_at
   end
 
   private
 
   def parse_time(value)
     with_timezone { Time.parse(value) }
+  end
+
+  def source_names(names)
+    unknown_names = names - SOURCE_NAMES
+    raise ArgumentError, "unknown sources: #{unknown_names.join(', ')}" unless unknown_names.empty?
+    raise ArgumentError, 'at least one source must be selected' if names.empty?
+
+    names
+  end
+
+  def collect_selected_sources(definitions)
+    selected = definitions.to_h.slice(*@source_names).to_a
+    collected = collect_sources(
+      selected,
+      overall_timeout_seconds: @overall_timeout_seconds,
+      on_start: method(:progress_source_start),
+      on_finish: method(:progress_source_finish)
+    )
+    definitions.to_h do |name, _|
+      [name, collected.fetch(name, skipped('not selected'))]
+    end
+  end
+
+  def progress_source_start(name)
+    progress("source #{name} started")
+  end
+
+  def progress_source_finish(name, result, elapsed_seconds)
+    status = result.is_a?(Hash) && result[:status] ? result[:status] : 'used'
+    detail = result.is_a?(Hash) ? result[:reason] : nil
+    message = "source #{name} completed after #{format_elapsed(elapsed_seconds)} with status #{status}"
+    progress(detail ? "#{message}: #{detail}" : message)
+  end
+
+  def progress(message)
+    @progress_lock ||= Mutex.new
+    @progress_lock.synchronize do
+      warn("repo-health: #{message}")
+      $stderr.flush
+    end
+  rescue Errno::EPIPE
+    nil
+  end
+
+  def format_elapsed(seconds)
+    format('%.3fs', seconds)
   end
 
   def day_start(time)
@@ -1128,22 +1183,27 @@ class RepoHealthCollector
   def circleci_pipelines(owner_repo, branch, token)
     pipelines = []
     page_token = nil
+    pages = 0
+    oldest_window_start = period_windows.last.fetch(:start)
     loop do
+      raise SourceLimit, 'CircleCI pipeline pagination reached its configured limit' if pages >= CIRCLECI_PAGE_LIMIT
+
       path = "/project/gh/#{owner_repo}/pipeline?branch=#{url_query(branch)}"
       path += "&page-token=#{URI.encode_www_form_component(page_token)}" if page_token
       data = circleci_get(path, token)
       items = data.fetch('items', [])
-      pipelines.concat(items)
+      pages += 1
+      pipelines.concat(items.select { |pipeline| Time.parse(pipeline.fetch('created_at')) >= oldest_window_start })
       oldest = items.filter_map { |pipeline| Time.parse(pipeline.fetch('created_at')) }.min
       page_token = data['next_page_token']
-      break if items.empty? || page_token.nil? || (oldest && oldest < period_windows.last.fetch(:start))
+      break if items.empty? || page_token.nil? || (oldest && oldest < oldest_window_start)
     end
     pipelines
   end
 
   def circleci_workflows(pipelines, token)
     pipelines.flat_map do |pipeline|
-      circleci_get("/pipeline/#{pipeline.fetch('id')}/workflow", token).fetch('items', []).map do |workflow|
+      circleci_paginated("/pipeline/#{pipeline.fetch('id')}/workflow", token).map do |workflow|
         workflow.merge('pipeline_created_at' => pipeline.fetch('created_at'),
                        'pipeline_number' => pipeline.fetch('number'))
       end
@@ -1152,7 +1212,7 @@ class RepoHealthCollector
 
   def circleci_jobs(workflows, token)
     workflows.flat_map do |workflow|
-      circleci_get("/workflow/#{workflow.fetch('id')}/job", token).fetch('items', []).map do |job|
+      circleci_paginated("/workflow/#{workflow.fetch('id')}/job", token).map do |job|
         job.merge('workflow_id' => workflow.fetch('id'), 'workflow_created_at' => workflow.fetch('created_at'))
       end
     end
@@ -1168,20 +1228,31 @@ class RepoHealthCollector
     YAML.safe_load_file(path).fetch('token')
   end
 
-  def gh_pr_list(*args)
-    limit = GITHUB_PR_PAGE_LIMIT
-    loop do
-      results = gh_json(*args, '--limit', limit.to_s)
-      return results if results.length < limit
-      if limit >= GITHUB_PR_PAGE_LIMIT_MAX
-        raise "gh pr list saturated at --limit #{limit} without proving completeness: #{args.join(' ')}"
-      end
+  def gh_pr_list(*)
+    results = gh_json(*, '--limit', GITHUB_PR_RESULT_LIMIT.to_s)
+    return results if results.length < GITHUB_PR_RESULT_LIMIT
 
-      limit *= 2
-    end
+    raise SourceLimit, 'GitHub pull request query reached its configured result limit'
   end
 
-  def summary_branch(owner_repo)
+  def circleci_paginated(path, token)
+    items = []
+    page_token = nil
+    pages = 0
+    loop do
+      raise SourceLimit, 'CircleCI pagination reached its configured limit' if pages >= CIRCLECI_PAGE_LIMIT
+
+      request_path = page_token ? "#{path}?page-token=#{URI.encode_www_form_component(page_token)}" : path
+      data = circleci_get(request_path, token)
+      items.concat(data.fetch('items', []))
+      pages += 1
+      page_token = data['next_page_token']
+      break unless page_token
+    end
+    items
+  end
+
+  def summary_branch(owner_repo, github_selected)
     return @branch if @branch
 
     branch = git('symbolic-ref', '--quiet', '--short', 'refs/remotes/origin/HEAD', allow_failure: true)
@@ -1189,7 +1260,7 @@ class RepoHealthCollector
              .sub(%r{\Aorigin/}, '')
     return branch unless branch.empty?
 
-    branch = github_default_branch(owner_repo)
+    branch = github_default_branch(owner_repo) if github_selected
     return branch if branch && !branch.empty?
 
     git('branch', '--show-current').strip
@@ -1223,7 +1294,9 @@ end
 options = {
   repo_path: Dir.pwd,
   timezone: ENV.fetch('TZ', 'Europe/Berlin'),
-  include_jobs: false
+  include_jobs: false,
+  source_names: RepoHealthCollector::SOURCE_NAMES,
+  overall_timeout_seconds: RepoHealthCollector::DEFAULT_OVERALL_TIMEOUT_SECONDS
 }
 
 OptionParser.new do |parser|
@@ -1248,8 +1321,17 @@ OptionParser.new do |parser|
     options[:branch] = value
   end
   parser.on('--include-jobs', 'Collect CircleCI job-level data for library repos.') { options[:include_jobs] = true }
+  parser.on('--sources NAMES',
+            'Comma-separated sources: local, github, circleci, digitalocean, kubernetes, uptimerobot.') do |value|
+    options[:source_names] = value.split(',').map(&:strip).reject(&:empty?).map(&:to_sym)
+  end
+  parser.on('--timeout SECONDS', Float, 'Overall collection timeout in seconds. Defaults to 240.') do |value|
+    raise OptionParser::InvalidArgument, 'timeout must be greater than zero' unless value.positive?
+
+    options[:overall_timeout_seconds] = value
+  end
 end.parse!
 
 puts RepoHealthCollector.new(options).call
 
-# rubocop:enable Metrics/ClassLength, Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+# rubocop:enable Metrics/ClassLength, Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/BlockLength
