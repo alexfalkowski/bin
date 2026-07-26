@@ -43,7 +43,10 @@ reporting period and comparison period, not necessarily a local folder.
    DigitalOcean/Kubernetes, and UptimeRobot read-only collection in one command
    and returns report-ready JSON with metrics and source summaries.
    - Run one collector process for each report. Do not run one process per
-     metric or source.
+     metric or source. The collector writes machine-readable JSON only to
+     standard output and progress to standard error.
+   - Use `--sources local,github` to limit collection when the report needs a
+     subset, or `--timeout SECONDS` to override the 240-second overall deadline.
    - Redirect its standard output to a unique temporary file created with
      `mktemp`; never let concurrent collector processes write to the same path.
    - Wait for the collector process to finish before parsing its output. Check

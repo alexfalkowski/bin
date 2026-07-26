@@ -21,35 +21,103 @@ module EvidenceSources
   class SourceTimeout < Timeout::Error
   end
 
+  # Marks an intentional, safe collection limit for report output.
+  class SourceLimit < StandardError
+  end
+
   private
 
   # Runs independent source collectors with bounded concurrency while preserving result order.
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-  def collect_sources(sources)
-    queue = Queue.new
-    sources.each_with_index { |source, index| queue << [index, *source] }
+  def collect_sources(sources, overall_timeout_seconds: nil, on_start: nil, on_finish: nil)
+    collection = { started_at: monotonic_time, results: {}, lock: Mutex.new, cancelled: false }
+    queue = source_queue(sources)
+    workers = source_workers(sources, queue, collection, on_start, on_finish)
 
-    workers = Array.new([sources.length, MAX_CONCURRENT_SOURCES].min) do
-      Thread.new do
-        results = []
-        loop do
-          source = begin
-            queue.pop(true)
-          rescue ThreadError
-            nil
-          end
-          break unless source
-
-          index, name, collect = source
-          results << [index, name, collect_source(name, collect)]
-        end
-        results
-      end
+    wait_for_sources(workers, overall_timeout_seconds)
+    if workers.any?(&:alive?)
+      mark_overall_timeout_sources(sources, collection, on_finish, overall_timeout_seconds)
+    else
+      workers.each(&:join)
     end
-
-    workers.flat_map(&:value).sort_by(&:first).to_h { |_, name, result| [name, result] }
+    sources.to_h { |name, _| [name, collection.fetch(:results).fetch(name)] }
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+
+  def source_queue(sources)
+    Queue.new.tap { |queue| sources.each { |source| queue << source } }
+  end
+
+  def source_workers(sources, queue, collection, on_start, on_finish)
+    Array.new([sources.length, MAX_CONCURRENT_SOURCES].min) do
+      Thread.new { collect_queued_sources(queue, collection, on_start, on_finish) }
+    end
+  end
+
+  def collect_queued_sources(queue, collection, on_start, on_finish)
+    loop do
+      break if collection_cancelled?(collection)
+
+      source = queue.pop(true)
+      collect_queued_source(source, collection, on_start, on_finish)
+    rescue ThreadError
+      break
+    end
+  end
+
+  def collect_queued_source(source, collection, on_start, on_finish)
+    name, collect = source
+    source_started_at = monotonic_time
+    on_start&.call(name)
+    result = collect_source(name, collect)
+    return if collection_cancelled?(collection)
+
+    collection.fetch(:lock).synchronize { collection.fetch(:results)[name] = result }
+    on_finish&.call(name, result, monotonic_time - source_started_at)
+  end
+
+  def wait_for_sources(workers, overall_timeout_seconds)
+    return workers.each(&:join) unless overall_timeout_seconds
+
+    deadline = monotonic_time + overall_timeout_seconds
+    workers.each do |worker|
+      remaining_seconds = deadline - monotonic_time
+      break unless remaining_seconds.positive?
+
+      worker.join(remaining_seconds)
+    end
+  end
+
+  def mark_overall_timeout_sources(sources, collection, on_finish, overall_timeout_seconds)
+    collection.fetch(:lock).synchronize { collection[:cancelled] = true }
+    missing_source_names(sources, collection).each do |name|
+      mark_overall_timeout_source(name, collection, on_finish, overall_timeout_seconds)
+    end
+  end
+
+  def missing_source_names(sources, collection)
+    sources.map(&:first).reject { |name| collection_result(collection, name) }
+  end
+
+  def mark_overall_timeout_source(name, collection, on_finish, overall_timeout_seconds)
+    result = unavailable("overall collection timed out after #{overall_timeout_seconds} seconds")
+    store_collection_result(collection, name, result)
+    on_finish&.call(name, result, monotonic_time - collection.fetch(:started_at))
+  end
+
+  def collection_result(collection, name)
+    collection.fetch(:lock).synchronize { collection.fetch(:results)[name] }
+  end
+
+  def store_collection_result(collection, name, result)
+    collection.fetch(:lock).synchronize { collection.fetch(:results)[name] = result }
+  end
+
+  def monotonic_time
+    Process.clock_gettime(Process::CLOCK_MONOTONIC)
+  end
+
+  def collection_cancelled?(collection)
+    collection.fetch(:lock).synchronize { collection[:cancelled] }
+  end
 
   def collect_source(name, collect)
     timeout_seconds = source_timeout_seconds(name)
@@ -70,7 +138,7 @@ module EvidenceSources
   end
 
   def source_error_reason(error)
-    return error.message if error.is_a?(SourceTimeout)
+    return error.message if error.is_a?(SourceTimeout) || error.is_a?(SourceLimit)
     return timeout_reason(source_timeout_seconds) if error.is_a?(Timeout::Error)
 
     "source collection failed (#{error.class})"

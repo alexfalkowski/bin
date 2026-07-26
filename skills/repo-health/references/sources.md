@@ -40,6 +40,13 @@ Use the manual commands below only for requested scope that the collector cannot
 cover or when Ruby is unavailable; state that collector gap before relying on
 manual evidence.
 
+The collector sends progress lines to standard error and emits exactly one JSON
+object to standard output when collection succeeds or degrades gracefully. Its
+default source set is local, GitHub, CircleCI, DigitalOcean, Kubernetes, and
+UptimeRobot. Limit a report to specific sources with `--sources local,github`,
+or set the 240-second overall deadline with `--timeout SECONDS`; sources
+unfinished at that deadline are reported as unavailable in the JSON output.
+
 Useful local commands include:
 
 ```bash
