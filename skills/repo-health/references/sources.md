@@ -22,14 +22,15 @@ Use the bundled collector as the default collection path when Ruby is
 available:
 
 ```bash
-report_output="$(mktemp "${TMPDIR:-/tmp}/repo-health.XXXXXX")"
-<skill-dir>/scripts/collect --repo <repo-path> > "$report_output"
+<skill-dir>/scripts/collect --repo <repo-path>
 rc=$?
-test "$rc" -eq 0
-test -s "$report_output"
-jq empty "$report_output"
-jq -e -s 'length == 1 and (.[0] | type == "object")' "$report_output" >/dev/null
 ```
+
+`scripts/collect` already runs exactly one collector process per attempt,
+validates the completed run's exit code, output, and JSON shape (non-empty,
+`jq empty`, exactly one JSON object), and retries once before giving up; trust
+its own validated `rc` and standard output directly instead of re-validating
+them.
 
 Full collection can take time, especially when CircleCI is selected. Start this
 command in the runtime's persistent session, then poll that same session until
@@ -38,13 +39,6 @@ deadline: agents must not kill, cancel, or switch to manual fallback because a
 poll returns before the collector exits. Allow the configured 240 seconds (or
 the supplied `--timeout`) plus final-output time. Record the completed command's
 exit code as `rc`; do not use `status`, which is read-only in zsh.
-
-`collect` runs exactly one collector process per attempt, writes its standard
-output to a fresh internal `mktemp` file, validates the completed run, and
-retries once only when that completed run has a non-zero exit code, empty output,
-invalid JSON, or anything other than exactly one JSON object. The outer
-`report_output` must still pass the checks above before parsing. Concurrent
-invocations must never write to the same output path.
 
 Do not retry when the persistent session is interrupted or timed out before it
 returns a completed `rc` and final output: classify that as `interrupted or
@@ -146,9 +140,10 @@ Common environment variables:
 
 - `CIRCLE_TOKEN`
 - `CIRCLECI_TOKEN`
+- `CIRCLECI_CLI_TOKEN`
 
-If neither environment variable is set, check the CircleCI CLI config at
-`${CIRCLECI_CLI_CONFIG:-$HOME/.circleci/cli.yml}` and use its `token` field
+If none of these environment variables is set, check the CircleCI CLI config
+at `${CIRCLECI_CLI_CONFIG:-$HOME/.circleci/cli.yml}` and use its `token` field
 when present. Do not print the token.
 
 The common project slug shape is `gh/<owner>/<repo>`. If the slug is ambiguous,

@@ -237,10 +237,8 @@ PATTERNS
 
 require_patterns skills/repo-health/scripts/collect <<'PATTERNS'
 collect.rb
-rc=$?
-test -s
-jq empty
-length == 1 and (.[0] | type == "object")
+run_skill_collector
+lib/skills/collector.sh
 PATTERNS
 
 reject_pattern skills/repo-health/scripts/collect 'status='
@@ -259,13 +257,21 @@ require_pattern_in_files 'scripts/collect' \
 
 require_patterns skills/diagnose-issue/scripts/collect <<'PATTERNS'
 collect.rb
+run_skill_collector
+lib/skills/collector.sh
+PATTERNS
+
+reject_pattern skills/diagnose-issue/scripts/collect 'status='
+
+# Shared collector retry/validation contract sourced by both scripts/collect above.
+require_patterns lib/skills/collector.sh <<'PATTERNS'
 rc=$?
 test -s
 jq empty
 length == 1 and (.[0] | type == "object")
 PATTERNS
 
-reject_pattern skills/diagnose-issue/scripts/collect 'status='
+reject_pattern lib/skills/collector.sh 'status='
 
 # Testing and language-standard contracts.
 require_patterns skills/testing-standards/SKILL.md <<'PATTERNS'

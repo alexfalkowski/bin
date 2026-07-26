@@ -454,45 +454,6 @@ class RepoHealthCollector
     end
   end
 
-  def collect_digitalocean
-    token = ENV.fetch('DIGITALOCEAN_ACCESS_TOKEN', nil)
-    return unavailable('DIGITALOCEAN_ACCESS_TOKEN is not set') if token.nil? || token.empty?
-
-    data = http_json('https://api.digitalocean.com/v2/kubernetes/clusters', 'Authorization' => "Bearer #{token}")
-    { status: 'used', clusters: data.fetch('kubernetes_clusters', []).map do |cluster|
-      pick(cluster, 'name', 'region', 'version', 'status', 'created_at')
-    end }
-  rescue StandardError => e
-    unavailable_for_error(e)
-  end
-
-  def collect_kubernetes(name)
-    return unavailable('kubectl is not installed') unless command_available?('kubectl')
-
-    context = capture('kubectl', 'config', 'current-context', allow_failure: true).strip
-    deployments = kubectl_json('get', 'deployments', '-A', '-o', 'json').fetch('items', []).select do |item|
-      item.dig('metadata', 'name')&.include?(name) || item.dig('metadata', 'namespace')&.include?(name)
-    end
-
-    pods = deployments.flat_map do |deployment|
-      namespace = deployment.dig('metadata', 'namespace')
-      labels = deployment.dig('spec', 'selector', 'matchLabels') || {}
-      selector = labels.map { |key, value| "#{key}=#{value}" }.join(',')
-      next [] if selector.empty?
-
-      kubectl_json('get', 'pods', '-n', namespace, '-l', selector, '-o', 'json').fetch('items', [])
-    end
-
-    {
-      status: 'used',
-      context: context,
-      deployments: deployments.map { |deployment| deployment_summary(deployment) },
-      pods: pods.map { |pod| pod_summary(pod) }
-    }
-  rescue StandardError => e
-    unavailable_for_error(e)
-  end
-
   def collect_uptimerobot(name)
     key = ENV.fetch('UPTIMEROBOT_API_KEY', '').strip
     return unavailable('UPTIMEROBOT_API_KEY is not set') if key.empty?
@@ -540,47 +501,12 @@ class RepoHealthCollector
     unavailable_for_error(e)
   end
 
-  def deployment_summary(deployment)
-    status = deployment.fetch('status', {})
-    spec = deployment.fetch('spec', {})
-    container = deployment.dig('spec', 'template', 'spec', 'containers', 0) || {}
-    {
-      namespace: deployment.dig('metadata', 'namespace'),
-      name: deployment.dig('metadata', 'name'),
-      desired_replicas: spec['replicas'],
-      ready_replicas: status['readyReplicas'] || 0,
-      available_replicas: status['availableReplicas'] || 0,
-      updated_replicas: status['updatedReplicas'] || 0,
-      image: container['image']
-    }
-  end
-
-  def pod_summary(pod)
-    statuses = pod.dig('status', 'containerStatuses') || []
-    conditions = pod.dig('status', 'conditions') || []
-    ready_condition = conditions.find { |condition| condition['type'] == 'Ready' }
-    {
-      namespace: pod.dig('metadata', 'namespace'),
-      name: pod.dig('metadata', 'name'),
-      phase: pod.dig('status', 'phase'),
-      ready: ready_condition ? ready_condition['status'] == 'True' : false,
-      restarts: statuses.sum { |status| status['restartCount'].to_i },
-      started_at: pod.dig('status', 'startTime')
-    }
-  end
-
   def response_samples(samples, start_time, end_time)
     selected = samples.select do |sample|
       timestamp = sample.fetch('datetime').to_i
       timestamp >= start_time.to_i && timestamp < end_time.to_i
     end
     selected.map { |sample| sample.fetch('value').to_f }
-  end
-
-  def find_uptimerobot_monitor(data, name)
-    data.fetch('monitors', []).find do |item|
-      [item['friendly_name'], item['url']].compact.any? { |value| value.include?(name) }
-    end
   end
 
   def summary_result(result)
@@ -1168,10 +1094,6 @@ class RepoHealthCollector
     github[key] if github.is_a?(Hash) && !github[:status]
   end
 
-  def unavailable_source?(value)
-    value.is_a?(Hash) && %w[skipped unavailable].include?(value[:status])
-  end
-
   def uptime_ranges(uptimerobot)
     uptimerobot.fetch(:uptime_ranges, '').split('-')
   end
@@ -1216,16 +1138,6 @@ class RepoHealthCollector
         job.merge('workflow_id' => workflow.fetch('id'), 'workflow_created_at' => workflow.fetch('created_at'))
       end
     end
-  end
-
-  def circleci_token
-    token = ENV['CIRCLE_TOKEN'] || ENV.fetch('CIRCLECI_TOKEN', nil)
-    return token unless token.nil? || token.empty?
-
-    path = ENV['CIRCLECI_CLI_CONFIG'] || File.join(Dir.home, '.circleci', 'cli.yml')
-    return nil unless File.exist?(path)
-
-    YAML.safe_load_file(path).fetch('token')
   end
 
   def gh_pr_list(*)

@@ -1,75 +1,10 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC1091
 # Runs the diagnose-issue collector with completed-run validation and one bounded retry.
 
 set -eo pipefail
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-max_attempts=2
-attempt=1
-diagnosis_output=""
+source "$script_dir/../../../lib/skills/collector.sh"
 
-cleanup() {
-  [[ -z $diagnosis_output ]] || rm -f "$diagnosis_output"
-}
-
-interrupted() {
-  printf 'diagnose-issue: collector invocation interrupted; output was discarded\n' >&2
-  exit 130
-}
-
-trap cleanup EXIT
-trap interrupted HUP INT TERM
-
-if ! command -v ruby >/dev/null 2>&1; then
-  printf 'diagnose-issue: ruby is required to run the collector\n' >&2
-  exit 127
-fi
-
-for argument in "$@"; do
-  if [[ $argument == '--help' || $argument == '-h' ]]; then
-    exec ruby "$script_dir/collect.rb" "$@"
-  fi
-done
-
-if ! command -v jq >/dev/null 2>&1; then
-  printf 'diagnose-issue: jq is required to validate collector output\n' >&2
-  exit 127
-fi
-
-while ((attempt <= max_attempts)); do
-  diagnosis_output="$(mktemp "${TMPDIR:-/tmp}/diagnose-issue.XXXXXX")"
-
-  set +e
-  ruby "$script_dir/collect.rb" "$@" > "$diagnosis_output"
-  rc=$?
-  set -e
-
-  validation_error=""
-  if ((rc != 0)); then
-    validation_error="collector completed with exit code $rc"
-  elif ! test -s "$diagnosis_output"; then
-    validation_error='collector completed without JSON output'
-  elif ! jq empty "$diagnosis_output" >/dev/null 2>&1; then
-    validation_error='collector completed with invalid JSON output'
-  elif ! jq -e -s 'length == 1 and (.[0] | type == "object")' "$diagnosis_output" >/dev/null; then
-    validation_error='collector completed without exactly one JSON object'
-  fi
-
-  if [[ -z $validation_error ]]; then
-    cat "$diagnosis_output"
-    exit 0
-  fi
-
-  if ((attempt == max_attempts)); then
-    printf 'diagnose-issue: %s after retry\n' "$validation_error" >&2
-    if ((rc == 0)); then
-      rc=1
-    fi
-    exit "$rc"
-  fi
-
-  printf 'diagnose-issue: %s; retrying once\n' "$validation_error" >&2
-  rm -f "$diagnosis_output"
-  diagnosis_output=""
-  ((attempt += 1))
-done
+run_skill_collector 'diagnose-issue' "$script_dir/collect.rb" "$@"
