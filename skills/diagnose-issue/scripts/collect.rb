@@ -14,6 +14,10 @@ class IssueDiagnosisCollector
 
   FAILED_WORKFLOW_STATUSES = %w[failed error unauthorized].freeze
   ACTIVE_WORKFLOW_STATUSES = %w[running failing on_hold queued].freeze
+  CIRCLECI_TEST_RESULT_PAGE_LIMIT = 2
+  CIRCLECI_TEST_RESULT_LIMIT = 100
+  CIRCLECI_TEST_CLASS_LIMIT = 10
+  GITHUB_COMMIT_STATUS_LIMIT = 20
 
   def initialize(options)
     @mode = options.fetch(:mode)
@@ -51,22 +55,31 @@ class IssueDiagnosisCollector
   def diagnose_ci(root, owner_repo)
     branch = @branch || current_branch
     branch = default_branch(owner_repo) if branch.empty?
-    circleci = collect_circleci_ci(owner_repo, branch)
+    revision = resolved_revision
+    circleci = collect_circleci_ci(owner_repo, branch, revision)
     target_branch = circleci.is_a?(Hash) ? circleci.dig(:pipeline, :branch) || branch : branch
     findings = ci_findings(target_branch, circleci)
-    current_pull_request = github_current_pull_request(owner_repo, target_branch)
+    current_pull_request = github_current_pull_request(owner_repo, target_branch) unless @revision
+    pull_requests_for_revision = github_pull_requests_for_revision(owner_repo, revision) if @revision
 
     target_type = @target
     target_type = 'pipeline' if @pipeline
     target_type = 'revision' if @revision
     target = { type: target_type, branch: target_branch, pipeline: @pipeline }
     target[:revision] = @revision if @revision
+    target[:resolved_revision] = revision if @revision && revision != @revision
+    github = { current_pull_request: current_pull_request }
+    github[:pull_requests_for_revision] = pull_requests_for_revision if @revision
+    sources = source_summary(
+      github: github_source(current_pull_request, pull_requests_for_revision),
+      circleci: circleci
+    )
 
     diagnosis_metadata(root, owner_repo).merge(
       target: target,
-      sources: source_summary(github: current_pull_request, circleci: circleci),
+      sources: sources,
       findings: findings,
-      evidence: { github: { current_pull_request: current_pull_request }, circleci: circleci }
+      evidence: { github: github, circleci: circleci }
     )
   end
 
@@ -122,17 +135,19 @@ class IssueDiagnosisCollector
     }
   end
 
-  def collect_circleci_ci(owner_repo, branch)
+  def collect_circleci_ci(owner_repo, branch, revision)
     token = circleci_token
     return unavailable('CircleCI token not found') if token.nil? || token.empty?
 
     pipeline = if @revision
-                 circleci_pipeline_by_revision(owner_repo, @revision, token)
+                 circleci_pipeline_by_revision(owner_repo, revision, token)
                elsif @pipeline
                  circleci_pipeline_target(owner_repo, @pipeline, token)
                else
                  latest_circleci_pipeline(owner_repo, branch, token)
                end
+    fallback = circleci_commit_status_fallback(owner_repo, revision) if @revision && pipeline.nil?
+    return fallback if fallback
     return unavailable(circleci_pipeline_not_found_reason(branch)) unless pipeline
 
     collect_circleci_pipeline(owner_repo, pipeline, token)
@@ -164,6 +179,7 @@ class IssueDiagnosisCollector
       status: 'used',
       pipeline: pipeline_summary(pipeline),
       workflows: workflows.map { |workflow| workflow_summary(workflow) },
+      workflow_attempts: workflow_attempt_groups(workflows),
       jobs: jobs.map { |job| job_summary(job) },
       failed_workflows: workflows.select { |workflow| failed_circleci_workflow?(workflow) }.map do |workflow|
         workflow_summary(workflow)
@@ -178,34 +194,65 @@ class IssueDiagnosisCollector
 
   def ci_findings(branch, circleci)
     return [source_finding('CircleCI', circleci)] if unavailable_source?(circleci)
+    return commit_status_findings(circleci) if circleci[:commit_status_fallback]
 
     failed_jobs = circleci.fetch(:failed_jobs, [])
-    failed_workflows = circleci.fetch(:failed_workflows, [])
-    active_workflows = circleci.fetch(:active_workflows, [])
+    workflow_attempts = circleci.fetch(:workflow_attempts, [])
 
-    findings = failed_workflows.map do |workflow|
-      finding('failure', 'circleci-workflow',
-              "#{workflow[:name]} workflow is #{workflow[:status]} on #{branch}.",
-              'Inspect the first failed job in this workflow.')
-    end
+    findings = []
+    workflow_attempts.each do |workflow_group|
+      workflow = workflow_group.fetch(:final_attempt)
+      attempts = workflow_group.fetch(:attempts)
+      attempt_context = workflow_attempt_context(attempts)
 
-    failed_jobs.each do |job|
-      next if active_workflows.any? { |workflow| workflow[:id] == job[:workflow_id] }
-
-      evidence = "#{job[:name]} is #{job[:status]}#{job_number(job)}#{job_context(job)}#{job_failed_step(job)}."
-      findings << finding('failure', 'circleci-job',
-                          evidence,
-                          "Inspect #{job[:name]} logs#{job_url(job)}.")
-    end
-
-    active_workflows.each do |workflow|
-      findings << finding('warning', 'circleci-workflow',
-                          "#{workflow[:name]} workflow is #{workflow[:status]} on #{branch}.",
-                          'Wait for the active workflow to reach a terminal state before diagnosing a failure.')
+      if failed_circleci_workflow?(workflow)
+        findings << finding('failure', 'circleci-workflow',
+                            "#{workflow[:name]} workflow is #{workflow[:status]} on #{branch}#{attempt_context}.",
+                            'Inspect the first failed job in this workflow.')
+        failed_jobs.select { |job| job[:workflow_id] == workflow[:id] }.each do |job|
+          findings << circleci_job_finding(job)
+        end
+      elsif active_circleci_workflow?(workflow)
+        findings << finding('warning', 'circleci-workflow',
+                            "#{workflow[:name]} workflow is #{workflow[:status]} on #{branch}#{attempt_context}.",
+                            'Wait for the active workflow to reach a terminal state before diagnosing a failure.')
+      elsif attempts.any? { |attempt| failed_circleci_workflow?(attempt) }
+        findings << finding('warning', 'circleci-workflow',
+                            "#{workflow[:name]} workflow succeeded on #{branch}#{attempt_context}.",
+                            'Confirm the earlier failed attempt was transient before relying on the rerun.')
+      else
+        failed_jobs.select { |job| job[:workflow_id] == workflow[:id] }.each do |job|
+          findings << circleci_job_finding(job)
+        end
+      end
     end
 
     findings << clean_finding('No failed jobs were found in the selected CircleCI pipeline.') if findings.empty?
     findings
+  end
+
+  def commit_status_findings(circleci)
+    jobs = circleci.dig(:commit_status_fallback, :jobs) || []
+    findings = jobs.filter_map do |job|
+      evidence = "CircleCI commit-status job ##{job[:job_number]} is #{job[:status]} for the selected revision."
+      case job[:status]
+      when 'failed', 'error'
+        finding('failure', 'circleci-job', evidence,
+                "Inspect the CircleCI job at #{job[:web_url]}.")
+      when 'running'
+        finding('warning', 'circleci-job', evidence,
+                'Wait for the CircleCI job to reach a terminal state before diagnosing a failure.')
+      end
+    end
+    if findings.empty?
+      findings << clean_finding('No failed CircleCI commit-status jobs were found for the selected revision.')
+    end
+    findings
+  end
+
+  def circleci_job_finding(job)
+    evidence = "#{job[:name]} is #{job[:status]}#{job_number(job)}#{job_context(job)}#{job_failed_step(job)}."
+    finding('failure', 'circleci-job', evidence, "Inspect #{job[:name]} logs#{job_url(job)}.")
   end
 
   def deployment_findings(service, version, circleci, kubernetes, uptimerobot)
@@ -324,6 +371,58 @@ class IssueDiagnosisCollector
     nil
   end
 
+  def circleci_commit_status_fallback(owner_repo, revision)
+    return nil unless command_available?('gh')
+
+    statuses = gh_json(
+      'api', "repos/#{owner_repo}/commits/#{url_query(revision)}/status?per_page=#{GITHUB_COMMIT_STATUS_LIMIT}"
+    ).fetch('statuses', [])
+    jobs = statuses.first(GITHUB_COMMIT_STATUS_LIMIT).filter_map do |status|
+      circleci_commit_status_job(status, owner_repo)
+    end
+    jobs = jobs.uniq { |job| job[:job_number] }
+    return nil if jobs.empty?
+
+    {
+      status: 'used',
+      pipeline: nil,
+      workflows: [],
+      workflow_attempts: [],
+      jobs: [],
+      failed_workflows: [],
+      active_workflows: [],
+      failed_jobs: [],
+      deploy_job: nil,
+      pipeline_lookup: unavailable(circleci_pipeline_not_found_reason('')),
+      commit_status_fallback: { status: 'used', revision: revision, jobs: jobs }
+    }
+  rescue StandardError
+    nil
+  end
+
+  def circleci_commit_status_job(status, owner_repo)
+    job_number = circleci_job_number_from_status_url(status['target_url'], owner_repo)
+    return nil unless job_number
+
+    job_status = circleci_commit_status(status['state'])
+    return nil unless job_status
+
+    {
+      job_number: job_number,
+      status: job_status,
+      web_url: "https://circleci.com/gh/#{owner_repo}/#{job_number}"
+    }
+  end
+
+  def circleci_job_number_from_status_url(target_url, owner_repo)
+    match = target_url.to_s.match(%r{\Ahttps://circleci\.com/gh/#{Regexp.escape(owner_repo)}/(\d+)(?:\z|[?#])})
+    match && match[1]
+  end
+
+  def circleci_commit_status(status)
+    { 'failure' => 'failed', 'error' => 'error', 'pending' => 'running', 'success' => 'success' }[status]
+  end
+
   def circleci_pipeline_for_revision(owner_repo, branch, revision, token)
     page_token = nil
     10.times do
@@ -341,6 +440,10 @@ class IssueDiagnosisCollector
 
   def circleci_pipeline(id, token)
     circleci_get("/pipeline/#{id}", token)
+  end
+
+  def circleci_v1_get(path, token)
+    http_json("https://circleci.com/api/v1.1#{path}", 'Circle-Token' => token)
   end
 
   def circleci_workflows(pipeline_id, token)
@@ -374,22 +477,103 @@ class IssueDiagnosisCollector
     )
     return enriched unless failed_circleci_job?(job)
 
-    enriched.merge(failed_step_metadata(details))
+    enriched.merge(failed_step_metadata_with_fallback(owner_repo, job, details, token))
+            .merge(circleci_test_result_summary(owner_repo, job, token))
   rescue StandardError => e
     result = enriched.merge('details_error' => source_error_reason(e))
     return result unless failed_circleci_job?(job)
 
-    result.merge('failed_step_metadata_limitation' => 'CircleCI job details are unavailable.')
+    result.merge(failed_step_metadata_fallback(owner_repo, job, token, 'CircleCI job details are unavailable.'))
+          .merge(circleci_test_result_summary(owner_repo, job, token))
   end
 
-  def failed_step_metadata(details)
+  def failed_step_metadata_with_fallback(owner_repo, job, details, token)
+    metadata = failed_step_metadata(details, 'circleci-v2')
+    return metadata if metadata['failed_step']
+
+    failed_step_metadata_fallback(owner_repo, job, token, metadata['failed_step_metadata_limitation'])
+  end
+
+  def failed_step_metadata_fallback(owner_repo, job, token, limitation)
+    path = "/project/github/#{owner_repo}/#{job.fetch('job_number')}"
+    metadata = failed_step_metadata(circleci_v1_get(path, token), 'circleci-v1')
+    return metadata if metadata['failed_step']
+
+    failed_step_metadata_unavailable(metadata['failed_step_metadata_limitation'])
+  rescue StandardError
+    failed_step_metadata_unavailable(limitation)
+  end
+
+  def failed_step_metadata_unavailable(limitation)
+    {
+      'failed_step_metadata_limitation' => limitation,
+      'failed_step_fallback' => { 'source' => 'circleci-v1', 'status' => 'unavailable', 'reason' => limitation }
+    }
+  end
+
+  def failed_step_metadata(details, source)
     details.fetch('steps', []).each do |step|
       action = step.fetch('actions', []).find { |candidate| failed_circleci_step?(candidate) }
       next unless action
 
-      return { 'failed_step' => pick(step, 'name').merge(pick(action, 'status', 'exit_code')) }
+      failed_step = pick(step, 'name').merge(pick(action, 'status', 'exit_code')).merge('source' => source)
+      return { 'failed_step' => failed_step }
     end
     { 'failed_step_metadata_limitation' => 'CircleCI did not report a failed step.' }
+  end
+
+  def circleci_test_result_summary(owner_repo, job, token)
+    results = []
+    page_token = nil
+    pages = 0
+    truncated = false
+
+    loop do
+      path = "/project/gh/#{owner_repo}/#{job.fetch('job_number')}/tests"
+      path += "?page-token=#{url_query(page_token)}" if page_token
+      data = circleci_get(path, token)
+      items = data.fetch('items', [])
+      remaining = CIRCLECI_TEST_RESULT_LIMIT - results.length
+      results.concat(items.first(remaining))
+      pages += 1
+      page_token = data['next_page_token']
+      truncated = items.length > remaining || (page_token && (pages >= CIRCLECI_TEST_RESULT_PAGE_LIMIT ||
+        results.length >= CIRCLECI_TEST_RESULT_LIMIT))
+      break if page_token.nil? || truncated
+    end
+
+    { 'test_results' => summarized_test_results(results, truncated) }
+  rescue StandardError => e
+    { 'test_results' => { 'status' => 'unavailable', 'reason' => source_error_reason(e) } }
+  end
+
+  def summarized_test_results(results, truncated)
+    failures = results.reject { |result| %w[success skipped].include?(test_result_value(result, 'result')) }
+    grouped = failures.group_by { |result| test_result_value(result, 'result') }.sort.to_h do |result, grouped_results|
+      [result, summarized_test_classes(grouped_results)]
+    end
+    grouped_failures = failures.group_by { |result| test_result_value(result, 'result') }
+    class_limit_reached = grouped_failures.any? do |_result, grouped_results|
+      grouped_results.map { |result| test_result_value(result, 'classname') }.uniq.length > CIRCLECI_TEST_CLASS_LIMIT
+    end
+    {
+      'status' => 'used',
+      'total' => failures.length,
+      'failures' => grouped.map { |result, test_classes| { 'result' => result, 'test_classes' => test_classes } },
+      'truncated' => truncated || class_limit_reached
+    }
+  end
+
+  def summarized_test_classes(results)
+    results.group_by { |result| test_result_value(result, 'classname') }
+           .sort_by { |classname, grouped_results| [-grouped_results.length, classname] }
+           .first(CIRCLECI_TEST_CLASS_LIMIT)
+           .map { |classname, grouped_results| { 'classname' => classname, 'count' => grouped_results.length } }
+  end
+
+  def test_result_value(result, key)
+    value = result[key]
+    value.nil? || value.empty? ? 'unknown' : value
   end
 
   def failed_circleci_step?(step)
@@ -508,13 +692,14 @@ class IssueDiagnosisCollector
   end
 
   def workflow_summary(workflow)
-    symbolize(pick(workflow, 'id', 'name', 'status', 'created_at', 'stopped_at'))
+    keys = %w[id name status created_at stopped_at auto_rerun_number max_auto_reruns]
+    symbolize(pick(workflow, *keys))
   end
 
   def job_summary(job)
     symbolize(pick(job, 'job_number', 'name', 'status', 'started_at', 'stopped_at', 'workflow_id',
                    'workflow_name', 'web_url', 'contexts', 'messages', 'details_error', 'failed_step',
-                   'failed_step_metadata_limitation'))
+                   'failed_step_metadata_limitation', 'failed_step_fallback', 'test_results'))
   end
 
   def github_current_pull_request(owner_repo, branch)
@@ -525,6 +710,17 @@ class IssueDiagnosisCollector
       'pr', 'list', '--repo', owner_repo, '--head', branch, '--state', 'open',
       '--json', 'number,title,url,headRefName,baseRefName,isDraft,mergeStateStatus,reviewDecision'
     ).first
+  rescue StandardError => e
+    unavailable_for_error(e)
+  end
+
+  def github_pull_requests_for_revision(owner_repo, revision)
+    return skipped('gh is not installed') unless command_available?('gh')
+
+    gh_json(
+      'pr', 'list', '--repo', owner_repo, '--search', revision, '--state', 'all', '--limit', '100',
+      '--json', 'number,title,url,state,headRefName,baseRefName,isDraft,mergedAt,closedAt'
+    )
   rescue StandardError => e
     unavailable_for_error(e)
   end
@@ -595,11 +791,11 @@ class IssueDiagnosisCollector
   end
 
   def failed_circleci_workflow?(workflow)
-    FAILED_WORKFLOW_STATUSES.include?(workflow['status'])
+    FAILED_WORKFLOW_STATUSES.include?(workflow['status'] || workflow[:status])
   end
 
   def active_circleci_workflow?(workflow)
-    ACTIVE_WORKFLOW_STATUSES.include?(workflow['status'])
+    ACTIVE_WORKFLOW_STATUSES.include?(workflow['status'] || workflow[:status])
   end
 
   def circleci_pipeline_not_found_reason(branch)
@@ -640,6 +836,40 @@ class IssueDiagnosisCollector
   def symbolize(hash)
     hash.to_h { |key, value| [key.to_sym, value] }
   end
+
+  def resolved_revision
+    return @revision unless abbreviated_sha?(@revision)
+
+    resolved = git('rev-parse', '--verify', '--end-of-options', "#{@revision}^{commit}", allow_failure: true).strip
+    resolved.empty? ? @revision : resolved
+  end
+
+  def abbreviated_sha?(revision)
+    revision&.match?(/\A[0-9a-f]{4,40}\z/i)
+  end
+
+  def github_source(current_pull_request, pull_requests_for_revision)
+    return pull_requests_for_revision if unavailable_source?(pull_requests_for_revision)
+    return current_pull_request if unavailable_source?(current_pull_request)
+
+    {}
+  end
+
+  def workflow_attempt_groups(workflows)
+    workflows.group_by { |workflow| workflow['name'] }.map do |name, attempts|
+      attempts = attempts.sort_by do |workflow|
+        [workflow.fetch('auto_rerun_number', 0).to_i, workflow.fetch('created_at', ''), workflow.fetch('id')]
+      end
+      summaries = attempts.map { |workflow| workflow_summary(workflow) }
+      { name: name, attempts: summaries, final_attempt: summaries.last }
+    end
+  end
+
+  def workflow_attempt_context(attempts)
+    return '' unless attempts.length > 1 || attempts.last[:auto_rerun_number].to_i.positive?
+
+    " after automatic rerun attempts #{attempts.filter_map { |attempt| attempt[:auto_rerun_number] }.join(', ')}"
+  end
 end
 
 def validate_selector_options!(options)
@@ -672,7 +902,12 @@ parser = OptionParser.new do |parser|
     options[:pipeline] = value
   end
   parser.on('--pipeline-id ID', 'CircleCI pipeline UUID for CI diagnosis.') { |value| options[:pipeline_id] = value }
-  parser.on('--revision SHA', 'Exact commit revision for CI diagnosis.') { |value| options[:revision] = value }
+  parser.on(
+    '--revision SHA',
+    'Commit revision for CI diagnosis (unique abbreviations are resolved locally).'
+  ) do |value|
+    options[:revision] = value
+  end
   parser.on('--version VERSION', 'Version tag for deployment diagnosis.') { |value| options[:version] = value }
   parser.on('--branch BRANCH', 'Branch for latest CI pipeline lookup. Defaults to the current branch.') do |value|
     options[:branch] = value

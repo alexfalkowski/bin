@@ -18,9 +18,10 @@ CI mode defaults to the latest CircleCI pipeline on the current branch. Use
 `--pipeline` when the user names a specific numeric CircleCI pipeline. UUIDs
 are accepted for compatibility, but do not ask users for UUIDs.
 
-Use `--revision` when the user identifies a commit. It selects the pipeline
-whose CircleCI `vcs.revision` exactly matches the SHA, and cannot be combined
-with `--branch`, `--pipeline`, `--pipeline-id`, or `--version`.
+Use `--revision` when the user identifies a commit. A uniquely resolvable local
+abbreviated SHA is expanded before selecting the pipeline whose CircleCI
+`vcs.revision` exactly matches it. It cannot be combined with `--branch`,
+`--pipeline`, `--pipeline-id`, or `--version`.
 
 ## Evidence Priority
 
@@ -31,7 +32,8 @@ with `--branch`, `--pipeline`, `--pipeline-id`, or `--version`.
    collect log bodies, `output_url` values, presigned URLs, tokens, or secrets.
 4. Failure category, especially compile, lint, test, security, dependency,
    deploy, release/versioning, and auth jobs.
-5. Current branch and open PR from local git and GitHub when available.
+5. Current branch and open PR from local git and GitHub when available. For a
+   commit target, also collect matching historical open or closed PRs.
 6. Local repository config such as `.circleci/config.yml`, Make targets, and
    documented CI entrypoints.
 

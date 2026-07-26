@@ -25,7 +25,8 @@ folder.
 
 1. Identify the requested diagnosis mode.
    - Use `ci` for the latest CI pipeline on the current branch, an explicit
-     CircleCI pipeline number, or an exact commit SHA.
+     CircleCI pipeline number, or an exact or uniquely resolvable abbreviated
+     commit SHA.
    - Use `deployment` for the latest deployed/released version or an explicit
      version tag.
    - Ask one concise question only when the mode changes which systems may be
