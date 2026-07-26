@@ -245,6 +245,28 @@ PATTERNS
 
 reject_pattern skills/repo-health/scripts/collect 'status='
 
+# Diagnose-issue collector invocation contract.
+require_patterns skills/diagnose-issue/SKILL.md <<'PATTERNS'
+scripts/collect
+persistent session
+completed run
+interruption or timeout
+PATTERNS
+
+require_pattern_in_files 'scripts/collect' \
+  skills/diagnose-issue/references/ci.md \
+  skills/diagnose-issue/references/deployment.md
+
+require_patterns skills/diagnose-issue/scripts/collect <<'PATTERNS'
+collect.rb
+rc=$?
+test -s
+jq empty
+length == 1 and (.[0] | type == "object")
+PATTERNS
+
+reject_pattern skills/diagnose-issue/scripts/collect 'status='
+
 # Testing and language-standard contracts.
 require_patterns skills/testing-standards/SKILL.md <<'PATTERNS'
 ## Mandatory Stop Gates
