@@ -12,12 +12,16 @@ require 'skills'
 class IssueDiagnosisCollector
   include EvidenceSources
 
+  FAILED_WORKFLOW_STATUSES = %w[failed error unauthorized].freeze
+  ACTIVE_WORKFLOW_STATUSES = %w[running failing on_hold queued].freeze
+
   def initialize(options)
     @mode = options.fetch(:mode)
     @repo_path = File.expand_path(options.fetch(:repo_path))
     @target = options.fetch(:target)
     @branch = options[:branch]
     @pipeline = options[:pipeline] || options[:pipeline_id]
+    @revision = options[:revision]
     @version = options[:version]
   end
 
@@ -52,8 +56,14 @@ class IssueDiagnosisCollector
     findings = ci_findings(target_branch, circleci)
     current_pull_request = github_current_pull_request(owner_repo, target_branch)
 
+    target_type = @target
+    target_type = 'pipeline' if @pipeline
+    target_type = 'revision' if @revision
+    target = { type: target_type, branch: target_branch, pipeline: @pipeline }
+    target[:revision] = @revision if @revision
+
     diagnosis_metadata(root, owner_repo).merge(
-      target: { type: @pipeline ? 'pipeline' : @target, branch: target_branch, pipeline: @pipeline },
+      target: target,
       sources: source_summary(github: current_pull_request, circleci: circleci),
       findings: findings,
       evidence: { github: { current_pull_request: current_pull_request }, circleci: circleci }
@@ -116,12 +126,14 @@ class IssueDiagnosisCollector
     token = circleci_token
     return unavailable('CircleCI token not found') if token.nil? || token.empty?
 
-    pipeline = if @pipeline
+    pipeline = if @revision
+                 circleci_pipeline_by_revision(owner_repo, @revision, token)
+               elsif @pipeline
                  circleci_pipeline_target(owner_repo, @pipeline, token)
                else
                  latest_circleci_pipeline(owner_repo, branch, token)
                end
-    return unavailable("No CircleCI pipeline found for #{branch}.") unless pipeline
+    return unavailable(circleci_pipeline_not_found_reason(branch)) unless pipeline
 
     collect_circleci_pipeline(owner_repo, pipeline, token)
   rescue StandardError => e
@@ -153,7 +165,10 @@ class IssueDiagnosisCollector
       pipeline: pipeline_summary(pipeline),
       workflows: workflows.map { |workflow| workflow_summary(workflow) },
       jobs: jobs.map { |job| job_summary(job) },
-      failed_workflows: workflows.reject { |workflow| workflow['status'] == 'success' }.map do |workflow|
+      failed_workflows: workflows.select { |workflow| failed_circleci_workflow?(workflow) }.map do |workflow|
+        workflow_summary(workflow)
+      end,
+      active_workflows: workflows.select { |workflow| active_circleci_workflow?(workflow) }.map do |workflow|
         workflow_summary(workflow)
       end,
       failed_jobs: jobs.select { |job| failed_circleci_job?(job) }.map { |job| job_summary(job) },
@@ -166,6 +181,7 @@ class IssueDiagnosisCollector
 
     failed_jobs = circleci.fetch(:failed_jobs, [])
     failed_workflows = circleci.fetch(:failed_workflows, [])
+    active_workflows = circleci.fetch(:active_workflows, [])
 
     findings = failed_workflows.map do |workflow|
       finding('failure', 'circleci-workflow',
@@ -174,9 +190,18 @@ class IssueDiagnosisCollector
     end
 
     failed_jobs.each do |job|
+      next if active_workflows.any? { |workflow| workflow[:id] == job[:workflow_id] }
+
+      evidence = "#{job[:name]} is #{job[:status]}#{job_number(job)}#{job_context(job)}#{job_failed_step(job)}."
       findings << finding('failure', 'circleci-job',
-                          "#{job[:name]} is #{job[:status]}#{job_number(job)}#{job_context(job)}.",
+                          evidence,
                           "Inspect #{job[:name]} logs#{job_url(job)}.")
+    end
+
+    active_workflows.each do |workflow|
+      findings << finding('warning', 'circleci-workflow',
+                          "#{workflow[:name]} workflow is #{workflow[:status]} on #{branch}.",
+                          'Wait for the active workflow to reach a terminal state before diagnosing a failure.')
     end
 
     findings << clean_finding('No failed jobs were found in the selected CircleCI pipeline.') if findings.empty?
@@ -284,6 +309,21 @@ class IssueDiagnosisCollector
     nil
   end
 
+  def circleci_pipeline_by_revision(owner_repo, revision, token)
+    page_token = nil
+    50.times do
+      path = "/project/gh/#{owner_repo}/pipeline"
+      path += "?page-token=#{url_query(page_token)}" if page_token
+      data = circleci_get(path, token)
+      found = data.fetch('items', []).find { |pipeline| pipeline.dig('vcs', 'revision') == revision }
+      return found if found
+
+      page_token = data['next_page_token']
+      break unless page_token
+    end
+    nil
+  end
+
   def circleci_pipeline_for_revision(owner_repo, branch, revision, token)
     page_token = nil
     10.times do
@@ -318,18 +358,43 @@ class IssueDiagnosisCollector
 
   def enrich_circleci_job(owner_repo, job, token)
     enriched = enrich_circleci_job_url(owner_repo, job)
-    return enriched unless job['job_number']
+    if job['job_number'].nil?
+      return enriched unless failed_circleci_job?(job)
+
+      return enriched.merge('failed_step_metadata_limitation' => 'CircleCI did not provide a job number.')
+    end
     return enriched unless failed_circleci_job?(job) || (job['name'] == 'deploy' && job['status'] != 'not_run')
 
     details = circleci_get("/project/gh/#{owner_repo}/job/#{job.fetch('job_number')}", token)
-    enriched.merge(
+    enriched = enriched.merge(
       'web_url' => details['web_url'],
       'contexts' => details.fetch('contexts', []).map { |context| context['name'] },
       'messages' => details['messages'],
       'executor' => details['executor']
     )
+    return enriched unless failed_circleci_job?(job)
+
+    enriched.merge(failed_step_metadata(details))
   rescue StandardError => e
-    enriched.merge('details_error' => source_error_reason(e))
+    result = enriched.merge('details_error' => source_error_reason(e))
+    return result unless failed_circleci_job?(job)
+
+    result.merge('failed_step_metadata_limitation' => 'CircleCI job details are unavailable.')
+  end
+
+  def failed_step_metadata(details)
+    details.fetch('steps', []).each do |step|
+      action = step.fetch('actions', []).find { |candidate| failed_circleci_step?(candidate) }
+      next unless action
+
+      return { 'failed_step' => pick(step, 'name').merge(pick(action, 'status', 'exit_code')) }
+    end
+    { 'failed_step_metadata_limitation' => 'CircleCI did not report a failed step.' }
+  end
+
+  def failed_circleci_step?(step)
+    status = step['status']
+    status && !%w[success running on_hold not_run].include?(status)
   end
 
   def enrich_circleci_job_url(owner_repo, job)
@@ -448,7 +513,8 @@ class IssueDiagnosisCollector
 
   def job_summary(job)
     symbolize(pick(job, 'job_number', 'name', 'status', 'started_at', 'stopped_at', 'workflow_id',
-                   'workflow_name', 'web_url', 'contexts', 'messages', 'details_error'))
+                   'workflow_name', 'web_url', 'contexts', 'messages', 'details_error', 'failed_step',
+                   'failed_step_metadata_limitation'))
   end
 
   def github_current_pull_request(owner_repo, branch)
@@ -511,12 +577,35 @@ class IssueDiagnosisCollector
     job[:web_url] ? " at #{job[:web_url]}" : ''
   end
 
+  def job_failed_step(job)
+    step = job[:failed_step]
+    return '' unless step
+
+    exit_code = step['exit_code']
+    suffix = exit_code.nil? ? '' : " with exit code #{exit_code}"
+    "; failed step #{step['name']} is #{step['status']}#{suffix}"
+  end
+
   def unavailable_source?(value)
     value.is_a?(Hash) && %w[skipped unavailable].include?(value[:status])
   end
 
   def failed_circleci_job?(job)
     job['stopped_at'] && !%w[success running on_hold not_run].include?(job['status'])
+  end
+
+  def failed_circleci_workflow?(workflow)
+    FAILED_WORKFLOW_STATUSES.include?(workflow['status'])
+  end
+
+  def active_circleci_workflow?(workflow)
+    ACTIVE_WORKFLOW_STATUSES.include?(workflow['status'])
+  end
+
+  def circleci_pipeline_not_found_reason(branch)
+    return "No CircleCI pipeline found for revision #{@revision}." if @revision
+
+    "No CircleCI pipeline found for #{branch}."
   end
 
   def circleci_token
@@ -553,13 +642,29 @@ class IssueDiagnosisCollector
   end
 end
 
+def validate_selector_options!(options)
+  return unless options[:revision]
+
+  conflicts = []
+  conflicts << '--pipeline' if options[:pipeline]
+  conflicts << '--pipeline-id' if options[:pipeline_id]
+  conflicts << '--branch' if options[:branch]
+  conflicts << '--version' if options[:version]
+  unless conflicts.empty?
+    raise OptionParser::InvalidArgument, "--revision cannot be combined with #{conflicts.join(', ')}"
+  end
+  return if options[:mode] == 'ci'
+
+  raise OptionParser::InvalidArgument, '--revision is only supported with --mode ci'
+end
+
 options = {
   mode: 'ci',
   repo_path: Dir.pwd,
   target: 'latest'
 }
 
-OptionParser.new do |parser|
+parser = OptionParser.new do |parser|
   parser.banner = 'Usage: collect.rb [options]'
   parser.on('--mode MODE', 'Diagnosis mode: ci or deployment. Defaults to ci.') { |value| options[:mode] = value }
   parser.on('--target TARGET', 'Target to inspect. Defaults to latest.') { |value| options[:target] = value }
@@ -567,6 +672,7 @@ OptionParser.new do |parser|
     options[:pipeline] = value
   end
   parser.on('--pipeline-id ID', 'CircleCI pipeline UUID for CI diagnosis.') { |value| options[:pipeline_id] = value }
+  parser.on('--revision SHA', 'Exact commit revision for CI diagnosis.') { |value| options[:revision] = value }
   parser.on('--version VERSION', 'Version tag for deployment diagnosis.') { |value| options[:version] = value }
   parser.on('--branch BRANCH', 'Branch for latest CI pipeline lookup. Defaults to the current branch.') do |value|
     options[:branch] = value
@@ -574,7 +680,15 @@ OptionParser.new do |parser|
   parser.on('--repo PATH', 'Repository path. Defaults to the current directory.') do |value|
     options[:repo_path] = value
   end
-end.parse!
+end
+
+begin
+  parser.parse!
+  validate_selector_options!(options)
+rescue OptionParser::ParseError => e
+  warn "diagnose-issue: #{e.message}"
+  exit 2
+end
 
 puts IssueDiagnosisCollector.new(options).call
 

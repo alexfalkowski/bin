@@ -25,6 +25,12 @@ if ! command -v ruby >/dev/null 2>&1; then
   exit 127
 fi
 
+for argument in "$@"; do
+  if [[ $argument == '--help' || $argument == '-h' ]]; then
+    exec ruby "$script_dir/collect.rb" "$@"
+  fi
+done
+
 if ! command -v jq >/dev/null 2>&1; then
   printf 'diagnose-issue: jq is required to validate collector output\n' >&2
   exit 127
