@@ -45,7 +45,8 @@ List concrete source facts:
 
 - Pipeline ID/number, workflow status, failed job names, job numbers, contexts,
   and job URLs.
-- Current PR number/title when available.
+- Current PR number/title when available, plus matching open or closed PRs for
+  a selected commit target.
 - Selected version and deploy job status for deployment mode.
 - Runtime image, deployment readiness, pod phase, restart count, or monitor
   logs when relevant.
