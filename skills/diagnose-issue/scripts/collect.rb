@@ -14,10 +14,29 @@ class IssueDiagnosisCollector
 
   FAILED_WORKFLOW_STATUSES = %w[failed error unauthorized].freeze
   ACTIVE_WORKFLOW_STATUSES = %w[running failing on_hold queued].freeze
-  CIRCLECI_TEST_RESULT_PAGE_LIMIT = 2
-  CIRCLECI_TEST_RESULT_LIMIT = 100
+  CIRCLECI_TEST_RESULT_PAGE_LIMIT = 5
+  CIRCLECI_TEST_RESULT_LIMIT = 500
   CIRCLECI_TEST_CLASS_LIMIT = 10
+  CIRCLECI_FAILURE_SAMPLE_LIMIT = 5
+  CIRCLECI_FAILURE_TEXT_LIMIT = 240
+  CIRCLECI_FAILURE_VALUE_LIMIT = 160
   GITHUB_COMMIT_STATUS_LIMIT = 20
+
+  FAILURE_URL_PATTERN = %r{\b(?:https?|s3)://[^\s<>"']+}i
+  FAILURE_CREDENTIAL_NAMES = [
+    'access[-_ ]?token', 'api[-_ ]?key', 'authorization', 'bearer', 'circle(?:ci)?[-_ ]?token',
+    'credential', 'output[-_ ]?url', 'password', 'secret', 'session[-_ ]?token', 'signature', 'token'
+  ].freeze
+  FAILURE_CREDENTIAL_PATTERN = Regexp.new(
+    "(\\b(?:[A-Za-z0-9]+[-_])?(?:#{FAILURE_CREDENTIAL_NAMES.join('|')})[A-Za-z0-9_-]*\\s*" \
+    "(?:=|:|\\s)\\s*(?:Bearer\\s+)?)(?:[\"']?)[^\\s,;]+",
+    Regexp::IGNORECASE
+  )
+  FAILURE_ASSIGNMENT_PATTERN = /(\b[A-Za-z_][A-Za-z0-9_-]*\s*=\s*)(?:["']?)[^\s,;]+/
+  FAILURE_TOKEN_PATTERN = /
+    \b(?:AKIA[0-9A-Z]{16}|(?:ccip|cct|gh[pousr]|github_pat)_[A-Za-z0-9_-]{16,}|
+    [A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{10,})\b
+  /x
 
   def initialize(options)
     @mode = options.fetch(:mode)
@@ -533,13 +552,12 @@ class IssueDiagnosisCollector
       path += "?page-token=#{url_query(page_token)}" if page_token
       data = circleci_get(path, token)
       items = data.fetch('items', [])
-      remaining = CIRCLECI_TEST_RESULT_LIMIT - results.length
-      results.concat(items.first(remaining))
+      results, result_limit_reached = bounded_test_results(results + items)
       pages += 1
       page_token = data['next_page_token']
-      truncated = items.length > remaining || (page_token && (pages >= CIRCLECI_TEST_RESULT_PAGE_LIMIT ||
-        results.length >= CIRCLECI_TEST_RESULT_LIMIT))
-      break if page_token.nil? || truncated
+      page_limit_reached = page_token && pages >= CIRCLECI_TEST_RESULT_PAGE_LIMIT
+      truncated ||= result_limit_reached || page_limit_reached
+      break if page_token.nil? || page_limit_reached
     end
 
     { 'test_results' => summarized_test_results(results, truncated) }
@@ -560,8 +578,94 @@ class IssueDiagnosisCollector
       'status' => 'used',
       'total' => failures.length,
       'failures' => grouped.map { |result, test_classes| { 'result' => result, 'test_classes' => test_classes } },
+      'failure_samples' => summarized_failure_samples(failures, truncated),
       'truncated' => truncated || class_limit_reached
     }
+  end
+
+  def bounded_test_results(results)
+    return [results, false] if results.length <= CIRCLECI_TEST_RESULT_LIMIT
+
+    selected = results.each_with_index.sort_by do |result, index|
+      [test_result_priority(test_result_value(result, 'result')), index]
+    end.first(CIRCLECI_TEST_RESULT_LIMIT).map(&:first)
+    [selected, true]
+  end
+
+  def summarized_failure_samples(failures, source_truncated)
+    candidates = failures.each_with_index.map do |result, index|
+      [failure_sample(result), index]
+    end
+    candidates.sort_by! do |sample, index|
+      [test_result_priority(sample.fetch('result')), sample.key?('message') ? 0 : 1, index]
+    end
+    samples = deduplicated_failure_samples(candidates)
+    selected = samples.first(CIRCLECI_FAILURE_SAMPLE_LIMIT)
+    sample_text_truncated = selected.any? do |sample|
+      sample.any? { |key, value| key.end_with?('_truncated') && value }
+    end
+
+    {
+      'samples' => selected,
+      'deduplicated' => samples.length < candidates.length,
+      'truncated' => source_truncated || samples.length > selected.length || sample_text_truncated
+    }
+  end
+
+  def deduplicated_failure_samples(candidates)
+    seen = {}
+    candidates.filter_map do |sample, _index|
+      key = sample['message']&.gsub(/\b\d+\b/, '#') || sample.values_at('result', 'name', 'classname').join("\u0000")
+      next if seen[key]
+
+      seen[key] = true
+      sample
+    end
+  end
+
+  def failure_sample(result)
+    name, name_truncated = sanitized_failure_text(result['name'], CIRCLECI_FAILURE_VALUE_LIMIT)
+    classname, classname_truncated = sanitized_failure_text(result['classname'], CIRCLECI_FAILURE_VALUE_LIMIT)
+    sample_result, result_truncated = sanitized_failure_text(result['result'], CIRCLECI_FAILURE_VALUE_LIMIT)
+    message, message_truncated = sanitized_failure_text(
+      result['message'], CIRCLECI_FAILURE_TEXT_LIMIT, from_end: true
+    )
+    sample = {
+      'name' => name || 'unknown',
+      'classname' => classname || 'unknown',
+      'result' => sample_result || 'unknown'
+    }
+    sample['message'] = message if message
+    sample['name_truncated'] = true if name_truncated
+    sample['classname_truncated'] = true if classname_truncated
+    sample['result_truncated'] = true if result_truncated
+    sample['message_truncated'] = true if message_truncated
+    sample
+  end
+
+  def test_result_priority(result)
+    return 0 if %w[failure error].include?(result.downcase)
+    return 2 if result.downcase == 'system-err'
+
+    1
+  end
+
+  def sanitized_failure_text(value, limit, from_end: false)
+    return [nil, false] if value.nil?
+
+    text = redact_failure_text(value.to_s.gsub(/\s+/, ' ').strip)
+    return [nil, false] if text.empty?
+    return [text, false] if text.length <= limit
+
+    excerpt = from_end ? text[-(limit - 3)..] : text[0, limit - 3]
+    [from_end ? "...#{excerpt}" : "#{excerpt}...", true]
+  end
+
+  def redact_failure_text(text)
+    text.gsub(FAILURE_URL_PATTERN, '[REDACTED_URL]')
+        .gsub(FAILURE_CREDENTIAL_PATTERN, '\\1[REDACTED]')
+        .gsub(FAILURE_ASSIGNMENT_PATTERN, '\\1[REDACTED]')
+        .gsub(FAILURE_TOKEN_PATTERN, '[REDACTED]')
   end
 
   def summarized_test_classes(results)
