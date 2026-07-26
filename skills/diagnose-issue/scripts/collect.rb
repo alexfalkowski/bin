@@ -14,12 +14,15 @@ class IssueDiagnosisCollector
 
   FAILED_WORKFLOW_STATUSES = %w[failed error unauthorized].freeze
   ACTIVE_WORKFLOW_STATUSES = %w[running failing on_hold queued].freeze
+  TERMINAL_WORKFLOW_STATUSES = %w[canceled cancelled error failed success unauthorized].freeze
   CIRCLECI_TEST_RESULT_PAGE_LIMIT = 5
   CIRCLECI_TEST_RESULT_LIMIT = 500
   CIRCLECI_TEST_CLASS_LIMIT = 10
   CIRCLECI_FAILURE_SAMPLE_LIMIT = 5
-  CIRCLECI_FAILURE_TEXT_LIMIT = 240
   CIRCLECI_FAILURE_VALUE_LIMIT = 160
+  CIRCLECI_FAILURE_SIGNATURE_LIMIT = 5
+  CIRCLECI_REVISION_PIPELINE_LIMIT = 5
+  CIRCLECI_REVISION_COMPARISON_LIMIT = 3
   CIRCLECI_FAILURE_TEXT_TRUNCATION_MARKER = ' ... '
   GITHUB_COMMIT_STATUS_LIMIT = 20
 
@@ -35,9 +38,11 @@ class IssueDiagnosisCollector
   )
   FAILURE_ASSIGNMENT_PATTERN = /(\b[A-Za-z_][A-Za-z0-9_-]*\s*=\s*)(?:["']?)[^\s,;]+/
   FAILURE_TOKEN_PATTERN = /
-    \b(?:AKIA[0-9A-Z]{16}|(?:ccip|cct|gh[pousr]|github_pat)_[A-Za-z0-9_-]{16,}|
+    \b(?:AKIA[0-9A-Z]{16}|(?:ccip|cct|gh[pousr]|github_pat|glpat|npm)_[A-Za-z0-9_-]{16,}|
+    (?:sk|rk|pk)_(?:live|test)_[A-Za-z0-9_-]{16,}|xox[baprs]-[A-Za-z0-9-]{16,}|
     [A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{10,})\b
   /x
+  SENSITIVE_OUTPUT_KEYS = %w[logs messages output_url url web_url].freeze
 
   def initialize(options)
     @mode = options.fetch(:mode)
@@ -67,7 +72,7 @@ class IssueDiagnosisCollector
                )
              end
 
-    JSON.pretty_generate(result)
+    JSON.pretty_generate(sanitized_output(result))
   end
 
   private
@@ -81,6 +86,11 @@ class IssueDiagnosisCollector
     findings = ci_findings(target_branch, circleci)
     current_pull_request = github_current_pull_request(owner_repo, target_branch) unless @revision
     pull_requests_for_revision = github_pull_requests_for_revision(owner_repo, revision) if @revision
+    revision_comparison = if @revision
+                            identical_tree_revision_comparison(
+                              owner_repo, revision, pull_requests_for_revision, circleci
+                            )
+                          end
 
     target_type = @target
     target_type = 'pipeline' if @pipeline
@@ -95,11 +105,14 @@ class IssueDiagnosisCollector
       circleci: circleci
     )
 
+    evidence = { github: github, circleci: circleci }
+    evidence[:revision_comparison] = revision_comparison if revision_comparison
+
     diagnosis_metadata(root, owner_repo).merge(
       target: target,
       sources: sources,
       findings: findings,
-      evidence: { github: github, circleci: circleci }
+      evidence: evidence
     )
   end
 
@@ -159,18 +172,26 @@ class IssueDiagnosisCollector
     token = circleci_token
     return unavailable('CircleCI token not found') if token.nil? || token.empty?
 
-    pipeline = if @revision
-                 circleci_pipeline_by_revision(owner_repo, revision, token)
-               elsif @pipeline
-                 circleci_pipeline_target(owner_repo, @pipeline, token)
-               else
-                 latest_circleci_pipeline(owner_repo, branch, token)
-               end
+    selection = circleci_revision_pipeline_selection(owner_repo, revision, token) if @revision
+    pipeline = selection&.fetch(:pipeline, nil)
+    if pipeline.nil?
+      pipeline = if @pipeline
+                   circleci_pipeline_target(owner_repo, @pipeline, token)
+                 else
+                   latest_circleci_pipeline(owner_repo, branch, token)
+                 end
+    end
     fallback = circleci_commit_status_fallback(owner_repo, revision) if @revision && pipeline.nil?
     return fallback if fallback
     return unavailable(circleci_pipeline_not_found_reason(branch)) unless pipeline
 
-    collect_circleci_pipeline(owner_repo, pipeline, token)
+    collect_circleci_pipeline(
+      owner_repo,
+      pipeline,
+      token,
+      workflows: selection&.fetch(:workflows, nil),
+      pipeline_selection: selection&.fetch(:metadata, nil)
+    )
   rescue StandardError => e
     unavailable_for_error(e)
   end
@@ -192,15 +213,16 @@ class IssueDiagnosisCollector
     unavailable_for_error(e)
   end
 
-  def collect_circleci_pipeline(owner_repo, pipeline, token)
-    workflows = circleci_workflows(pipeline.fetch('id'), token)
+  def collect_circleci_pipeline(owner_repo, pipeline, token, workflows: nil, pipeline_selection: nil)
+    workflows ||= circleci_workflows(pipeline.fetch('id'), token)
     jobs = circleci_jobs(owner_repo, workflows, token)
-    {
+    result = {
       status: 'used',
       pipeline: pipeline_summary(pipeline),
       workflows: workflows.map { |workflow| workflow_summary(workflow) },
       workflow_attempts: workflow_attempt_groups(workflows),
       jobs: jobs.map { |job| job_summary(job) },
+      recurring_failure_signatures: summarized_failure_signatures(jobs, workflows),
       failed_workflows: workflows.select { |workflow| failed_circleci_workflow?(workflow) }.map do |workflow|
         workflow_summary(workflow)
       end,
@@ -210,6 +232,8 @@ class IssueDiagnosisCollector
       failed_jobs: jobs.select { |job| failed_circleci_job?(job) }.map { |job| job_summary(job) },
       deploy_job: jobs.find { |job| job['name'] == 'deploy' }&.then { |job| job_summary(job) }
     }
+    result[:pipeline_selection] = pipeline_selection if pipeline_selection
+    result
   end
 
   def ci_findings(branch, circleci)
@@ -258,7 +282,7 @@ class IssueDiagnosisCollector
       case job[:status]
       when 'failed', 'error'
         finding('failure', 'circleci-job', evidence,
-                "Inspect the CircleCI job at #{job[:web_url]}.")
+                'Inspect the CircleCI job details.')
       when 'running'
         finding('warning', 'circleci-job', evidence,
                 'Wait for the CircleCI job to reach a terminal state before diagnosing a failure.')
@@ -272,7 +296,7 @@ class IssueDiagnosisCollector
 
   def circleci_job_finding(job)
     evidence = "#{job[:name]} is #{job[:status]}#{job_number(job)}#{job_context(job)}#{job_failed_step(job)}."
-    finding('failure', 'circleci-job', evidence, "Inspect #{job[:name]} logs#{job_url(job)}.")
+    finding('failure', 'circleci-job', evidence, "Inspect #{job[:name]} job details.")
   end
 
   def deployment_findings(service, version, circleci, kubernetes, uptimerobot)
@@ -300,7 +324,7 @@ class IssueDiagnosisCollector
     return [] if deploy[:status] == 'success'
 
     [finding('failure', 'deploy-job', "Deploy job is #{deploy[:status]}#{job_number(deploy)}.",
-             "Inspect deploy logs#{job_url(deploy)} before checking runtime state.")]
+             'Inspect deploy job details before checking runtime state.')]
   end
 
   def kubernetes_findings(version, kubernetes)
@@ -376,19 +400,101 @@ class IssueDiagnosisCollector
     nil
   end
 
-  def circleci_pipeline_by_revision(owner_repo, revision, token)
+  def circleci_revision_pipeline_selection(owner_repo, revision, token)
+    pipelines, truncated = circleci_pipelines_by_revision(owner_repo, revision, token)
+    return nil if pipelines.empty?
+
+    candidates = pipelines.map { |pipeline| revision_pipeline_candidate(pipeline, token) }
+    selected = candidates.max_by { |candidate| revision_pipeline_rank(candidate) }
+    {
+      pipeline: selected.fetch(:pipeline),
+      workflows: selected[:workflows],
+      workflow_evidence: selected.fetch(:workflow_evidence),
+      metadata: revision_pipeline_selection_metadata(revision, candidates, selected, truncated)
+    }
+  end
+
+  def circleci_pipelines_by_revision(owner_repo, revision, token)
+    matches = []
     page_token = nil
     50.times do
       path = "/project/gh/#{owner_repo}/pipeline"
       path += "?page-token=#{url_query(page_token)}" if page_token
       data = circleci_get(path, token)
-      found = data.fetch('items', []).find { |pipeline| pipeline.dig('vcs', 'revision') == revision }
-      return found if found
+      matches.concat(data.fetch('items', []).select { |pipeline| pipeline.dig('vcs', 'revision') == revision })
+      if matches.length > CIRCLECI_REVISION_PIPELINE_LIMIT
+        return [matches.first(CIRCLECI_REVISION_PIPELINE_LIMIT), true]
+      end
 
       page_token = data['next_page_token']
-      break unless page_token
+      return [matches, false] unless page_token
     end
-    nil
+    [matches, true]
+  end
+
+  def revision_pipeline_candidate(pipeline, token)
+    workflows = circleci_workflows(pipeline.fetch('id'), token)
+    evidence = workflow_evidence(workflows)
+    { pipeline: pipeline, workflows: workflows, workflow_evidence: evidence }
+  rescue StandardError => e
+    {
+      pipeline: pipeline,
+      workflow_evidence: { status: 'unavailable', reason: source_error_reason(e) }
+    }
+  end
+
+  def revision_pipeline_rank(candidate)
+    evidence = candidate.fetch(:workflow_evidence)
+    [
+      evidence.fetch(:terminal_workflow_count, 0).positive? ? 1 : 0,
+      evidence.fetch(:failed_workflow_count, 0).positive? ? 1 : 0,
+      evidence.fetch(:terminal_workflow_count, 0),
+      evidence.fetch(:workflow_count, 0),
+      candidate.fetch(:pipeline).fetch('number', 0).to_i
+    ]
+  end
+
+  def revision_pipeline_selection_metadata(revision, candidates, selected, truncated)
+    ordered_candidates = candidates.sort_by { |candidate| -candidate.fetch(:pipeline).fetch('number', 0).to_i }
+    {
+      status: 'used',
+      revision: revision,
+      matching_pipeline_count: candidates.length,
+      matching_pipeline_truncated: truncated,
+      selected_pipeline_number: selected.fetch(:pipeline).fetch('number', nil),
+      selection_reason: revision_pipeline_selection_reason(selected),
+      candidates: ordered_candidates.map do |candidate|
+        {
+          pipeline: pipeline_summary(candidate.fetch(:pipeline)),
+          workflow_evidence: candidate.fetch(:workflow_evidence)
+        }
+      end
+    }
+  end
+
+  def revision_pipeline_selection_reason(candidate)
+    return 'terminal_workflow_evidence' if candidate.dig(:workflow_evidence, :terminal_workflow_count).to_i.positive?
+
+    'latest_pipeline_without_terminal_workflow_evidence'
+  end
+
+  def workflow_evidence(workflows)
+    statuses = workflows.group_by { |workflow| workflow_status(workflow) }
+                        .sort
+                        .to_h { |status, grouped| [status, grouped.length] }
+    terminal_statuses = workflows.select { |workflow| terminal_circleci_workflow?(workflow) }
+                                 .group_by { |workflow| workflow_status(workflow) }
+                                 .sort
+                                 .to_h { |status, grouped| [status, grouped.length] }
+    {
+      status: 'used',
+      workflow_count: workflows.length,
+      terminal_workflow_count: workflows.count { |workflow| terminal_circleci_workflow?(workflow) },
+      failed_workflow_count: workflows.count { |workflow| failed_circleci_workflow?(workflow) },
+      active_workflow_count: workflows.count { |workflow| active_circleci_workflow?(workflow) },
+      statuses: statuses,
+      terminal_statuses: terminal_statuses
+    }
   end
 
   def circleci_commit_status_fallback(owner_repo, revision)
@@ -429,8 +535,7 @@ class IssueDiagnosisCollector
 
     {
       job_number: job_number,
-      status: job_status,
-      web_url: "https://circleci.com/gh/#{owner_repo}/#{job_number}"
+      status: job_status
     }
   end
 
@@ -480,7 +585,7 @@ class IssueDiagnosisCollector
   end
 
   def enrich_circleci_job(owner_repo, job, token)
-    enriched = enrich_circleci_job_url(owner_repo, job)
+    enriched = job
     if job['job_number'].nil?
       return enriched unless failed_circleci_job?(job)
 
@@ -490,9 +595,7 @@ class IssueDiagnosisCollector
 
     details = circleci_get("/project/gh/#{owner_repo}/job/#{job.fetch('job_number')}", token)
     enriched = enriched.merge(
-      'web_url' => details['web_url'],
       'contexts' => details.fetch('contexts', []).map { |context| context['name'] },
-      'messages' => details['messages'],
       'executor' => details['executor']
     )
     return enriched unless failed_circleci_job?(job)
@@ -568,18 +671,33 @@ class IssueDiagnosisCollector
 
   def summarized_test_results(results, truncated)
     failures = results.reject { |result| %w[success skipped].include?(test_result_value(result, 'result')) }
-    grouped = failures.group_by { |result| test_result_value(result, 'result') }.sort.to_h do |result, grouped_results|
-      [result, summarized_test_classes(grouped_results)]
-    end
+    primary_failures, cascading_failures = classified_test_failures(failures)
     grouped_failures = failures.group_by { |result| test_result_value(result, 'result') }
+    grouped_entries = grouped_failures.sort_by do |result, _grouped_results|
+      [failure_classification(result, primary_failures.any?) == 'primary' ? 0 : 1, result]
+    end
+    grouped = grouped_entries.to_h do |result, grouped_results|
+      [result, {
+        'classification' => failure_classification(result, primary_failures.any?),
+        'test_classes' => summarized_test_classes(grouped_results)
+      }]
+    end
     class_limit_reached = grouped_failures.any? do |_result, grouped_results|
       grouped_results.map { |result| test_result_value(result, 'classname') }.uniq.length > CIRCLECI_TEST_CLASS_LIMIT
     end
     {
       'status' => 'used',
       'total' => failures.length,
-      'failures' => grouped.map { |result, test_classes| { 'result' => result, 'test_classes' => test_classes } },
-      'failure_samples' => summarized_failure_samples(failures, truncated),
+      'primary_total' => primary_failures.length,
+      'cascading_total' => cascading_failures.length,
+      'failures' => grouped.map do |result, summary|
+        {
+          'result' => result,
+          'classification' => summary.fetch('classification'),
+          'test_classes' => summary.fetch('test_classes')
+        }
+      end,
+      'failure_samples' => summarized_failure_samples(primary_failures, cascading_failures, truncated),
       'truncated' => truncated || class_limit_reached
     }
   end
@@ -587,19 +705,22 @@ class IssueDiagnosisCollector
   def bounded_test_results(results)
     return [results, false] if results.length <= CIRCLECI_TEST_RESULT_LIMIT
 
-    selected = results.each_with_index.sort_by do |result, index|
-      [test_result_priority(test_result_value(result, 'result')), index]
-    end.first(CIRCLECI_TEST_RESULT_LIMIT).map(&:first)
+    selected = results.sort_by do |result|
+      [
+        test_result_priority(test_result_value(result, 'result')),
+        test_result_value(result, 'result'),
+        test_result_value(result, 'classname'),
+        test_result_value(result, 'name'),
+        result['message'].to_s
+      ]
+    end.first(CIRCLECI_TEST_RESULT_LIMIT)
     [selected, true]
   end
 
-  def summarized_failure_samples(failures, source_truncated)
-    candidates = failures.each_with_index.map do |result, index|
-      [failure_sample(result), index]
-    end
-    candidates.sort_by! do |sample, index|
-      [test_result_priority(sample.fetch('result')), sample.key?('message') ? 0 : 1, index]
-    end
+  def summarized_failure_samples(primary_failures, cascading_failures, source_truncated)
+    selected_failures = primary_failures.empty? ? cascading_failures : primary_failures
+    candidates = selected_failures.map { |result| failure_sample(result, primary_failures.any?) }
+    candidates.sort_by! { |sample| failure_sample_sort_key(sample) }
     samples = deduplicated_failure_samples(candidates)
     selected = samples.first(CIRCLECI_FAILURE_SAMPLE_LIMIT)
     sample_text_truncated = selected.any? do |sample|
@@ -615,8 +736,8 @@ class IssueDiagnosisCollector
 
   def deduplicated_failure_samples(candidates)
     seen = {}
-    candidates.filter_map do |sample, _index|
-      key = sample['message']&.gsub(/\b\d+\b/, '#') || sample.values_at('result', 'name', 'classname').join("\u0000")
+    candidates.filter_map do |sample|
+      key = failure_signature_key(sample)
       next if seen[key]
 
       seen[key] = true
@@ -624,26 +745,80 @@ class IssueDiagnosisCollector
     end
   end
 
-  def failure_sample(result)
+  def failure_sample(result, primary_present)
     name, name_truncated = sanitized_failure_text(result['name'], CIRCLECI_FAILURE_VALUE_LIMIT)
     classname, classname_truncated = sanitized_failure_text(result['classname'], CIRCLECI_FAILURE_VALUE_LIMIT)
     sample_result, result_truncated = sanitized_failure_text(result['result'], CIRCLECI_FAILURE_VALUE_LIMIT)
-    message, message_truncated = sanitized_failure_text(
-      result['message'],
-      CIRCLECI_FAILURE_TEXT_LIMIT,
-      preserve_ends: true
-    )
     sample = {
       'name' => name || 'unknown',
       'classname' => classname || 'unknown',
-      'result' => sample_result || 'unknown'
+      'result' => sample_result || 'unknown',
+      'classification' => failure_classification(test_result_value(result, 'result'), primary_present)
     }
-    sample['message'] = message if message
+    assertion, assertion_truncated = sanitized_assertion(result['message'])
+    sample['assertion'] = assertion if assertion
     sample['name_truncated'] = true if name_truncated
     sample['classname_truncated'] = true if classname_truncated
     sample['result_truncated'] = true if result_truncated
-    sample['message_truncated'] = true if message_truncated
+    sample['assertion_truncated'] = true if assertion_truncated
     sample
+  end
+
+  def classified_test_failures(failures)
+    primary_present = failures.any? { |result| primary_test_result?(test_result_value(result, 'result')) }
+    failures.partition { |result| !cascading_test_result?(test_result_value(result, 'result'), primary_present) }
+  end
+
+  def primary_test_result?(result)
+    %w[failure error].include?(result.downcase)
+  end
+
+  def cascading_test_result?(result, primary_present)
+    primary_present && result.downcase == 'system-err'
+  end
+
+  def failure_classification(result, primary_present)
+    cascading_test_result?(result, primary_present) ? 'cascading' : 'primary'
+  end
+
+  def failure_sample_sort_key(sample)
+    [
+      sample.fetch('classification') == 'primary' ? 0 : 1,
+      test_result_priority(sample.fetch('result')),
+      sample.fetch('classname'),
+      sample.fetch('name'),
+      failure_signature_key(sample)
+    ]
+  end
+
+  def failure_signature_key(sample)
+    [sample['result'], sample['classname'], sample['name'], *sample.fetch('assertion', {}).values]
+      .join("\u0000")
+      .gsub(/\b\d+\b/, '#')
+  end
+
+  def sanitized_assertion(value)
+    return [nil, false] if value.nil?
+
+    text = value.to_s.gsub(/\s+/, ' ').strip
+    expected, expected_truncated = assertion_value(text, 'expected')
+    actual, actual_truncated = assertion_value(text, 'actual|got|but was')
+    return [nil, false] unless expected || actual
+
+    assertion = {}.tap do |assertion|
+      assertion['expected'] = expected if expected
+      assertion['actual'] = actual if actual
+    end
+    [assertion, expected_truncated || actual_truncated]
+  end
+
+  def assertion_value(text, labels)
+    pattern = "\\b(?:#{labels})\\b\\s*(?::|=)?\\s*" \
+              "(\"(?:\\\\.|[^\"\\\\])*\"|'(?:\\\\.|[^'\\\\])*'|<[^>]*>|\\[[^\\]]*\\]|\\{[^}]*\\}|`[^`]*`|[^\\s,;]+)"
+    match = text.match(Regexp.new(pattern, Regexp::IGNORECASE))
+    return [nil, false] unless match
+
+    sanitized_failure_text(match[1], CIRCLECI_FAILURE_VALUE_LIMIT, preserve_ends: true)
   end
 
   def test_result_priority(result)
@@ -694,12 +869,6 @@ class IssueDiagnosisCollector
     status && !%w[success running on_hold not_run].include?(status)
   end
 
-  def enrich_circleci_job_url(owner_repo, job)
-    return job unless job['job_number']
-
-    job.merge('web_url' => "https://circleci.com/gh/#{owner_repo}/#{job.fetch('job_number')}")
-  end
-
   def collect_digitalocean
     token = ENV.fetch('DIGITALOCEAN_ACCESS_TOKEN', nil)
     return unavailable('DIGITALOCEAN_ACCESS_TOKEN is not set') if token.nil? || token.empty?
@@ -744,7 +913,7 @@ class IssueDiagnosisCollector
     key = ENV.fetch('UPTIMEROBOT_API_KEY', '').strip
     return unavailable('UPTIMEROBOT_API_KEY is not set') if key.empty?
 
-    params = { 'api_key' => key, 'format' => 'json', 'logs' => '1', 'response_times' => '1' }
+    params = { 'api_key' => key, 'format' => 'json' }
     monitor_ids = ENV.fetch('UPTIMEROBOT_MONITOR_IDS', '').split(',').map(&:strip).reject(&:empty?)
     params['monitors'] = monitor_ids.join('-') unless monitor_ids.empty?
     data = uptimerobot(params)
@@ -757,8 +926,7 @@ class IssueDiagnosisCollector
     end
     return unavailable("no UptimeRobot monitor matched #{name}") unless monitor
 
-    { status: 'used', monitor: symbolize(pick(monitor, 'id', 'friendly_name', 'url', 'status')),
-      logs: monitor.fetch('logs', []) }
+    { status: 'used', monitor: symbolize(pick(monitor, 'id', 'friendly_name', 'status')) }
   rescue StandardError => e
     unavailable_for_error(e)
   end
@@ -811,7 +979,7 @@ class IssueDiagnosisCollector
 
   def job_summary(job)
     symbolize(pick(job, 'job_number', 'name', 'status', 'started_at', 'stopped_at', 'workflow_id',
-                   'workflow_name', 'web_url', 'contexts', 'messages', 'details_error', 'failed_step',
+                   'workflow_name', 'contexts', 'details_error', 'failed_step',
                    'failed_step_metadata_limitation', 'failed_step_fallback', 'test_results'))
   end
 
@@ -821,7 +989,7 @@ class IssueDiagnosisCollector
 
     gh_json(
       'pr', 'list', '--repo', owner_repo, '--head', branch, '--state', 'open',
-      '--json', 'number,title,url,headRefName,baseRefName,isDraft,mergeStateStatus,reviewDecision'
+      '--json', 'number,title,headRefName,baseRefName,isDraft,mergeStateStatus,reviewDecision'
     ).first
   rescue StandardError => e
     unavailable_for_error(e)
@@ -832,10 +1000,100 @@ class IssueDiagnosisCollector
 
     gh_json(
       'pr', 'list', '--repo', owner_repo, '--search', revision, '--state', 'all', '--limit', '100',
-      '--json', 'number,title,url,state,headRefName,baseRefName,isDraft,mergedAt,closedAt'
+      '--json', 'number,title,state,headRefName,baseRefName,isDraft,mergedAt,closedAt,mergeCommit'
     )
   rescue StandardError => e
     unavailable_for_error(e)
+  end
+
+  def identical_tree_revision_comparison(owner_repo, revision, pull_requests, circleci)
+    unless pull_requests.is_a?(Array)
+      return skipped('No GitHub pull-request evidence was available for the selected revision.')
+    end
+    unless circleci[:status] == 'used'
+      return skipped('CircleCI pipeline evidence was unavailable for the selected revision.')
+    end
+
+    source_tree = revision_tree(revision)
+    return skipped('The selected revision is not available locally for tree comparison.') if source_tree.nil?
+
+    pull_requests = merged_pull_requests(pull_requests)
+    return skipped('No merged pull request matched the selected revision.') if pull_requests.empty?
+
+    selected = pull_requests.first(CIRCLECI_REVISION_COMPARISON_LIMIT)
+    token = circleci_token
+    source_workflow_evidence = workflow_evidence(circleci.fetch(:workflows, []))
+    {
+      status: 'used',
+      source_revision: revision,
+      source_workflow_evidence: source_workflow_evidence,
+      comparisons: selected.map do |pull_request|
+        revision_tree_comparison(owner_repo, source_tree, pull_request, token, source_workflow_evidence)
+      end,
+      truncated: pull_requests.length > selected.length
+    }
+  end
+
+  def merged_pull_requests(pull_requests)
+    pull_requests.select { |pull_request| pull_request['mergedAt'] && pull_request.dig('mergeCommit', 'oid') }
+                 .sort_by { |pull_request| [pull_request['mergedAt'], pull_request['number'].to_i] }
+                 .reverse
+  end
+
+  def revision_tree_comparison(owner_repo, source_tree, pull_request, token, source_workflow_evidence)
+    merge_revision = pull_request.dig('mergeCommit', 'oid')
+    merge_tree = revision_tree(merge_revision)
+    comparison = {
+      pr_number: pull_request['number'],
+      merge_revision: merge_revision,
+      tree_relation: tree_relation(source_tree, merge_tree)
+    }
+    return comparison unless comparison[:tree_relation] == 'identical'
+
+    comparison.merge(merge_workflow_comparison(owner_repo, merge_revision, token, source_workflow_evidence))
+  end
+
+  def merge_workflow_comparison(owner_repo, merge_revision, token, source_workflow_evidence)
+    unless token
+      return { merge_workflow_evidence: skipped('CircleCI token was unavailable for merge-revision comparison.') }
+    end
+
+    selection = circleci_revision_pipeline_selection(owner_repo, merge_revision, token)
+    unless selection
+      reason = "No CircleCI pipeline found for merge revision #{merge_revision}."
+      return { merge_workflow_evidence: unavailable(reason) }
+    end
+
+    merge_evidence = selection.fetch(:workflow_evidence)
+    {
+      merge_workflow_evidence: merge_evidence,
+      terminal_outcome_relation: terminal_outcome_relation(source_workflow_evidence, merge_evidence)
+    }
+  end
+
+  def terminal_outcome_relation(source_evidence, merge_evidence)
+    return 'unavailable' unless merge_evidence[:status] == 'used'
+    if source_evidence.fetch(:terminal_workflow_count, 0).zero? ||
+       merge_evidence.fetch(:terminal_workflow_count, 0).zero?
+      return 'no_terminal_evidence'
+    end
+
+    if merge_evidence.fetch(:terminal_statuses, {}) == source_evidence.fetch(:terminal_statuses, {})
+      'same_terminal_statuses'
+    else
+      'different_terminal_statuses'
+    end
+  end
+
+  def tree_relation(source_tree, merge_tree)
+    return 'unavailable' if merge_tree.nil?
+
+    merge_tree == source_tree ? 'identical' : 'different'
+  end
+
+  def revision_tree(revision)
+    tree = git('rev-parse', '--verify', '--end-of-options', "#{revision}^{tree}", allow_failure: true).strip
+    tree.empty? ? nil : tree
   end
 
   def latest_version
@@ -882,10 +1140,6 @@ class IssueDiagnosisCollector
     job.fetch(:contexts, []).any? ? "; context #{job.fetch(:contexts).join(', ')}" : ''
   end
 
-  def job_url(job)
-    job[:web_url] ? " at #{job[:web_url]}" : ''
-  end
-
   def job_failed_step(job)
     step = job[:failed_step]
     return '' unless step
@@ -904,11 +1158,21 @@ class IssueDiagnosisCollector
   end
 
   def failed_circleci_workflow?(workflow)
-    FAILED_WORKFLOW_STATUSES.include?(workflow['status'] || workflow[:status])
+    FAILED_WORKFLOW_STATUSES.include?(workflow_status(workflow))
   end
 
   def active_circleci_workflow?(workflow)
-    ACTIVE_WORKFLOW_STATUSES.include?(workflow['status'] || workflow[:status])
+    ACTIVE_WORKFLOW_STATUSES.include?(workflow_status(workflow))
+  end
+
+  def terminal_circleci_workflow?(workflow)
+    return true if TERMINAL_WORKFLOW_STATUSES.include?(workflow_status(workflow))
+
+    !workflow['stopped_at'].nil? || !workflow[:stopped_at].nil?
+  end
+
+  def workflow_status(workflow)
+    workflow['status'] || workflow[:status] || 'unknown'
   end
 
   def circleci_pipeline_not_found_reason(branch)
@@ -982,6 +1246,67 @@ class IssueDiagnosisCollector
     return '' unless attempts.length > 1 || attempts.last[:auto_rerun_number].to_i.positive?
 
     " after automatic rerun attempts #{attempts.filter_map { |attempt| attempt[:auto_rerun_number] }.join(', ')}"
+  end
+
+  def summarized_failure_signatures(jobs, workflows)
+    attempts_by_workflow = workflows.to_h do |workflow|
+      [workflow.fetch('id'), workflow.fetch('auto_rerun_number', 0).to_i]
+    end
+    signatures = jobs.select { |job| failed_circleci_job?(job) }.flat_map do |job|
+      job_failure_signatures(job, attempts_by_workflow.fetch(job['workflow_id'], 0))
+    end
+    recurring = signatures.group_by { |signature| signature.fetch(:key) }
+                          .filter_map { |_key, occurrences| summarized_recurring_signature(occurrences) }
+                          .select { |signature| signature.fetch('occurrences') > 1 }
+                          .sort_by do |signature|
+      [-signature.fetch('occurrences'), JSON.generate(signature.fetch('signature'))]
+    end
+    selected = recurring.first(CIRCLECI_FAILURE_SIGNATURE_LIMIT)
+
+    {
+      'recurring' => selected,
+      'truncated' => recurring.length > selected.length
+    }
+  end
+
+  def job_failure_signatures(job, workflow_attempt)
+    samples = job.dig('test_results', 'failure_samples', 'samples') || []
+    samples = [nil] if samples.empty?
+    samples.map do |sample|
+      signature = {
+        'job_name' => sanitized_failure_text(job['name'], CIRCLECI_FAILURE_VALUE_LIMIT).first || 'unknown',
+        'failed_step' => sanitized_failure_text(job.dig('failed_step', 'name'), CIRCLECI_FAILURE_VALUE_LIMIT).first,
+        'test' => sample&.slice('classname', 'name', 'result', 'assertion')
+      }.compact
+      { key: JSON.generate(signature), signature: signature, workflow_attempt: workflow_attempt }
+    end
+  end
+
+  def summarized_recurring_signature(occurrences)
+    workflow_attempts = occurrences.map { |occurrence| occurrence.fetch(:workflow_attempt) }.uniq
+    {
+      'signature' => occurrences.first.fetch(:signature),
+      'occurrences' => occurrences.length,
+      'workflow_attempt_count' => workflow_attempts.length,
+      'rerun_attempt_count' => workflow_attempts.count(&:positive?)
+    }
+  end
+
+  def sanitized_output(value)
+    case value
+    when Hash
+      value.each_with_object({}) do |(key, nested), output|
+        next if SENSITIVE_OUTPUT_KEYS.include?(key.to_s)
+
+        output[key] = sanitized_output(nested)
+      end
+    when Array
+      value.map { |item| sanitized_output(item) }
+    when String
+      sanitized_failure_text(value, CIRCLECI_FAILURE_VALUE_LIMIT, preserve_ends: true).first
+    else
+      value
+    end
   end
 end
 
