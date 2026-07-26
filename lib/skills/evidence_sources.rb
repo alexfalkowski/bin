@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Provides read-only access to the external sources used by collector scripts.
-# rubocop:disable Metrics/ModuleLength
+# rubocop:disable Metrics/ModuleLength, Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 module EvidenceSources
   MAX_CONCURRENT_SOURCES = 4
   SOURCE_TIMEOUT_SECONDS = 30
@@ -273,6 +273,95 @@ module EvidenceSources
     keys.each_with_object({}) { |key, result| result[key] = hash[key] if hash.key?(key) }
   end
 
+  def collect_digitalocean
+    token = ENV.fetch('DIGITALOCEAN_ACCESS_TOKEN', nil)
+    return unavailable('DIGITALOCEAN_ACCESS_TOKEN is not set') if token.nil? || token.empty?
+
+    data = http_json('https://api.digitalocean.com/v2/kubernetes/clusters', 'Authorization' => "Bearer #{token}")
+    { status: 'used', clusters: data.fetch('kubernetes_clusters', []).map do |cluster|
+      pick(cluster, 'name', 'region', 'version', 'status', 'created_at')
+    end }
+  rescue StandardError => e
+    unavailable_for_error(e)
+  end
+
+  def collect_kubernetes(name)
+    return unavailable('kubectl is not installed') unless command_available?('kubectl')
+
+    context = capture('kubectl', 'config', 'current-context', allow_failure: true).strip
+    deployments = kubectl_json('get', 'deployments', '-A', '-o', 'json').fetch('items', []).select do |item|
+      item.dig('metadata', 'name')&.include?(name) || item.dig('metadata', 'namespace')&.include?(name)
+    end
+    pods = deployments.flat_map { |deployment| deployment_pods(deployment) }
+
+    {
+      status: 'used',
+      context: context,
+      deployments: deployments.map { |deployment| deployment_summary(deployment) },
+      pods: pods.map { |pod| pod_summary(pod) }
+    }
+  rescue StandardError => e
+    unavailable_for_error(e)
+  end
+
+  def deployment_pods(deployment)
+    namespace = deployment.dig('metadata', 'namespace')
+    labels = deployment.dig('spec', 'selector', 'matchLabels') || {}
+    selector = labels.map { |key, value| "#{key}=#{value}" }.join(',')
+    return [] if selector.empty?
+
+    kubectl_json('get', 'pods', '-n', namespace, '-l', selector, '-o', 'json').fetch('items', [])
+  end
+
+  def deployment_summary(deployment)
+    status = deployment.fetch('status', {})
+    spec = deployment.fetch('spec', {})
+    container = deployment.dig('spec', 'template', 'spec', 'containers', 0) || {}
+    {
+      namespace: deployment.dig('metadata', 'namespace'),
+      name: deployment.dig('metadata', 'name'),
+      desired_replicas: spec['replicas'],
+      ready_replicas: status['readyReplicas'] || 0,
+      available_replicas: status['availableReplicas'] || 0,
+      updated_replicas: status['updatedReplicas'] || 0,
+      image: container['image']
+    }
+  end
+
+  def pod_summary(pod)
+    statuses = pod.dig('status', 'containerStatuses') || []
+    conditions = pod.dig('status', 'conditions') || []
+    ready_condition = conditions.find { |condition| condition['type'] == 'Ready' }
+    {
+      namespace: pod.dig('metadata', 'namespace'),
+      name: pod.dig('metadata', 'name'),
+      phase: pod.dig('status', 'phase'),
+      ready: ready_condition ? ready_condition['status'] == 'True' : false,
+      restarts: statuses.sum { |status| status['restartCount'].to_i },
+      started_at: pod.dig('status', 'startTime')
+    }
+  end
+
+  def find_uptimerobot_monitor(data, name)
+    data.fetch('monitors', []).find do |item|
+      [item['friendly_name'], item['url']].compact.any? { |value| value.include?(name) }
+    end
+  end
+
+  def unavailable_source?(value)
+    value.is_a?(Hash) && %w[skipped unavailable].include?(value[:status])
+  end
+
+  def circleci_token
+    token = ENV['CIRCLE_TOKEN'] || ENV['CIRCLECI_TOKEN'] || ENV.fetch('CIRCLECI_CLI_TOKEN', nil)
+    return token unless token.nil? || token.empty?
+
+    path = ENV['CIRCLECI_CLI_CONFIG'] || File.join(Dir.home, '.circleci', 'cli.yml')
+    return nil unless File.exist?(path)
+
+    YAML.safe_load_file(path).fetch('token')
+  end
+
   def parse_owner_repo(remote)
     clean = remote.delete_suffix('.git')
     return Regexp.last_match(1) if clean.match(/\Agit@github\.com:(.+)\z/)
@@ -294,4 +383,4 @@ module EvidenceSources
     { status: 'unavailable', reason: reason }
   end
 end
-# rubocop:enable Metrics/ModuleLength
+# rubocop:enable Metrics/ModuleLength, Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity

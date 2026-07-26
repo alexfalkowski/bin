@@ -42,11 +42,12 @@ reporting period and comparison period, not necessarily a local folder.
    available. It performs the local, GitHub, CircleCI,
    DigitalOcean/Kubernetes, and UptimeRobot read-only collection in one command
    and returns report-ready JSON with metrics and source summaries.
-   - Run it in the runtime's persistent command session. The wrapper runs one
-     collector process per attempt, validates its completed output, and retries
-     exactly once only after a completed run fails validation. Do not run one
-     process per metric or source. The collector writes machine-readable JSON
-     only to standard output and progress to standard error.
+   - Run it in the runtime's persistent command session; do not run one process
+     per metric or source. `scripts/collect` itself runs one collector attempt,
+     validates the completed output, and retries exactly once only after a
+     completed run fails validation, writing progress to standard error and
+     validated JSON to standard output. Record its exit code in `rc`, never
+     `status`: `status` is read-only in zsh.
    - Use `--sources local,github` to limit collection when the report needs a
     subset, or `--timeout SECONDS` to override the 240-second overall deadline.
    - Full collection can take time, especially when CircleCI is selected. After
@@ -54,14 +55,7 @@ reporting period and comparison period, not necessarily a local folder.
      30-second command wait as the session lifetime. Agents must not kill,
      cancel, or switch to manual fallback because a poll returns before the
      collector exits. Allow at least the configured 240-second timeout plus
-     final-output time before declaring the invocation timed out. Record the
-     completed process exit code in `rc`, never `status`: `status` is read-only
-     in zsh.
-   - Redirect the wrapper's standard output to a unique temporary file created
-     with `mktemp`; never let concurrent collector processes write to the same
-     path. After the session exits, require `rc` to be zero, the file to be
-     non-empty, `jq empty` to succeed, and `jq -e -s 'length == 1 and (.[0] |
-     type == "object")'` to succeed before parsing it.
+     final-output time before declaring the invocation timed out.
    - Do not retry an interruption or timeout: a session without a completed exit
      code or final output is an invocation failure, not source data. A completed
      zero-exit valid JSON result with an unavailable source is a
