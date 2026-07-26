@@ -20,21 +20,31 @@ are accepted for compatibility, but do not ask users for UUIDs.
 
 Use `--revision` when the user identifies a commit. A uniquely resolvable local
 abbreviated SHA is expanded before selecting the pipeline whose CircleCI
-`vcs.revision` exactly matches it. It cannot be combined with `--branch`,
-`--pipeline`, `--pipeline-id`, or `--version`.
+`vcs.revision` exactly matches it. When multiple pipelines match, the collector
+examines up to five candidates and prefers terminal workflow evidence over an
+empty pipeline; it records the bounded candidate metadata and selection reason.
+It cannot be combined with `--branch`, `--pipeline`, `--pipeline-id`, or
+`--version`.
 
 ## Evidence Priority
 
 1. Selected CircleCI pipeline.
 2. Workflow status and the first failed workflow.
-3. Failed job names, job numbers, web URLs, contexts, v2 job messages, and the
-   failed step name, status, and exit code when CircleCI exposes them. Do not
-   collect log bodies, `output_url` values, presigned URLs, tokens, or secrets.
-4. Failure category, especially compile, lint, test, security, dependency,
+3. Failed job names, job numbers, contexts, and the failed step name, status,
+   and exit code when CircleCI exposes them. Test-result evidence is limited to
+   bounded, sanitized expected/actual assertions, primary-versus-cascading
+   classification, and recurring signatures across rerun attempts. Do not
+   collect log bodies, URLs (including `output_url` and presigned URLs), tokens,
+   or secrets.
+4. For a revision with a matched merged PR, compare up to three locally
+   available merge revisions with an identical Git tree. Record bounded terminal
+   workflow-status comparisons as evidence only: matching trees and statuses can
+   support a deterministic-failure hypothesis but do not prove it.
+5. Failure category, especially compile, lint, test, security, dependency,
    deploy, release/versioning, and auth jobs.
-5. Current branch and open PR from local git and GitHub when available. For a
+6. Current branch and open PR from local git and GitHub when available. For a
    commit target, also collect matching historical open or closed PRs.
-6. Local repository config such as `.circleci/config.yml`, Make targets, and
+7. Local repository config such as `.circleci/config.yml`, Make targets, and
    documented CI entrypoints.
 
 ## Diagnosis Guidance

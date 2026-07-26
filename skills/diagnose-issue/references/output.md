@@ -44,12 +44,17 @@ uncertainty.
 List concrete source facts:
 
 - Pipeline ID/number, workflow status, failed job names, job numbers, contexts,
-  and job URLs.
+  bounded sanitized expected/actual assertions, and recurring failure counts
+  across reruns. Keep primary failures separate from cascading errors.
+- For revision targets with multiple matching pipelines, the bounded candidate
+  workflow metadata and selection reason. For matching merged PRs, include only
+  bounded identical-tree and terminal-status comparison evidence; do not present
+  this as proof of determinism.
 - Current PR number/title when available, plus matching open or closed PRs for
   a selected commit target.
 - Selected version and deploy job status for deployment mode.
 - Runtime image, deployment readiness, pod phase, restart count, or monitor
-  logs when relevant.
+  status when relevant; do not include log bodies.
 - Exact source gaps such as missing token, missing CLI, missing monitor mapping,
   missing `.cd`, or unavailable selected target.
 
