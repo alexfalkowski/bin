@@ -10,6 +10,7 @@ Run the collector from the repository being diagnosed:
 ```bash
 <skill-dir>/scripts/collect --mode ci --repo <repo-path>
 <skill-dir>/scripts/collect --mode ci --pipeline <circleci-pipeline-number> --repo <repo-path>
+<skill-dir>/scripts/collect --mode ci --revision <commit-sha> --repo <repo-path>
 ```
 
 CI mode defaults to the latest CircleCI pipeline on the current branch. Use
@@ -17,12 +18,17 @@ CI mode defaults to the latest CircleCI pipeline on the current branch. Use
 `--pipeline` when the user names a specific numeric CircleCI pipeline. UUIDs
 are accepted for compatibility, but do not ask users for UUIDs.
 
+Use `--revision` when the user identifies a commit. It selects the pipeline
+whose CircleCI `vcs.revision` exactly matches the SHA, and cannot be combined
+with `--branch`, `--pipeline`, `--pipeline-id`, or `--version`.
+
 ## Evidence Priority
 
 1. Selected CircleCI pipeline.
 2. Workflow status and the first failed workflow.
-3. Failed job names, job numbers, web URLs, contexts, and v2 job messages when
-   CircleCI exposes them.
+3. Failed job names, job numbers, web URLs, contexts, v2 job messages, and the
+   failed step name, status, and exit code when CircleCI exposes them. Do not
+   collect log bodies, `output_url` values, presigned URLs, tokens, or secrets.
 4. Failure category, especially compile, lint, test, security, dependency,
    deploy, release/versioning, and auth jobs.
 5. Current branch and open PR from local git and GitHub when available.
@@ -34,6 +40,9 @@ are accepted for compatibility, but do not ask users for UUIDs.
 - Treat the first failed job in the selected pipeline as the highest-value
   starting point unless a later job failed because an earlier artifact was
   missing.
+- Treat `running`, `failing`, `on_hold`, and `queued` workflows as active
+  evidence, not failures; wait for their terminal state before inferring a
+  cause.
 - Do not summarize a date range by default. The unit of diagnosis is the
   selected pipeline.
 - If the latest branch has no pipeline, check whether the branch exists
