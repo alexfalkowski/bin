@@ -1,15 +1,9 @@
 # frozen_string_literal: true
 
-require 'json'
-require 'net/http'
-require 'open3'
-require 'openssl'
-require 'time'
-require 'uri'
-
 # Provides read-only access to the external sources used by collector scripts.
 # rubocop:disable Metrics/ModuleLength
-module EvidenceSourceAccess
+module EvidenceSources
+  MAX_CONCURRENT_SOURCES = 4
   HTTP_TIMEOUT_SECONDS = 15
   HTTP_RETRY_MAX_ATTEMPTS = 3
   HTTP_RETRY_BASE_DELAY_SECONDS = 0.2
@@ -21,6 +15,34 @@ module EvidenceSourceAccess
   ].freeze
 
   private
+
+  # Runs independent source collectors with bounded concurrency while preserving result order.
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def collect_sources(sources)
+    queue = Queue.new
+    sources.each_with_index { |source, index| queue << [index, *source] }
+
+    workers = Array.new([sources.length, MAX_CONCURRENT_SOURCES].min) do
+      Thread.new do
+        results = []
+        loop do
+          source = begin
+            queue.pop(true)
+          rescue ThreadError
+            nil
+          end
+          break unless source
+
+          index, name, collect = source
+          results << [index, name, collect.call]
+        end
+        results
+      end
+    end
+
+    workers.flat_map(&:value).sort_by(&:first).to_h { |_, name, result| [name, result] }
+  end
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   def circleci_get(path, token)
     http_json("https://circleci.com/api/v2#{path}", 'Circle-Token' => token)

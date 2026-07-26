@@ -3,16 +3,14 @@
 
 # rubocop:disable Metrics/ClassLength, Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
-require 'json'
-require 'optparse'
-require 'time'
-require 'yaml'
+lib = File.expand_path('../../../lib', __dir__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
-require_relative '../../../lib/evidence_source_access'
+require 'skills'
 
 # Performs read-only CI and deployment diagnosis for one repository target.
 class IssueDiagnosisCollector
-  include EvidenceSourceAccess
+  include EvidenceSources
 
   def initialize(options)
     @mode = options.fetch(:mode)
@@ -33,10 +31,12 @@ class IssueDiagnosisCollector
              when 'deployment'
                diagnose_deployment(root, owner_repo)
              else
-               base_result(root, owner_repo).merge(findings: [
-                                                     finding('error', 'mode', "Unsupported mode: #{@mode}.",
-                                                             'Use --mode ci or --mode deployment.')
-                                                   ])
+               diagnosis_metadata(root, owner_repo).merge(
+                 findings: [
+                   finding('error', 'mode', "Unsupported mode: #{@mode}.",
+                           'Use --mode ci or --mode deployment.')
+                 ]
+               )
              end
 
     JSON.pretty_generate(result)
@@ -52,7 +52,7 @@ class IssueDiagnosisCollector
     findings = ci_findings(target_branch, circleci)
     current_pull_request = github_current_pull_request(owner_repo, target_branch)
 
-    base_result(root, owner_repo).merge(
+    diagnosis_metadata(root, owner_repo).merge(
       target: { type: @pipeline ? 'pipeline' : @target, branch: target_branch, pipeline: @pipeline },
       sources: source_summary(github: current_pull_request, circleci: circleci),
       findings: findings,
@@ -63,28 +63,47 @@ class IssueDiagnosisCollector
   def diagnose_deployment(root, owner_repo)
     service = File.exist?(File.join(root, '.cd'))
     version = @version || latest_version&.fetch(:tag, nil)
-    circleci = service ? collect_circleci_deployment(owner_repo, version) : skipped('not a service repo')
-    digitalocean = service ? collect_digitalocean : skipped('not a service repo')
-    kubernetes = service ? collect_kubernetes(owner_repo.split('/').last) : skipped('not a service repo')
-    uptimerobot = service ? collect_uptimerobot(owner_repo.split('/').last) : skipped('not a service repo')
+    evidence = collect_sources([
+                                 [:circleci, lambda do
+                                   if service
+                                     collect_circleci_deployment(owner_repo, version)
+                                   else
+                                     skipped('not a service repo')
+                                   end
+                                 end],
+                                 [:digitalocean, lambda do
+                                   service ? collect_digitalocean : skipped('not a service repo')
+                                 end],
+                                 [:kubernetes, lambda do
+                                   if service
+                                     collect_kubernetes(owner_repo.split('/').last)
+                                   else
+                                     skipped('not a service repo')
+                                   end
+                                 end],
+                                 [:uptimerobot, lambda do
+                                   if service
+                                     collect_uptimerobot(owner_repo.split('/').last)
+                                   else
+                                     skipped('not a service repo')
+                                   end
+                                 end]
+                               ])
+    circleci = evidence.fetch(:circleci)
+    kubernetes = evidence.fetch(:kubernetes)
+    uptimerobot = evidence.fetch(:uptimerobot)
 
     findings = deployment_findings(service, version, circleci, kubernetes, uptimerobot)
 
-    base_result(root, owner_repo).merge(
+    diagnosis_metadata(root, owner_repo).merge(
       target: { type: @version ? 'version' : @target, version: version, latest_version: latest_version },
-      sources: source_summary(circleci: circleci, digitalocean: digitalocean, kubernetes: kubernetes,
-                              uptimerobot: uptimerobot),
+      sources: source_summary(evidence),
       findings: findings,
-      evidence: {
-        circleci: circleci,
-        digitalocean: digitalocean,
-        kubernetes: kubernetes,
-        uptimerobot: uptimerobot
-      }
+      evidence: evidence
     )
   end
 
-  def base_result(root, owner_repo)
+  def diagnosis_metadata(root, owner_repo)
     {
       repository: owner_repo,
       repo_path: root,

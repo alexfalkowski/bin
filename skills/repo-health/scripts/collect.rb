@@ -3,18 +3,15 @@
 
 # rubocop:disable Metrics/ClassLength, Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
-require 'date'
-require 'json'
-require 'optparse'
-require 'time'
-require 'yaml'
+lib = File.expand_path('../../../lib', __dir__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
-require_relative '../../../lib/evidence_source_access'
+require 'skills'
 
 # Collects read-only repository health evidence from local and remote
 # sources, then prints a JSON document for the skill to summarize.
 class RepoHealthCollector
-  include EvidenceSourceAccess
+  include EvidenceSources
 
   TREND_WINDOW_COUNT = 4
   STALE_PR_SECONDS = 7 * 24 * 60 * 60
@@ -43,6 +40,28 @@ class RepoHealthCollector
     branch = summary_branch(owner_repo)
     mode = File.exist?(File.join(root, '.cd')) ? 'service' : 'library'
     period = window_seconds <= 24 * 60 * 60 ? 'daily' : 'weekly'
+    sources = collect_sources([
+                                [:local, -> { collect_local(root) }],
+                                [:github, -> { collect_github(owner_repo) }],
+                                [:circleci, -> { collect_circleci(owner_repo, branch, mode, root) }],
+                                [:digitalocean, lambda do
+                                  mode == 'service' ? collect_digitalocean : skipped('not a service repo')
+                                end],
+                                [:kubernetes, lambda do
+                                  if mode == 'service'
+                                    collect_kubernetes(owner_repo.split('/').last)
+                                  else
+                                    skipped('not a service repo')
+                                  end
+                                end],
+                                [:uptimerobot, lambda do
+                                  if mode == 'service'
+                                    collect_uptimerobot(owner_repo.split('/').last)
+                                  else
+                                    skipped('not a service repo')
+                                  end
+                                end]
+                              ])
 
     result = {
       repository: owner_repo,
@@ -52,12 +71,12 @@ class RepoHealthCollector
       timezone: @timezone,
       window: window_hash(@current_start, @current_end),
       comparison_window: window_hash(@previous_start, @previous_end),
-      local: collect_local(root),
-      github: collect_github(owner_repo),
-      circleci: collect_circleci(owner_repo, branch, mode, root),
-      digitalocean: mode == 'service' ? collect_digitalocean : skipped('not a service repo'),
-      kubernetes: mode == 'service' ? collect_kubernetes(owner_repo.split('/').last) : skipped('not a service repo'),
-      uptimerobot: mode == 'service' ? collect_uptimerobot(owner_repo.split('/').last) : skipped('not a service repo')
+      local: sources.fetch(:local),
+      github: sources.fetch(:github),
+      circleci: sources.fetch(:circleci),
+      digitalocean: sources.fetch(:digitalocean),
+      kubernetes: sources.fetch(:kubernetes),
+      uptimerobot: sources.fetch(:uptimerobot)
     }
 
     JSON.pretty_generate(summary_result(result))
