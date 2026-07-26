@@ -225,8 +225,8 @@ class RepoHealthCollector
       workflows: data.fetch('workflows', {}).keys.reject { |key| key == 'version' },
       jobs: data.fetch('jobs', {}).keys
     }
-  rescue Psych::SyntaxError => e
-    { present: true, error: e.message }
+  rescue Psych::SyntaxError
+    { present: true, error: 'invalid CircleCI configuration' }
   end
 
   def collect_github(owner_repo)
@@ -245,7 +245,7 @@ class RepoHealthCollector
       stale_prs: open_state.fetch(:stale)
     }
   rescue StandardError => e
-    unavailable(e.message)
+    unavailable_for_error(e)
   end
 
   # Reconstructs which PRs were open at @current_end from complete creation
@@ -344,7 +344,7 @@ class RepoHealthCollector
       jobs_collected: jobs.length
     }
   rescue StandardError => e
-    unavailable(e.message)
+    unavailable_for_error(e)
   end
 
   def circleci_period(workflows, jobs, start_time, end_time)
@@ -408,7 +408,7 @@ class RepoHealthCollector
       pick(cluster, 'name', 'region', 'version', 'status', 'created_at')
     end }
   rescue StandardError => e
-    unavailable(e.message)
+    unavailable_for_error(e)
   end
 
   def collect_kubernetes(name)
@@ -435,7 +435,7 @@ class RepoHealthCollector
       pods: pods.map { |pod| pod_summary(pod) }
     }
   rescue StandardError => e
-    unavailable(e.message)
+    unavailable_for_error(e)
   end
 
   def collect_uptimerobot(name)
@@ -482,7 +482,7 @@ class RepoHealthCollector
       response_time_average_ms_by_period: response_averages
     }
   rescue StandardError => e
-    unavailable(e.message)
+    unavailable_for_error(e)
   end
 
   def deployment_summary(deployment)

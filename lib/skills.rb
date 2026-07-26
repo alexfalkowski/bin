@@ -7,6 +7,7 @@ require 'optparse'
 require 'open3'
 require 'openssl'
 require 'time'
+require 'timeout'
 require 'uri'
 require 'yaml'
 
