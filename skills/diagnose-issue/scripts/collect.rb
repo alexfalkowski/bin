@@ -20,6 +20,7 @@ class IssueDiagnosisCollector
   CIRCLECI_FAILURE_SAMPLE_LIMIT = 5
   CIRCLECI_FAILURE_TEXT_LIMIT = 240
   CIRCLECI_FAILURE_VALUE_LIMIT = 160
+  CIRCLECI_FAILURE_TEXT_TRUNCATION_MARKER = ' ... '
   GITHUB_COMMIT_STATUS_LIMIT = 20
 
   FAILURE_URL_PATTERN = %r{\b(?:https?|s3)://[^\s<>"']+}i
@@ -628,7 +629,9 @@ class IssueDiagnosisCollector
     classname, classname_truncated = sanitized_failure_text(result['classname'], CIRCLECI_FAILURE_VALUE_LIMIT)
     sample_result, result_truncated = sanitized_failure_text(result['result'], CIRCLECI_FAILURE_VALUE_LIMIT)
     message, message_truncated = sanitized_failure_text(
-      result['message'], CIRCLECI_FAILURE_TEXT_LIMIT, from_end: true
+      result['message'],
+      CIRCLECI_FAILURE_TEXT_LIMIT,
+      preserve_ends: true
     )
     sample = {
       'name' => name || 'unknown',
@@ -650,15 +653,21 @@ class IssueDiagnosisCollector
     1
   end
 
-  def sanitized_failure_text(value, limit, from_end: false)
+  def sanitized_failure_text(value, limit, preserve_ends: false)
     return [nil, false] if value.nil?
 
     text = redact_failure_text(value.to_s.gsub(/\s+/, ' ').strip)
     return [nil, false] if text.empty?
     return [text, false] if text.length <= limit
 
-    excerpt = from_end ? text[-(limit - 3)..] : text[0, limit - 3]
-    [from_end ? "...#{excerpt}" : "#{excerpt}...", true]
+    return ["#{text[0, limit - 3]}...", true] unless preserve_ends
+
+    remaining_length = limit - CIRCLECI_FAILURE_TEXT_TRUNCATION_MARKER.length
+    leading_length = (remaining_length + 1) / 2
+    trailing_length = remaining_length - leading_length
+    excerpt = "#{text[0, leading_length]}#{CIRCLECI_FAILURE_TEXT_TRUNCATION_MARKER}" \
+              "#{text[-trailing_length, trailing_length]}"
+    [excerpt, true]
   end
 
   def redact_failure_text(text)
