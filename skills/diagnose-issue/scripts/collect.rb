@@ -177,6 +177,8 @@ class IssueDiagnosisCollector
     if pipeline.nil?
       pipeline = if @pipeline
                    circleci_pipeline_target(owner_repo, @pipeline, token)
+                 elsif @revision
+                   nil
                  else
                    latest_circleci_pipeline(owner_repo, branch, token)
                  end
