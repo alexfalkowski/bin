@@ -1023,23 +1023,50 @@ class RepoHealthCollector
   end
 
   def incident_logs(logs, start_time, end_time)
-    Array(logs).select do |log|
-      timestamp = log['datetime'] && Time.at(log.fetch('datetime').to_i)
-      timestamp && within?(timestamp, start_time, end_time) && incident_log?(log)
-    end
+    Array(logs).select { |log| incident_log?(log) && incident_overlaps?(log, start_time, end_time) }
   end
 
   def incident_log?(log)
-    log['type'].to_i == 1 || log['duration'].to_i.positive?
+    log['type'].to_i == 1
+  end
+
+  def incident_overlaps?(log, start_time, end_time)
+    outage_start = incident_start(log)
+    return false unless outage_start
+
+    duration = incident_duration(log)
+    return within?(outage_start, start_time, end_time) unless duration.positive?
+
+    outage_start < end_time && outage_start + duration > start_time
+  end
+
+  def incident_start(log)
+    datetime = log['datetime']
+    datetime && Time.at(datetime.to_i)
+  end
+
+  def incident_duration(log)
+    log['duration'].to_i
   end
 
   def downtime_seconds(logs, start_time, end_time)
-    incident_logs(logs, start_time, end_time).sum { |log| log['duration'].to_i }
+    incident_logs(logs, start_time, end_time).sum do |log|
+      incident_downtime_seconds(log, start_time, end_time)
+    end
+  end
+
+  def incident_downtime_seconds(log, start_time, end_time)
+    duration = incident_duration(log)
+    return 0 unless duration.positive?
+
+    outage_start = incident_start(log)
+    outage_end = outage_start + duration
+    [[outage_end, end_time].min - [outage_start, start_time].max, 0].max
   end
 
   def mttr_seconds(logs, start_time, end_time)
     median(incident_logs(logs, start_time, end_time).filter_map do |log|
-      duration = log['duration'].to_i
+      duration = incident_duration(log)
       duration if duration.positive?
     end)
   end

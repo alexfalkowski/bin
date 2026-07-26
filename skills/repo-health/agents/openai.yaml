@@ -1,4 +1,4 @@
 interface:
   display_name: "Repo Health"
   short_description: "Summarize repository health and trends"
-  default_prompt: "Use $repo-health to produce a daily or weekly repository health report with delivery, CI, release, reliability, trend, and action evidence."
+  default_prompt: "Use $repo-health to produce a daily or weekly repository health report with safely collected and validated delivery, CI, release, reliability, trend, and action evidence."
