@@ -42,6 +42,16 @@ reporting period and comparison period, not necessarily a local folder.
    available. It performs the local, GitHub, CircleCI,
    DigitalOcean/Kubernetes, and UptimeRobot read-only collection in one command
    and returns report-ready JSON with metrics and source summaries.
+   - Run one collector process for each report. Do not run one process per
+     metric or source.
+   - Redirect its standard output to a unique temporary file created with
+     `mktemp`; never let concurrent collector processes write to the same path.
+   - Wait for the collector process to finish before parsing its output. Check
+     that the file is non-empty, validate it with `jq empty`, and confirm that
+     it contains exactly one JSON object before using it.
+   - If that validation fails, retry the collector exactly once with a newly
+     created temporary output path. Validate the retry before parsing it; do
+     not parse either invalid output.
 7. Collect evidence manually only for requested scope that `scripts/collect.rb`
    cannot cover or when Ruby is unavailable. Keep the manual collection as
    narrow as possible, and state why the collector was insufficient before

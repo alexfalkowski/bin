@@ -22,12 +22,23 @@ Use the bundled collector as the default collection path when Ruby is
 available:
 
 ```bash
-ruby <skill-dir>/scripts/collect.rb --repo <repo-path>
+report_output="$(mktemp "${TMPDIR:-/tmp}/repo-health.XXXXXX")"
+ruby <skill-dir>/scripts/collect.rb --repo <repo-path> > "$report_output"
+test -s "$report_output"
+jq empty "$report_output"
+jq -e -s 'length == 1 and (.[0] | type == "object")' "$report_output" >/dev/null
 ```
 
-The collector returns report-ready metrics and source summaries. Use the manual
-commands below only for requested scope that the collector cannot cover or when
-Ruby is unavailable; state that collector gap before relying on manual evidence.
+The collector returns report-ready metrics and source summaries. Run exactly
+one collector process for a report, wait for it to exit, then run the checks
+above before parsing `report_output`. Each invocation must use its own `mktemp`
+path; concurrent processes must never write to the same path. If validation
+fails, create a fresh temporary output path and retry once. Validate that retry
+before parsing it, and do not parse either invalid output.
+
+Use the manual commands below only for requested scope that the collector cannot
+cover or when Ruby is unavailable; state that collector gap before relying on
+manual evidence.
 
 Useful local commands include:
 
