@@ -125,7 +125,7 @@ class IssueDiagnosisCollector
 
     collect_circleci_pipeline(owner_repo, pipeline, token)
   rescue StandardError => e
-    unavailable(e.message)
+    unavailable_for_error(e)
   end
 
   def collect_circleci_deployment(owner_repo, version)
@@ -142,7 +142,7 @@ class IssueDiagnosisCollector
 
     collect_circleci_pipeline(owner_repo, pipeline, token).merge(version: version, revision: revision)
   rescue StandardError => e
-    unavailable(e.message)
+    unavailable_for_error(e)
   end
 
   def collect_circleci_pipeline(owner_repo, pipeline, token)
@@ -329,7 +329,7 @@ class IssueDiagnosisCollector
       'executor' => details['executor']
     )
   rescue StandardError => e
-    enriched.merge('details_error' => e.message)
+    enriched.merge('details_error' => source_error_reason(e))
   end
 
   def enrich_circleci_job_url(owner_repo, job)
@@ -347,7 +347,7 @@ class IssueDiagnosisCollector
       pick(cluster, 'name', 'region', 'version', 'status', 'created_at')
     end }
   rescue StandardError => e
-    unavailable(e.message)
+    unavailable_for_error(e)
   end
 
   def collect_kubernetes(name)
@@ -366,7 +366,7 @@ class IssueDiagnosisCollector
       pods: pods.map { |pod| pod_summary(pod) }
     }
   rescue StandardError => e
-    unavailable(e.message)
+    unavailable_for_error(e)
   end
 
   def deployment_pods(deployment)
@@ -398,7 +398,7 @@ class IssueDiagnosisCollector
     { status: 'used', monitor: symbolize(pick(monitor, 'id', 'friendly_name', 'url', 'status')),
       logs: monitor.fetch('logs', []) }
   rescue StandardError => e
-    unavailable(e.message)
+    unavailable_for_error(e)
   end
 
   def deployment_summary(deployment)
@@ -460,7 +460,7 @@ class IssueDiagnosisCollector
       '--json', 'number,title,url,headRefName,baseRefName,isDraft,mergeStateStatus,reviewDecision'
     ).first
   rescue StandardError => e
-    unavailable(e.message)
+    unavailable_for_error(e)
   end
 
   def latest_version

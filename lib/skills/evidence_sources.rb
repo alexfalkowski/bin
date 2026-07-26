@@ -4,6 +4,9 @@
 # rubocop:disable Metrics/ModuleLength
 module EvidenceSources
   MAX_CONCURRENT_SOURCES = 4
+  SOURCE_TIMEOUT_SECONDS = 30
+  CIRCLECI_SOURCE_TIMEOUT_SECONDS = 180
+  GITHUB_SOURCE_TIMEOUT_SECONDS = 180
   HTTP_TIMEOUT_SECONDS = 15
   HTTP_RETRY_MAX_ATTEMPTS = 3
   HTTP_RETRY_BASE_DELAY_SECONDS = 0.2
@@ -13,6 +16,10 @@ module EvidenceSources
     OpenSSL::SSL::SSLError, EOFError, Errno::ECONNRESET, Errno::EPIPE, Errno::ECONNREFUSED, Errno::ETIMEDOUT,
     Errno::EHOSTUNREACH, Errno::ENETUNREACH, Net::OpenTimeout, Net::ReadTimeout
   ].freeze
+
+  # Marks a collector deadline with a fixed, safe message for report output.
+  class SourceTimeout < Timeout::Error
+  end
 
   private
 
@@ -34,7 +41,7 @@ module EvidenceSources
           break unless source
 
           index, name, collect = source
-          results << [index, name, collect.call]
+          results << [index, name, collect_source(name, collect)]
         end
         results
       end
@@ -43,6 +50,35 @@ module EvidenceSources
     workers.flat_map(&:value).sort_by(&:first).to_h { |_, name, result| [name, result] }
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+
+  def collect_source(name, collect)
+    timeout_seconds = source_timeout_seconds(name)
+    Timeout.timeout(timeout_seconds, SourceTimeout, timeout_reason(timeout_seconds)) { collect.call }
+  rescue StandardError => e
+    unavailable_for_error(e)
+  end
+
+  def source_timeout_seconds(name = nil)
+    return CIRCLECI_SOURCE_TIMEOUT_SECONDS if name == :circleci
+    return GITHUB_SOURCE_TIMEOUT_SECONDS if name == :github
+
+    SOURCE_TIMEOUT_SECONDS
+  end
+
+  def unavailable_for_error(error)
+    unavailable(source_error_reason(error))
+  end
+
+  def source_error_reason(error)
+    return error.message if error.is_a?(SourceTimeout)
+    return timeout_reason(source_timeout_seconds) if error.is_a?(Timeout::Error)
+
+    "source collection failed (#{error.class})"
+  end
+
+  def timeout_reason(seconds)
+    "source collection timed out after #{seconds} seconds"
+  end
 
   def circleci_get(path, token)
     http_json("https://circleci.com/api/v2#{path}", 'Circle-Token' => token)
