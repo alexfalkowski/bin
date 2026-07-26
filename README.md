@@ -58,6 +58,36 @@ Projects that use the shared git workflow can include it separately:
 include bin/build/make/git.mak
 ```
 
+### Git Worktrees
+
+The git fragment can create local worktrees for independently checked-out
+feature branches. Keep the primary checkout on `master`, then create and work
+from a sibling directory:
+
+```bash
+make add-feature-worktree name=login worktree=../app-login
+cd ../app-login
+make review msg="add login flow" desc="..."
+```
+
+This fetches `origin`, creates a branch named
+`<username>-<random>/feat/login` from `origin/master`, and initializes
+submodules in the new worktree. `add-worktree` is also available when you need
+to provide a branch prefix directly:
+
+```bash
+make add-worktree branch=fix/login worktree=../app-login-fix
+```
+
+List and remove worktrees from the primary checkout. Removal refuses a dirty
+worktree and does not delete its branch:
+
+```bash
+make list-worktrees
+make remove-worktree worktree=../app-login
+make prune-worktrees
+```
+
 Consuming repositories choose which fragments to include and remain responsible
 for project-specific configuration such as service code, image names, release
 version files, and environment-specific settings.

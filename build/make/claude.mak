@@ -1,5 +1,3 @@
-.PHONY: claude-init
-
 BIN_ROOT ?= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))../..)
 
 # Wire this repository for Claude Code using the shared bin skills.
