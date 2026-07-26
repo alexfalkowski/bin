@@ -47,9 +47,13 @@ List concrete source facts:
   bounded sanitized expected/actual assertions, and recurring failure counts
   across reruns. Keep primary failures separate from cascading errors.
 - For revision targets with multiple matching pipelines, the bounded candidate
-  workflow metadata and selection reason. For matching merged PRs, include only
-  bounded identical-tree and terminal-status comparison evidence; do not present
-  this as proof of determinism.
+  workflow metadata and selection reason. Treat
+  `observed_matching_pipeline_count` as the count observed during the scan, not
+  a total when `candidate_scan_truncated` is true. The legacy
+  `matching_pipeline_count` is the retained-candidate count and
+  `matching_pipeline_truncated` aliases `candidate_scan_truncated`. For matching
+  merged PRs, include only bounded identical-tree and terminal-status comparison
+  evidence; do not present this as proof of determinism.
 - Current PR number/title when available, plus matching open or closed PRs for
   a selected commit target.
 - Selected version and deploy job status for deployment mode.

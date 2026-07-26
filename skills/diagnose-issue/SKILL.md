@@ -41,9 +41,6 @@ folder.
      parsing its standard output. The wrapper runs one collector process per
      attempt, validates a completed run's output, and retries once only after a
      completed run fails validation.
-   - Redirect the wrapper's standard output to a unique `mktemp` file. Before
-     parsing, require a zero `rc`, non-empty output, valid JSON, and exactly one
-     JSON object.
    - Do not retry an interruption or timeout: a session without a completed
      exit code and final output is an invocation failure, not source data. A
      completed valid JSON result may still contain unavailable source evidence;

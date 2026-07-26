@@ -401,7 +401,7 @@ class IssueDiagnosisCollector
   end
 
   def circleci_revision_pipeline_selection(owner_repo, revision, token)
-    pipelines, truncated = circleci_pipelines_by_revision(owner_repo, revision, token)
+    pipelines, scan = circleci_pipelines_by_revision(owner_repo, revision, token)
     return nil if pipelines.empty?
 
     candidates = pipelines.map { |pipeline| revision_pipeline_candidate(pipeline, token) }
@@ -410,26 +410,40 @@ class IssueDiagnosisCollector
       pipeline: selected.fetch(:pipeline),
       workflows: selected[:workflows],
       workflow_evidence: selected.fetch(:workflow_evidence),
-      metadata: revision_pipeline_selection_metadata(revision, candidates, selected, truncated)
+      metadata: revision_pipeline_selection_metadata(revision, candidates, selected, scan)
     }
   end
 
   def circleci_pipelines_by_revision(owner_repo, revision, token)
     matches = []
+    observed_matching_pipeline_count = 0
     page_token = nil
     50.times do
       path = "/project/gh/#{owner_repo}/pipeline"
       path += "?page-token=#{url_query(page_token)}" if page_token
       data = circleci_get(path, token)
-      matches.concat(data.fetch('items', []).select { |pipeline| pipeline.dig('vcs', 'revision') == revision })
+      page_matches = data.fetch('items', []).select { |pipeline| pipeline.dig('vcs', 'revision') == revision }
+      observed_matching_pipeline_count += page_matches.length
+      matches.concat(page_matches)
       if matches.length > CIRCLECI_REVISION_PIPELINE_LIMIT
-        return [matches.first(CIRCLECI_REVISION_PIPELINE_LIMIT), true]
+        return [
+          matches.first(CIRCLECI_REVISION_PIPELINE_LIMIT),
+          { observed_matching_pipeline_count: observed_matching_pipeline_count, candidate_scan_truncated: true }
+        ]
       end
 
       page_token = data['next_page_token']
-      return [matches, false] unless page_token
+      unless page_token
+        return [
+          matches,
+          { observed_matching_pipeline_count: observed_matching_pipeline_count, candidate_scan_truncated: false }
+        ]
+      end
     end
-    [matches, true]
+    [
+      matches,
+      { observed_matching_pipeline_count: observed_matching_pipeline_count, candidate_scan_truncated: true }
+    ]
   end
 
   def revision_pipeline_candidate(pipeline, token)
@@ -454,13 +468,15 @@ class IssueDiagnosisCollector
     ]
   end
 
-  def revision_pipeline_selection_metadata(revision, candidates, selected, truncated)
+  def revision_pipeline_selection_metadata(revision, candidates, selected, scan)
     ordered_candidates = candidates.sort_by { |candidate| -candidate.fetch(:pipeline).fetch('number', 0).to_i }
     {
       status: 'used',
       revision: revision,
       matching_pipeline_count: candidates.length,
-      matching_pipeline_truncated: truncated,
+      matching_pipeline_truncated: scan.fetch(:candidate_scan_truncated),
+      observed_matching_pipeline_count: scan.fetch(:observed_matching_pipeline_count),
+      candidate_scan_truncated: scan.fetch(:candidate_scan_truncated),
       selected_pipeline_number: selected.fetch(:pipeline).fetch('number', nil),
       selection_reason: revision_pipeline_selection_reason(selected),
       candidates: ordered_candidates.map do |candidate|
@@ -801,6 +817,9 @@ class IssueDiagnosisCollector
     return [nil, false] if value.nil?
 
     text = value.to_s.gsub(/\s+/, ' ').strip
+    rspec_assertion = rspec_matcher_assertion(text)
+    return rspec_assertion if rspec_assertion
+
     expected, expected_truncated = assertion_value(text, 'expected')
     actual, actual_truncated = assertion_value(text, 'actual|got|but was')
     return [nil, false] unless expected || actual
@@ -810,6 +829,15 @@ class IssueDiagnosisCollector
       assertion['actual'] = actual if actual
     end
     [assertion, expected_truncated || actual_truncated]
+  end
+
+  def rspec_matcher_assertion(text)
+    match = text.match(/\bexpected\s+(.+?)\s+to be (?:an? )?(?:instance|kind) of\s+([^\s,;]+)/i)
+    return nil unless match
+
+    actual, actual_truncated = sanitized_failure_text(match[1], CIRCLECI_FAILURE_VALUE_LIMIT, preserve_ends: true)
+    expected, expected_truncated = sanitized_failure_text(match[2], CIRCLECI_FAILURE_VALUE_LIMIT, preserve_ends: true)
+    [{ 'actual' => actual, 'expected' => expected }, actual_truncated || expected_truncated]
   end
 
   def assertion_value(text, labels)

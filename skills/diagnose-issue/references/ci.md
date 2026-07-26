@@ -23,8 +23,16 @@ abbreviated SHA is expanded before selecting the pipeline whose CircleCI
 `vcs.revision` exactly matches it. When multiple pipelines match, the collector
 examines up to five candidates and prefers terminal workflow evidence over an
 empty pipeline; it records the bounded candidate metadata and selection reason.
-It cannot be combined with `--branch`, `--pipeline`, `--pipeline-id`, or
-`--version`.
+`observed_matching_pipeline_count` is the number of matches seen before the
+scan stopped, while `candidate_scan_truncated` states whether that scan was
+bounded rather than exhaustive. The legacy `matching_pipeline_count` is the
+number of retained candidates and `matching_pipeline_truncated` is an alias for
+`candidate_scan_truncated`; preserve them for compatible consumers. It cannot
+be combined with `--branch`, `--pipeline`, `--pipeline-id`, or `--version`.
+
+The collector command must exit with status zero; a nonzero exit status, empty
+file, invalid JSON, or anything other than one JSON object is an invocation
+failure, not diagnosis evidence.
 
 ## Evidence Priority
 
@@ -33,9 +41,10 @@ It cannot be combined with `--branch`, `--pipeline`, `--pipeline-id`, or
 3. Failed job names, job numbers, contexts, and the failed step name, status,
    and exit code when CircleCI exposes them. Test-result evidence is limited to
    bounded, sanitized expected/actual assertions, primary-versus-cascading
-   classification, and recurring signatures across rerun attempts. Do not
-   collect log bodies, URLs (including `output_url` and presigned URLs), tokens,
-   or secrets.
+   classification, and recurring signatures across rerun attempts. For RSpec
+   matcher wording such as `expected <actual> to be a kind of <expected type>`,
+   label the values as `actual` and `expected` respectively. Do not collect log
+   bodies, URLs (including `output_url` and presigned URLs), tokens, or secrets.
 4. For a revision with a matched merged PR, compare up to three locally
    available merge revisions with an identical Git tree. Record bounded terminal
    workflow-status comparisons as evidence only: matching trees and statuses can
