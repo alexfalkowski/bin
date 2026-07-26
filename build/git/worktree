@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# Manage local Git worktrees for the shared Make targets.
+
+set -eo pipefail
+
+readonly action="${1:-}"
+
+case "$action" in
+add)
+  readonly worktree="${2:-}"
+  readonly branch="${3:-}"
+  readonly user="${4:-}"
+
+  if [[ -z $worktree ]]; then
+    printf '%s\n' 'bin: worktree is required (set worktree=<path>)' >&2
+    exit 2
+  fi
+
+  if [[ -z $branch ]]; then
+    printf '%s\n' 'bin: branch is required (set branch=<branch>)' >&2
+    exit 2
+  fi
+
+  readonly full_branch="$user/$branch"
+
+  if ! git check-ref-format --branch "$full_branch" >/dev/null 2>&1; then
+    printf '%s\n' 'bin: branch is invalid' >&2
+    exit 2
+  fi
+
+  git fetch origin
+  git worktree add -b "$full_branch" -- "$worktree" origin/master
+  git -C "$worktree" submodule sync
+  git -C "$worktree" submodule update --init
+  printf "bin: added worktree '%s' on branch '%s'\n" "$worktree" "$full_branch"
+  ;;
+list)
+  git worktree list
+  ;;
+remove)
+  readonly worktree="${2:-}"
+
+  if [[ -z $worktree ]]; then
+    printf '%s\n' 'bin: worktree is required (set worktree=<path>)' >&2
+    exit 2
+  fi
+
+  git worktree remove -- "$worktree"
+  ;;
+prune)
+  git worktree prune
+  ;;
+*)
+  printf '%s\n' 'usage: worktree {add <path> <branch> <user>|list|remove <path>|prune}' >&2
+  exit 2
+  ;;
+esac

@@ -3,11 +3,9 @@
 BIN_ROOT ?= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))../..)
 
 USER:=$(shell $(BIN_ROOT)/build/git/user)
-BRANCH:=$(shell git branch --show-current)
-export BRANCH
+export BRANCH := $(shell git branch --show-current)
 NEW_BRANCH:=$(subst $() ,-,$(name))
-PREFIX:=$(shell $(BIN_ROOT)/build/git/prefix)
-export PREFIX
+export PREFIX := $(shell $(BIN_ROOT)/build/git/prefix)
 
 override export msg := $(value msg)
 override export desc := $(value desc)
@@ -84,6 +82,50 @@ new-refactor: new-branch
 # Start a new release branch (name=<branch>, runs latest first).
 new-release: branch=release/$(NEW_BRANCH)
 new-release: new-branch
+
+# Add a worktree on a new username-random/$(branch) branch from origin/master (set branch and worktree).
+add-worktree:
+	@$(BIN_ROOT)/build/git/worktree add "$(worktree)" "$(branch)" "$(USER)"
+
+# Add a feature worktree (name=<branch>, worktree=<path>).
+add-feature-worktree: branch=feat/$(NEW_BRANCH)
+add-feature-worktree: add-worktree
+
+# Add a fix worktree (name=<branch>, worktree=<path>).
+add-fix-worktree: branch=fix/$(NEW_BRANCH)
+add-fix-worktree: add-worktree
+
+# Add a build worktree (name=<branch>, worktree=<path>).
+add-build-worktree: branch=build/$(NEW_BRANCH)
+add-build-worktree: add-worktree
+
+# Add a test worktree (name=<branch>, worktree=<path>).
+add-test-worktree: branch=test/$(NEW_BRANCH)
+add-test-worktree: add-worktree
+
+# Add a docs worktree (name=<branch>, worktree=<path>).
+add-docs-worktree: branch=docs/$(NEW_BRANCH)
+add-docs-worktree: add-worktree
+
+# Add a refactor worktree (name=<branch>, worktree=<path>).
+add-refactor-worktree: branch=refactor/$(NEW_BRANCH)
+add-refactor-worktree: add-worktree
+
+# Add a release worktree (name=<branch>, worktree=<path>).
+add-release-worktree: branch=release/$(NEW_BRANCH)
+add-release-worktree: add-worktree
+
+# List registered worktrees.
+list-worktrees:
+	@$(BIN_ROOT)/build/git/worktree list
+
+# Remove a clean worktree without deleting its branch (set worktree=<path>).
+remove-worktree:
+	@$(BIN_ROOT)/build/git/worktree remove "$(worktree)"
+
+# Prune stale worktree metadata.
+prune-worktrees:
+	@$(BIN_ROOT)/build/git/worktree prune
 
 # Delete the current branch.
 delete:

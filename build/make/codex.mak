@@ -1,5 +1,3 @@
-.PHONY: codex-init
-
 BIN_ROOT ?= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))../..)
 
 # Wire this repository for Codex using shared skills, permissions, and rules.
