@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+# Runs the repo-health collector with completed-run validation and one bounded retry.
+
+set -eo pipefail
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+max_attempts=2
+attempt=1
+report_output=""
+
+cleanup() {
+  [[ -z $report_output ]] || rm -f "$report_output"
+}
+
+interrupted() {
+  printf 'repo-health: collector invocation interrupted; output was discarded\n' >&2
+  exit 130
+}
+
+trap cleanup EXIT
+trap interrupted HUP INT TERM
+
+if ! command -v ruby >/dev/null 2>&1; then
+  printf 'repo-health: ruby is required to run the collector\n' >&2
+  exit 127
+fi
+
+if ! command -v jq >/dev/null 2>&1; then
+  printf 'repo-health: jq is required to validate collector output\n' >&2
+  exit 127
+fi
+
+while ((attempt <= max_attempts)); do
+  report_output="$(mktemp "${TMPDIR:-/tmp}/repo-health.XXXXXX")"
+
+  set +e
+  ruby "$script_dir/collect.rb" "$@" > "$report_output"
+  rc=$?
+  set -e
+
+  validation_error=""
+  if ((rc != 0)); then
+    validation_error="collector completed with exit code $rc"
+  elif ! test -s "$report_output"; then
+    validation_error='collector completed without JSON output'
+  elif ! jq empty "$report_output" >/dev/null 2>&1; then
+    validation_error='collector completed with invalid JSON output'
+  elif ! jq -e -s 'length == 1 and (.[0] | type == "object")' "$report_output" >/dev/null; then
+    validation_error='collector completed without exactly one JSON object'
+  fi
+
+  if [[ -z $validation_error ]]; then
+    cat "$report_output"
+    exit 0
+  fi
+
+  if ((attempt == max_attempts)); then
+    printf 'repo-health: %s after retry\n' "$validation_error" >&2
+    if ((rc == 0)); then
+      rc=1
+    fi
+    exit "$rc"
+  fi
+
+  printf 'repo-health: %s; retrying once\n' "$validation_error" >&2
+  rm -f "$report_output"
+  report_output=""
+  ((attempt += 1))
+done

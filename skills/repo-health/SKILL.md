@@ -38,24 +38,36 @@ reporting period and comparison period, not necessarily a local folder.
 3. Read `references/sources.md` before collecting data.
 4. Read `references/metrics.md` before calculating or naming metrics.
 5. Read `references/output.md` before writing the final summary.
-6. Use `scripts/collect.rb` as the default collection path when Ruby is
+6. Use `scripts/collect` as the default collection path when Ruby is
    available. It performs the local, GitHub, CircleCI,
    DigitalOcean/Kubernetes, and UptimeRobot read-only collection in one command
    and returns report-ready JSON with metrics and source summaries.
-   - Run one collector process for each report. Do not run one process per
-     metric or source. The collector writes machine-readable JSON only to
-     standard output and progress to standard error.
+   - Run it in the runtime's persistent command session. The wrapper runs one
+     collector process per attempt, validates its completed output, and retries
+     exactly once only after a completed run fails validation. Do not run one
+     process per metric or source. The collector writes machine-readable JSON
+     only to standard output and progress to standard error.
    - Use `--sources local,github` to limit collection when the report needs a
-     subset, or `--timeout SECONDS` to override the 240-second overall deadline.
-   - Redirect its standard output to a unique temporary file created with
-     `mktemp`; never let concurrent collector processes write to the same path.
-   - Wait for the collector process to finish before parsing its output. Check
-     that the file is non-empty, validate it with `jq empty`, and confirm that
-     it contains exactly one JSON object before using it.
-   - If that validation fails, retry the collector exactly once with a newly
-     created temporary output path. Validate the retry before parsing it; do
-     not parse either invalid output.
-7. Collect evidence manually only for requested scope that `scripts/collect.rb`
+    subset, or `--timeout SECONDS` to override the 240-second overall deadline.
+   - Full collection can take time, especially when CircleCI is selected. After
+     starting it, poll the same persistent session until it exits; do not use a
+     30-second command wait as the session lifetime. Agents must not kill,
+     cancel, or switch to manual fallback because a poll returns before the
+     collector exits. Allow at least the configured 240-second timeout plus
+     final-output time before declaring the invocation timed out. Record the
+     completed process exit code in `rc`, never `status`: `status` is read-only
+     in zsh.
+   - Redirect the wrapper's standard output to a unique temporary file created
+     with `mktemp`; never let concurrent collector processes write to the same
+     path. After the session exits, require `rc` to be zero, the file to be
+     non-empty, `jq empty` to succeed, and `jq -e -s 'length == 1 and (.[0] |
+     type == "object")'` to succeed before parsing it.
+   - Do not retry an interruption or timeout: a session without a completed exit
+     code or final output is an invocation failure, not source data. A completed
+     zero-exit valid JSON result with an unavailable source is a
+     collector-generated unavailable source and must be reported as such, not
+     retried.
+7. Collect evidence manually only for requested scope that `scripts/collect`
    cannot cover or when Ruby is unavailable. Keep the manual collection as
    narrow as possible, and state why the collector was insufficient before
    relying on local repository facts, authenticated source APIs, or CLIs.
@@ -75,7 +87,7 @@ reporting period and comparison period, not necessarily a local folder.
 
 ## References
 
-- Run `scripts/collect.rb --repo PATH` first for report-ready metrics and
+- Run `scripts/collect --repo PATH` first for report-ready metrics and
   source summaries.
 - Read `references/sources.md` for source priority, credential names, and
   collection boundaries.

@@ -3,6 +3,9 @@ approval_policy = "on-request"
 approvals_reviewer = "user"
 default_permissions = "shared-development"
 
+# Allow persistent command polls through repo-health's 240-second deadline.
+background_terminal_max_timeout = 300000
+
 [permissions.shared-development]
 description = "Autonomous workspace development with host credentials and internet access."
 extends = ":workspace"

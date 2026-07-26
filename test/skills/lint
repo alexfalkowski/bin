@@ -210,6 +210,41 @@ PATTERNS
 
 reject_pattern skills/change-validation/references/check-selection.md "zsh -"
 
+# Repo-health collector invocation contract.
+require_patterns skills/repo-health/SKILL.md <<'PATTERNS'
+persistent session
+poll
+240-second timeout
+can take time
+must not kill
+`rc`
+interruption or timeout
+collector-generated unavailable
+PATTERNS
+
+require_patterns skills/repo-health/references/sources.md <<'PATTERNS'
+scripts/collect
+persistent session
+poll
+240 seconds
+can take time
+must not kill
+exit code
+exactly one JSON object
+interrupted or timed out
+collector-generated unavailable
+PATTERNS
+
+require_patterns skills/repo-health/scripts/collect <<'PATTERNS'
+collect.rb
+rc=$?
+test -s
+jq empty
+length == 1 and (.[0] | type == "object")
+PATTERNS
+
+reject_pattern skills/repo-health/scripts/collect 'status='
+
 # Testing and language-standard contracts.
 require_patterns skills/testing-standards/SKILL.md <<'PATTERNS'
 ## Mandatory Stop Gates

@@ -23,18 +23,34 @@ available:
 
 ```bash
 report_output="$(mktemp "${TMPDIR:-/tmp}/repo-health.XXXXXX")"
-ruby <skill-dir>/scripts/collect.rb --repo <repo-path> > "$report_output"
+<skill-dir>/scripts/collect --repo <repo-path> > "$report_output"
+rc=$?
+test "$rc" -eq 0
 test -s "$report_output"
 jq empty "$report_output"
 jq -e -s 'length == 1 and (.[0] | type == "object")' "$report_output" >/dev/null
 ```
 
-The collector returns report-ready metrics and source summaries. Run exactly
-one collector process for a report, wait for it to exit, then run the checks
-above before parsing `report_output`. Each invocation must use its own `mktemp`
-path; concurrent processes must never write to the same path. If validation
-fails, create a fresh temporary output path and retry once. Validate that retry
-before parsing it, and do not parse either invalid output.
+Full collection can take time, especially when CircleCI is selected. Start this
+command in the runtime's persistent session, then poll that same session until
+it exits. A 30-second tool wait is only a poll interval, not a collector
+deadline: agents must not kill, cancel, or switch to manual fallback because a
+poll returns before the collector exits. Allow the configured 240 seconds (or
+the supplied `--timeout`) plus final-output time. Record the completed command's
+exit code as `rc`; do not use `status`, which is read-only in zsh.
+
+`collect` runs exactly one collector process per attempt, writes its standard
+output to a fresh internal `mktemp` file, validates the completed run, and
+retries once only when that completed run has a non-zero exit code, empty output,
+invalid JSON, or anything other than exactly one JSON object. The outer
+`report_output` must still pass the checks above before parsing. Concurrent
+invocations must never write to the same output path.
+
+Do not retry when the persistent session is interrupted or timed out before it
+returns a completed `rc` and final output: classify that as `interrupted or
+timed out`, not as unavailable source data. In contrast, a completed zero-exit
+result with valid JSON may contain a collector-generated unavailable source;
+retain and report that source state rather than retrying the invocation.
 
 Use the manual commands below only for requested scope that the collector cannot
 cover or when Ruby is unavailable; state that collector gap before relying on
