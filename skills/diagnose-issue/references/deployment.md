@@ -9,8 +9,8 @@ version questions.
 Run the collector from the repository being diagnosed:
 
 ```bash
-ruby <skill-dir>/scripts/collect.rb --mode deployment --repo <repo-path>
-ruby <skill-dir>/scripts/collect.rb --mode deployment --version <version-tag> --repo <repo-path>
+<skill-dir>/scripts/collect --mode deployment --repo <repo-path>
+<skill-dir>/scripts/collect --mode deployment --version <version-tag> --repo <repo-path>
 ```
 
 Deployment mode defaults to the latest local version tag. Use `--version` when

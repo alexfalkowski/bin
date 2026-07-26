@@ -8,8 +8,8 @@ questions.
 Run the collector from the repository being diagnosed:
 
 ```bash
-ruby <skill-dir>/scripts/collect.rb --mode ci --repo <repo-path>
-ruby <skill-dir>/scripts/collect.rb --mode ci --pipeline <circleci-pipeline-number> --repo <repo-path>
+<skill-dir>/scripts/collect --mode ci --repo <repo-path>
+<skill-dir>/scripts/collect --mode ci --pipeline <circleci-pipeline-number> --repo <repo-path>
 ```
 
 CI mode defaults to the latest CircleCI pipeline on the current branch. Use

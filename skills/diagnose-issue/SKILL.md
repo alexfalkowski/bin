@@ -34,12 +34,23 @@ folder.
    - `references/ci.md` for CI and PR diagnosis.
    - `references/deployment.md` for deployment and runtime diagnosis.
    - `references/output.md` before writing the final answer.
-3. Use `scripts/collect.rb` as the default collection path when Ruby is
+3. Use `scripts/collect` as the default collection path when Ruby and `jq` are
    available; the mode references contain the exact commands and options.
-4. Collect manually only for missing evidence or a narrower user request that
-   the script cannot cover. State why the collector was insufficient before
-   relying on manual `gh`, CircleCI, `kubectl`, DigitalOcean, UptimeRobot, or
-   local-git commands.
+   - Run it in the runtime's persistent session and wait for it to exit before
+     parsing its standard output. The wrapper runs one collector process per
+     attempt, validates a completed run's output, and retries once only after a
+     completed run fails validation.
+   - Redirect the wrapper's standard output to a unique `mktemp` file. Before
+     parsing, require a zero `rc`, non-empty output, valid JSON, and exactly one
+     JSON object.
+   - Do not retry an interruption or timeout: a session without a completed
+     exit code and final output is an invocation failure, not source data. A
+     completed valid JSON result may still contain unavailable source evidence;
+     report that source gap rather than retrying it.
+4. Collect manually only for missing evidence, a narrower user request that the
+   script cannot cover, or an unavailable Ruby or `jq` command. State why the
+   collector was insufficient before relying on manual `gh`, CircleCI,
+   `kubectl`, DigitalOcean, UptimeRobot, or local-git commands.
 5. Separate facts from inference. Label source gaps, stale data, partial
    windows, missing credentials, and collection-time Kubernetes state.
 6. Give fixes as ordered suggestions. Prefer the smallest likely fix first, and
