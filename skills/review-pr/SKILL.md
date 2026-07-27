@@ -38,6 +38,14 @@ These rules remain mandatory:
   `make review` while blocking findings remain unless the human explicitly says
   to open a draft PR with those findings unresolved; in that case, call them out
   in the PR summary.
+- For an apparent breaking change, establish whether it is intended before
+  treating it as a blocking finding or changing the reviewed work. Compare the
+  request and PR context with the changed contract, documentation, tests, and
+  supported usage. Do not undo, revert, discard, or replace changes merely to
+  clear the finding. If intent remains unclear, stop and ask the human, stating
+  the impact and practical remedies. If the break is intentional, preserve it
+  and document its compatibility and migration implications; if it is
+  unintended, present the proposed fix and get approval before editing.
 - If `$code-review` reports security findings or security validation gaps, resolve them or document them in the PR summary before `make review`.
 - Treat `$style-review` notes as non-blocking unless the user explicitly asks to resolve them before opening the PR.
 - Draft the `msg` and `desc` from `references/summary-format.md`. Keep `msg`

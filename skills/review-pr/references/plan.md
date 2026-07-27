@@ -60,16 +60,24 @@ repository root and keep `bin/` as shared guidance.
    review.
 10. Run `$style-review` only when the human explicitly asked for non-blocking
    polish.
-11. Resolve blocking review findings or get explicit approval to open the draft
-    PR with unresolved findings documented.
-12. Read `references/summary-format.md`.
-13. Draft the lowercase, unprefixed `msg` and multiline Markdown `desc`.
-14. Create `desc_file` yourself with
+11. Investigate review findings. For an apparent breaking change,
+    establish intent from the request and PR context, changed contract,
+    documentation, tests, and supported usage before treating it as blocking or
+    modifying the reviewed work. Do not undo, revert, discard, or replace
+    changes merely to clear the finding. If intent is unclear, stop and ask the
+    human with the impact and practical remedies. If intentional, preserve the
+    change and document compatibility and migration implications; if
+    unintended, present the proposed fix and get approval before editing.
+12. Resolve confirmed blocking review findings or get explicit approval to open
+    the draft PR with unresolved findings documented.
+13. Read `references/summary-format.md`.
+14. Draft the lowercase, unprefixed `msg` and multiline Markdown `desc`.
+15. Create `desc_file` yourself with
     `mktemp "${TMPDIR:-/tmp}/review-pr.XXXXXX"`; never ask the user for the path
     or file contents. Capture the returned path and write `desc` to it.
-15. Substitute the returned path directly into
+16. Substitute the returned path directly into
     `make review cleanup_desc_file=true msg="..." desc_file="/returned/path/review-pr.ABC123"`.
-16. Rely on `make review` to remove the opted-in temporary `desc_file`,
+17. Rely on `make review` to remove the opted-in temporary `desc_file`,
     including when commit, push, or draft creation fails.
-17. Read `references/output-format.md`.
-18. Report the result in the required output format.
+18. Read `references/output-format.md`.
+19. Report the result in the required output format.
