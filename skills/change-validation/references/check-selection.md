@@ -5,8 +5,11 @@ Use this reference when choosing which checks to run.
 ## Validation Principles
 
 - Before wrapping up code changes, run the applicable lint checks.
-- Run the narrowest check that gives credible confidence for the change and
-  report when broader CI coverage is intentionally left to CI.
+- Identify the changed packages, commands, scenarios, or features and run only
+  their narrowest established selectors. Add direct dependents only when the
+  repository provides a reliable dependency graph or mapping that proves the
+  impact. Report that CI owns complete-suite coverage. If the repository
+  exposes no narrower selector, use its supported target and report that limit.
 - Prefer repository-defined commands because they encode project conventions.
 - Use direct commands only when they are an established repository or harness
   selector that is clearly narrower or better aligned with the task than a
@@ -16,16 +19,21 @@ Use this reference when choosing which checks to run.
 - Do not add or select an ad hoc language-native test command when the repository's established harness owns the behavior, unless the user explicitly asked for that layer or the behavior cannot be covered through the established harness.
 - If bypassing the dominant harness is necessary, stop before editing or validating and state why the established harness cannot cover the behavior.
 - For code or test changes, prefer fast feedback from supported package, file,
-  scenario, example, focus, or test-name selectors in the dominant harness
-  before running a broad suite. Do not use a selector that changes the test
-  layer or skips required setup.
+  scenario, example, focus, or test-name selectors in the dominant harness.
+  Do not run a complete local suite solely because a change is shared,
+  cross-package, release-sensitive, or handed to another agent/session; CI owns
+  that coverage unless the user explicitly requests it or no narrower
+  repository-defined selector exists. Do not use a selector that changes the
+  test layer or skips required setup.
 - Use CI configuration as a strong signal for which checks matter most.
 - Run the repository's setup target, such as `make dep`, when checks depend on installed dependencies, generated files, or vendored state.
 - Identify checks that require SSH credentials, GitHub auth, registry auth,
   cloning, pushing, publishing, opening PRs, or updating remote state. Rely on
   the active agent configuration for command approval behavior; do not add a
   separate model-level permission request.
-- Expand from targeted checks to broader checks only when the task or risk justifies it.
+- Expand lint, security, schema, or other non-test checks when the task or risk
+  justifies it. Keep local test execution scoped to changed packages and
+  graph-proven direct dependents.
 - Never imply a check ran if the wrapper no-op'd because a dependency was missing.
 - Report network, credential, shell environment, `PATH`, or tool-version failures as environment or validation gaps rather than code failures.
 - Keep the repository-defined command as the intended validation command when the agent command environment differs from the configured command environment.
@@ -52,7 +60,10 @@ Use this reference when choosing which checks to run.
 3. Run the nearest repository entry point, often a `make` target, when that is the project's standard workflow.
 4. Run applicable lint for changed code, tests, scripts, docs, skills, or policy.
 5. Run any additional repo-defined checks that are clearly relevant to the risk of the change.
-6. Run broader lint or test suites only when the change touches shared infrastructure, multiple packages, or release-sensitive behavior.
+6. Run broader lint or non-test checks only when the change touches shared
+   infrastructure, multiple packages, or release-sensitive behavior. Keep local
+   tests scoped to changed packages and graph-proven direct dependents; CI runs
+   the complete suite.
 
 ## Output Format
 
@@ -92,6 +103,11 @@ For standalone validation reports, use exactly this Markdown structure and do no
   example, prefer the matching supported selector first. If the repository only
   exposes a broad `make` target, use that target and report the lack of a
   narrower supported selector as validation scope, not as a failure.
+- For Go, use repository-provided package metadata or a dependency graph to
+  identify direct dependents when available. For Ruby and other repositories
+  without a reliable dependency mapping, run the established selector for the
+  changed package or feature and report that reverse-dependency expansion is
+  unavailable; do not guess from filenames or require a complete local suite.
 - If a service behavior is primarily covered by Cucumber, Gherkin, RSpec-style features, acceptance tests, or another cross-language harness, validate through that harness unless the user explicitly asks for lower-level tests.
 - Run language-specific lint or formatting commands for changed code when the repository exposes them, regardless of which harness owns the behavior tests.
 - For Go changes whose majority relevant tests are Go-based, prefer the repo's Go test entry points.

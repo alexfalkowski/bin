@@ -48,8 +48,11 @@ repository root and keep `bin/` as shared guidance.
 4. Run `$project-workflow` discovery for entrypoints, CI, and `./bin` wiring.
 5. Make the remote-write behavior explicit: the review target commits,
    force-pushes, and opens a draft PR.
-6. Select and run credible validation for the full change with
-   `$change-validation`.
+6. Select and run current credible validation for the changed packages,
+   commands, scenarios, or features with `$change-validation`. Add only
+   graph-proven direct dependents. A different agent/session does not justify a
+   complete local test suite; CI owns that coverage unless the user explicitly
+   requests it or no narrower repository-defined selector exists.
 7. Apply relevant language, test, and documentation standards for the changed
    paths.
 8. Run `$code-review` on the current change.

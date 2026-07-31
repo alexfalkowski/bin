@@ -1,4 +1,4 @@
 interface:
   display_name: "Review PR"
   short_description: "Prepare a safe review PR flow"
-  default_prompt: "Use $review-pr to validate and review local changes, verify whether an apparent breaking change is intentional before proposing a fix, then commit, force-push, and open a draft PR."
+  default_prompt: "Use $review-pr to validate changed packages, commands, scenarios, or features (plus graph-proven direct dependents), review local changes, verify whether an apparent breaking change is intentional before proposing a fix, then commit, force-push, and open a draft PR; CI owns complete-suite coverage."
