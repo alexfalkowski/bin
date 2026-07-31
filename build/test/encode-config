@@ -9,4 +9,4 @@ validate_config
 
 readonly kind_value="${kind:-}"
 
-base64 -w 0 "test/$kind_value.yml"
+base64 -w 0 "test/$kind_value.yaml"
