@@ -15,7 +15,10 @@ description: Use when a user asks how to verify a change, choose tests or lint c
    registries, cloning, pushing, publishing, opening PRs, or remote state. Rely
    on the active agent configuration for command approval behavior; do not add
    a separate model-level permission request.
-6. Run the narrowest check that credibly exercises the changed behavior, then expand only when risk justifies it.
+6. Identify the changed packages, commands, scenarios, or features and run only
+   their narrowest credible checks. Add direct dependents only when the
+   repository provides a reliable dependency graph or mapping that proves the
+   impact; CI owns complete-suite coverage.
 7. Treat validation as valid only for the file state it tested. If files change while a validation command is still running or after it completes, report that result as stale and rerun the relevant checks after final edits.
 8. Notice wrappers that no-op because optional tools are missing, and do not report them as full validation.
 9. Use `$testing-standards` when the task needs decisions about what tests to add or whether coverage is credible; keep this skill focused on selecting and reporting commands.

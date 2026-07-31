@@ -82,9 +82,10 @@ For find, audit-only, and one-pass modes:
   files, or components; integration checks may need listeners or services; and
   dependency, security, or generation checks may need network or cache writes.
 - Prefer fast, reproducible local evidence from the smallest supported command
-  or dominant harness. Broaden to suite, lint, security, or CI-equivalent
-  checks when the scope crosses boundaries, affects shared infrastructure, or
-  needs higher confidence.
+  or dominant harness. Keep local tests scoped to changed packages and
+  graph-proven direct dependents. Broaden lint, security, or CI-equivalent
+  non-test checks when the scope crosses boundaries, affects shared
+  infrastructure, or needs higher confidence; CI owns complete-suite coverage.
 - CI raises confidence only when a current run or equivalent repository-defined
   command is observed and classified. Its existence or a future run is not
   reproduction evidence. Confidence closure requires current CI or an

@@ -71,11 +71,16 @@
   they clarify behavior without hiding the scenario.
 - Put repeated configuration literals in the established fixture/helper
   location and keep call sites focused on scenario-specific values.
-- Use broader suites for shared infrastructure, compatibility-sensitive
-  behavior, release-sensitive behavior, or cross-boundary changes.
+- Keep local tests scoped to changed packages and graph-proven direct
+  dependents, including for shared infrastructure, compatibility-sensitive,
+  release-sensitive, or cross-boundary changes. CI owns complete-suite
+  coverage; broaden local lint, security, schema, or other non-test checks when
+  risk requires it.
 - Use focused package, file, scenario, example, focus-tag, or test-name runs for
-  fast feedback when the dominant harness supports them; broaden when risk,
-  shared surface, or confidence target requires it.
+  fast feedback when the dominant harness supports them. Do not expand the test
+  package set beyond changed packages and graph-proven direct dependents solely
+  because risk, a shared surface, a confidence target, or a different
+  agent/session is involved.
 - Do not add behavioral tests for docs-only or formatting-only changes; run
   relevant lint, docs, or formatting validation.
 - When reviewing tests, flag private surfaces without approval, wrong harnesses,

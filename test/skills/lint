@@ -208,6 +208,43 @@ Treat validation as valid only for the file state it tested
 configured command environment
 PATTERNS
 
+# Changed-package local-test policy.
+require_patterns skills/change-validation/SKILL.md <<'PATTERNS'
+Identify the changed packages, commands, scenarios, or features and run only
+repository provides a reliable dependency graph or mapping that proves the
+impact; CI owns complete-suite coverage.
+PATTERNS
+
+require_patterns skills/change-validation/references/check-selection.md <<'PATTERNS'
+Do not run a complete local suite solely because a change is shared,
+cross-package, release-sensitive, or handed to another agent/session; CI owns
+graph-proven direct dependents.
+Run broader lint or non-test checks only when the change touches shared
+tests scoped to changed packages and graph-proven direct dependents; CI runs
+For Go, use repository-provided package metadata or a dependency graph to
+without a reliable dependency mapping, run the established selector for the
+do not guess from filenames or require a complete local suite.
+PATTERNS
+
+require_patterns skills/references/gap-workflow/find-audit.md <<'PATTERNS'
+Keep local tests scoped to changed packages and
+graph-proven direct dependents. Broaden lint, security, or CI-equivalent
+non-test checks when the scope crosses boundaries
+PATTERNS
+
+require_patterns skills/review-pr/references/plan.md <<'PATTERNS'
+A different agent/session does not justify a
+complete local test suite; CI owns that coverage unless the user explicitly
+PATTERNS
+
+require_patterns skills/testing-standards/references/principles.md <<'PATTERNS'
+Keep local tests scoped to changed packages and graph-proven direct
+a confidence target, or a different
+agent/session is involved.
+PATTERNS
+
+require_pattern skills/testing-standards/agents/openai.yaml "never expand local tests solely because work moves to a different agent/session"
+
 reject_pattern skills/change-validation/references/check-selection.md "zsh -"
 
 # Repo-health collector invocation contract.

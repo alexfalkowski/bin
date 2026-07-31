@@ -1,4 +1,4 @@
 interface:
   display_name: "Change Validation"
   short_description: "Verify changes with trusted checks"
-  default_prompt: "Use $change-validation to verify this change with the narrowest credible repository-defined test, lint, CI, or security check in the configured command environment; rerun checks when file changes make prior validation stale."
+  default_prompt: "Use $change-validation to verify this change with narrow repository-defined checks for changed packages, commands, scenarios, or features; add only graph-proven direct dependents, keep complete-suite coverage in CI, and rerun checks when file changes make prior validation stale in the configured command environment."
