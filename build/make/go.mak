@@ -134,7 +134,7 @@ trivy-repo:
 # Run security checks.
 sec: govulncheck trivy-repo
 
-# Base64-encode test/$(kind).yml as a single line.
+# Base64-encode test/$(kind).yaml as a single line.
 encode-config:
 	@$(BIN_ROOT)/build/test/encode-config
 
