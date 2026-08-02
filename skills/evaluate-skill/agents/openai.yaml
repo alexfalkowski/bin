@@ -1,0 +1,4 @@
+interface:
+  display_name: "Evaluate Skill"
+  short_description: "Inspect and compare skill revisions"
+  default_prompt: "Use $evaluate-skill to inspect a target skill for unnecessary text and compare a lean candidate only when agents are explicitly authorized."
