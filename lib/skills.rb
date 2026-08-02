@@ -11,4 +11,17 @@ require 'timeout'
 require 'uri'
 require 'yaml'
 
-require 'skills/evidence_sources'
+# Namespace for reusable skill collection components.
+module Skills
+end
+
+require 'skills/collection'
+require 'skills/command'
+require 'skills/http_client'
+require 'skills/circleci'
+require 'skills/digitalocean'
+require 'skills/git'
+require 'skills/github'
+require 'skills/kubernetes'
+require 'skills/source_status'
+require 'skills/uptimerobot'

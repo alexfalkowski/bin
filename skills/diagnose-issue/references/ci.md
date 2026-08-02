@@ -38,13 +38,15 @@ failure, not diagnosis evidence.
 
 1. Selected CircleCI pipeline.
 2. Workflow status and the first failed workflow.
-3. Failed job names, job numbers, contexts, and the failed step name, status,
-   and exit code when CircleCI exposes them. Test-result evidence is limited to
-   bounded, sanitized expected/actual assertions, primary-versus-cascading
+3. Failed job names, job numbers, contexts, and every failed step's name,
+   status, and exit code when CircleCI exposes them. Failed-step evidence includes the
+   raw command and output when CircleCI provides it. The compatibility
+   `failed_step` field is the first entry in `failed_steps`. Test-result evidence includes raw
+   messages and expected/actual assertions, primary-versus-cascading
    classification, and recurring signatures across rerun attempts. For RSpec
    matcher wording such as `expected <actual> to be a kind of <expected type>`,
-   label the values as `actual` and `expected` respectively. Do not collect log
-   bodies, URLs (including `output_url` and presigned URLs), tokens, or secrets.
+   label the values as `actual` and `expected` respectively. CI providers and
+   repositories are responsible for keeping returned evidence free of secrets.
 4. For a revision with a matched merged PR, compare up to three locally
    available merge revisions with an identical Git tree. Record bounded terminal
    workflow-status comparisons as evidence only: matching trees and statuses can

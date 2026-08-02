@@ -44,7 +44,7 @@ uncertainty.
 List concrete source facts:
 
 - Pipeline ID/number, workflow status, failed job names, job numbers, contexts,
-  bounded sanitized expected/actual assertions, and recurring failure counts
+  raw command output for every failed step, raw test-result messages and expected/actual assertions, and recurring failure counts
   across reruns. Keep primary failures separate from cascading errors.
 - For revision targets with multiple matching pipelines, the bounded candidate
   workflow metadata and selection reason. Treat

@@ -10,39 +10,16 @@ require 'skills'
 
 # Performs read-only CI and deployment diagnosis for one repository target.
 class IssueDiagnosisCollector
-  include EvidenceSources
-
   FAILED_WORKFLOW_STATUSES = %w[failed error unauthorized].freeze
   ACTIVE_WORKFLOW_STATUSES = %w[running failing on_hold queued].freeze
   TERMINAL_WORKFLOW_STATUSES = %w[canceled cancelled error failed success unauthorized].freeze
-  CIRCLECI_TEST_RESULT_PAGE_LIMIT = 5
-  CIRCLECI_TEST_RESULT_LIMIT = 500
-  CIRCLECI_TEST_CLASS_LIMIT = 10
-  CIRCLECI_FAILURE_SAMPLE_LIMIT = 5
-  CIRCLECI_FAILURE_VALUE_LIMIT = 160
-  CIRCLECI_FAILURE_SIGNATURE_LIMIT = 5
-  CIRCLECI_REVISION_PIPELINE_LIMIT = 5
-  CIRCLECI_REVISION_COMPARISON_LIMIT = 3
-  CIRCLECI_FAILURE_TEXT_TRUNCATION_MARKER = ' ... '
-  GITHUB_COMMIT_STATUS_LIMIT = 20
-
-  FAILURE_URL_PATTERN = %r{\b(?:https?|s3)://[^\s<>"']+}i
-  FAILURE_CREDENTIAL_NAMES = [
-    'access[-_ ]?token', 'api[-_ ]?key', 'authorization', 'bearer', 'circle(?:ci)?[-_ ]?token',
-    'credential', 'output[-_ ]?url', 'password', 'secret', 'session[-_ ]?token', 'signature', 'token'
-  ].freeze
-  FAILURE_CREDENTIAL_PATTERN = Regexp.new(
-    "(\\b(?:[A-Za-z0-9]+[-_])?(?:#{FAILURE_CREDENTIAL_NAMES.join('|')})[A-Za-z0-9_-]*\\s*" \
-    "(?:=|:|\\s)\\s*(?:Bearer\\s+)?)(?:[\"']?)[^\\s,;]+",
-    Regexp::IGNORECASE
-  )
-  FAILURE_ASSIGNMENT_PATTERN = /(\b[A-Za-z_][A-Za-z0-9_-]*\s*=\s*)(?:["']?)[^\s,;]+/
-  FAILURE_TOKEN_PATTERN = /
-    \b(?:AKIA[0-9A-Z]{16}|(?:ccip|cct|gh[pousr]|github_pat|glpat|npm)_[A-Za-z0-9_-]{16,}|
-    (?:sk|rk|pk)_(?:live|test)_[A-Za-z0-9_-]{16,}|xox[baprs]-[A-Za-z0-9-]{16,}|
-    [A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{10,})\b
-  /x
-  SENSITIVE_OUTPUT_KEYS = %w[logs messages output_url url web_url].freeze
+  TEST_RESULT_SUMMARY_LIMIT = 500
+  TEST_CLASS_SUMMARY_LIMIT = 10
+  FAILURE_SAMPLE_LIMIT = 5
+  FAILURE_SIGNATURE_LIMIT = 5
+  REVISION_PIPELINE_CANDIDATE_LIMIT = 5
+  REVISION_COMPARISON_LIMIT = 3
+  COMMIT_STATUS_EVIDENCE_LIMIT = 20
 
   def initialize(options)
     @mode = options.fetch(:mode)
@@ -52,11 +29,16 @@ class IssueDiagnosisCollector
     @pipeline = options[:pipeline] || options[:pipeline_id]
     @revision = options[:revision]
     @version = options[:version]
+    @command = Skills::Command.new
+    @git = Skills::Git.new(@repo_path, command: @command)
+    @github = Skills::GitHub.new(command: @command)
+    @kubernetes = Skills::Kubernetes.new(command: @command)
+    @circleci = {}
   end
 
   def call
-    root = git_root
-    owner_repo = parse_owner_repo(git('remote', 'get-url', 'origin').strip)
+    root = @git.root
+    owner_repo = Skills::GitHub.repository_from_remote(@git.origin_url)
 
     result = case @mode
              when 'ci'
@@ -72,7 +54,7 @@ class IssueDiagnosisCollector
                )
              end
 
-    JSON.pretty_generate(sanitized_output(result))
+    JSON.pretty_generate(result)
   end
 
   private
@@ -119,32 +101,33 @@ class IssueDiagnosisCollector
   def diagnose_deployment(root, owner_repo)
     service = File.exist?(File.join(root, '.cd'))
     version = @version || latest_version&.fetch(:tag, nil)
-    evidence = collect_sources([
-                                 [:circleci, lambda do
-                                   if service
-                                     collect_circleci_deployment(owner_repo, version)
-                                   else
-                                     skipped('not a service repo')
-                                   end
-                                 end],
-                                 [:digitalocean, lambda do
-                                   service ? collect_digitalocean : skipped('not a service repo')
-                                 end],
-                                 [:kubernetes, lambda do
-                                   if service
-                                     collect_kubernetes(owner_repo.split('/').last)
-                                   else
-                                     skipped('not a service repo')
-                                   end
-                                 end],
-                                 [:uptimerobot, lambda do
-                                   if service
-                                     collect_uptimerobot(owner_repo.split('/').last)
-                                   else
-                                     skipped('not a service repo')
-                                   end
-                                 end]
-                               ])
+    source_definitions = [
+      [:circleci, lambda do
+        if service
+          collect_circleci_deployment(owner_repo, version)
+        else
+          skipped('not a service repo')
+        end
+      end],
+      [:digitalocean, lambda do
+        service ? collect_digitalocean : skipped('not a service repo')
+      end],
+      [:kubernetes, lambda do
+        if service
+          collect_kubernetes(owner_repo.split('/').last)
+        else
+          skipped('not a service repo')
+        end
+      end],
+      [:uptimerobot, lambda do
+        if service
+          collect_uptimerobot(owner_repo.split('/').last)
+        else
+          skipped('not a service repo')
+        end
+      end]
+    ]
+    evidence = Skills::Collection.call(source_definitions) { |error| unavailable_for_error(error) }
     circleci = evidence.fetch(:circleci)
     kubernetes = evidence.fetch(:kubernetes)
     uptimerobot = evidence.fetch(:uptimerobot)
@@ -169,7 +152,7 @@ class IssueDiagnosisCollector
   end
 
   def collect_circleci_ci(owner_repo, branch, revision)
-    token = circleci_token
+    token = Skills::CircleCI.token
     return unavailable('CircleCI token not found') if token.nil? || token.empty?
 
     selection = circleci_revision_pipeline_selection(owner_repo, revision, token) if @revision
@@ -199,13 +182,13 @@ class IssueDiagnosisCollector
   end
 
   def collect_circleci_deployment(owner_repo, version)
-    token = circleci_token
+    token = Skills::CircleCI.token
     return unavailable('CircleCI token not found') if token.nil? || token.empty?
     return unavailable('No version tag was found.') if version.nil? || version.empty?
 
     branch = default_branch(owner_repo)
-    revision = git('rev-list', '-n', '1', version, allow_failure: true).strip
-    return unavailable("No local tag found for #{version}.") if revision.empty?
+    revision = @git.tag_revision(version)
+    return unavailable("No local tag found for #{version}.") unless revision
 
     pipeline = circleci_pipeline_for_revision(owner_repo, branch, revision, token)
     return unavailable("No CircleCI pipeline found for #{version}.") unless pipeline
@@ -378,7 +361,7 @@ class IssueDiagnosisCollector
   end
 
   def latest_circleci_pipeline(owner_repo, branch, token)
-    circleci_get("/project/gh/#{owner_repo}/pipeline?branch=#{url_query(branch)}", token).fetch('items', []).first
+    circleci_source(token).latest_pipeline(owner_repo, branch)
   end
 
   def circleci_pipeline_target(owner_repo, target, token)
@@ -388,18 +371,7 @@ class IssueDiagnosisCollector
   end
 
   def circleci_pipeline_by_number(owner_repo, number, token)
-    page_token = nil
-    50.times do
-      path = "/project/gh/#{owner_repo}/pipeline"
-      path += "?page-token=#{url_query(page_token)}" if page_token
-      data = circleci_get(path, token)
-      found = data.fetch('items', []).find { |pipeline| pipeline['number'].to_i == number }
-      return found if found
-
-      page_token = data['next_page_token']
-      break unless page_token
-    end
-    nil
+    circleci_source(token).pipeline_by_number(owner_repo, number)
   end
 
   def circleci_revision_pipeline_selection(owner_repo, revision, token)
@@ -417,35 +389,10 @@ class IssueDiagnosisCollector
   end
 
   def circleci_pipelines_by_revision(owner_repo, revision, token)
-    matches = []
-    observed_matching_pipeline_count = 0
-    page_token = nil
-    50.times do
-      path = "/project/gh/#{owner_repo}/pipeline"
-      path += "?page-token=#{url_query(page_token)}" if page_token
-      data = circleci_get(path, token)
-      page_matches = data.fetch('items', []).select { |pipeline| pipeline.dig('vcs', 'revision') == revision }
-      observed_matching_pipeline_count += page_matches.length
-      matches.concat(page_matches)
-      if matches.length > CIRCLECI_REVISION_PIPELINE_LIMIT
-        return [
-          matches.first(CIRCLECI_REVISION_PIPELINE_LIMIT),
-          { observed_matching_pipeline_count: observed_matching_pipeline_count, candidate_scan_truncated: true }
-        ]
-      end
-
-      page_token = data['next_page_token']
-      unless page_token
-        return [
-          matches,
-          { observed_matching_pipeline_count: observed_matching_pipeline_count, candidate_scan_truncated: false }
-        ]
-      end
-    end
-    [
-      matches,
-      { observed_matching_pipeline_count: observed_matching_pipeline_count, candidate_scan_truncated: true }
-    ]
+    result = circleci_source(token).pipelines_for_revision(
+      owner_repo, revision, limit: REVISION_PIPELINE_CANDIDATE_LIMIT
+    )
+    [result.fetch(:pipelines), result.slice(:observed_matching_pipeline_count, :candidate_scan_truncated)]
   end
 
   def revision_pipeline_candidate(pipeline, token)
@@ -516,12 +463,10 @@ class IssueDiagnosisCollector
   end
 
   def circleci_commit_status_fallback(owner_repo, revision)
-    return nil unless command_available?('gh')
+    return nil unless @github.available?
 
-    statuses = gh_json(
-      'api', "repos/#{owner_repo}/commits/#{url_query(revision)}/status?per_page=#{GITHUB_COMMIT_STATUS_LIMIT}"
-    ).fetch('statuses', [])
-    jobs = statuses.first(GITHUB_COMMIT_STATUS_LIMIT).filter_map do |status|
+    statuses = @github.commit_statuses(owner_repo, revision, limit: COMMIT_STATUS_EVIDENCE_LIMIT)
+    jobs = statuses.first(COMMIT_STATUS_EVIDENCE_LIMIT).filter_map do |status|
       circleci_commit_status_job(status, owner_repo)
     end
     jobs = jobs.uniq { |job| job[:job_number] }
@@ -567,38 +512,20 @@ class IssueDiagnosisCollector
   end
 
   def circleci_pipeline_for_revision(owner_repo, branch, revision, token)
-    page_token = nil
-    10.times do
-      path = "/project/gh/#{owner_repo}/pipeline?branch=#{url_query(branch)}"
-      path += "&page-token=#{url_query(page_token)}" if page_token
-      data = circleci_get(path, token)
-      found = data.fetch('items', []).find { |pipeline| pipeline.dig('vcs', 'revision') == revision }
-      return found if found
-
-      page_token = data['next_page_token']
-      break unless page_token
-    end
-    nil
+    circleci_source(token).pipeline_for_revision(owner_repo, branch, revision)
   end
 
   def circleci_pipeline(id, token)
-    circleci_get("/pipeline/#{id}", token)
-  end
-
-  def circleci_v1_get(path, token)
-    http_json("https://circleci.com/api/v1.1#{path}", 'Circle-Token' => token)
+    circleci_source(token).pipeline(id)
   end
 
   def circleci_workflows(pipeline_id, token)
-    circleci_get("/pipeline/#{pipeline_id}/workflow", token).fetch('items', [])
+    circleci_source(token).workflows_for_pipeline(pipeline_id)
   end
 
   def circleci_jobs(owner_repo, workflows, token)
-    workflows.flat_map do |workflow|
-      circleci_get("/workflow/#{workflow.fetch('id')}/job", token).fetch('items', []).map do |job|
-        enrich_circleci_job(owner_repo, job.merge('workflow_id' => workflow.fetch('id'),
-                                                  'workflow_name' => workflow.fetch('name')), token)
-      end
+    circleci_source(token).jobs_for_workflows(workflows).map do |job|
+      enrich_circleci_job(owner_repo, job, token)
     end
   end
 
@@ -611,7 +538,7 @@ class IssueDiagnosisCollector
     end
     return enriched unless failed_circleci_job?(job) || (job['name'] == 'deploy' && job['status'] != 'not_run')
 
-    details = circleci_get("/project/gh/#{owner_repo}/job/#{job.fetch('job_number')}", token)
+    details = circleci_source(token).job_details(owner_repo, job.fetch('job_number'))
     enriched = enriched.merge(
       'contexts' => details.fetch('contexts', []).map { |context| context['name'] },
       'executor' => details['executor']
@@ -629,20 +556,19 @@ class IssueDiagnosisCollector
   end
 
   def failed_step_metadata_with_fallback(owner_repo, job, details, token)
-    metadata = failed_step_metadata(details, 'circleci-v2')
-    return metadata if metadata['failed_step']
+    fallback = failed_step_metadata_fallback(owner_repo, job, token)
+    return fallback if fallback['failed_steps']
 
-    failed_step_metadata_fallback(owner_repo, job, token, metadata['failed_step_metadata_limitation'])
+    failed_step_metadata(details, 'circleci-v2')
   end
 
-  def failed_step_metadata_fallback(owner_repo, job, token, limitation)
-    path = "/project/github/#{owner_repo}/#{job.fetch('job_number')}"
-    metadata = failed_step_metadata(circleci_v1_get(path, token), 'circleci-v1')
-    return metadata if metadata['failed_step']
+  def failed_step_metadata_fallback(owner_repo, job, token)
+    failed_steps = circleci_source(token).failed_steps_for(owner_repo, job.fetch('job_number'))
+    return failed_step_metadata_for(failed_steps) if failed_steps.any?
 
-    failed_step_metadata_unavailable(metadata['failed_step_metadata_limitation'])
+    failed_step_metadata_unavailable('CircleCI did not report a failed step.')
   rescue StandardError
-    failed_step_metadata_unavailable(limitation)
+    failed_step_metadata_unavailable('CircleCI job details are unavailable.')
   end
 
   def failed_step_metadata_unavailable(limitation)
@@ -653,34 +579,26 @@ class IssueDiagnosisCollector
   end
 
   def failed_step_metadata(details, source)
-    details.fetch('steps', []).each do |step|
-      action = step.fetch('actions', []).find { |candidate| failed_circleci_step?(candidate) }
-      next unless action
+    failed_steps = details.fetch('steps', []).flat_map do |step|
+      step.fetch('actions', []).filter_map do |action|
+        next unless failed_circleci_step?(action)
 
-      failed_step = pick(step, 'name').merge(pick(action, 'status', 'exit_code')).merge('source' => source)
-      return { 'failed_step' => failed_step }
+        step.slice('name').merge(action.slice('status', 'exit_code')).merge('source' => source)
+      end
     end
+    return failed_step_metadata_for(failed_steps) if failed_steps.any?
+
     { 'failed_step_metadata_limitation' => 'CircleCI did not report a failed step.' }
   end
 
-  def circleci_test_result_summary(owner_repo, job, token)
-    results = []
-    page_token = nil
-    pages = 0
-    truncated = false
+  def failed_step_metadata_for(failed_steps)
+    { 'failed_step' => failed_steps.first, 'failed_steps' => failed_steps }
+  end
 
-    loop do
-      path = "/project/gh/#{owner_repo}/#{job.fetch('job_number')}/tests"
-      path += "?page-token=#{url_query(page_token)}" if page_token
-      data = circleci_get(path, token)
-      items = data.fetch('items', [])
-      results, result_limit_reached = bounded_test_results(results + items)
-      pages += 1
-      page_token = data['next_page_token']
-      page_limit_reached = page_token && pages >= CIRCLECI_TEST_RESULT_PAGE_LIMIT
-      truncated ||= result_limit_reached || page_limit_reached
-      break if page_token.nil? || page_limit_reached
-    end
+  def circleci_test_result_summary(owner_repo, job, token)
+    response = circleci_source(token).test_results_for(owner_repo, job.fetch('job_number'))
+    results, result_limit_reached = bounded_test_results(response.fetch(:items))
+    truncated = response.fetch(:truncated) || result_limit_reached
 
     { 'test_results' => summarized_test_results(results, truncated) }
   rescue StandardError => e
@@ -701,7 +619,7 @@ class IssueDiagnosisCollector
       }]
     end
     class_limit_reached = grouped_failures.any? do |_result, grouped_results|
-      grouped_results.map { |result| test_result_value(result, 'classname') }.uniq.length > CIRCLECI_TEST_CLASS_LIMIT
+      grouped_results.map { |result| test_result_value(result, 'classname') }.uniq.length > TEST_CLASS_SUMMARY_LIMIT
     end
     {
       'status' => 'used',
@@ -721,7 +639,7 @@ class IssueDiagnosisCollector
   end
 
   def bounded_test_results(results)
-    return [results, false] if results.length <= CIRCLECI_TEST_RESULT_LIMIT
+    return [results, false] if results.length <= TEST_RESULT_SUMMARY_LIMIT
 
     selected = results.sort_by do |result|
       [
@@ -731,7 +649,7 @@ class IssueDiagnosisCollector
         test_result_value(result, 'name'),
         result['message'].to_s
       ]
-    end.first(CIRCLECI_TEST_RESULT_LIMIT)
+    end.first(TEST_RESULT_SUMMARY_LIMIT)
     [selected, true]
   end
 
@@ -740,15 +658,11 @@ class IssueDiagnosisCollector
     candidates = selected_failures.map { |result| failure_sample(result, primary_failures.any?) }
     candidates.sort_by! { |sample| failure_sample_sort_key(sample) }
     samples = deduplicated_failure_samples(candidates)
-    selected = samples.first(CIRCLECI_FAILURE_SAMPLE_LIMIT)
-    sample_text_truncated = selected.any? do |sample|
-      sample.any? { |key, value| key.end_with?('_truncated') && value }
-    end
-
+    selected = samples.first(FAILURE_SAMPLE_LIMIT)
     {
       'samples' => selected,
       'deduplicated' => samples.length < candidates.length,
-      'truncated' => source_truncated || samples.length > selected.length || sample_text_truncated
+      'truncated' => source_truncated || samples.length > selected.length
     }
   end
 
@@ -764,21 +678,15 @@ class IssueDiagnosisCollector
   end
 
   def failure_sample(result, primary_present)
-    name, name_truncated = sanitized_failure_text(result['name'], CIRCLECI_FAILURE_VALUE_LIMIT)
-    classname, classname_truncated = sanitized_failure_text(result['classname'], CIRCLECI_FAILURE_VALUE_LIMIT)
-    sample_result, result_truncated = sanitized_failure_text(result['result'], CIRCLECI_FAILURE_VALUE_LIMIT)
     sample = {
-      'name' => name || 'unknown',
-      'classname' => classname || 'unknown',
-      'result' => sample_result || 'unknown',
+      'name' => result['name'] || 'unknown',
+      'classname' => result['classname'] || 'unknown',
+      'result' => result['result'] || 'unknown',
       'classification' => failure_classification(test_result_value(result, 'result'), primary_present)
     }
-    assertion, assertion_truncated = sanitized_assertion(result['message'])
+    sample['message'] = result['message'] if result['message']
+    assertion = assertion_from(result['message'])
     sample['assertion'] = assertion if assertion
-    sample['name_truncated'] = true if name_truncated
-    sample['classname_truncated'] = true if classname_truncated
-    sample['result_truncated'] = true if result_truncated
-    sample['assertion_truncated'] = true if assertion_truncated
     sample
   end
 
@@ -815,40 +723,37 @@ class IssueDiagnosisCollector
       .gsub(/\b\d+\b/, '#')
   end
 
-  def sanitized_assertion(value)
-    return [nil, false] if value.nil?
+  def assertion_from(value)
+    return nil if value.nil?
 
-    text = value.to_s.gsub(/\s+/, ' ').strip
+    text = value.to_s
     rspec_assertion = rspec_matcher_assertion(text)
     return rspec_assertion if rspec_assertion
 
-    expected, expected_truncated = assertion_value(text, 'expected')
-    actual, actual_truncated = assertion_value(text, 'actual|got|but was')
-    return [nil, false] unless expected || actual
+    expected = assertion_value(text, 'expected')
+    actual = assertion_value(text, 'actual|got|but was')
+    return nil unless expected || actual
 
-    assertion = {}.tap do |assertion|
+    {}.tap do |assertion|
       assertion['expected'] = expected if expected
       assertion['actual'] = actual if actual
     end
-    [assertion, expected_truncated || actual_truncated]
   end
 
   def rspec_matcher_assertion(text)
     match = text.match(/\bexpected\s+(.+?)\s+to be (?:an? )?(?:instance|kind) of\s+([^\s,;]+)/i)
     return nil unless match
 
-    actual, actual_truncated = sanitized_failure_text(match[1], CIRCLECI_FAILURE_VALUE_LIMIT, preserve_ends: true)
-    expected, expected_truncated = sanitized_failure_text(match[2], CIRCLECI_FAILURE_VALUE_LIMIT, preserve_ends: true)
-    [{ 'actual' => actual, 'expected' => expected }, actual_truncated || expected_truncated]
+    { 'actual' => match[1], 'expected' => match[2] }
   end
 
   def assertion_value(text, labels)
     pattern = "\\b(?:#{labels})\\b\\s*(?::|=)?\\s*" \
               "(\"(?:\\\\.|[^\"\\\\])*\"|'(?:\\\\.|[^'\\\\])*'|<[^>]*>|\\[[^\\]]*\\]|\\{[^}]*\\}|`[^`]*`|[^\\s,;]+)"
     match = text.match(Regexp.new(pattern, Regexp::IGNORECASE))
-    return [nil, false] unless match
+    return nil unless match
 
-    sanitized_failure_text(match[1], CIRCLECI_FAILURE_VALUE_LIMIT, preserve_ends: true)
+    match[1]
   end
 
   def test_result_priority(result)
@@ -858,34 +763,10 @@ class IssueDiagnosisCollector
     1
   end
 
-  def sanitized_failure_text(value, limit, preserve_ends: false)
-    return [nil, false] if value.nil?
-
-    text = redact_failure_text(value.to_s.gsub(/\s+/, ' ').strip)
-    return [nil, false] if text.empty?
-    return [text, false] if text.length <= limit
-
-    return ["#{text[0, limit - 3]}...", true] unless preserve_ends
-
-    remaining_length = limit - CIRCLECI_FAILURE_TEXT_TRUNCATION_MARKER.length
-    leading_length = (remaining_length + 1) / 2
-    trailing_length = remaining_length - leading_length
-    excerpt = "#{text[0, leading_length]}#{CIRCLECI_FAILURE_TEXT_TRUNCATION_MARKER}" \
-              "#{text[-trailing_length, trailing_length]}"
-    [excerpt, true]
-  end
-
-  def redact_failure_text(text)
-    text.gsub(FAILURE_URL_PATTERN, '[REDACTED_URL]')
-        .gsub(FAILURE_CREDENTIAL_PATTERN, '\\1[REDACTED]')
-        .gsub(FAILURE_ASSIGNMENT_PATTERN, '\\1[REDACTED]')
-        .gsub(FAILURE_TOKEN_PATTERN, '[REDACTED]')
-  end
-
   def summarized_test_classes(results)
     results.group_by { |result| test_result_value(result, 'classname') }
            .sort_by { |classname, grouped_results| [-grouped_results.length, classname] }
-           .first(CIRCLECI_TEST_CLASS_LIMIT)
+           .first(TEST_CLASS_SUMMARY_LIMIT)
            .map { |classname, grouped_results| { 'classname' => classname, 'count' => grouped_results.length } }
   end
 
@@ -900,23 +781,14 @@ class IssueDiagnosisCollector
   end
 
   def collect_uptimerobot(name)
-    key = ENV.fetch('UPTIMEROBOT_API_KEY', '').strip
-    return unavailable('UPTIMEROBOT_API_KEY is not set') if key.empty?
+    source = Skills::UptimeRobot.from_environment
+    return unavailable('UPTIMEROBOT_API_KEY is not set') unless source
 
-    params = { 'api_key' => key, 'format' => 'json' }
-    monitor_ids = ENV.fetch('UPTIMEROBOT_MONITOR_IDS', '').split(',').map(&:strip).reject(&:empty?)
-    params['monitors'] = monitor_ids.join('-') unless monitor_ids.empty?
-    data = uptimerobot(params)
-    monitor = find_uptimerobot_monitor(data, name)
-
-    if monitor.nil? && !monitor_ids.empty?
-      params.delete('monitors')
-      data = uptimerobot(params)
-      monitor = find_uptimerobot_monitor(data, name)
-    end
+    params = {}
+    monitor = source.monitor(name, params:).fetch(:monitor)
     return unavailable("no UptimeRobot monitor matched #{name}") unless monitor
 
-    { status: 'used', monitor: symbolize(pick(monitor, 'id', 'friendly_name', 'status')) }
+    { status: 'used', monitor: symbolize(monitor.slice('id', 'friendly_name', 'status')) }
   rescue StandardError => e
     unavailable_for_error(e)
   end
@@ -935,34 +807,28 @@ class IssueDiagnosisCollector
 
   def workflow_summary(workflow)
     keys = %w[id name status created_at stopped_at auto_rerun_number max_auto_reruns]
-    symbolize(pick(workflow, *keys))
+    symbolize(workflow.slice(*keys))
   end
 
   def job_summary(job)
-    symbolize(pick(job, 'job_number', 'name', 'status', 'started_at', 'stopped_at', 'workflow_id',
-                   'workflow_name', 'contexts', 'details_error', 'failed_step',
-                   'failed_step_metadata_limitation', 'failed_step_fallback', 'test_results'))
+    symbolize(job.slice('job_number', 'name', 'status', 'started_at', 'stopped_at', 'workflow_id',
+                        'workflow_name', 'contexts', 'details_error', 'failed_step',
+                        'failed_steps', 'failed_step_metadata_limitation', 'failed_step_fallback', 'test_results'))
   end
 
   def github_current_pull_request(owner_repo, branch)
-    return skipped('gh is not installed') unless command_available?('gh')
+    return skipped('gh is not installed') unless @github.available?
     return nil if branch.nil? || branch.empty?
 
-    gh_json(
-      'pr', 'list', '--repo', owner_repo, '--head', branch, '--state', 'open',
-      '--json', 'number,title,headRefName,baseRefName,isDraft,mergeStateStatus,reviewDecision'
-    ).first
+    @github.current_pull_request(owner_repo, branch)
   rescue StandardError => e
     unavailable_for_error(e)
   end
 
   def github_pull_requests_for_revision(owner_repo, revision)
-    return skipped('gh is not installed') unless command_available?('gh')
+    return skipped('gh is not installed') unless @github.available?
 
-    gh_json(
-      'pr', 'list', '--repo', owner_repo, '--search', revision, '--state', 'all', '--limit', '100',
-      '--json', 'number,title,state,headRefName,baseRefName,isDraft,mergedAt,closedAt,mergeCommit'
-    )
+    @github.pull_requests_for_revision(owner_repo, revision)
   rescue StandardError => e
     unavailable_for_error(e)
   end
@@ -981,8 +847,8 @@ class IssueDiagnosisCollector
     pull_requests = merged_pull_requests(pull_requests)
     return skipped('No merged pull request matched the selected revision.') if pull_requests.empty?
 
-    selected = pull_requests.first(CIRCLECI_REVISION_COMPARISON_LIMIT)
-    token = circleci_token
+    selected = pull_requests.first(REVISION_COMPARISON_LIMIT)
+    token = Skills::CircleCI.token
     source_workflow_evidence = workflow_evidence(circleci.fetch(:workflows, []))
     {
       status: 'used',
@@ -1053,18 +919,54 @@ class IssueDiagnosisCollector
   end
 
   def revision_tree(revision)
-    tree = git('rev-parse', '--verify', '--end-of-options', "#{revision}^{tree}", allow_failure: true).strip
-    tree.empty? ? nil : tree
+    @git.tree(revision)
   end
 
   def latest_version
-    git_lines('for-each-ref', 'refs/tags', '--sort=-creatordate', '--count=1',
-              '--format=%(refname:short)%09%(creatordate:iso-strict)')
-      .filter_map do |line|
-        tag, created_at = line.split("\t", 2)
-        { tag: tag, created_at: created_at } if tag && created_at
-      end
-      .first
+    @git.latest_tag
+  end
+
+  def unavailable_for_error(error)
+    Skills::SourceStatus.unavailable_for(error)
+  end
+
+  def source_error_reason(error)
+    Skills::SourceStatus.error_reason(error)
+  end
+
+  def unavailable_source?(value)
+    Skills::SourceStatus.unavailable?(value)
+  end
+
+  def skipped(reason)
+    Skills::SourceStatus.skipped(reason)
+  end
+
+  def unavailable(reason)
+    Skills::SourceStatus.unavailable(reason)
+  end
+
+  def circleci_source(token)
+    @circleci[token] ||= Skills::CircleCI.new(token)
+  end
+
+  def collect_digitalocean
+    source = Skills::DigitalOcean.from_environment
+    return unavailable('DIGITALOCEAN_ACCESS_TOKEN is not set') unless source
+
+    clusters = source.kubernetes_clusters
+    summaries = clusters.map { |cluster| cluster.slice('name', 'region', 'version', 'status', 'created_at') }
+    { status: 'used', clusters: summaries }
+  rescue StandardError => e
+    unavailable_for_error(e)
+  end
+
+  def collect_kubernetes(name)
+    return unavailable('kubectl is not installed') unless @kubernetes.available?
+
+    { status: 'used' }.merge(@kubernetes.workload(name))
+  rescue StandardError => e
+    unavailable_for_error(e)
   end
 
   def source_summary(sources)
@@ -1139,16 +1041,14 @@ class IssueDiagnosisCollector
   end
 
   def current_branch
-    git('branch', '--show-current').strip
+    @git.current_branch
   end
 
   def default_branch(owner_repo)
-    branch = git('symbolic-ref', '--quiet', '--short', 'refs/remotes/origin/HEAD', allow_failure: true)
-             .strip
-             .sub(%r{\Aorigin/}, '')
+    branch = @git.remote_default_branch
     return branch unless branch.empty?
 
-    github_default_branch(owner_repo) || current_branch
+    @github.default_branch(owner_repo) || current_branch
   end
 
   def symbolize(hash)
@@ -1158,8 +1058,7 @@ class IssueDiagnosisCollector
   def resolved_revision
     return @revision unless abbreviated_sha?(@revision)
 
-    resolved = git('rev-parse', '--verify', '--end-of-options', "#{@revision}^{commit}", allow_failure: true).strip
-    resolved.empty? ? @revision : resolved
+    @git.resolve_commit(@revision) || @revision
   end
 
   def abbreviated_sha?(revision)
@@ -1202,7 +1101,7 @@ class IssueDiagnosisCollector
                           .sort_by do |signature|
       [-signature.fetch('occurrences'), JSON.generate(signature.fetch('signature'))]
     end
-    selected = recurring.first(CIRCLECI_FAILURE_SIGNATURE_LIMIT)
+    selected = recurring.first(FAILURE_SIGNATURE_LIMIT)
 
     {
       'recurring' => selected,
@@ -1215,8 +1114,8 @@ class IssueDiagnosisCollector
     samples = [nil] if samples.empty?
     samples.map do |sample|
       signature = {
-        'job_name' => sanitized_failure_text(job['name'], CIRCLECI_FAILURE_VALUE_LIMIT).first || 'unknown',
-        'failed_step' => sanitized_failure_text(job.dig('failed_step', 'name'), CIRCLECI_FAILURE_VALUE_LIMIT).first,
+        'job_name' => job['name'] || 'unknown',
+        'failed_step' => job.dig('failed_step', 'name'),
         'test' => sample&.slice('classname', 'name', 'result', 'assertion')
       }.compact
       { key: JSON.generate(signature), signature: signature, workflow_attempt: workflow_attempt }
@@ -1231,23 +1130,6 @@ class IssueDiagnosisCollector
       'workflow_attempt_count' => workflow_attempts.length,
       'rerun_attempt_count' => workflow_attempts.count(&:positive?)
     }
-  end
-
-  def sanitized_output(value)
-    case value
-    when Hash
-      value.each_with_object({}) do |(key, nested), output|
-        next if SENSITIVE_OUTPUT_KEYS.include?(key.to_s)
-
-        output[key] = sanitized_output(nested)
-      end
-    when Array
-      value.map { |item| sanitized_output(item) }
-    when String
-      sanitized_failure_text(value, CIRCLECI_FAILURE_VALUE_LIMIT, preserve_ends: true).first
-    else
-      value
-    end
   end
 end
 
