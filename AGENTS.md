@@ -178,6 +178,9 @@ main cross-cutting concerns:
   `naming-standards` when their scopes apply.
 - `code-review`, `security-audit`, and `style-review` for their named review
   scopes.
+- `evaluate-skill` for read-only skill-text inspection and cost-tiered
+  current-versus-lean comparisons; comparison modes require explicit
+  current-request sub-agent authorization.
 - `testing-standards` before adding, reviewing, refactoring, or planning tests.
 - Use API, reliability, Go, Ruby, and shell standards when those scopes apply.
 
