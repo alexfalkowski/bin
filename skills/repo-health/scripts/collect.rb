@@ -11,14 +11,10 @@ require 'skills'
 # Collects read-only repository health evidence from local and remote
 # sources, then prints a JSON document for the skill to summarize.
 class RepoHealthCollector
-  include EvidenceSources
-
   TREND_WINDOW_COUNT = 4
   STALE_PR_SECONDS = 7 * 24 * 60 * 60
   SOURCE_NAMES = %i[local github circleci digitalocean kubernetes uptimerobot].freeze
   DEFAULT_OVERALL_TIMEOUT_SECONDS = 240
-  GITHUB_PR_RESULT_LIMIT = 6_400
-  CIRCLECI_PAGE_LIMIT = 10
   CI_SUCCESS_RATE_ACTION_THRESHOLD = 0.90
   CHANGE_RATIO_ACTION_THRESHOLD = 0.25
   LIBRARY_RELEASE_AGE_ACTION_SECONDS = 90 * 24 * 60 * 60
@@ -36,13 +32,18 @@ class RepoHealthCollector
       options[:current_start] ? parse_time(options[:current_start]) : subtract_local_days(@current_end, 7)
     @previous_end = @current_start
     @previous_start = options[:previous_start] ? parse_time(options[:previous_start]) : default_previous_start
+    @command = Skills::Command.new
+    @git = Skills::Git.new(@repo_path, command: @command)
+    @github = Skills::GitHub.new(command: @command)
+    @kubernetes = Skills::Kubernetes.new(command: @command)
+    @circleci = {}
   end
 
   def call
     started_at = monotonic_time
     progress('collector started')
-    root = git_root
-    owner_repo = parse_owner_repo(git('remote', 'get-url', 'origin').strip)
+    root = @git.root
+    owner_repo = Skills::GitHub.repository_from_remote(@git.origin_url)
     branch = summary_branch(owner_repo, @source_names.include?(:github))
     mode = File.exist?(File.join(root, '.cd')) ? 'service' : 'library'
     period = window_seconds <= 24 * 60 * 60 ? 'daily' : 'weekly'
@@ -107,15 +108,54 @@ class RepoHealthCollector
 
   def collect_selected_sources(definitions)
     selected = definitions.to_h.slice(*@source_names).to_a
-    collected = collect_sources(
+    collected = Skills::Collection.call(
       selected,
       overall_timeout_seconds: @overall_timeout_seconds,
       on_start: method(:progress_source_start),
       on_finish: method(:progress_source_finish)
-    )
+    ) { |error| unavailable_for_error(error) }
     definitions.to_h do |name, _|
       [name, collected.fetch(name, skipped('not selected'))]
     end
+  end
+
+  def unavailable_for_error(error)
+    Skills::SourceStatus.unavailable_for(error)
+  end
+
+  def unavailable_source?(value)
+    Skills::SourceStatus.unavailable?(value)
+  end
+
+  def skipped(reason)
+    Skills::SourceStatus.skipped(reason)
+  end
+
+  def unavailable(reason)
+    Skills::SourceStatus.unavailable(reason)
+  end
+
+  def circleci_source(token)
+    @circleci[token] ||= Skills::CircleCI.new(token)
+  end
+
+  def collect_digitalocean
+    source = Skills::DigitalOcean.from_environment
+    return unavailable('DIGITALOCEAN_ACCESS_TOKEN is not set') unless source
+
+    clusters = source.kubernetes_clusters
+    summaries = clusters.map { |cluster| cluster.slice('name', 'region', 'version', 'status', 'created_at') }
+    { status: 'used', clusters: summaries }
+  rescue StandardError => e
+    unavailable_for_error(e)
+  end
+
+  def collect_kubernetes(name)
+    return unavailable('kubectl is not installed') unless @kubernetes.available?
+
+    { status: 'used' }.merge(@kubernetes.workload(name))
+  rescue StandardError => e
+    unavailable_for_error(e)
   end
 
   def progress_source_start(name)
@@ -141,6 +181,10 @@ class RepoHealthCollector
 
   def format_elapsed(seconds)
     format('%.3fs', seconds)
+  end
+
+  def monotonic_time
+    Process.clock_gettime(Process::CLOCK_MONOTONIC)
   end
 
   def day_start(time)
@@ -224,23 +268,8 @@ class RepoHealthCollector
   end
 
   def local_period(start_time, end_time)
-    commits = git_lines(
-      'log', "--since=#{start_time.iso8601}", "--until=#{end_time.iso8601}",
-      '--no-merges', '--format=%H%x09%aI%x09%an%x09%s'
-    ).map do |line|
-      sha, authored_at, author, subject = line.split("\t", 4)
-      { sha: sha, authored_at: authored_at, author: author, subject: subject }
-    end
-
-    tags = git_lines('for-each-ref', 'refs/tags', '--sort=creatordate',
-                     '--format=%(refname:short)%09%(creatordate:iso-strict)')
-           .filter_map do |line|
-      tag, created_at = line.split("\t", 2)
-      next unless created_at
-
-      created = Time.parse(created_at)
-      { tag: tag, created_at: created_at } if created >= start_time && created < end_time
-    end
+    commits = @git.commits_between(start_time, end_time)
+    tags = @git.tags_between(start_time, end_time)
 
     rollback_subjects = commits.filter_map { |commit| commit[:subject] if commit[:subject]&.match?(/revert|rollback/i) }
 
@@ -255,16 +284,16 @@ class RepoHealthCollector
   end
 
   def local_release_state
-    latest = git_lines('for-each-ref', 'refs/tags', '--sort=-creatordate',
-                       '--format=%(refname:short)%09%(creatordate:iso-strict)').first
-    return { latest_tag: nil, unreleased_commit_count: git('rev-list', '--count', 'HEAD').to_i } unless latest
+    latest = @git.latest_tag
+    return { latest_tag: nil, unreleased_commit_count: @git.commit_count } unless latest
 
-    tag, created_at = latest.split("\t", 2)
+    tag = latest.fetch(:tag)
+    created_at = latest.fetch(:created_at)
     {
       latest_tag: tag,
       latest_tag_created_at: created_at,
       latest_release_age_seconds: @now - Time.parse(created_at),
-      unreleased_commit_count: git('rev-list', '--count', "#{tag}..HEAD").to_i
+      unreleased_commit_count: @git.commit_count("#{tag}..HEAD")
     }
   end
 
@@ -285,7 +314,7 @@ class RepoHealthCollector
   end
 
   def collect_github(owner_repo)
-    return skipped('gh is not installed') unless command_available?('gh')
+    return skipped('gh is not installed') unless @github.available?
 
     open_state = github_open_prs_at_end(owner_repo)
     trend = period_windows.map { |window| github_period(owner_repo, window.fetch(:start), window.fetch(:end)) }
@@ -310,11 +339,7 @@ class RepoHealthCollector
   # activity could have happened after the boundary, so staleness is reported
   # as unavailable rather than reused from the live `updatedAt`.
   def github_open_prs_at_end(owner_repo)
-    candidates = gh_pr_list(
-      'pr', 'list', '--repo', owner_repo, '--state', 'all',
-      '--search', "created:<=#{@current_end.getutc.strftime('%Y-%m-%d')}",
-      '--json', 'number,title,createdAt,updatedAt,closedAt,url'
-    )
+    candidates = @github.open_pull_requests_before(owner_repo, @current_end)
     open_prs = candidates.select do |pr|
       Time.parse(pr.fetch('createdAt')) <= @current_end &&
         (pr['closedAt'].nil? || Time.parse(pr.fetch('closedAt')) > @current_end)
@@ -328,21 +353,14 @@ class RepoHealthCollector
   end
 
   def github_period(owner_repo, start_time, end_time)
-    date_range = "#{start_time.getutc.strftime('%Y-%m-%d')}..#{(end_time - 1).getutc.strftime('%Y-%m-%d')}"
-    merged = gh_pr_list(
-      'pr', 'list', '--repo', owner_repo, '--state', 'merged', '--search', "merged:#{date_range}",
-      '--json', 'number,title,createdAt,mergedAt,url,reviews'
-    ).select { |pr| within?(Time.parse(pr.fetch('mergedAt')), start_time, end_time) }
+    merged = @github.merged_pull_requests_between(owner_repo, start_time, end_time)
+                    .select { |pr| within?(Time.parse(pr.fetch('mergedAt')), start_time, end_time) }
 
-    created = gh_pr_list(
-      'pr', 'list', '--repo', owner_repo, '--state', 'all', '--search', "created:#{date_range}",
-      '--json', 'number,createdAt'
-    ).count { |pr| within?(Time.parse(pr.fetch('createdAt')), start_time, end_time) }
+    created = @github
+              .pull_requests_created_between(owner_repo, start_time, end_time)
+              .count { |pr| within?(Time.parse(pr.fetch('createdAt')), start_time, end_time) }
 
-    closed_unmerged = gh_pr_list(
-      'pr', 'list', '--repo', owner_repo, '--state', 'closed',
-      '--search', "closed:#{date_range} -merged:#{date_range}", '--json', 'number,closedAt,mergedAt'
-    ).count do |pr|
+    closed_unmerged = @github.unmerged_pull_requests_closed_between(owner_repo, start_time, end_time).count do |pr|
       pr['mergedAt'].nil? && pr['closedAt'] && within?(Time.parse(pr.fetch('closedAt')), start_time,
                                                        end_time)
     end
@@ -357,7 +375,7 @@ class RepoHealthCollector
       end),
       median_review_latency_seconds: median(review_latencies),
       prs_with_reviews: merged.count { |pr| pr.fetch('reviews', []).any? },
-      merged_prs: merged.map { |pr| pick(pr, 'number', 'title', 'createdAt', 'mergedAt', 'url') }
+      merged_prs: merged.map { |pr| pr.slice('number', 'title', 'createdAt', 'mergedAt', 'url') }
     }
   end
 
@@ -374,13 +392,14 @@ class RepoHealthCollector
     root_config = circleci_config(root)
     return skipped('no .circleci/config.yml') unless root_config[:present]
 
-    token = circleci_token
+    token = Skills::CircleCI.token
     return unavailable('CircleCI token not found') if token.nil? || token.empty?
 
-    pipelines = circleci_pipelines(owner_repo, branch, token)
-    workflows = circleci_workflows(pipelines, token)
-    jobs = @include_jobs || mode == 'service' ? circleci_jobs(workflows, token) : []
-    flaky = circleci_get("/insights/gh/#{owner_repo}/flaky-tests", token)
+    source = circleci_source(token)
+    pipelines = source.project_pipelines_since(owner_repo, branch, since: period_windows.last.fetch(:start))
+    workflows = source.workflows_for(pipelines)
+    jobs = @include_jobs || mode == 'service' ? source.jobs_for(workflows) : []
+    flaky = source.flaky_tests(owner_repo)
     trend = period_windows.map { |window| circleci_period(workflows, jobs, window.fetch(:start), window.fetch(:end)) }
 
     {
@@ -390,7 +409,7 @@ class RepoHealthCollector
       flaky_tests: {
         total: flaky['total_flaky_tests'],
         examples: flaky.fetch('flaky_tests', []).map do |test|
-          pick(test, 'classname', 'test_name', 'times_flaked', 'workflow_name', 'job_name', 'workflow_created_at')
+          test.slice('classname', 'test_name', 'times_flaked', 'workflow_name', 'job_name', 'workflow_created_at')
         end
       },
       config: root_config,
@@ -423,7 +442,7 @@ class RepoHealthCollector
       workflow_success_rate: completed.empty? ? nil : successful.to_f / completed.length,
       median_workflow_duration_seconds: median(durations),
       p95_workflow_duration_seconds: percentile(durations, 0.95),
-      failed_workflows: failed.map { |workflow| pick(workflow, 'name', 'status', 'created_at') },
+      failed_workflows: failed.map { |workflow| workflow.slice('name', 'status', 'created_at') },
       jobs: job_summary(jobs, start_time, end_time)
     }
   end
@@ -449,34 +468,22 @@ class RepoHealthCollector
         failed: failed.length,
         median_duration_seconds: median(durations),
         p95_duration_seconds: percentile(durations, 0.95),
-        failed_jobs: failed.map { |job| pick(job, 'status', 'started_at', 'created_at') }
+        failed_jobs: failed.map { |job| job.slice('status', 'started_at', 'created_at') }
       }
     end
   end
 
   def collect_uptimerobot(name)
-    key = ENV.fetch('UPTIMEROBOT_API_KEY', '').strip
-    return unavailable('UPTIMEROBOT_API_KEY is not set') if key.empty?
+    source = Skills::UptimeRobot.from_environment
+    return unavailable('UPTIMEROBOT_API_KEY is not set') unless source
 
     ranges = period_windows.map { |window| "#{window.fetch(:start).to_i}_#{window.fetch(:end).to_i}" }.join('-')
     params = {
-      'api_key' => key,
-      'format' => 'json',
       'logs' => '1',
       'response_times' => '1',
       'custom_uptime_ranges' => ranges
     }
-    monitor_ids = ENV.fetch('UPTIMEROBOT_MONITOR_IDS', '').split(',').map(&:strip).reject(&:empty?)
-    params['monitors'] = monitor_ids.join('-') unless monitor_ids.empty?
-
-    data = uptimerobot(params)
-    monitor = find_uptimerobot_monitor(data, name)
-
-    if monitor.nil? && !monitor_ids.empty?
-      params.delete('monitors')
-      data = uptimerobot(params)
-      monitor = find_uptimerobot_monitor(data, name)
-    end
+    monitor = source.monitor(name, params:).fetch(:monitor)
     return unavailable("no UptimeRobot monitor matched #{name}") unless monitor
 
     samples = monitor.fetch('response_times', [])
@@ -488,7 +495,7 @@ class RepoHealthCollector
 
     {
       status: 'used',
-      monitor: pick(monitor, 'id', 'friendly_name', 'url', 'status'),
+      monitor: monitor.slice('id', 'friendly_name', 'url', 'status'),
       uptime_ranges: monitor['custom_uptime_ranges'] || monitor['custom_uptime_range'],
       logs: monitor.fetch('logs', []),
       current_response_time_average_ms: average(current_samples),
@@ -1102,80 +1109,16 @@ class RepoHealthCollector
     keys.each_with_object({}) { |key, result| result[key] = hash[key] if hash.key?(key) }
   end
 
-  def circleci_pipelines(owner_repo, branch, token)
-    pipelines = []
-    page_token = nil
-    pages = 0
-    oldest_window_start = period_windows.last.fetch(:start)
-    loop do
-      raise SourceLimit, 'CircleCI pipeline pagination reached its configured limit' if pages >= CIRCLECI_PAGE_LIMIT
-
-      path = "/project/gh/#{owner_repo}/pipeline?branch=#{url_query(branch)}"
-      path += "&page-token=#{URI.encode_www_form_component(page_token)}" if page_token
-      data = circleci_get(path, token)
-      items = data.fetch('items', [])
-      pages += 1
-      pipelines.concat(items.select { |pipeline| Time.parse(pipeline.fetch('created_at')) >= oldest_window_start })
-      oldest = items.filter_map { |pipeline| Time.parse(pipeline.fetch('created_at')) }.min
-      page_token = data['next_page_token']
-      break if items.empty? || page_token.nil? || (oldest && oldest < oldest_window_start)
-    end
-    pipelines
-  end
-
-  def circleci_workflows(pipelines, token)
-    pipelines.flat_map do |pipeline|
-      circleci_paginated("/pipeline/#{pipeline.fetch('id')}/workflow", token).map do |workflow|
-        workflow.merge('pipeline_created_at' => pipeline.fetch('created_at'),
-                       'pipeline_number' => pipeline.fetch('number'))
-      end
-    end
-  end
-
-  def circleci_jobs(workflows, token)
-    workflows.flat_map do |workflow|
-      circleci_paginated("/workflow/#{workflow.fetch('id')}/job", token).map do |job|
-        job.merge('workflow_id' => workflow.fetch('id'), 'workflow_created_at' => workflow.fetch('created_at'))
-      end
-    end
-  end
-
-  def gh_pr_list(*)
-    results = gh_json(*, '--limit', GITHUB_PR_RESULT_LIMIT.to_s)
-    return results if results.length < GITHUB_PR_RESULT_LIMIT
-
-    raise SourceLimit, 'GitHub pull request query reached its configured result limit'
-  end
-
-  def circleci_paginated(path, token)
-    items = []
-    page_token = nil
-    pages = 0
-    loop do
-      raise SourceLimit, 'CircleCI pagination reached its configured limit' if pages >= CIRCLECI_PAGE_LIMIT
-
-      request_path = page_token ? "#{path}?page-token=#{URI.encode_www_form_component(page_token)}" : path
-      data = circleci_get(request_path, token)
-      items.concat(data.fetch('items', []))
-      pages += 1
-      page_token = data['next_page_token']
-      break unless page_token
-    end
-    items
-  end
-
   def summary_branch(owner_repo, github_selected)
     return @branch if @branch
 
-    branch = git('symbolic-ref', '--quiet', '--short', 'refs/remotes/origin/HEAD', allow_failure: true)
-             .strip
-             .sub(%r{\Aorigin/}, '')
+    branch = @git.remote_default_branch
     return branch unless branch.empty?
 
-    branch = github_default_branch(owner_repo) if github_selected
+    branch = @github.default_branch(owner_repo) if github_selected
     return branch if branch && !branch.empty?
 
-    git('branch', '--show-current').strip
+    @git.current_branch
   end
 
   def within?(time, start_time, end_time)

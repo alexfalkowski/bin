@@ -58,7 +58,8 @@ folder.
 
 - Keep collection read-only. API calls, `gh`, `curl`, `git log`, `kubectl get`,
   and repository searches are acceptable; remote or cluster mutations are not.
-- Do not expose tokens, API keys, URLs, full logs, or secrets. Use only bounded, sanitized assertion evidence.
+- The collector returns the selected source evidence unchanged. CI providers and repositories are responsible for ensuring
+  that their API responses and logs do not expose secrets.
 - Prefer exact failing workflow, job, deployment, pod, monitor, version, and
   timestamp evidence over broad health summaries.
 - If evidence is missing because credentials, CLIs, or mappings are unavailable,
