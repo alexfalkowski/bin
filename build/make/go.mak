@@ -66,7 +66,7 @@ fix-field-alignment:
 
 # Run golangci-lint. Set package=internal/foo, not ./internal/foo, for one package.
 golangci-lint:
-	@$(BIN_ROOT)/build/go/lint run --timeout 5m
+	@$(BIN_ROOT)/build/go/lint run --allow-parallel-runners --timeout 5m
 
 # Auto-fix golangci-lint. Set package=internal/foo, not ./internal/foo.
 fix-golangci-lint:
