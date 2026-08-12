@@ -112,9 +112,16 @@ Agents MUST NOT:
 - Treat `AGENTS.md` or `SKILL.md` instructions as optional.
 - Continue after discovering they violated an instruction; they must correct
   course immediately and remove their own noncompliant change.
-- Report `Red`, `Green`, `Refactor`, or any TDD cycle without pasting the actual
-  command and its output; never narrate end-of-run debugging of already-written
-  code as a red-then-green cycle.
+- Report `Red`, `Green`, `Refactor`, or any TDD cycle without actually running
+  the command during the current work and pasting the command and the real
+  output returned by that run. Agents MUST NOT invent or reconstruct command
+  output, or substitute a paraphrase for the required pasted output.
+- Accept a failing command as `Red` without inspecting its output and explaining
+  why it matches the stated expected failure signal for the intended missing
+  behavior. A setup, harness, tooling, dependency, fixture, timeout,
+  compilation, assertion, or other failure that does not match that signal does
+  not count; classify or fix the cause and rerun before production edits. Never
+  narrate end-of-run debugging of already-written code as a red-then-green cycle.
 - Present work as test-driven when the failing test was never observed before
   implementation; label such work "test-after (not TDD)" with the reason.
 

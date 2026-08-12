@@ -59,6 +59,17 @@ These are mandatory gates, not guidance.
 - If the intended red test or scenario passes unexpectedly, agents MUST stop
   before production edits and either strengthen the test, choose a better layer,
   or report that existing coverage already protects the behavior.
+- Before running the intended red test or scenario, agents MUST state the
+  specific expected failure signal and why it demonstrates the intended missing
+  behavior. A non-zero exit alone is not a valid Red.
+- Agents MUST accept a failure as Red only when they actually ran the command
+  during the current work, pasted the real output returned by that run,
+  inspected that output, and explained why it matches the stated expected
+  failure signal. A setup, harness, tooling, dependency, fixture, timeout,
+  compilation, assertion, or other failure that does not match that signal does
+  not count. Classify or fix an invalid failure and rerun before production
+  edits. Agents MUST NOT invent or reconstruct command output, or substitute a
+  paraphrase for the required pasted output.
 - Tests MUST NOT invent public constructors, callbacks, interfaces, modules,
   packages, commands, or helper seams before the intended caller-facing API is
   clear. If the first test needs implementation-shaped API, private access, or
@@ -113,7 +124,7 @@ These are mandatory gates, not guidance.
    first test exercises the caller-facing contract rather than an implementation
    seam.
 10. Before editing behavior-changing production code, make an explicit test-first decision. State `TDD: yes` with the first test/scenario, or `TDD: no` with the concrete reason. For non-executable or behavior-preserving changes where the only plausible test would be cryptic implementation-order coverage, use validation and an intent comment when warranted.
-11. For behavior-changing code with an established harness, work test-first: write or update the narrowest credible test/scenario and run it to observe the expected red before any production edit. Paste the exact command and its failing output; the observed red is required, not optional. Then implement the smallest green change and refactor while keeping tests green. If the harness cannot execute, do not treat red as impractical to skip; apply the harness-runnable precondition in the stop gates. If the test passes unexpectedly, stop and re-check coverage, assertion strength, or layer choice before production edits.
+11. For behavior-changing code with an established harness, work test-first: write or update the narrowest credible test/scenario, state the expected failure signal, and run it to observe the expected red before any production edit. Paste the exact command and its real failing output, then explain why the output matches that signal and proves the intended behavior is missing. The observed, intended-cause red is required, not optional; an unrelated non-zero exit is not Red. Classify or fix an invalid failure and rerun before production edits. Then implement the smallest green change and refactor while keeping tests green. If the harness cannot execute, do not treat red as impractical to skip; apply the harness-runnable precondition in the stop gates. If the test passes unexpectedly, stop and re-check coverage, assertion strength, or layer choice before production edits.
 12. If behavior-changing production code was edited before the test-first decision, stop and correct course: add or update the narrowest credible test and run it against the current state. If a failing red was never observed before implementation, you MUST report `test-after: red step was NOT observed (<reason>)` and MUST NOT present the work as a TDD or red/green/refactor cycle.
 13. Choose the narrowest established test layer that credibly covers the changed behavior.
 14. While editing, get fast feedback from the narrowest supported selector in
@@ -133,7 +144,7 @@ These are mandatory gates, not guidance.
 25. If no cleanup is needed, record `Refactor: none (<reason>)` after stating which refactor passes were considered.
 26. Before finishing, do a readability pass after formatting and scan changed tests for low-information repeated boolean or numeric assertions; add named subtests or assertion messages where needed.
 27. When reviewing test quality, evaluate whether tests are understandable, maintainable, repeatable, atomic, necessary, granular, fast enough for their layer, and first/test-driven where relevant. Use scores only when asked.
-28. For behavior-changing code with an established test harness, report `TDD decision`, `Style detected`, `First test/scenario`, `Red`, `Green`, `Refactor`, mutation/coverage gaps, and validation. `Red` and `Green` MUST each paste the actual command run and its real output, and MUST use the same command/selector; a `Red` or `Green` label without pasted command output is not an acceptable report. Never narrate end-of-run debugging of already-written code as a red-then-green cycle. Use `Refactor: none (<reason>)` when no cleanup was needed.
+28. For behavior-changing code with an established test harness, report `TDD decision`, `Style detected`, `First test/scenario`, `Expected red`, `Red`, `Green`, `Refactor`, mutation/coverage gaps, and validation. `Red` and `Green` MUST each paste the actual command run and its real output, and MUST use the same command/selector. `Red` MUST also explain why the observed output matches `Expected red`; a label without pasted command output and that match explanation is not an acceptable report. Never invent or reconstruct command output, and never narrate end-of-run debugging of already-written code as a red-then-green cycle. Use `Refactor: none (<reason>)` when no cleanup was needed.
 
 ## References
 
