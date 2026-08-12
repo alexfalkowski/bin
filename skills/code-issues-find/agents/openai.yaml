@@ -1,4 +1,4 @@
 interface:
   display_name: "Code Issues Find"
   short_description: "Find scoped code defects and risks"
-  default_prompt: "Use $code-issues-find to find scoped code bugs, security, compatibility, and public-contract issues without editing. After scoping, use repo archetype lead generation, apply the shared delegation gate, and hand confirmed entries to $code-issues-implement."
+  default_prompt: "Use $code-issues-find to find scoped code bugs, security, compatibility, and public-contract issues without editing. After scoping, use repo archetype lead generation, collect exact-revision CircleCI evidence with the shared gap-workflow collector when configured, otherwise use the repository-owned evidence path, reuse exact-state green CI evidence, apply the shared delegation gate, and hand confirmed entries to $code-issues-implement."

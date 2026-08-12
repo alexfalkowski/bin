@@ -14,7 +14,8 @@ For find, audit-only, and one-pass modes:
    allow reading a ledger, incorporate matching entries and stop on unrelated
    or ambiguous active work.
 3. Run `$project-workflow` discovery for entrypoints, CI, documented commands,
-   relevant public surfaces, and `./bin` wiring.
+   relevant public surfaces, and `./bin` wiring. Establish the exact-state CI
+   baseline described below before selecting validation commands.
 4. Build a recursive inventory and bounded review slices from the selected
    plan. After the repository archetype and audit scope make it relevant, read
    `../gap-lead-generation.md` to build the lead inventory. Use depth only as
@@ -59,17 +60,69 @@ For find, audit-only, and one-pass modes:
   closure requires every relevant slice to be deep-reviewed or explicitly
   excluded.
 
-## Audit Preflight And Validation Ladder
+## Validation Baseline
 
-- Before a long audit, run tool and environment preflight through
-  `$project-workflow` and `$change-validation`: repository root, documented
-  entrypoints, CI analogue, configured command environment, and applicable tool
-  availability. Check runtimes, analyzers, linters, scanners, generation tools,
-  sidecars, or services only when repository workflow needs them.
-- Preflight plans evidence; it does not replace repository Make targets. Run
-  checks normally first. If a failure is clearly sandbox, cache-permission,
-  localhost, network, credential, service, or shell-environment related, retry
-  only through the approved escalation or configured command environment.
+- Before a long audit, use `$project-workflow` to identify the repository root,
+  documented entrypoints, CI analogue, configured command environment, and
+  applicable tool availability. Identify runtimes, analyzers, linters,
+  scanners, generation tools, sidecars, or services only when repository
+  workflow needs them. This discovery does not run those commands or tools.
+- For a CircleCI repository, collect exact-revision evidence with this shared
+  workflow's own collector; do not invoke another skill's collector:
+
+  ```bash
+  audit_revision="$(git rev-parse HEAD)"
+  skills/references/gap-workflow/collect-ci --repo . --revision "$audit_revision"
+  ```
+
+  The collector reports the matching `vcs.revision`, selected most-recent
+  pipeline, final workflow attempts, configuration files, and whether matching
+  candidates exceeded its selection limit. A missing token, unmatched revision,
+  collector error, or truncated candidate selection is unavailable evidence,
+  not a green baseline. When
+  `dynamic_config` is true, use every reported `.circleci` configuration file,
+  including continuation files such as `.circleci/continue_config.yml`, to
+  determine the workflows relevant to the audited scope; do not treat the
+  setup workflow as the only required validation. For another CI provider,
+  inspect that provider's exact-revision checks through its repository-owned
+  evidence path; do not infer results from configuration or a status badge.
+- Record the current revision, working-tree state, and current CI result for the tested
+  revision. For CircleCI, use the collector's selected exact-revision pipeline,
+  observed final workflow attempts, and reported configuration files. Do not
+  require workflows filtered out by the exact revision's branch or path scope.
+- Classify the baseline:
+  - `green`: relevant required jobs passed and the files in scope match the
+    tested revision. For CircleCI, this additionally requires `status: used`,
+    `exact_revision_match: true`, `candidate_scan_truncated: false`, and final
+    attempts with `success` status for every required workflow.
+  - `stale`: files in scope differ from the tested revision.
+  - `unknown`: CI status is unavailable or the tested state cannot be matched.
+- Record skipped or no-op checks as uncovered. Continue discovery with a stale
+  or unknown baseline, but require equivalent current evidence before claiming
+  no-finding closure. Do not infer a green baseline from CI configuration, a
+  status badge, a previous run, or a future run.
+
+## When To Run Commands
+
+- Treat preflight as evidence planning; it does not execute standard CI
+  targets. Reuse exact-state green CI evidence instead of repeating matching
+  checks. Do not rerun matching broad CI targets solely for lead generation,
+  delegation, or no-finding closure.
+- Use `$change-validation` only when selecting a command that will actually run.
+- Run the smallest supported command only to reproduce or disprove a candidate,
+  cover a relevant behavior or bug class absent from CI, investigate state or
+  environment drift, or replace unavailable, stale, incomplete, skipped, or
+  no-op CI evidence.
+- When command execution is warranted, prefer fast, reproducible local evidence
+  from the smallest supported command or dominant harness.
+  Keep local tests scoped to changed packages and
+  graph-proven direct dependents. Broaden lint, security, or CI-equivalent
+  non-test checks only when exact-state CI does not already cover the needed
+  evidence and the scope crosses boundaries, affects shared infrastructure, or
+  needs higher confidence. CI owns complete-suite coverage.
+
+## Result Classification
+
 - After a repository-defined command, Make target, dominant harness, or
   skill-required workflow fails, classify it before considering any retry. Do
   not switch to an ad hoc command, validation layer, or alternate workflow just
@@ -78,18 +131,20 @@ For find, audit-only, and one-pass modes:
   environment issue, missing tool, or inconclusive. A sandbox failure is not a
   repository finding without repository-owned code, config, or workflow
   evidence.
+- If a failure is clearly sandbox, cache-permission, localhost, network,
+  credential, service, or shell-environment related, retry only through the
+  approved escalation or configured command environment.
 - Preserve analyzer nuance: a tool may no-op for missing packages, modules,
   files, or components; integration checks may need listeners or services; and
   dependency, security, or generation checks may need network or cache writes.
-- Prefer fast, reproducible local evidence from the smallest supported command
-  or dominant harness. Keep local tests scoped to changed packages and
-  graph-proven direct dependents. Broaden lint, security, or CI-equivalent
-  non-test checks when the scope crosses boundaries, affects shared
-  infrastructure, or needs higher confidence; CI owns complete-suite coverage.
-- CI raises confidence only when a current run or equivalent repository-defined
-  command is observed and classified. Its existence or a future run is not
-  reproduction evidence. Confidence closure requires current CI or an
-  equivalent clean validation, with unavailable checks explicitly classified.
+
+## Confidence Evidence
+
+- CI raises confidence only when the validation baseline is green or an
+  equivalent repository-defined command is observed and classified. CI is
+  baseline or closure evidence, not reproduction evidence for a candidate.
+  Confidence closure requires current CI or an equivalent clean validation,
+  with unavailable checks explicitly classified.
 - For high-assurance closure, account for relevant bug classes and missing
   assurance such as property/fuzz tests, round trips, boundary/default cases,
   race/stress tests, lifecycle repetition, fault injection, generated-contract

@@ -22,9 +22,10 @@ security/compatibility evidence, and public contract evidence.
 3. When resolving a scoped ledger path or entry ID, read
    `../../code-issues-implement/ledger.yaml`; use its scoped ledger path and ID
    prefix.
-4. Run `$project-workflow` discovery and the shared audit preflight, including
-   applicable tools, service dependencies, validation ladder, and command
-   failure classification.
+4. Run `$project-workflow` discovery and the shared audit preflight. Establish
+   and reuse exact-state green CI evidence; use `$change-validation` only when
+   selecting a candidate-, drift-, or missing-evidence command that will
+   actually run, then classify any failure.
 5. After the repository archetype and audit scope make lead generation
    relevant, read `../../references/gap-lead-generation.md` and build a lead
    inventory for code, compatibility, security, mapping, generated-contract,
