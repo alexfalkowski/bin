@@ -239,9 +239,41 @@ do not guess from filenames or require a complete local suite.
 PATTERNS
 
 require_patterns skills/references/gap-workflow/find-audit.md <<'PATTERNS'
+## Validation Baseline
+## When To Run Commands
+## Result Classification
+## Confidence Evidence
+collect-ci --repo . --revision
+do not invoke another skill's collector
+candidate_scan_truncated: false
+dynamic_config
+continue_config.yml
 Keep local tests scoped to changed packages and
 graph-proven direct dependents. Broaden lint, security, or CI-equivalent
-non-test checks when the scope crosses boundaries
+non-test checks only when exact-state CI does not already cover the needed
+evidence and the scope crosses boundaries
+current revision, working-tree state, and current CI result
+Do not infer a green baseline from CI configuration
+Do not rerun matching broad CI targets solely for lead generation
+Use `$change-validation` only when selecting a command that will actually run
+PATTERNS
+
+require_patterns skills/references/gap-workflow/collect-ci <<'PATTERNS'
+collect-ci.rb
+run_skill_collector
+lib/skills/collector.sh
+PATTERNS
+
+reject_pattern skills/references/gap-workflow/collect-ci 'status='
+
+require_patterns skills/references/gap-workflow/collect-ci.rb <<'PATTERNS'
+Skills::CircleCI.token
+latest_pipelines_for_revision
+exact_revision_match
+candidate_scan_truncated
+configuration_files
+dynamic_config
+--revision SHA
 PATTERNS
 
 require_patterns skills/review-pr/references/plan.md <<'PATTERNS'
@@ -657,6 +689,24 @@ require_pattern_in_files "repo archetype lead generation" \
   skills/reliability-gaps-find/agents/openai.yaml \
   skills/test-gaps-find/agents/openai.yaml \
   skills/security-audit/agents/openai.yaml
+
+require_pattern_in_files "reuse exact-state green CI evidence" \
+  skills/code-issues-find/agents/openai.yaml \
+  skills/doc-gaps-audit/agents/openai.yaml \
+  skills/doc-gaps-fix/agents/openai.yaml \
+  skills/feature-gaps-find/agents/openai.yaml \
+  skills/project-gaps-find/agents/openai.yaml \
+  skills/reliability-gaps-find/agents/openai.yaml \
+  skills/test-gaps-find/agents/openai.yaml
+
+require_pattern_in_files "collect exact-revision CircleCI evidence with the shared gap-workflow collector when configured" \
+  skills/code-issues-find/agents/openai.yaml \
+  skills/doc-gaps-audit/agents/openai.yaml \
+  skills/doc-gaps-fix/agents/openai.yaml \
+  skills/feature-gaps-find/agents/openai.yaml \
+  skills/project-gaps-find/agents/openai.yaml \
+  skills/reliability-gaps-find/agents/openai.yaml \
+  skills/test-gaps-find/agents/openai.yaml
 
 require_patterns skills/security-audit/references/shared.md <<'PATTERNS'
 Source-To-Sink Review

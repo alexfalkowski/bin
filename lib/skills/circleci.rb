@@ -106,6 +106,28 @@ module Skills
       }
     end
 
+    def latest_pipelines_for_revision(owner_repo, revision, limit:)
+      page_token = nil
+      PROJECT_PIPELINE_PAGE_LIMIT.times do
+        data = project_pipelines(owner_repo, page_token:)
+        items = data.fetch('items', [])
+        page_matches = items.select { |pipeline| pipeline.dig('vcs', 'revision') == revision }
+        unless page_matches.empty?
+          pipelines = page_matches.first(limit)
+          return {
+            pipelines: pipelines,
+            observed_matching_pipeline_count: page_matches.length,
+            candidate_scan_truncated: page_matches.length > pipelines.length
+          }
+        end
+
+        page_token = data['next_page_token']
+        return empty_latest_revision_candidates unless page_token
+      end
+
+      truncated_latest_revision_candidates
+    end
+
     def pipeline_for_revision(owner_repo, branch, revision)
       page_token = nil
       PAGE_LIMIT.times do
@@ -220,6 +242,14 @@ module Skills
         return true unless page_token
       end
       false
+    end
+
+    def empty_latest_revision_candidates
+      { pipelines: [], observed_matching_pipeline_count: 0, candidate_scan_truncated: false }
+    end
+
+    def truncated_latest_revision_candidates
+      { pipelines: [], observed_matching_pipeline_count: 0, candidate_scan_truncated: true }
     end
   end
   # rubocop:enable Metrics/ClassLength, Metrics/AbcSize, Metrics/MethodLength
