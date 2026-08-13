@@ -70,11 +70,9 @@ Agents MUST:
   evidence cannot be found, lower confidence below the active recording
   threshold, route the concern to the correct workflow, or state the evidence
   gap instead of recording it.
-- Route findings about third-party libraries, frameworks, tools, or project-owned
-  upstream libraries to the owner of the fix. Use `project-gaps-find` only for the
-  repository-owned dependency/tooling response; route project-owned upstream
-  library bugs to that library's agent or ledger unless local adapter behavior is
-  independently wrong.
+- Apply the shared upstream-ownership rule in
+  `skills/references/finding-severity.md`; record only the current scope's owned
+  response.
 - Treat unowned working-tree changes as human changes by default. Do not undo,
   overwrite, reformat, relocate, or "clean up" changes the agent did not make;
   if they affect the current task, explain the conflict and ask before editing

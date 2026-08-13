@@ -71,11 +71,26 @@ missing, gather it, lower confidence below the recording threshold, route the
 concern to a better workflow, or record only the evidence gap when the selected
 workflow has a place for unresolved questions.
 
-For third-party tools or project-owned upstream libraries, separate defect
-evidence from fix ownership. A finding is local only when repository-owned
-adapter, dependency policy, validation, compatibility, fallback, or documented
-contract behavior is wrong. Otherwise route the dependency/tooling response to
-project workflow, or route the defect to the owning library's agent or ledger.
+## Upstream Finding Ownership
+
+Before recording dependency-related behavior, identify a stable fix
+owned by the current scope. Reject or route candidates whose correction requires
+changing, forking, or reimplementing upstream code; relying on experimental,
+internal, or undocumented APIs; or creating a custom replacement merely because
+it is theoretically possible.
+
+A candidate is a local finding only when repository code misuses a stable public
+API, violates its own adapter or compatibility contract, or owns a documented
+pin, upgrade, validation, fallback, or workaround. Otherwise route it to the
+owner of the stable fix.
+
+When upstream ownership is plausible, check for a relevant upstream issue,
+release, or default-branch fix when readily available. An unreleased fix is
+ownership evidence, not a local resolution. When this research informs
+ownership or routing, record the consulted issue, release, or revision and its
+status in the workflow's existing evidence or source field. If no relevant
+record is found, say that it was not found in the consulted sources; do not
+claim that no upstream issue exists.
 
 When a candidate depends on comments, GoDoc, README text, examples, or other
 prose contradicting implementation, do not treat the prose as source of truth.
