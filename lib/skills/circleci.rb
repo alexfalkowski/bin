@@ -3,7 +3,6 @@
 # Reads CircleCI API v1.1 and v2 records for a configured token.
 module Skills
   # Reads CircleCI API v1.1 and v2 records for a configured token.
-  # rubocop:disable Metrics/ClassLength, Metrics/AbcSize, Metrics/MethodLength
   class CircleCI
     API_V2_URL = 'https://circleci.com/api/v2'
     API_V1_URL = 'https://circleci.com/api/v1.1'
@@ -252,5 +251,4 @@ module Skills
       { pipelines: [], observed_matching_pipeline_count: 0, candidate_scan_truncated: true }
     end
   end
-  # rubocop:enable Metrics/ClassLength, Metrics/AbcSize, Metrics/MethodLength
 end

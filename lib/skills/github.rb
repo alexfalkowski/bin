@@ -3,7 +3,6 @@
 # Reads GitHub records through the authenticated GitHub CLI.
 module Skills
   # Reads GitHub records through the authenticated GitHub CLI.
-  # rubocop:disable Metrics/ClassLength, Metrics/MethodLength
   class GitHub
     HEALTH_PULL_REQUEST_LIMIT = 6_400
 
@@ -129,5 +128,4 @@ module Skills
       JSON.parse(@command.capture('gh', ...))
     end
   end
-  # rubocop:enable Metrics/ClassLength, Metrics/MethodLength
 end

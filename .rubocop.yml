@@ -5,3 +5,21 @@ AllCops:
   Exclude:
     - "bin/**/*"
     - "vendor/**/*"
+
+Metrics/ClassLength:
+  Max: 956
+
+Metrics/MethodLength:
+  Max: 48
+
+Metrics/CyclomaticComplexity:
+  Max: 16
+
+Metrics/AbcSize:
+  Max: 49
+
+Metrics/PerceivedComplexity:
+  Max: 16
+
+Metrics/BlockLength:
+  Max: 29
