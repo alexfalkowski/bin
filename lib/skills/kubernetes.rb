@@ -3,7 +3,6 @@
 # Reads Kubernetes resources through kubectl from the active context.
 module Skills
   # Reads Kubernetes resources through kubectl from the active context.
-  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength
   class Kubernetes
     def initialize(command: Command.new)
       @command = command
@@ -80,5 +79,4 @@ module Skills
       JSON.parse(@command.capture('kubectl', ...))
     end
   end
-  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/MethodLength
 end

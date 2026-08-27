@@ -50,13 +50,20 @@ class GapWorkflowCICollector
 
   def used_circleci_evidence(matches, revision, token, configuration)
     pipelines = matches.fetch(:pipelines)
-    selected = pipelines.max_by { |pipeline| pipeline.fetch('number', 0).to_i }
+    selected = select_pipeline(pipelines)
     circleci_metadata(matches, revision).merge(
       configuration: configuration,
       matching_pipelines: pipelines.map { |pipeline| pipeline_summary(pipeline) },
       selected_pipeline: pipeline_summary(selected),
       workflow_attempts: workflow_attempts(circleci_source(token).workflows_for_pipeline(selected.fetch('id')))
     )
+  end
+
+  def select_pipeline(pipelines)
+    branch = @git.current_branch
+    on_branch = pipelines.select { |pipeline| pipeline.dig('vcs', 'branch') == branch }
+    candidates = on_branch.empty? ? pipelines : on_branch
+    candidates.max_by { |pipeline| pipeline.fetch('number', 0).to_i }
   end
 
   def circleci_metadata(matches, revision)
