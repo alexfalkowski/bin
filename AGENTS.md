@@ -88,9 +88,10 @@ Agents MUST:
 - Stop and ask before deviating from a selected skill, repository instruction,
   dominant test harness, local style, or documented workflow, and state the
   exact instruction being deviated from before proposing any deviation.
-- Treat a checklist item the agent itself declared (for example "TDD decision:
-  scenario-first") as a binding commitment. If it cannot be honored, STOP at that
-  item and flag the deviation before continuing; silence is a violation.
+- Treat a checklist item the agent itself declared (for example "Validation:
+  focused package test") as a binding commitment. If it cannot be honored,
+  STOP at that item and flag the deviation before continuing; silence is a
+  violation.
 - Re-read the selected skill and identify the governing instruction when the
   human challenges process, asks what the skill says, or points out a suspected
   instruction violation.
@@ -110,18 +111,13 @@ Agents MUST NOT:
 - Treat `AGENTS.md` or `SKILL.md` instructions as optional.
 - Continue after discovering they violated an instruction; they must correct
   course immediately and remove their own noncompliant change.
-- Report `Red`, `Green`, `Refactor`, or any TDD cycle without actually running
-  the command during the current work and pasting the command and the real
-  output returned by that run. Agents MUST NOT invent or reconstruct command
-  output, or substitute a paraphrase for the required pasted output.
-- Accept a failing command as `Red` without inspecting its output and explaining
-  why it matches the stated expected failure signal for the intended missing
-  behavior. A setup, harness, tooling, dependency, fixture, timeout,
-  compilation, assertion, or other failure that does not match that signal does
-  not count; classify or fix the cause and rerun before production edits. Never
-  narrate end-of-run debugging of already-written code as a red-then-green cycle.
-- Present work as test-driven when the failing test was never observed before
-  implementation; label such work "test-after (not TDD)" with the reason.
+- Claim a command ran without actually running it during the current work.
+- Present invented, reconstructed, or paraphrased text as command output, or
+  present a summary without labeling it as a summary and marking any omissions
+  or redactions.
+- Treat a failing command as evidence for the intended behavior gap before
+  classifying whether setup, harness, tooling, dependency, fixture, timeout,
+  compilation, assertion, or another cause produced the failure.
 
 ## Inherited credential handling
 

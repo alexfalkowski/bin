@@ -21,14 +21,10 @@ state, operational expectation, and failure-mode evidence.
    current repository.
 5. Before editing, state local code/config/docs pattern, dominant relevant
    test harness, planned validation, and deviations. For behavior-changing
-   fixes, state the reliability execution checklist: TDD decision, first
-   test/scenario, expected red, intended green change, refactor checkpoint, and
-   validation. When the harness is runnable, observe and paste the red before
-   implementation edits; if it is not runnable, stop and request agreement to
-   proceed test-after with the reason instead of skipping red silently.
+   fixes, use the same execution fields before editing and at completion:
+   `Behavior`, `Coverage`, `Change`, `Refactor`, and `Validation`. Do not
+   prescribe whether tests or implementation must be written first.
 6. Use `$reliability-standards`, `$change-safety`, `$testing-standards`,
-   `$change-validation`, and `$security-audit` as required, then report `Red`,
-   `Green`, `Refactor`, and `Validation`. `Red` and `Green` must each paste the
-   actual command and its real output using the same command/selector; label
-   work as `test-after (not TDD)` with the reason when red was never observed
-   before implementation.
+   `$change-validation`, and `$security-audit` as required, then report those
+   fields using the observed behavior, actual change, coverage, refactor
+   assessment, validation commands, and outcomes observed.

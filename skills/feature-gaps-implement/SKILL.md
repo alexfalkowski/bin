@@ -47,12 +47,11 @@ These feature implementation rules remain mandatory:
   or helper layers, stop and explain why the existing repository pattern cannot
   support the confirmed feature. If the reason is only flexibility,
   convenience, experimentation, or personal clarity, do not add the machinery.
-- For behavior-changing features, state the feature execution checklist before
-  editing: `TDD decision`, `First test/scenario`, `Expected red`, `Intended
-  green change`, `Refactor checkpoint`, and `Validation`. When the harness is
-  runnable, observe and paste the red (command + failing output) before
-  implementation edits; if it is not runnable, stop and request agreement to
-  proceed test-after with the reason rather than skipping red silently.
+- For behavior-changing features, use the same feature execution fields before
+  editing and at completion: `Behavior`, `Coverage`, `Change`, `Refactor`, and
+  `Validation`. Before editing, record the expected behavior, coverage plan,
+  intended change, refactor checkpoint, and planned validation without
+  prescribing whether tests or implementation must be written first.
 - Implement only the confirmed feature with the smallest clear change that
   preserves existing public behavior unless the human explicitly approved a
   compatibility break.
@@ -63,7 +62,7 @@ These feature implementation rules remain mandatory:
 - Use `$doc-standards` when the feature changes public commands, APIs, examples,
   configuration, or documented workflows.
 - Use `$change-validation` when selecting validation commands.
-- Report `Red`, `Green`, `Refactor`, and `Validation` entries. `Red` and `Green` must each paste the actual command and its real output using the same command/selector; a label without pasted output is not acceptable, and work where red was never observed before implementation must be labeled `test-after (not TDD)` with the reason instead of a TDD cycle. Use `Refactor: none (<reason>)` when no cleanup was needed after green. After validation, update the selected ledger entry; a named batch follows the shared sequential re-check and stop rules.
+- At completion, report those same fields using the observed behavior, actual change, coverage, refactor assessment, validation commands, and outcomes observed. Use `Refactor: none (<reason>)` when no cleanup was needed. After validation, update the selected ledger entry; a named batch follows the shared sequential re-check and stop rules.
 
 ## Ledger Format
 
