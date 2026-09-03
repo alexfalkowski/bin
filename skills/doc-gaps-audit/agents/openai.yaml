@@ -1,4 +1,4 @@
 interface:
   display_name: "Doc Gaps Audit"
   short_description: "Audit scoped doc adequacy gaps only"
-  default_prompt: "Use $doc-gaps-audit with $doc-standards to audit scoped documentation without editing. After scoping, use repo archetype lead generation, collect exact-revision CircleCI evidence with the shared gap-workflow collector when configured, otherwise use the repository-owned evidence path, reuse exact-state green CI evidence, apply the shared delegation gate, and hand confirmed entries to $doc-gaps-fix."
+  default_prompt: "Use $doc-gaps-audit with $doc-standards only for a requested scoped documentation-gap audit without editing, and use $code-review for diff, branch, or PR review; after scoping, use repo archetype lead generation, collect exact-revision CircleCI evidence with the shared gap-workflow collector when configured, otherwise use the repository-owned evidence path, reuse exact-state green CI evidence, apply the shared delegation gate, and hand confirmed entries to $doc-gaps-fix."

@@ -1,6 +1,6 @@
 ---
 name: doc-gaps-audit
-description: Audit scoped documentation for concrete gaps without editing; use $doc-gaps-fix to find and fix documentation gaps.
+description: Audit a user-requested documentation-gap scope without editing; use $code-review for diff, branch, or PR review and $doc-gaps-fix to fix gaps.
 ---
 
 # Doc Gaps Audit
@@ -9,6 +9,7 @@ Trigger phrases: `Audit-only $doc-gaps-audit in PACKAGE_OR_FOLDER` or
 `Find doc gaps in PACKAGE_OR_FOLDER without editing`. This skill only
 discovers and records candidates; it never edits documentation. Use
 `$doc-gaps-fix` for the default find-and-fix pass.
+Use `$code-review` for a general diff, branch, or PR review.
 
 Before starting, read `../references/gap-workflow.md` completely, then
 `references/plan.md`; they own runtime state, delegation, scope, coverage, and

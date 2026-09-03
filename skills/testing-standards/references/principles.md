@@ -16,11 +16,11 @@
   future maintainers might remove it, and normal validation.
 - Do not write source-inspection tests to enforce implementation absence unless
   the repository owns that rule as lint, static analysis, or generation.
-- Keep each test or scenario narrow enough to guide the next useful behavior.
-  Make the test-first decision before production edits when a credible harness
-  exists; use validation instead for docs, policy, config, metadata, formatting,
-  mechanical, generated, or non-executable changes.
-- Treat Refactor as the TDD design payoff: inspect for real smells, remove only
+- Keep each test or scenario narrow enough to verify useful behavior. Define the
+  expected observable behavior and validation evidence before production edits;
+  use validation instead of new tests for docs, policy, config, metadata,
+  formatting, mechanical, generated, or non-executable changes.
+- Treat Refactor as a design checkpoint: inspect for real smells, remove only
   those supported by local evidence, and avoid broad rewrites, speculative
   abstraction, or unrelated polish.
 - Prefer classicist behavior tests over mockist interaction tests. Test

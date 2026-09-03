@@ -47,17 +47,13 @@ confirmed gap-ledger entry.
 - Before editing, state the selected local pattern, dominant relevant harness
   or validation path, planned command, and any deviation. If a deviation is
   needed, stop and ask before editing.
-- When an execution checklist includes `Expected red`, state the expected
-  failure signal, confirm the harness can run, actually run the command during
-  the current work, and paste its real failing output before behavior edits.
-  Inspect the output and explain why it matches the expected signal for the
-  intended missing behavior. A setup, harness, tooling, dependency, fixture,
-  timeout, compilation, assertion, or other failure that does not match that
-  signal is not Red. Classify or fix an invalid failure and rerun. The reported
-  `Green` must use that same command and pass. If the harness is not runnable,
-  stop and either make it runnable or request agreement for named test-after
-  work. Silent test-after, invented or reconstructed command output, and a
-  paraphrase substituted for required pasted output are prohibited.
+- For behavior-changing work, define the observable behavior and validation
+  evidence before editing. Use the established harness when it owns the
+  behavior, but do not prescribe whether tests or implementation must be
+  written first. Classify failures before treating them as evidence: setup,
+  harness, tooling, dependency, fixture, timeout, compilation, assertion, and
+  unrelated failures do not prove the intended behavior gap. Never invent or
+  reconstruct command output or claim a check ran when it did not.
 - For substantial, ambiguous, or multi-iteration work, use
   `../long-running-work.md`. Keep progress in runtime state, work in thin
   validated slices, and do not use it to combine modes or edit outside scope.
