@@ -78,13 +78,12 @@ mktemp "${TMPDIR:-/tmp}/review-pr.XXXXXX"
   command prefix:
 
 ```bash
-make review cleanup_desc_file=true msg="unprefixed subject" desc_file="/returned/path/review-pr.ABC123"
+make review msg="unprefixed subject" desc_file="/returned/path/review-pr.ABC123"
 ```
 
-- Pass `cleanup_desc_file=true` for the temporary path created above. `make
-  review` owns its cleanup and removes the file after commit, push, and draft
-  creation, including when any review step fails. Do not pass this opt-in for
-  a caller-owned `desc_file` that must remain available. Do not flatten the
+- A `desc_file` passed to `make review` is disposable. `make review` removes
+  it after commit, push, and draft creation, including when any review step
+  fails. Do not use a caller-owned file for `desc_file`. Do not flatten the
   summary into a single line or pass Markdown through a quoted shell argument.
 - Read `references/output-format.md`, then report the result using that exact
   structure.

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Run the ordered review flow and clean up an opted-in description file.
+# Run the ordered review flow and clean up its disposable description file.
 
 set -eo pipefail
 
@@ -11,11 +11,12 @@ dry_run() {
   [[ ${MAKEFLAGS:-} =~ (^|[[:space:]])(-n|n|--just-print|--dry-run)([[:space:]]|$) ]]
 }
 
-# Remove an opted-in summary file after the complete review flow, including failures.
+# A desc_file passed to make review is disposable; remove it after the complete
+# flow, including failures.
 cleanup() {
   local exit_code=$?
 
-  if [[ ${cleanup_desc_file:-} == true && -n ${desc_file:-} ]] && ! dry_run; then
+  if [[ -n ${desc_file:-} ]] && ! dry_run; then
     rm -f -- "$desc_file"
   fi
 

@@ -3,6 +3,11 @@
 
 set -eo pipefail
 
+if [[ -z ${msg//[[:space:]]/} ]]; then
+  printf 'bin: set msg to a non-empty commit subject\n' >&2
+  exit 1
+fi
+
 file="$(mktemp)"
 trap 'rm -f "$file"' EXIT
 
