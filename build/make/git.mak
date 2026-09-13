@@ -10,7 +10,6 @@ export PREFIX := $(shell $(BIN_ROOT)/build/git/prefix)
 override export msg := $(value msg)
 override export desc := $(value desc)
 override export desc_file := $(value desc_file)
-override export cleanup_desc_file := $(value cleanup_desc_file)
 
 # Checkout the master branch.
 master:
@@ -148,7 +147,7 @@ amend: add
 edit-amend: add
 	@git commit --amend
 
-# Commit all changes with a prefix derived from the branch (set msg and desc or desc_file).
+# Commit all changes with a prefix derived from the branch (set a non-empty msg and desc or desc_file).
 commit: add
 	@$(BIN_ROOT)/build/git/commit
 
@@ -171,7 +170,7 @@ pr:
 merge:
 	@gh pr merge --auto --squash
 
-# Commit, force-push with a lease, and open a draft PR (cleanup_desc_file=true removes desc_file).
+# Commit, force-push with a lease, and open a draft PR (removes supplied desc_file).
 review:
 	@REVIEW_MAKEFILE="$(abspath $(firstword $(MAKEFILE_LIST)))" REVIEW_MAKE="$(MAKE)" $(BIN_ROOT)/build/git/review
 
