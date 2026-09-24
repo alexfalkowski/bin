@@ -141,11 +141,11 @@ sync: fetch
 
 # Amend the last commit with staged changes (no message edit).
 amend: add
-	@git commit --amend --no-edit
+	@$(BIN_ROOT)/build/git/amend --no-edit
 
 # Amend the last commit with staged changes (edit message).
 edit-amend: add
-	@git commit --amend
+	@$(BIN_ROOT)/build/git/amend
 
 # Commit all changes with a prefix derived from the branch (set a non-empty msg and desc or desc_file).
 commit: add
