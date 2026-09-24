@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Amend the latest commit with the supplied Git commit options.
+
+set -eo pipefail
+
+"$(dirname "$0")/check-commit-branch"
+
+git commit --amend "$@"

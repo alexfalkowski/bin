@@ -79,6 +79,10 @@ to provide a branch prefix directly:
 make add-worktree branch=fix/login worktree=../app-login-fix
 ```
 
+The shared `commit`, `amend`, and `edit-amend` targets stage changes but refuse
+to commit on `master`; create a branch first. The `force`, `review`, and `ready`
+flows use these targets too.
+
 List and remove worktrees from the primary checkout. Removal refuses a dirty
 worktree and does not delete its branch:
 
