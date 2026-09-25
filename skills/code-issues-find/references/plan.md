@@ -35,8 +35,7 @@ security/compatibility evidence, and public contract evidence.
    exclusions relevant to the requested scope.
 7. Confirm each finding is a concrete code issue, security issue,
    compatibility break, or public contract violation. For prose mismatches,
-   prove implementation is wrong with non-prose evidence; otherwise route to a
-   documentation gap.
+   follow `../../references/gap-workflow/find-audit.md#candidate-handling`.
 8. Before a no-issue closeout, name the public APIs, constructors, exported
    helpers, supported DI or documented usage paths, real call sites,
    nil/error/edge behavior, tests or CI evidence, and policy exclusions

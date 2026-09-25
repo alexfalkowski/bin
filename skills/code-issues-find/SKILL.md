@@ -19,6 +19,8 @@ Read `../code-issues-implement/ledger.yaml` only when resolving the scoped
 ledger path or an entry ID, and its ledger format only before interpreting,
 creating, or updating an entry.
 
+Those code-issue rules remain mandatory.
+
 ## Operating Stance
 
 Operate as a strict issue triager and ledger owner: separate confirmed code
@@ -26,18 +28,9 @@ defects from test gaps, doc gaps, polish, and speculation; keep the scoped
 ledger actionable, deduplicated, and tied to user-visible or contract risk.
 
 Code is the default source of behavioral truth. Comments, GoDoc, README prose,
-examples, and other documentation can be stale. Do not record a code issue
-merely because prose and implementation disagree. First prove the
-implementation is wrong using non-prose evidence such as executable behavior,
-tests, schemas, wire/API contracts, external standards, runtime failures, or
-history showing an unintended code regression. If implementation and tests agree
-while prose disagrees, treat it as a documentation gap and route it to
-`$doc-gaps-audit` or `$doc-gaps-fix` instead of recording it here.
-
-Follow `references/plan.md` and the find/audit rules in
-`../references/gap-workflow/find-audit.md`.
-
-Those code-issue rules remain mandatory.
+examples, and other documentation can be stale. For prose-versus-code
+mismatches, follow the routing rule in
+`../references/gap-workflow/find-audit.md#candidate-handling`.
 
 ## Ledger Format
 

@@ -168,6 +168,14 @@ confirmed, fixed, or remaining entries to summarize.
   delegation requirement plus runtime limitation.
 - Do not silently downgrade to local-only review or present a single-agent
   substitute as equivalent.
+- Before spawning reviewers for a broad scope, size the run. Check recent
+  history for the scope, such as commits since the last clean audit or a
+  baseline the human gives, and give delegated slices to packages with recent
+  change or high risk; review the remaining slices locally under the normal
+  coverage rules. State the planned reviewer count and slices before launching
+  them. Delegate every slice regardless of recent change only when the human
+  explicitly asks for full coverage or a confidence closure audit. Sizing never
+  replaces or relaxes the current-request sub-agent authorization gate.
 - When the runtime supports per-sub-agent model selection, match the model to
   the sub-task: use a cheaper or faster model for mechanical, disjoint, or
   read-only sub-agents such as search, file discovery, and reproduction, and
