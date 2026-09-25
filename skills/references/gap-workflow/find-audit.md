@@ -28,7 +28,8 @@ For find, audit-only, and one-pass modes:
    cloning, pushing, publishing, remote writes, or destructive effects. Rely on
    the active agent configuration for command approval behavior; do not add a
    separate model-level permission request.
-7. Apply the shared gap-workflow delegation gate before review work.
+7. Apply the shared gap-workflow delegation gate and delegation sizing before
+   review work.
 8. Wait for review work, update coverage for every slice, and deduplicate or
    directly re-check conflicting candidates.
 9. Classify validation as a repository finding, local environment issue,
@@ -169,6 +170,11 @@ For find, audit-only, and one-pass modes:
   Do not pass intended conclusions, rejected-lead rationale, or proposed
   confidence numbers to the adversarial reviewer unless the validation task
   specifically requires that context.
+- Use adversarial review only for high-assurance closure as defined in
+  `../gap-workflow.md`. Outside a confidence closure audit, do not launch an
+  adversarial or extra reviewer only to raise scope no-finding confidence to
+  the broad threshold; use the below-threshold closeout in Find And Audit
+  Outcomes instead.
 - Read `../finding-severity.md` only when filtering or assigning a candidate's
   confidence or severity. The lead inventory is a recall aid and never lowers
   ownership, reproduction, validation, confidence, or implementation gates.
@@ -210,10 +216,12 @@ For find, audit-only, and one-pass modes:
   by the selected scope; route another project-owned library's defect to its
   agent or ledger.
 - When prose, comments, examples, or docs contradict implementation, require
-  non-prose evidence before routing the candidate to code, security,
-  reliability, or test workflows. If code, tests, runtime, generated
-  contracts, CI, or history support implementation, route stale prose to
-  `$doc-gaps-audit` or `$doc-gaps-fix`.
+  non-prose evidence that the implementation is wrong, such as executable
+  behavior, tests, schemas, wire/API contracts, external standards, runtime
+  failures, or history showing an unintended regression, before routing the
+  candidate to code, security, reliability, or test workflows. If code, tests,
+  helper names, runtime, generated contracts, CI, or history support
+  implementation, route stale prose to `$doc-gaps-audit` or `$doc-gaps-fix`.
 - Dismiss candidates already covered by the authoritative surface, below
   threshold, duplicative, out of scope, or owned by another workflow. Preserve
   rejected, routed, deferred, and blocked lead notes for local and delegated
@@ -246,6 +254,12 @@ are no findings.
   When no explicit target is given, the broad-scope default is 95%. Otherwise
   use the incomplete outcome and state the reduced assurance when an explicit
   target lowers that default.
+- When the human did not request a confidence closure target, every relevant
+  slice is deep-reviewed or excluded, and scope no-finding confidence is still
+  below the active broad no-finding threshold, close with `Audit incomplete: no
+  confirmed findings so far`. State the residual risks and offer further passes
+  without starting them. A `with a goal` tail does not by itself turn a find
+  run into a confidence closure audit.
 - Confidence closure additionally requires current clean validation,
   coverage/rejected-lead/validation/follow-up evidence for each delegated slice,
   every candidate reproduced or rejected/routed, and a final challenge pass
