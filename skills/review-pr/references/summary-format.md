@@ -18,13 +18,13 @@ Use this reference when drafting the `msg` value and PR summary content for `mak
 ```markdown
 ## What
 
-- Describe what changed in terms of behavior, documentation, commands, configuration, or public/reviewer-visible outcomes.
+- Describe what changed in terms of behavior, documentation, commands, configuration, or public/reviewer-visible outcomes. When context is needed, explain the behavior before and after the change.
 - Mention the context the code cannot fully tell the reviewer, such as scope, intentional boundaries, compatibility notes, non-goals, or user-facing effect.
 - Avoid implementation mechanics unless they are the observable change.
 
 ## Why
 
-- Explain why the PR matters: the problem, risk, workflow gap, maintenance benefit, or user value it addresses.
+- Explain why the PR matters: the original problem, risk, workflow gap, maintenance benefit, or user value it addresses.
 - Make this the selling point of the PR.
 - Do not repeat the What section or rely on the diff to imply motivation.
 
@@ -46,6 +46,8 @@ Use this reference when drafting the `msg` value and PR summary content for `mak
 
 ## Commit Message Subject
 
+- Use a concise imperative subject without a trailing period, such as `prevent commits on master`.
+- Aim for roughly 50 characters for the complete subject, including the generated prefix; prefer clarity over a strict limit.
 - Check whether the local commit workflow adds a conventional-commit prefix from the current branch.
 - In repositories using this shared `bin` workflow, `build/make/git.mak` derives `type(scope):` from branches shaped like `user/type/scope` and prepends it in `make commit`, `make review`, and related targets.
 - When the workflow prepends a branch-derived prefix, output only the unprefixed subject intended for `msg`; do not include a conventional prefix such as `feat(scope):`.
