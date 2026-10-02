@@ -17,12 +17,15 @@ description: Use when you need to discover how a repository is built, tested, li
 8. Read `references/make-fragments.md` when you need to interpret included `bin/build/make/*.mak` fragments, edit reusable make fragments, or reason about likely target behavior.
 9. Identify commands that require network, SSH, GitHub auth, registry auth, cloning, pushing, publishing, opening PRs, or updating remote state before running or recommending them.
 10. Before editing code, tests, docs, config, scripts, or validation paths, identify the local pattern for the changed surface: import style, naming style, file layout, dominant test harness, documented config keys, and repository validation target. Agents MUST preserve those patterns unless the user explicitly asks to change them.
-11. If an edit would deviate from the discovered local pattern, stop and ask before editing. State the exact pattern, why it cannot work, and the proposed deviation.
-12. When workflow discovery is the final response, use the exact structure in `references/bin-submodule.md`; do not add, remove, rename, or reorder sections.
-13. When another skill embeds this discovery, preserve the discovered commands, CI expectations, bin wiring, constraints, and local-pattern facts in the caller's output format.
+11. If an edit would deviate from the discovered local pattern, stop and ask before editing. State the exact pattern, why it cannot work, and the proposed deviation. For tooling choices, identify the concrete requirement the default cannot satisfy and how the alternative addresses it.
+12. For new tools or dependency classes, use `$change-safety` to assess adoption and support costs. Use `$doc-standards` to preserve significant approved decisions in the repository's existing documentation.
+13. When evidence encountered in scope shows repeated justified exceptions to a tooling default, propose reassessing that default and cite the exceptions. Reassessment does not itself authorize changing the default or expanding the task.
+14. When workflow discovery is the final response, use the exact structure in `references/bin-submodule.md`; do not add, remove, rename, or reorder sections.
+15. When another skill embeds this discovery, preserve the discovered commands, CI expectations, bin wiring, constraints, and local-pattern facts in the caller's output format.
 
 ## References
 
 - Read `references/bin-submodule.md` when a repository includes `bin/build/make/*.mak`, vendors this project as `./bin`, or uses shared helper paths through `BIN_ROOT`.
 - Read `references/make-fragments.md` after discovering which shared Makefile fragments are included and before editing or debugging reusable `build/make/*.mak` behavior.
 - Read `references/downstream-defaults.md` only when downstream-specific defaults apply after confirming shared `./bin` wiring.
+- Background for tooling defaults and justified exceptions: [The Power of Sensible Defaults](https://stevebennett.co/posts/the-power-of-sensible-defaults/).

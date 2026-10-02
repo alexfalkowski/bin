@@ -10,6 +10,12 @@ Route documentation to the surface that owns the reader's next action:
 - **User docs**: workflows, setup paths, operational procedures, migrations,
   troubleshooting, and multi-step behavior that does not fit command help or API
   comments.
+- **Decision documentation**: requirements, alternatives, rationale,
+  consequences, and known reasons to revisit significant technology defaults or
+  approved exceptions. Use existing architecture decision records (ADRs),
+  architecture docs, or the repository's established decision owner. Routine
+  edits do not require decision records; do not introduce an ADR convention
+  solely to document a choice.
 - **Command help**: command syntax, flags, environment variables, defaults,
   error cases, and command-specific examples.
 - **Public API comments, GoDoc, RDoc, and docstrings**: callable API contracts,

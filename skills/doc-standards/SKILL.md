@@ -25,8 +25,9 @@ behavior the repository actually implements.
 ## Steps
 
 1. Identify the documentation surface in scope: README files, docs, examples,
-   command help, setup instructions, configuration docs, public API comments,
-   code comments, docstrings, changelogs, migration notes, or generated docs.
+   command help, setup instructions, configuration docs, decision records,
+   architecture docs, public API comments, code comments, docstrings, changelogs,
+   migration notes, or generated docs.
 2. Identify the public surface, intended user, authoritative documentation
    owner, minimum successful example or command, and non-obvious contract that
    users need before they can use or maintain the surface safely.

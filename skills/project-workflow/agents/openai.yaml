@@ -1,4 +1,4 @@
 interface:
   display_name: "Project Workflow"
   short_description: "Discover project commands and conventions"
-  default_prompt: "Use $project-workflow to discover how this repository is built, tested, linted, released, and configured before beginning work in the configured command environment. Treat AGENTS.md and selected skills as mandatory rules."
+  default_prompt: "Use $project-workflow to discover how this repository is built, tested, linted, released, and configured before beginning work in the configured command environment. Treat AGENTS.md and selected skills as mandatory rules. Justify tooling exceptions against concrete requirements, assess adoption costs, preserve significant approved decisions, and propose reassessment when evidence shows repeated justified exceptions."
