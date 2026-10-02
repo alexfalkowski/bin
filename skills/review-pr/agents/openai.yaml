@@ -1,4 +1,4 @@
 interface:
   display_name: "Review PR"
   short_description: "Prepare a safe review PR flow"
-  default_prompt: "Use $review-pr to validate changed packages, commands, scenarios, or features (plus graph-proven direct dependents), review local changes, verify whether an apparent breaking change is intentional before proposing a fix, then commit, force-push, and open a draft PR; CI owns complete-suite coverage."
+  default_prompt: "Use $review-pr to validate changed packages, commands, scenarios, or features (plus graph-proven direct dependents), review local changes, verify whether an apparent breaking change is intentional before proposing a fix, draft a concise lowercase imperative subject without a trailing period (aim for roughly 50 characters including the generated prefix, with clarity taking priority) and a summary explaining the problem, resulting behavior, and motivation, then commit, force-push, and open a draft PR; CI owns complete-suite coverage."
