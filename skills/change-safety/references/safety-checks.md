@@ -34,7 +34,7 @@ When safety notes are the final response, use exactly this Markdown structure an
 - Use `Compatibility` for intentional breakage or preserved documented interfaces.
 - Use `Migration` for required consumer action, deprecation, or replacement guidance.
 - Use `Security` for security-sensitive tradeoffs, unsafe defaults, secrets, shell execution, filesystem writes, auth, or untrusted input.
-- Use `Generated Or External Files` for generated files, vendored files, lockfiles, or dependency constraints.
+- Use `Generated Or External Files` for generated files, vendored files, lockfiles, dependency constraints, or tool and dependency adoption costs.
 - When another skill embeds safety notes, keep the same compatibility, migration, security, and generated/external-file facts but use the caller's required output sections.
 
 ## Migration And Deprecation
@@ -55,6 +55,12 @@ When safety notes are the final response, use exactly this Markdown structure an
 - Do not modify vendored code unless the task explicitly requires it.
 - Update lockfiles only when dependency changes actually require it.
 - When regeneration is needed, prefer the repository's documented generation command.
+
+## Tool And Dependency Choices
+
+- For a new tool or dependency class, compare its benefits over the established option with the costs of adoption and ongoing support.
+- Account for relevant integration, migration, maintenance, operational support, team familiarity, and knowledge transfer. Base team capabilities and support ownership on available evidence; identify unknowns rather than inventing them.
+- Keep the assessment proportional to the change. Routine updates within the established stack need no separate technology-choice assessment unless they materially change support or operating requirements.
 
 ## Documentation Scope
 

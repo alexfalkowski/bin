@@ -1,4 +1,4 @@
 interface:
   display_name: "Change Safety"
   short_description: "Protect interfaces and migrations"
-  default_prompt: "Use $change-safety before compatibility-sensitive or user-facing changes."
+  default_prompt: "Use $change-safety before compatibility-sensitive or user-facing changes; for new tools or dependency classes, compare benefits over the established option with adoption and ongoing support costs, keeping the assessment proportional to the change."

@@ -8,7 +8,7 @@ description: Use when changes may affect compatibility, documented interfaces, m
 ## Steps
 
 1. Identify whether the requested change touches a user-facing or documented interface.
-2. Read `references/safety-checks.md` before editing compatibility-sensitive, security-sensitive, generated, vendored, or documented behavior.
+2. Read `references/safety-checks.md` before proposing a new tool or dependency class or editing compatibility-sensitive, security-sensitive, generated, vendored, or documented behavior.
 3. Preserve existing behavior unless the user explicitly requests a breaking change or the fix requires one.
 4. Update documentation and examples in the repository's existing style when behavior, usage, or migration expectations change; if no docs update is needed for a user-facing change, state why.
 5. For security-specific risk analysis, pair with `$security-audit` instead of expanding this skill into a full audit.
@@ -18,4 +18,4 @@ description: Use when changes may affect compatibility, documented interfaces, m
 
 ## References
 
-- Read `references/safety-checks.md` for compatibility, migration, security, generated-file, vendored-file, dependency, and documentation-scope decisions.
+- Read `references/safety-checks.md` for compatibility, migration, security, generated-file, vendored-file, tool and dependency adoption, and documentation-scope decisions.
