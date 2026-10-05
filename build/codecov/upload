@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Upload a coverage report to Codecov without failing CI on upload errors.
+
+set -eo pipefail
+
+readonly report="${1:?usage: upload COVERAGE_FILE}"
+
+codecovcli --verbose upload-process -F service -f "$report" || true

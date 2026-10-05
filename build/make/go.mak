@@ -115,9 +115,9 @@ func-coverage: remove-generated-coverage
 # Generate both HTML and function coverage reports.
 coverage: html-coverage func-coverage
 
-# Upload test/reports/final.cov to Codecov (codecovcli upload-process).
+# Upload test/reports/final.cov to Codecov (upload failures are ignored).
 codecov-upload:
-	@codecovcli --verbose upload-process -F service -f test/reports/final.cov
+	@$(BIN_ROOT)/build/codecov/upload test/reports/final.cov
 
 # Remove generated report artifacts while preserving report placeholders.
 clean-reports:
