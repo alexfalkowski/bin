@@ -80,8 +80,10 @@ or compatibility boundary that must remain unchanged.
 
 #### Definition of Success
 
-- Observable proof the control works (for example, an injected fault is now
-  contained or recovered).
+- Describe success using concrete scenarios and expected outcomes that prove
+  the control works (for example, an injected fault is now contained or
+  recovered). Include relevant failure or boundary cases. Keep the detail
+  proportionate to the change.
 - **Validation:** The repository command(s), fault scenario(s), or operational
   check(s) that prove the result.
 ````

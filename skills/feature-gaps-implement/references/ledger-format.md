@@ -85,8 +85,9 @@ boundaries that must remain unchanged.
 
 #### Definition of Success
 
-- The observable outcome the audience gains (the previously blocked workflow now
-  completes).
+- Describe success using concrete scenarios and expected outcomes the audience
+  gains (the previously blocked workflow now completes). Include relevant
+  failure or boundary cases. Keep the detail proportionate to the change.
 - **Validation:** The repository command(s), scenario(s), or supported workflow
   that prove the result.
 ````

@@ -83,8 +83,10 @@ or ownership boundaries that must remain unchanged.
 
 #### Definition of Success
 
-- The observable proof the workflow improves (the target runs, CI passes, or the
-  command is discoverable).
+- Describe success using concrete scenarios and expected outcomes that prove
+  the workflow improves (the target runs, CI passes, or the command is
+  discoverable). Include relevant failure or boundary cases. Keep the detail
+  proportionate to the change.
 - **Validation:** The repository command(s), CI path(s), or workflow check(s)
   that prove the result.
 ````

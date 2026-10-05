@@ -77,8 +77,10 @@ must remain unchanged.
 
 #### Definition of Success
 
-- Observable result that proves the bug is gone (for example, the previously
-  failing case now passes).
+- Describe success using concrete scenarios and expected outcomes that prove
+  the bug is gone (for example, the previously failing case now passes).
+  Include relevant failure or boundary cases. Keep the detail proportionate to
+  the change.
 - **Validation:** The repository command(s) or scenario(s) that prove the result.
 ````
 
