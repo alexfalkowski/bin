@@ -80,8 +80,10 @@ semantics that must remain unchanged.
 
 #### Definition of Success
 
-- The new or fixed test fails against the unprotected behavior and passes once
-  it is covered.
+- Describe success using concrete scenarios and expected outcomes: the new or
+  fixed test fails against the unprotected behavior and passes once it is
+  covered. Include relevant failure or boundary cases. Keep the detail
+  proportionate to the change.
 - **Validation:** The repository command(s) or scenario(s) that prove the result.
 ````
 
