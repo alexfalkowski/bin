@@ -53,9 +53,9 @@ benchmarks:
 clean-reports:
 	@$(BIN_ROOT)/build/shell/clean-reports "$(if $(wildcard reports/.),reports,test/reports)"
 
-# Upload test/reports/coverage.xml to Codecov (codecovcli upload-process).
+# Upload test/reports/coverage.xml to Codecov (upload failures are ignored).
 codecov-upload:
-	@codecovcli --verbose upload-process -F service -f test/reports/coverage.xml
+	@$(BIN_ROOT)/build/codecov/upload test/reports/coverage.xml
 
 # Scan the repository with Trivy, excluding .ruby-lsp, bin, vendor, and test/vendor.
 trivy-repo:
