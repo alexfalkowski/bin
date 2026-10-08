@@ -120,6 +120,9 @@ turn the entry into an architecture document.
 ### Open Questions
 - A workflow-ownership, compatibility, or CI-runtime decision that needs the human.
 
+### Decision
+- Record the agreed direction and its rationale when the entry needs one.
+
 ````
 
 ## Status And Lifecycle

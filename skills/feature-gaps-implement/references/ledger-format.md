@@ -122,6 +122,9 @@ turn the entry into an architecture document.
 ### Open Questions
 - A product-direction, scope, or compatibility decision that needs the human.
 
+### Decision
+- Record the agreed direction and its rationale when the entry needs one.
+
 ````
 
 ## Status And Lifecycle

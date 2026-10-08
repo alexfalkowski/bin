@@ -119,6 +119,9 @@ the prose. Do not turn the entry into an architecture document.
 ### Open Questions
 - A documentation-location or scope decision that needs the human.
 
+### Decision
+- Record the agreed direction and its rationale when the entry needs one.
+
 ````
 
 ## Status And Lifecycle

@@ -58,19 +58,10 @@ recording findings. Keep GoDoc details in `$go-standards`, RDoc details in
 
 ## Candidate And Ledger Format
 
-Before creating, updating, or interpreting the scoped ledger, read `ledger.yaml` and
-`references/ledger-format.md`. This skill is the canonical owner of the ledger
-contract; `$doc-gaps-audit` cross-references these same files by relative
-path rather than duplicating them. Each entry is a self-contained mini-RFC
-using `What -> Why -> How`. The required core must keep `| Field | Value |`,
-`| Status |`, and `**Summary.**`; `### What` with `**Current.**` and
-`**Expected.**`; `### Why` with `**Impact.**` and `#### Evidence` containing
-`**Claim:**`, `**Observed:**`, `**Reproduction:** Smallest reader action`, and
-`**Source:**`; and `### How` with `#### Proposal`, `**Keep.**`,
-`#### Alternatives Considered`, and `#### Definition of Success` containing
-`**Validation:**`. Add `#### Situation Map`,
-`### Goals / Non-goals`, `### Open Questions`, and `### Decision` only when the
-entry warrants them.
+Before interpreting, creating, or updating an entry, read `ledger.yaml` and
+`references/ledger-format.md`. This skill owns the scoped path, required fields,
+optional sections, and lifecycle; `$doc-gaps-audit` uses the same contract.
+Use that contract for every entry.
 
 ## References
 

@@ -1,18 +1,20 @@
 ---
 name: review-pr
 description: >-
-  Use when, and only when, the user invokes $review-pr or explicitly asks to
-  prepare, open, update, or run a review PR from local changes. A bare
-  current-request invocation runs the full workflow: review, validate, commit,
+  Use when, and only when, the user invokes $review-pr or /review-pr or
+  explicitly asks to prepare, open, update, or run a review PR from local
+  changes. A bare current-request invocation runs the full workflow: review, validate, commit,
   force-push, and open a draft pull request with the repository review target.
+disable-model-invocation: false
 ---
 
 # Review PR
 
-A bare `$review-pr` invocation is an explicit current-request instruction to
-run the full workflow for the current repository: review and validate local
-changes, commit them, force-push the branch, and open a draft pull request. It
-does not require an `in SCOPE` suffix. If an existing PR or draft description
+A bare `$review-pr` (Codex) or `/review-pr` (Claude Code) invocation is an
+explicit current-request instruction to run the full workflow for the current
+repository: review and validate local changes, commit them, force-push the
+branch, and open a draft pull request. It does not require an `in SCOPE` suffix.
+If an existing PR or draft description
 would be updated, ask before replacing it; future changes do not carry forward
 permission to push again.
 
@@ -22,13 +24,22 @@ into the repository unless the human explicitly asks for a durable plan file.
 Use runtime goals only when explicitly authorized; otherwise keep permission,
 validation, review, PR drafting, and remote-write state in the active plan.
 
+## Invocation
+
+Model selection stays enabled in both assistants so explicit natural-language
+requests can reach this workflow. Loading the skill does not authorize its
+actions; establish current-request intent before executing it. A request such
+as `prepare a review PR from these local changes` qualifies. A question such as
+`what does review-pr do?` remains informational; a code-review request alone
+authorizes review without commit, push, or PR creation.
+
 ## Steps
 
 Follow `references/plan.md#execution-plan`.
 
 These rules remain mandatory:
 
-- Confirm that the current request contains `$review-pr` or an equivalent explicit request to commit, push, update, or open a review PR. If not, do not run `make review`, `make push`, or any equivalent push/PR update command.
+- Confirm that the current request invokes `$review-pr` or `/review-pr` or contains an equivalent explicit request to commit, push, update, or open a review PR. An informational mention does not qualify. If not, do not run `make review`, `make push`, or any equivalent push/PR update command.
 - If new changes would make an existing PR description, review comment, or previously drafted summary obsolete, flag that and ask whether the user wants the PR updated before pushing anything.
 - Make the remote-write behavior of `make review` explicit before running it: the target commits, force-pushes, and opens a draft PR.
 - Use `$change-validation`, relevant language standards, `$doc-standards`, and
