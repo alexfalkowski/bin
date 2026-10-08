@@ -427,21 +427,21 @@ Before editing, state the selected local code pattern
 same issue execution fields before editing and at completion
 `Behavior`, `Coverage`, `Change`, `Refactor`, and `Validation`
 Use `Refactor: none (<reason>)`
-**Reproduction:** Smallest supported command
 PATTERNS
+require_pattern skills/code-issues-implement/references/ledger-format.md "**Reproduction:** Smallest supported command"
 
 require_patterns skills/test-gaps-implement/SKILL.md <<'PATTERNS'
 Before editing, state the selected local test pattern
 same test execution fields before editing and at completion
 `Behavior`, `Coverage`, `Change`, `Refactor`, and `Validation`
 Use `Refactor: none (<reason>)`
-**Reproduction:** Smallest supported command
 PATTERNS
+require_pattern skills/test-gaps-implement/references/ledger-format.md "**Reproduction:** Smallest supported command"
 
 require_patterns skills/doc-gaps-fix/SKILL.md <<'PATTERNS'
 Before editing an unresolved-ledger fix
-**Reproduction:** Smallest reader action
 PATTERNS
+require_pattern skills/doc-gaps-fix/references/ledger-format.md "**Reproduction:** Smallest reader action"
 
 require_patterns skills/feature-gaps-implement/SKILL.md <<'PATTERNS'
 Before editing, state the selected local code/config/docs pattern
@@ -449,15 +449,17 @@ same feature execution fields before
 `Behavior`, `Coverage`, `Change`, `Refactor`, and
 Use `Refactor: none (<reason>)`
 `PREFIX-N[/N...]`
-**Reproduction:** Smallest supported user
 PATTERNS
+require_pattern skills/feature-gaps-implement/references/ledger-format.md "**Reproduction:** Smallest supported user"
 
 require_patterns skills/project-gaps-implement/SKILL.md <<'PATTERNS'
 Before editing, state the selected local project workflow pattern
-| Implementation home | current repo \| shared bin \| external repo \| mixed |
 same project execution fields before editing and at completion
 `Behavior`, `Evidence`, `Change`, `Refactor`, and `Validation`
 Use `Refactor: none (<reason>)`
+PATTERNS
+require_patterns skills/project-gaps-implement/references/ledger-format.md <<'PATTERNS'
+| Implementation home | current repo \| shared bin \| external repo \| mixed |
 **Reproduction:** Smallest supported maintainer
 PATTERNS
 
@@ -466,10 +468,11 @@ Before editing, state the selected local code/config/docs pattern
 same reliability execution fields before editing and at completion
 `Behavior`, `Coverage`, `Change`, `Refactor`, and `Validation`
 Use `Refactor: none (<reason>)`
-**Reproduction:** Smallest supported trigger
 PATTERNS
+require_pattern skills/reliability-gaps-implement/references/ledger-format.md "**Reproduction:** Smallest supported trigger"
 
 require_pattern skills/project-gaps-find/SKILL.md "If a candidate's implementation home is outside the requested scope"
+# Entrypoints route to each pair's canonical schema instead of repeating it.
 for gap_skill in \
   skills/code-issues-find/SKILL.md \
   skills/code-issues-implement/SKILL.md \
@@ -484,7 +487,10 @@ for gap_skill in \
   skills/reliability-gaps-find/SKILL.md \
   skills/reliability-gaps-implement/SKILL.md
 do
-  require_ledger_core "$gap_skill"
+  require_patterns "$gap_skill" <<'PATTERNS'
+Before interpreting, creating, or updating an entry, read
+Use that contract for every entry.
+PATTERNS
 done
 
 # Gap-ledger format contracts.
@@ -505,6 +511,7 @@ Source locations support verification; they do not carry the explanation
 line number only when
 active threshold is the explicit request, otherwise 90%
 architecture document
+### Decision
 PATTERNS
 done
 

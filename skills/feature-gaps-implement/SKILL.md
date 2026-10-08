@@ -66,20 +66,10 @@ These feature implementation rules remain mandatory:
 
 ## Ledger Format
 
-Before creating, updating, or interpreting the scoped ledger, read `ledger.yaml`
-and `references/ledger-format.md`. This skill is the canonical owner of the
-ledger contract; `$feature-gaps-find` cross-references these same files by
-relative path rather than duplicating them. Each entry is a self-contained
-mini-PRD organized like the shared mini-RFC: `What -> Why -> How`. The
-required core must keep `| Field | Value |`, `| Status |`, and
-`**Summary.**`; `### What` with `**Current.**` and `**Expected.**`; `### Why`
-with `**Impact.**` and `#### Evidence` containing `**Claim:**`,
-`**Observed:**`, `**Reproduction:** Smallest supported user`, and
-`**Source:**`; and `### How` with `#### Proposal`, `**Keep.**`,
-`#### Alternatives Considered`, and `#### Definition of Success` containing
-`**Validation:**`. Add `#### Situation Map`, `### Goals / Non-goals` (usually
-warranted for features), `### Open Questions`, and `### Decision` when the
-entry warrants them.
+Before interpreting, creating, or updating an entry, read `ledger.yaml` and
+`references/ledger-format.md`. This skill owns the scoped path, required fields,
+optional sections, and lifecycle; `$feature-gaps-find` uses the same contract.
+Use that contract for every entry.
 
 ## References
 

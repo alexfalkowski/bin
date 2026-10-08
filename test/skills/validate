@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# Validates this repository's skill frontmatter, agent metadata, gap-pair
-# wiring, and ledger contract markdown references.
+# Validates this repository's skill frontmatter, agent metadata, invocation
+# policy agreement, gap-pair wiring, and ledger contract markdown references.
 
 require 'yaml'
 
@@ -66,10 +66,18 @@ def valid_required_strings?(data, keys, path, prefix: nil)
 end
 
 def valid_skill_keys?(data, path)
-  extra = data.keys - %w[name description]
+  extra = data.keys - %w[name description disable-model-invocation]
   return true if extra.empty?
 
   report_failure("unexpected frontmatter keys in #{path}: #{extra.join(', ')}")
+end
+
+def valid_optional_boolean?(data, key, path, prefix: nil)
+  return true unless data.key?(key)
+  return true if [true, false].include?(data[key])
+
+  name = [prefix, key].compact.join('.')
+  report_failure("#{name} must be true or false in #{path}")
 end
 
 def valid_short_description?(interface, path)
@@ -95,6 +103,7 @@ def valid_skill?(path)
 
   [
     valid_skill_keys?(data, path),
+    valid_optional_boolean?(data, 'disable-model-invocation', path),
     valid_required_strings?(data, %w[name description], path),
     valid_skill_name_length?(data, path),
     valid_skill_name_format?(data, path),
@@ -103,24 +112,31 @@ def valid_skill?(path)
   ].all?
 end
 
-def agent_interface(path)
+def valid_agent?(path)
   data = safe_load_file(path)
   return false unless mapping?(data, path, 'agent YAML must be a mapping')
 
   interface = data['interface']
-  return interface if interface.is_a?(Hash)
-
-  report_failure("missing interface mapping: #{path}")
-end
-
-def valid_agent?(path)
-  interface = agent_interface(path)
-  return false unless interface
+  return report_failure("missing interface mapping: #{path}") unless interface.is_a?(Hash)
 
   [
     valid_required_strings?(interface, %w[display_name short_description default_prompt], path, prefix: 'interface'),
     valid_short_description?(interface, path),
-    valid_default_prompt?(interface, path)
+    valid_default_prompt?(interface, path),
+    valid_agent_policy?(data, path)
+  ].all?
+end
+
+def valid_agent_policy?(data, path)
+  return true unless data.key?('policy')
+
+  policy = data['policy']
+  return false unless mapping?(policy, path, 'policy must be a mapping')
+
+  extra = policy.keys - %w[allow_implicit_invocation]
+  [
+    extra.empty? || report_failure("unexpected policy keys in #{path}: #{extra.join(', ')}"),
+    valid_optional_boolean?(policy, 'allow_implicit_invocation', path, prefix: 'policy')
   ].all?
 end
 
@@ -226,8 +242,23 @@ def valid_skill_agent_pairs?
 
   [
     valid_pairs?(missing_agents, 'missing agent metadata for skill'),
-    valid_pairs?(orphan_agents, 'orphan agent metadata without skill')
+    valid_pairs?(orphan_agents, 'orphan agent metadata without skill'),
+    (skills & agents).map { |skill_name| valid_invocation_policy?(skill_name) }.all?
   ].all?
+end
+
+def valid_invocation_policy?(skill_name)
+  skill_path = "skills/#{skill_name}/SKILL.md"
+  agent_path = "skills/#{skill_name}/agents/openai.yaml"
+  skill = safe_load_frontmatter(skill_path)
+  agent = safe_load_file(agent_path)
+  return false unless skill.is_a?(Hash) && agent.is_a?(Hash)
+
+  policy = agent.fetch('policy', {})
+  return false unless policy.is_a?(Hash)
+  return true if skill.fetch('disable-model-invocation', false) == !policy.fetch('allow_implicit_invocation', true)
+
+  report_failure("invocation policy must agree between #{skill_path} and #{agent_path}")
 end
 
 def valid_pairs?(names, message)
@@ -403,16 +434,17 @@ end
 
 def valid_gap_pair_skill_text?(find_skill_text, implement_skill_text, find_paths, implement_paths)
   [
-    valid_gap_find_skill_text?(find_skill_text, find_paths[:skill]),
+    valid_gap_find_skill_text?(find_skill_text, find_paths[:skill], implement_paths[:skill].split('/')[1]),
     valid_gap_implement_skill_text?(implement_skill_text, implement_paths[:skill])
   ].all?
 end
 
-def valid_gap_find_skill_text?(skill_text, skill_path)
+def valid_gap_find_skill_text?(skill_text, skill_path, implement_skill_name)
   [
     required_text?(skill_text, skill_path, 'references/plan.md'),
     required_text?(skill_text, skill_path, '../references/gap-workflow.md'),
-    required_text?(skill_text, skill_path, 'ledger.yaml'),
+    required_text?(skill_text, skill_path, "`../#{implement_skill_name}/ledger.yaml`"),
+    required_text?(skill_text, skill_path, "`../#{implement_skill_name}/references/ledger-format.md`"),
     rejected_text?(skill_text, skill_path, BATCH_ID_SYNTAX),
     rejected_text?(skill_text, skill_path, 'same-prefix batch')
   ].all?
@@ -424,7 +456,8 @@ def valid_gap_implement_skill_text?(skill_text, skill_path)
     required_text?(skill_text, skill_path, '../references/gap-workflow.md'),
     required_text?(skill_text, skill_path, BATCH_ID_SYNTAX),
     required_text?(skill_text, skill_path, 'same-prefix batch'),
-    required_text?(skill_text, skill_path, 'ledger.yaml')
+    required_text?(skill_text, skill_path, '`ledger.yaml`'),
+    required_text?(skill_text, skill_path, '`references/ledger-format.md`')
   ].all?
 end
 

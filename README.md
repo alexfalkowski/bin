@@ -100,7 +100,29 @@ version files, and environment-specific settings.
 
 This repository also ships shared agent guidance in `skills/`. Each skill is a
 `skills/<name>/SKILL.md` file that works with both OpenAI Codex and Claude Code;
-`skills/<name>/agents/openai.yaml` carries the Codex-specific interface.
+`skills/<name>/agents/openai.yaml` carries the Codex-specific interface and
+invocation policy.
+
+Skills support natural-language selection by default. `review-pr` keeps that
+behavior for explicit requests such as
+`prepare a review PR from these local changes`, as well as `$review-pr` in
+Codex or `/review-pr` in Claude Code. Those
+requests run its review, validation, commit, force-push, and draft-PR workflow;
+asking only for a code review authorizes the review. See
+[the review-pr skill](skills/review-pr/SKILL.md) for its authorization gates.
+
+Skill maintainers must keep invocation settings consistent across assistants:
+
+| Selection mode | Claude Code `disable-model-invocation` | Codex `policy.allow_implicit_invocation` |
+| --- | --- | --- |
+| Natural-language selection (default) | `false` or omitted | `true` or omitted |
+| Named invocation only | `true` | `false` |
+
+These settings control discovery; the skill instructions and `AGENTS.md` define
+task authorization. `make skills-lint` checks the boolean values and agreement
+between the two settings. Field behavior is documented in the official
+[Claude Code skill docs](https://code.claude.com/docs/en/skills#control-who-invokes-a-skill)
+and [OpenAI skill docs](https://learn.chatgpt.com/docs/build-skills).
 
 ### Codex
 

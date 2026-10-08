@@ -113,6 +113,9 @@ turn the entry into an architecture document.
 ### Open Questions
 - A decision that needs the human before or during the fix.
 
+### Decision
+- Record the agreed direction and its rationale when the entry needs one.
+
 ````
 
 ## Status And Lifecycle

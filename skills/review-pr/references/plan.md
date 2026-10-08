@@ -41,8 +41,9 @@ repository root and keep `bin/` as shared guidance.
 
 1. Inspect changed paths from the working tree, or the latest commit if the
    working tree is clean.
-2. Confirm the current user request explicitly asks to commit, push, update, or
-   open a review PR.
+2. Confirm the current user request invokes `$review-pr` or `/review-pr`, or
+   explicitly asks to commit, push, update, or open a review PR. An
+   informational mention of the skill does not qualify.
 3. If existing PR text may become obsolete, ask whether to update it before
    pushing.
 4. Run `$project-workflow` discovery for entrypoints, CI, and `./bin` wiring.

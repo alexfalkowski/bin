@@ -72,20 +72,11 @@ Those feature-gap rules remain mandatory.
 
 ## Ledger Format
 
-Before recording a candidate, read `../feature-gaps-implement/ledger.yaml` and
-`../feature-gaps-implement/references/ledger-format.md` —
-`$feature-gaps-implement` owns the ledger contract and entry-format definition
-so there is one canonical copy. Each entry is a self-contained mini-PRD
-organized like the shared mini-RFC: `What -> Why -> How`. The required core
-must keep `| Field | Value |`, `| Status |`, and `**Summary.**`; `### What`
-with `**Current.**` and `**Expected.**`; `### Why` with `**Impact.**` and
-`#### Evidence` containing `**Claim:**`, `**Observed:**`,
-`**Reproduction:** Smallest supported user`, and `**Source:**`; and `### How`
-with `#### Proposal`, `**Keep.**`, `#### Alternatives Considered`, and
-`#### Definition of Success` containing `**Validation:**`. Add
-`#### Situation Map`, `### Goals / Non-goals` (usually warranted for
-features), `### Open Questions`, and `### Decision` when the entry warrants
-them.
+Before interpreting, creating, or updating an entry, read
+`../feature-gaps-implement/ledger.yaml` and
+`../feature-gaps-implement/references/ledger-format.md`. `$feature-gaps-implement`
+owns the scoped path, required fields, optional sections, and lifecycle.
+Use that contract for every entry.
 
 ## References
 

@@ -1,4 +1,4 @@
 interface:
   display_name: "Code Review"
   short_description: "Review changes for risks and regressions"
-  default_prompt: "Use $code-review to review this diff, branch, or PR for evidence-backed bugs, regressions, compatibility risks, test or documentation gaps, and maintainability concerns."
+  default_prompt: "Use $code-review to review this diff, branch, PR, or pending change against the current request and accepted requirements, tracing material outcomes to implementation and validation evidence, then report evidence-backed bugs, regressions, compatibility risks, test or documentation gaps, and maintainability concerns."

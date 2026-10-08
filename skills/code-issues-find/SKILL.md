@@ -34,19 +34,11 @@ mismatches, follow the routing rule in
 
 ## Ledger Format
 
-Before recording a candidate, read `../code-issues-implement/ledger.yaml` and
-`../code-issues-implement/references/ledger-format.md` — `$code-issues-implement`
-owns the ledger contract and entry-format definition so there is one canonical
-copy; this skill only writes conforming entries into the path they resolve.
-Each entry is a self-contained mini-RFC using `What -> Why -> How`. The
-required core must keep `| Field | Value |`, `| Status |`, and
-`**Summary.**`; `### What` with `**Current.**` and `**Expected.**`; `### Why`
-with `**Impact.**` and `#### Evidence` containing `**Claim:**`,
-`**Observed:**`, `**Reproduction:** Smallest supported command`, and
-`**Source:**`; and `### How` with `#### Proposal`, `**Keep.**`,
-`#### Alternatives Considered`, and `#### Definition of Success` containing
-`**Validation:**`. Add `#### Situation Map`, `### Goals / Non-goals`,
-`### Open Questions`, and `### Decision` only when the entry warrants them.
+Before interpreting, creating, or updating an entry, read
+`../code-issues-implement/ledger.yaml` and
+`../code-issues-implement/references/ledger-format.md`. `$code-issues-implement`
+owns the scoped path, required fields, optional sections, and lifecycle.
+Use that contract for every entry.
 
 ## References
 
