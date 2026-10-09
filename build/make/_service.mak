@@ -28,12 +28,12 @@ tidy:
 vendor:
 	@go mod vendor
 
-# Check alignment with fieldalignment.
+# Check named struct alignment with betteralign, including test files; skip anonymous structs and generated files.
 # .gofa may list comma-separated packages, default ./...
 field-alignment:
 	@$(BIN_ROOT)/build/go/fa
 
-# Auto-fix alignment with betteralign to preserve comments.
+# Auto-fix named struct alignment with betteralign, including test files; preserve comments.
 # .gofa may list comma-separated packages, default ./...
 fix-field-alignment:
 	@$(BIN_ROOT)/build/go/fa -fix
@@ -46,7 +46,7 @@ golangci-lint:
 fix-golangci-lint:
 	@$(BIN_ROOT)/build/go/lint run --build-tags features --timeout 5m --fix
 
-# Run fieldalignment and golangci-lint (build-tags=features).
+# Run betteralign (including test files) and golangci-lint (build-tags=features).
 go-lint: field-alignment golangci-lint
 
 # Auto-fix betteralign and golangci-lint issues (best effort).

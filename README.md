@@ -45,6 +45,22 @@ include bin/build/make/help.mak
 include bin/build/make/go.mak
 ```
 
+Go alignment targets require `betteralign` in `PATH`, with support for
+`-test_files` and `-fix`. Both `make field-alignment` and
+`make fix-field-alignment` use `betteralign -test_files` to check or fix named
+structs in Go source and test files; fixes preserve comments. `lint` and
+`fix-lint` include these targets. The service fragments provide the same
+alignment coverage through `go-lint` and `go-fix-lint`.
+
+The optional `.gofa` file selects comma-separated package paths relative to the
+project root, for example `internal/foo,internal/bar`. Each becomes
+`./<path>/...`; a missing or empty file defaults to `./...`.
+
+Alignment checks and fixes skip generated files and anonymous structs, including
+nested anonymous struct fields and struct literals. Generated layouts remain
+under the generator's control. This intentionally narrows the previous
+`fieldalignment` check coverage; skipped layouts are neither reported nor fixed.
+
 Ruby projects typically include the Ruby fragment instead:
 
 ```make
