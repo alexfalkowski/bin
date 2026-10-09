@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# Check .gofa packages with fieldalignment and use betteralign for fix flags.
+# Check or fix named structs, including test files, in .gofa packages with betteralign.
 
 file = '.gofa'
 packages = if File.exist?(file)
@@ -11,10 +11,7 @@ packages = if File.exist?(file)
              ['./...']
            end
 
-fix = ARGV.any? { |arg| arg.match?(/\A--?(fix|apply)(?:=|\z)/) }
-tool = fix ? 'betteralign' : 'fieldalignment'
-
-system(tool, *ARGV, *packages)
+system('betteralign', '-test_files', *ARGV, *packages)
 status = Process.last_status
 exit(128 + status.termsig) if status&.signaled?
 
