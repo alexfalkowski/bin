@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+# Check .gofa packages with fieldalignment and use betteralign for fix flags.
+
 file = '.gofa'
 packages = if File.exist?(file)
              configured = File.read(file).strip.split(',').reject(&:empty?).map { |package| "./#{package}/..." }
@@ -9,5 +11,11 @@ packages = if File.exist?(file)
              ['./...']
            end
 
-system('betteralign', *ARGV, *packages)
-exit(Process.last_status&.exitstatus || 1)
+fix = ARGV.any? { |arg| arg.match?(/\A--?(fix|apply)(?:=|\z)/) }
+tool = fix ? 'betteralign' : 'fieldalignment'
+
+system(tool, *ARGV, *packages)
+status = Process.last_status
+exit(128 + status.termsig) if status&.signaled?
+
+exit(status&.exitstatus || 1)
