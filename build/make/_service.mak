@@ -28,11 +28,13 @@ tidy:
 vendor:
 	@go mod vendor
 
-# Run betteralign; .gofa may list comma-separated packages, default ./...
+# Check alignment with fieldalignment.
+# .gofa may list comma-separated packages, default ./...
 field-alignment:
 	@$(BIN_ROOT)/build/go/fa
 
-# Auto-fix betteralign; .gofa may list comma-separated packages, default ./...
+# Auto-fix alignment with betteralign to preserve comments.
+# .gofa may list comma-separated packages, default ./...
 fix-field-alignment:
 	@$(BIN_ROOT)/build/go/fa -fix
 
@@ -44,7 +46,7 @@ golangci-lint:
 fix-golangci-lint:
 	@$(BIN_ROOT)/build/go/lint run --build-tags features --timeout 5m --fix
 
-# Run betteralign and golangci-lint (build-tags=features).
+# Run fieldalignment and golangci-lint (build-tags=features).
 go-lint: field-alignment golangci-lint
 
 # Auto-fix betteralign and golangci-lint issues (best effort).
