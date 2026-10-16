@@ -99,46 +99,38 @@ These are mandatory gates, not guidance.
 
 1. Confirm the task involves adding tests, changing tests, reviewing test quality, planning coverage, or deciding where behavior should be exercised.
 2. Decide whether the change has repository-owned executable behavior. For docs, policy, configuration, metadata, formatting-only edits, generated artifacts, and simple shell/Make/Docker glue, default to validation unless an established harness owns the behavior.
-3. Inspect existing tests, fixtures, helpers, entrypoints, CI targets, and the language or harness used by most relevant tests before recommending, adding, or changing test structure.
-4. Do not infer the repository's test strategy or test language from implementation language or `*_test.go` files alone. Agents MUST follow the majority relevant test pattern, including cross-language harnesses such as `test/`, `features/`, and `spec/`; add language-native tests only when that layer owns the behavior, the surface is a language-level package/API contract, or the user asks for it.
-5. Detect the dominant local test style before choosing the test shape. When multiple layers exist, choose the narrowest established layer that protects the changed behavior.
-6. Check whether the change should preserve, restore, or improve coverage; do not let meaningful behavior lose coverage without calling out the gap.
-7. Before adding a new standalone test, check whether existing tests already cover the behavior or should be extended through a table, fixture, helper, or assertion block.
-8. Before choosing the test boundary, identify the front door that will call the
-   new or changed behavior. Use the narrowest established layer that still
-   exercises that caller-facing contract; do not start from an exported helper,
-   method, constructor, interface, or package merely because it is public.
-9. Before editing behavior-changing production code that adds or changes a
+3. Inspect existing tests, fixtures, helpers, entrypoints, CI targets, and the language or harness used by most relevant tests before recommending, adding, or changing test structure. Apply the Mandatory Stop Gates to choose the narrowest established layer that protects the real caller-facing behavior.
+4. Check whether the change should preserve, restore, or improve coverage; do not let meaningful behavior lose coverage without calling out the gap.
+5. Before adding a new standalone test, check whether existing tests already cover the behavior or should be extended through a table, fixture, helper, or assertion block.
+6. Before editing behavior-changing production code that adds or changes a
    public or documented API, sketch the intended caller or scenario so tests and
    implementation share a deliberate caller-facing contract.
-10. Before editing behavior-changing production code, identify the expected
-    observable behavior and the evidence that will validate it. Do not prescribe
-    whether tests or implementation must be written first.
-11. For behavior-changing code with an established runnable harness, complete
-    both the smallest clear implementation and the narrowest credible test or
-    scenario; either may be written first.
-    Run the focused selector after both are in place, and earlier whenever it
-    provides useful feedback. Inspect failures to distinguish missing behavior
-    from setup, harness, dependency, fixture, timeout, compilation, or unrelated
-    failures, use test feedback while iterating, and keep relevant tests passing.
-12. Choose the narrowest established test layer that credibly covers the changed behavior.
-13. While editing, get fast feedback from the narrowest supported selector in
-    that layer: package, file, scenario, example, focus tag, test name, command,
-    or documented entrypoint. Do not use speed as a reason to switch to a
-    different layer, skip required setup, or test private surfaces.
-14. Test through public or documented APIs, commands, tasks, or service entrypoints so coverage reflects real consumer behavior.
-15. Do not add tests against private functions, private methods, or internal-only seams unless the human explicitly asks for that approach. If private-surface testing seems necessary, first explain why a public or documented entrypoint cannot cover it, then ask before writing it.
-16. Preserve the repository's existing test framework, fixture layout, helper style, assertion idioms, and naming patterns unless the task explicitly changes testing infrastructure.
-17. Pair with the relevant language standard skill for language-specific idioms, and with `$change-validation` for commands.
-18. If another testing-focused skill applies, use this skill for cross-language policy and the other skill only for specialized language, framework, or library details.
-19. When tests use mocks, stubs, spies, fakes, or other test doubles, check whether each double protects a true boundary or only mirrors internal implementation.
-20. Before accepting or repeating a coverage claim, run the selected coverage command when practical and inspect every reported metric, not only line coverage.
-21. Before broad validation, perform an explicit Refactor assessment on changed production code and tests. Refactor is a mandatory assessment step, not an optional cleanup note. Use behavior-preserving, step-by-step changes only; propose behavior-changing cleanup separately.
-22. Run a two-pass refactor assessment: inspect local code smells and test smells, then boundary fit. Use a third pass when the change touches shared tooling, public or documented interfaces, compatibility-sensitive behavior, security-sensitive behavior, release or CI workflow, or when either earlier pass still leaves a credible smell. Use the Refactoring Guru catalog categories as checklist prompts, including composing methods, moving features, organizing data, simplifying conditionals, simplifying method calls, and generalization cleanup, only when they fit local patterns.
-23. If no cleanup is needed, record `Refactor: none (<reason>)` after stating which refactor passes were considered.
-24. Before finishing, do a readability pass after formatting and scan changed tests for low-information repeated boolean or numeric assertions; add named subtests or assertion messages where needed.
-25. When reviewing test quality, evaluate whether tests are understandable, maintainable, repeatable, atomic, necessary, granular, and fast enough for their layer. Use scores only when asked.
-26. For behavior-changing code with an established test harness, report the test strategy, style detected, coverage changes, focused validation, refactor assessment, mutation/coverage gaps, and broader validation. Never invent or reconstruct command output or claim a check ran when it did not. Use `Refactor: none (<reason>)` when no cleanup was needed.
+7. Before editing behavior-changing production code, identify the expected
+   observable behavior and the evidence that will validate it. Do not prescribe
+   whether tests or implementation must be written first.
+8. For behavior-changing code with an established runnable harness, complete
+   both the smallest clear implementation and the narrowest credible test or
+   scenario; either may be written first.
+   Run the focused selector after both are in place, and earlier whenever it
+   provides useful feedback. Inspect failures to distinguish missing behavior
+   from setup, harness, dependency, fixture, timeout, compilation, or unrelated
+   failures, use test feedback while iterating, and keep relevant tests passing.
+9. While editing, get fast feedback from the narrowest supported selector in
+   that layer: package, file, scenario, example, focus tag, test name, command,
+   or documented entrypoint. Do not use speed as a reason to switch to a
+   different layer, skip required setup, or test private surfaces.
+10. Do not add tests against private functions, private methods, or internal-only seams unless the human explicitly asks for that approach. If private-surface testing seems necessary, first explain why a public or documented entrypoint cannot cover it, then ask before writing it.
+11. Preserve the repository's existing test framework, fixture layout, helper style, assertion idioms, and naming patterns unless the task explicitly changes testing infrastructure.
+12. Pair with the relevant language standard skill for language-specific idioms, and with `$change-validation` for commands.
+13. If another testing-focused skill applies, use this skill for cross-language policy and the other skill only for specialized language, framework, or library details.
+14. When tests use mocks, stubs, spies, fakes, or other test doubles, check whether each double protects a true boundary or only mirrors internal implementation.
+15. Before accepting or repeating a coverage claim, run the selected coverage command when practical and inspect every reported metric, not only line coverage.
+16. Before broad validation, perform an explicit Refactor assessment on changed production code and tests. Refactor is a mandatory assessment step, not an optional cleanup note. Use behavior-preserving, step-by-step changes only; propose behavior-changing cleanup separately.
+17. Run a two-pass refactor assessment: inspect local code smells and test smells, then boundary fit. Use a third pass when the change touches shared tooling, public or documented interfaces, compatibility-sensitive behavior, security-sensitive behavior, release or CI workflow, or when either earlier pass still leaves a credible smell. Use the Refactoring Guru catalog categories as checklist prompts, including composing methods, moving features, organizing data, simplifying conditionals, simplifying method calls, and generalization cleanup, only when they fit local patterns.
+18. If no cleanup is needed, record `Refactor: none (<reason>)` after stating which refactor passes were considered.
+19. Before finishing, do a readability pass after formatting and scan changed tests for low-information repeated boolean or numeric assertions; add named subtests or assertion messages where needed.
+20. When reviewing test quality, evaluate whether tests are understandable, maintainable, repeatable, atomic, necessary, granular, and fast enough for their layer. Use scores only when asked.
+21. For behavior-changing code with an established test harness, report the test strategy, style detected, coverage changes, focused validation, refactor assessment, mutation/coverage gaps, and broader validation. Never invent or reconstruct command output or claim a check ran when it did not. Use `Refactor: none (<reason>)` when no cleanup was needed.
 
 ## References
 
