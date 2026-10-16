@@ -24,6 +24,68 @@ validate() {
   fi
 }
 
+# Match the shared HTTP client's three-attempt budget and transient status codes.
+# Permission failures take precedence even when a registry also reports a timeout.
+retry_registry() {
+  local attempt="$1"
+  local http_status='(status([[:space:]]code)?[^[:digit:]]*|HTTP(/[0-9.]+)?[[:space:]]+)'
+  local permission_errors='denied|unauthorized|forbidden|insufficient.scope|authentication required|immutable|conflict|already exists'
+  local transient_errors='too many requests|bad gateway|service unavailable|gateway timeout|i/o timeout|TLS handshake timeout|Client.Timeout|connection reset by peer|connection refused|unexpected EOF|context deadline exceeded'
+  if ((attempt >= 3)) ||
+    grep -Eiq "$permission_errors|$http_status(401|403)([^[:digit:]]|$)" <<< "$registry_output" ||
+    ! grep -Eiq "$transient_errors|$http_status(429|502|503|504)([^[:digit:]]|$)" <<< "$registry_output"; then
+    return 1
+  fi
+
+  printf '%s\nRetrying registry operation (%s/3)\n' "$registry_output" "$((attempt + 1))" >&2
+  sleep "$((2 ** (attempt - 1))).$((RANDOM % 1000))"
+}
+
+registry() {
+  local attempt=1
+  while ! registry_output="$("$@" 2>&1)"; do
+    retry_registry "$attempt" || return 1
+    ((attempt += 1))
+  done
+}
+
+architecture_manifest() {
+  local reference="$1"
+  local architecture="$2"
+  registry docker buildx imagetools inspect "$reference" --format '{"manifest":{{json .Manifest}},"image":{{json .Image}}}' ||
+    die "could not inspect $reference: $registry_output"
+
+  jq -ces --arg architecture "$architecture" '
+    if length == 1 and
+      (.[0].manifest.mediaType == "application/vnd.docker.distribution.manifest.v2+json" or
+       .[0].manifest.mediaType == "application/vnd.oci.image.manifest.v1+json") and
+      (.[0].manifest.digest | test("^sha256:[a-f0-9]{64}$")) and
+      .[0].image.os == "linux" and .[0].image.architecture == $architecture
+    then .[0] | {digest: .manifest.digest,
+      platform: (.image | {os, architecture, variant} | with_entries(select(.value != null)))}
+    else error("expected one linux/" + $architecture + " image manifest") end
+  ' <<< "$registry_output" || die "invalid architecture image: $reference"
+}
+
+# Buildx reads the registry directly, avoiding docker manifest's local list cache.
+# Only an exact missing-reference error permits publication of a new version.
+verify_version() {
+  if registry docker buildx imagetools inspect "$image" --raw; then
+    jq -es --argjson expected "$expected_manifests" '
+      length == 1 and .[0].schemaVersion == 2 and
+      (.[0].mediaType == "application/vnd.docker.distribution.manifest.list.v2+json" or
+       .[0].mediaType == "application/vnd.oci.image.index.v1+json") and
+      ((.[0].manifests | map({digest, platform}) | sort_by(.platform.architecture)) == $expected)
+    ' <<< "$registry_output" >/dev/null || die "conflicting or invalid existing manifest: $image"
+    return 0
+  fi
+
+  case "$registry_output" in
+    "ERROR: docker.io/$image: not found" | "ERROR: $image: not found") return 1 ;;
+    *) die "could not inspect $image: $registry_output" ;;
+  esac
+}
+
 if [[ -f "$version_file" ]]; then
   readonly name="$1"
   readonly latest_tag="$(cat "$version_file")"
@@ -33,9 +95,28 @@ if [[ -f "$version_file" ]]; then
   readonly latest_image="alexfalkowski/$name"
 
   validate
-  docker manifest create "$image" --amend "$amd64_image" --amend "$arm64_image"
-  docker manifest push "$image"
+  amd64_manifest="$(architecture_manifest "$amd64_image" amd64)"
+  arm64_manifest="$(architecture_manifest "$arm64_image" arm64)"
+  expected_manifests="$(jq -cn --argjson amd64 "$amd64_manifest" --argjson arm64 "$arm64_manifest" '[$amd64, $arm64] | sort_by(.platform.architecture)')"
+  amd64_reference="alexfalkowski/$name@$(jq -r '.digest' <<< "$amd64_manifest")"
+  arm64_reference="alexfalkowski/$name@$(jq -r '.digest' <<< "$arm64_manifest")"
+  readonly amd64_manifest arm64_manifest expected_manifests amd64_reference arm64_reference
 
-  docker manifest create "$latest_image" --amend "$amd64_image" --amend "$arm64_image"
-  docker manifest push "$latest_image"
+  for attempt in 1 2 3; do
+    if verify_version; then
+      printf 'Verified existing manifest %s; skipping version publication\n' "$image"
+      break
+    fi
+
+    if registry_output="$(docker buildx imagetools create --tag "$image" "$amd64_reference" "$arm64_reference" 2>&1)"; then
+      printf '%s\n' "$registry_output"
+      break
+    fi
+    # A failed push may have committed the immutable tag. Inspect before retrying.
+    retry_registry "$attempt" || die "could not publish $image: $registry_output"
+  done
+
+  registry docker buildx imagetools create --tag "$latest_image" "$amd64_reference" "$arm64_reference" ||
+    die "could not publish $latest_image: $registry_output"
+  printf '%s\n' "$registry_output"
 fi

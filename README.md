@@ -283,6 +283,16 @@ Dockerfile lint targets depend on `shellcheck` and `hadolint`;
 `../docker` checkout, or uses SSH to clone
 `git@github.com:alexfalkowski/docker.git` there when missing.
 
+`make manifest-docker` requires Docker Buildx and `jq`. It reads the release
+version from `APP_VERSION_FILE` (default `/tmp/workspace/release-version.txt`)
+and does nothing when that file is absent. An existing version must contain
+exactly the intended `linux/amd64` and `linux/arm64` child digests and platforms;
+matching versions are left in place and `latest` is still published. Conflicts
+and inspection failures stop publication. Recognized transient registry failures
+use at most three attempts with exponential backoff and jitter; permission and
+content errors are not retried. Both tags use the verified child digests, and a
+version push that fails transiently is inspected again before another push.
+
 ## 🔗 References
 
 - `make` or `make help`: current command catalog for this repository.
