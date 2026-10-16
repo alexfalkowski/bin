@@ -18,65 +18,24 @@ conflicting established README convention. Use one emoji per heading, keep the
 heading text clear without relying on the emoji for meaning, and preserve local
 heading names and order when they keep the README responsibilities easy to find.
 
-Use this default README shape only as a reference audit shape, not as a required
-template. It demonstrates common responsibilities and a discoverable order, but
-the project-type responsibility checklist below is the governing rule.
+Do not pass a README because it is large or locally consistent while an
+applicable responsibility is missing or hard to find. Do not rename or reorder
+headings only to match a template. Remove empty sections and omit irrelevant
+responsibilities.
 
-Do not dismiss README structure gaps merely because the current README is large,
-locally consistent, matches this example shape, or has an established heading
-style. Treat missing, hard-to-find, stale, or wrong-location coverage for
-applicable responsibilities as a documentation gap.
-
-Do not rename or reorder headings only for cosmetic template conformity when the
-equivalent responsibility is already clear. Remove empty template sections, and
-omit irrelevant sections rather than keeping placeholders to satisfy the
-example shape.
-
-```markdown
-# Project Name
-
-One or two sentences explaining what this project does and who should use it.
-
-## 🎯 Why This Exists
-
-The problem it solves, the boundary it owns, and the tradeoff or design choice
-that helps users decide whether it fits.
-
-## 🚀 Install Or Bootstrap
-
-Only the commands required before the first useful command can run, such as
-package installation, submodule initialization, dependency setup, or required
-runtime assets.
-
-## 💻 Usage
-
-<A minimal, copy-paste-ready example through the main public API, CLI, service
-endpoint, package import, or configuration path.>
-
-## 🔧 Configuration
-
-<Only the configuration users must understand to run or integrate the project.
-Link to schema, examples, generated docs, or sample config when exhaustive
-field documentation belongs there.>
-
-## 🛠️ Operations
-
-<Security, deployment, compatibility, data freshness, health, migration,
-shutdown, or observability notes that affect real use. Omit this section when
-the project has no operator-facing behavior.>
-
-## 🔗 References
-
-<Links to generated API docs, protobuf contracts, examples, changelog, package
-docs, or deeper design notes.>
-```
+Suggested section order: `🎯 Why This Exists`; `🚀 Install Or Bootstrap`;
+`💻 Usage`; `🔧 Configuration`; `🛠️ Operations`; `🔗 References`.
+Start with the project title and a short introduction. Treat this as an
+optional reference shape; omit inapplicable sections and preserve an
+established local shape when its responsibilities are clear.
 
 When reviewing a README, explicitly check whether it covers:
 
 - Identity: project name, module/package/service purpose, and intended
   audience.
 - Boundary: what the project owns, what it does not own, and when to use it.
-- Bootstrap: first commands or setup required before useful work.
+- Bootstrap: first commands or setup required before useful work, including
+  required tools, runtimes, dependencies, and assets.
 - Usage: minimal copy-paste-ready example through the main public surface.
 - Configuration: required config shape, examples, defaults, and links to
   schemas or authoritative config docs.
@@ -156,7 +115,7 @@ Do not pass documentation based on these anti-patterns:
 - Do not pass a README because it is long, has many headings, or follows an
   established local template while missing an applicable README responsibility.
 - Do not fail or rewrite a README solely because its headings, order, or grouping
-  differ from the reference audit shape while the applicable responsibilities
+  differ from the suggested section order while the applicable responsibilities
   are easy to find.
 - Do not pass public API documentation because every exported symbol has a
   comment; verify that the comments document the contract users cannot infer
