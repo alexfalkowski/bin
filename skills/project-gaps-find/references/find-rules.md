@@ -1,5 +1,40 @@
 # Project-Gap Find Rules
 
+## Workflow Discovery
+
+Before selecting candidates for detailed acceptance review:
+
+- Trace a supported in-scope workflow from its starting state to the named
+  audience's intended outcome, using docs, commands, CI paths, scripts, or
+  downstream usage. Include relevant setup, change, verification, release, or
+  recovery steps without expanding a folder-scoped request into a whole-repo
+  audit. Technical inventories help locate evidence for this trace.
+- Identify where the audience waits, repeats work, switches context, performs
+  manual handoffs, or cannot complete a step. Distinguish observed or documented
+  friction from assumptions; mark unmeasured frequency and time savings as
+  unknown instead of inventing usage figures.
+- Account for existing targets, configuration, shared tooling, CI behavior,
+  and documented procedures. Identify the friction that remains when these
+  are used correctly. A missing target or another repository's convention alone
+  does not establish a workflow gap.
+- Rank candidates against each other by concrete effort saved, mistakes
+  prevented, outcomes unlocked, recurrence evidence, importance to the primary
+  workflow, and ongoing maintenance or CI-runtime cost. Use qualitative
+  judgments where measurements are unavailable. Explain why the leading
+  opportunities outrank the strongest alternatives; implementation ease alone
+  does not establish workflow value. Do not fill a quota with weak candidates.
+- For the strongest leads, compare extending the existing workflow, adding the
+  smallest useful capability, and keeping the current procedure. Identify the
+  owning implementation home and why the improvement belongs there before
+  developing a detailed proposal. Retain the confirmation and routing rules
+  below; leads needing more evidence remain unconfirmed.
+
+Include the comparative ranking rationale in closeout alongside the shared
+summary and coverage requirements. Keep evidence gaps, optional follow-ups, and
+routed work separate from confirmed ledger entries.
+
+## Review And Recording
+
 These rules remain mandatory:
 
 - Read `../../project-gaps-implement/ledger.yaml` and use its resolved scoped path as the proposal ledger.

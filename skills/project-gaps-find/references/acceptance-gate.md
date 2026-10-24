@@ -1,5 +1,8 @@
 # Project-Gap Acceptance Gate
 
+Apply this gate after workflow discovery and comparative ranking in
+`find-rules.md#workflow-discovery`.
+
 Apply this gate before recording any candidate in the resolved scoped ledger. A project
 proposal must satisfy every item below at or above the active confidence
 threshold. The active threshold is the explicit confidence target in the
@@ -13,7 +16,12 @@ instead of recording it as low priority.
   package consumer who benefits from the project workflow improvement.
 - **Current limitation**: State the existing build, CI, release, setup,
   validation, command discovery, Makefile, script, reusable tooling, or
-  repository workflow friction.
+  repository workflow friction. Identify the current supported path and the
+  limitation remaining after existing tooling and procedures are accounted for.
+- **Workflow benefit**: Name the concrete step, effort, mistake, or blocked
+  outcome the change addresses and its importance to the audience's workflow.
+  Explain the supported-usage evidence for recurrence or primary-workflow
+  impact; distinguish observed benefits from estimates and unknowns.
 - **Project surface**: Identify the repository-owned project workflow surface:
   Make target or fragment, CI job, setup path, release/versioning flow,
   validation/preflight entrypoint, script, generated-artifact check, local

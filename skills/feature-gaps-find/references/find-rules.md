@@ -1,5 +1,45 @@
 # Feature-Gap Find Rules
 
+## Product Discovery
+
+Before selecting candidates for detailed acceptance review:
+
+- Build a short product brief from docs, examples, supported consumers, and
+  current behavior: the audience, the outcome they seek, their recurring steps,
+  and where they spend effort or cannot progress. Separate observed needs from
+  assumptions; mark unknown demand, frequency, and impact instead of inventing
+  users or usage figures.
+- Follow the audience's workflow through preparation, the core action, and its
+  aftermath. Look for manual interpretation, repeated decisions, handoffs, and
+  blocked outcomes. Consider both improvements to current capabilities and
+  adjacent capabilities serving the same audience and problem. Use technical
+  archetypes to locate evidence, rather than as the boundary of product ideas.
+- Where workflows involve interpreting text, diagnosing failures, prioritising
+  work, or generating changes, assess AI alongside deterministic automation and
+  existing integrations. Explain the useful output, required data and access,
+  and the added audience benefit. For a promising AI opportunity, identify how
+  to evaluate output quality, handle wrong answers, and assess latency, cost,
+  data handling, and support. An AI candidate is optional; novelty is not value.
+- Research native platform capabilities and relevant mature products when that
+  could change the shortlist. Compare building, integrating, and using an
+  existing tool; explain the residual need this repository should own. State
+  what research was used or why it was skipped or unavailable.
+- Rank candidates against each other before developing detailed proposals.
+  Compare recurrence, effort saved or outcomes unlocked, importance to the
+  primary workflow, strength of demand evidence, differentiation from available
+  substitutes, and ongoing cost. Use qualitative judgments when measurements
+  are unavailable. Explain why the leading opportunities outrank the strongest
+  alternatives; easy implementation and readily provable absence do not
+  establish high product value. Do not fill a quota with weak candidates.
+- For the strongest leads, define the smallest useful audience outcome and the
+  cheapest way to resolve the material unknown: a supported workflow trace,
+  user feedback, or a bounded experiment. Explore a new service, dependency
+  class, or product direction as a tradeoff or decision before applying the
+  confirmation rules below. Developing an experiment proposal does not
+  authorize executing it.
+
+## Review And Recording
+
 These rules remain mandatory:
 
 - Read `../../feature-gaps-implement/ledger.yaml` and use its resolved scoped path as the proposal ledger.
@@ -52,11 +92,26 @@ These rules remain mandatory:
 - Do not record feature proposals that require a new product direction,
   breaking public behavior, new external service, new dependency class, or
   significant maintenance commitment unless the current repository already
-  points to that direction and the proposal explains the compatibility and
-  maintenance tradeoff.
+  points to that direction or the human has explicitly approved it. The
+  proposal must explain the compatibility and maintenance tradeoff and satisfy
+  the acceptance gate. Keep promising proposals needing that decision in
+  opportunity closeout notes.
 - If a candidate would mostly require documentation, examples, tests, or
   reliability controls for existing behavior, route it to the matching gap
   workflow instead of recording it here.
 - If a candidate would mostly require CI, build, Makefile, release, validation
   preflight, command discovery, setup, or repository workflow changes, route it
   to `$project-gaps-find` instead of recording it here.
+
+## Opportunity Closeout
+
+Present the ranked shortlist with audience outcomes, evidence, comparative
+value and fit, and material unknowns. Identify confirmed gaps by their ledger
+IDs and keep them in the shared summary format. Present promising hypotheses
+separately as **Opportunities to investigate**, with the next evidence to gather,
+smallest useful experiment, or product decision needed. Do not give hypotheses
+ledger IDs, confirmed status, or implementation follow-ups, and do not create a
+ledger solely for them. Include no hypotheses when none have credible audience
+and repository grounding. A no-confirmed-gap outcome does not establish that the
+product has no further opportunities; retain the shared coverage and validation
+requirements for that outcome.

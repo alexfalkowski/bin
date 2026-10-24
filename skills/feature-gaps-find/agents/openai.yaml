@@ -1,4 +1,4 @@
 interface:
   display_name: "Feature Gaps Find"
-  short_description: "Find product feature opportunities"
-  default_prompt: "Use $feature-gaps-find to find scoped product capability gaps without editing. After scoping, use repo archetype lead generation, collect exact-revision CircleCI evidence with the shared gap-workflow collector when configured, otherwise use the repository-owned evidence path, reuse exact-state green CI evidence, apply the shared delegation gate and sizing, route test and workflow gaps elsewhere, and hand confirmed entries to $feature-gaps-implement."
+  short_description: "Discover and rank product opportunities"
+  default_prompt: "Use $feature-gaps-find to discover and rank scoped product opportunities from audience outcomes, assess AI where useful, and keep hypotheses separate from confirmed gaps without editing code. Use repo archetype lead generation, collect exact-revision CircleCI evidence with the shared gap-workflow collector when configured, otherwise use the repository-owned evidence path, reuse exact-state green CI evidence, apply the shared delegation gate and sizing, route test and workflow gaps elsewhere, and hand confirmed entries to $feature-gaps-implement."
