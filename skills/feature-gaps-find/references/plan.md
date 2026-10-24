@@ -5,8 +5,9 @@ Use this reference to instantiate the feature-gap-specific active plan for
 `SKILL.md`; that shared gap workflow owns common plan state, optional goal
 state, scoped-ledger, delegation, and coverage gates.
 
-Track feature-gap-specific state for scope, audience, product surface,
-delegation, external research, ledger state, and workflow routing.
+Track feature-gap-specific state for scope, audience outcomes, product surface,
+ranked opportunities, material unknowns, delegation, external research, ledger
+state, and workflow routing.
 
 1. Follow `../../references/gap-workflow.md#common-plan-mechanics` for shared
    find-mode sequencing. Apply the shared gap-workflow delegation gate before review work.
@@ -18,11 +19,14 @@ delegation, external research, ledger state, and workflow routing.
    inventory for product-facing capabilities,
    package-consumer workflows, service-author workflows, operator surfaces, and
    shared-tooling capability when applicable.
-4. Inventory product-owned CLIs, APIs, libraries, service/operator behavior,
+4. Follow `find-rules.md#product-discovery` to build the audience workflow and
+   opportunity shortlist, using the technical inventory as evidence. Inventory
+   product-owned CLIs, APIs, libraries, service/operator behavior,
    package-consumer or service-author workflows, shipped templates, examples,
    docs, integrations, setup/onboarding flows, extension points, and comparable
    product, library, CLI, or system research when it materially improves
-   proposal quality.
+   proposal quality. Compare audience value, repository fit, substitutes, and
+   ongoing cost before developing detailed proposals.
 5. Route standalone test-harness, CI, build, Makefile, release, validation,
    command discovery, setup, and repository workflow concerns to
    `$test-gaps-find` or `$project-gaps-find`.
@@ -30,22 +34,26 @@ delegation, external research, ledger state, and workflow routing.
    it: APIs, commands, endpoints, generated contracts, runtime health/metrics,
    docs, examples, configuration, supported workflows, framework behavior, and
    shared helpers. Keep only candidates with a concrete residual gap after that
-   coverage is accounted for.
-7. Apply `SKILL.md#acceptance-gate` to each candidate and confirm audience,
-   current product limitation, existing coverage, residual gap, practical
-   audience benefit, common-operation evidence, repository-owned surface, value
-   evidence, repository fit, smallest plausible implementation path,
+   coverage is accounted for, and challenge the ranking against the strongest
+   alternative and the current workflow.
+7. Before confirming a ledger candidate, apply `SKILL.md#acceptance-gate` and
+   confirm audience, current product limitation, existing coverage, residual
+   gap, practical audience benefit, common-operation evidence, repository-owned
+   surface, value evidence, repository fit, smallest plausible implementation path,
    compatibility and maintenance tradeoffs, validation path, and correct
    workflow routing.
 8. Reject novelty, competitor checklists, trend-following, broad rewrites,
    new-framework preferences, future-roadmap assumptions, optional polish, vague
    benefits without concrete audience outcome, uncommon operations without
    evidence that the named audience needs them, and findings belonging to other
-   workflows.
+   workflows. Keep grounded opportunities needing evidence or an explicit
+   product decision in closeout notes, separate from confirmed gaps.
 9. Before a no-gap closeout, name audiences, product surfaces, documented
    workflows, public commands/APIs or package-consumer paths, comparable-tool
    research decisions, rejected and routed leads, validation evidence, and
-   policy exclusions checked.
+   policy exclusions checked. Use `find-rules.md#opportunity-closeout` to
+   present the ranked shortlist and any opportunities to investigate, whether
+   or not confirmed gaps remain.
 10. If confirmed gaps remain, write the resolved scoped ledger, present it,
    coverage state, proposed implementation plan, and runnable follow-up scopes,
    then stop before implementing features. Implementing happens only in

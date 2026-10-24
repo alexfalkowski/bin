@@ -1,14 +1,15 @@
 ---
 name: feature-gaps-find
-description: Find repository-fit product capability gaps without editing; use $feature-gaps-implement for confirmed entries, not test or project-workflow gaps.
+description: Discover and rank product opportunities without editing code; record confirmed repository-fit gaps for $feature-gaps-implement, not test or project-workflow gaps.
 ---
 
 # Feature Gaps Find
 
 Trigger phrases: `Find $feature-gaps-find in PACKAGE_OR_FOLDER` or
-`Find feature gaps in PACKAGE_OR_FOLDER`. This skill only discovers and
-records candidates; it never edits code. Use `$feature-gaps-implement` to
-re-check and implement a specific ledger entry, using the contract in
+`Find feature gaps in PACKAGE_OR_FOLDER`. This skill discovers product
+opportunities and records confirmed gaps; it never edits code. Use
+`$feature-gaps-implement` to re-check and implement a specific ledger entry,
+using the contract in
 `../feature-gaps-implement/ledger.yaml`.
 
 Before starting, read `../references/gap-workflow.md` completely, then
@@ -22,13 +23,19 @@ creating, or updating an entry.
 
 ## Operating Stance
 
-Operate as a scoped product triager: propose only main product capabilities
-that fit the repository's purpose, current architecture, documented workflows,
-and likely user, operator, service-author, package-consumer, CLI, API, or
-library needs. A feature gap is not a bug, test gap, doc gap, reliability gap,
-project workflow gap, or style preference. It is an actionable improvement that
-the repository does not currently provide and that would make an existing
-product-facing workflow meaningfully better.
+Operate as a scoped product discoverer and triager: start from audience
+outcomes, recurring problems, and the repository's purpose. Explore capabilities
+that improve or unlock those outcomes, then assess repository fit and
+feasibility. Current architecture informs that assessment without setting the
+ceiling for discovery. A confirmed feature gap is an actionable product
+improvement, distinct from a bug, test gap, doc gap, reliability gap, project
+workflow gap, or style preference.
+
+Use `references/find-rules.md#product-discovery` before selecting candidates
+for detailed acceptance review. Keep promising opportunities that need demand
+evidence or a product-direction decision separate from confirmed ledger entries,
+using that reference's closeout guidance. Discovery does not authorize a new
+product direction, dependency, external action, or implementation.
 
 Do not record standalone improvements to tests, test harnesses, CI, build
 systems, Make targets, release automation, validation preflight, command
@@ -43,9 +50,9 @@ whose value is local build/test/CI/release workflow hygiene still belong to
 
 Treat local repository evidence as the primary source of fit. Comparable
 products, libraries, CLIs, frameworks, and systems can reveal useful patterns,
-but do not record a feature merely because another tool has it. First prove the
-opportunity maps to this repository's scope, audience, and implementation
-surface.
+but do not record a feature merely because another tool has it. Before
+confirming a gap, prove the opportunity maps to this repository's scope,
+audience, and implementation surface.
 
 Use external product or library research when it would materially improve the
 proposal and the runtime provides an allowed research tool. Prefer official
@@ -81,7 +88,9 @@ Use that contract for every entry.
 ## References
 
 - Read `references/plan.md` before starting.
-- Read `references/find-rules.md` before reviewing or recording candidates.
+- Read `references/find-rules.md` for product discovery, comparative ranking,
+  review rules, and opportunity closeout before reviewing or recording
+  candidates.
 - Read `references/acceptance-gate.md` before recording any scoped-ledger
   candidate.
 - Read `../feature-gaps-implement/ledger.yaml` and

@@ -1,5 +1,10 @@
 # Feature-Gap Acceptance Gate
 
+Use this gate after product discovery and comparative ranking in
+`find-rules.md#product-discovery`. It governs confirmed ledger entries;
+opportunities needing more evidence or a product decision follow
+`find-rules.md#opportunity-closeout` instead.
+
 Apply this gate before recording any candidate in the resolved scoped ledger. A feature
 proposal must satisfy every item below at or above the active confidence
 threshold. The active threshold is the explicit confidence target in the

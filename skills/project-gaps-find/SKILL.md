@@ -1,6 +1,6 @@
 ---
 name: project-gaps-find
-description: Find scoped build, CI, Makefile, release, setup, validation, command-discovery, and workflow gaps without edits; use $project-gaps-implement for confirmed entries.
+description: Find and rank scoped build, CI, Makefile, release, setup, validation, command-discovery, and workflow gaps without edits; use $project-gaps-implement for confirmed entries.
 ---
 
 # Project Gaps Find
@@ -27,6 +27,11 @@ project's build, CI, release, setup, validation, command discovery, Makefile,
 script, reusable tooling, or local developer workflow surfaces. A project gap
 is not a product feature, code bug, security issue, reliability gap, test gap,
 doc gap, naming issue, or style preference.
+
+Use `references/find-rules.md#workflow-discovery` to trace supported audience
+workflows and compare the value of candidates before developing detailed
+proposals. Use the tooling inventory as evidence for workflow friction and
+benefit. Keep discovery within the requested scope.
 
 Use `$feature-gaps-find` for main product behavior and first-class user or
 consumer capabilities. Use `$test-gaps-find` when the concern is test
@@ -70,7 +75,8 @@ Use that contract for every entry.
 ## References
 
 - Read `references/plan.md` before starting.
-- Read `references/find-rules.md` before reviewing or recording candidates.
+- Read `references/find-rules.md` for workflow discovery, comparative ranking,
+  and review rules before reviewing or recording candidates.
 - Read `references/acceptance-gate.md` before recording any scoped-ledger
   candidate.
 - Read `../project-gaps-implement/ledger.yaml` and
