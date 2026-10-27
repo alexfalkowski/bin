@@ -45,6 +45,10 @@ These are mandatory gates, not guidance.
 - Personal clarity, convenience, faster local execution, implementation
   language, or direct access to private functions are not valid reasons to
   bypass the dominant harness.
+- Cucumber/Gherkin data and `Examples` tables MUST align their `|` separators
+  by padding each column to its widest cell (including headers), without
+  changing cell values. Recheck alignment after feature edits and before
+  committing.
 - Tests MUST use the existing harness lifecycle and configuration shape unless
   the changed behavior cannot be exercised through it. Before adding a second
   process, port, config file, startup mode, lifecycle hook, env/config
