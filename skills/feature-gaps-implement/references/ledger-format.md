@@ -11,6 +11,11 @@ Write short, direct sentences. Use the table for classification, the summary
 for the main point, and the body for supporting detail. Do not repeat the
 same prose across those layers.
 
+For proposed Go packages, follow the
+[Go naming conventions](../../go-standards/references/conventions.md#imports-and-naming)
+consistently across paths, code sketches, and validation commands. Continue
+resolving ledger filenames from `ledger.yaml`.
+
 Source locations support verification; they do not carry the explanation.
 Prefer a stable command, API, workflow, example, public symbol, or documented
 surface over a bare line number. Add a line number only when it makes the source

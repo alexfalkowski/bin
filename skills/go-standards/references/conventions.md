@@ -130,6 +130,10 @@ Use this reference when working in Go repositories.
 ## Imports And Naming
 
 - Use `$naming-standards` for concept clarity, vocabulary consistency, abstraction level, public terminology, and rename safety. Use this section for Go-specific package, import, alias, wrapper, and identifier idioms.
+- Use lowercase production package names without underscores or other separators:
+  `codereview`, never `code_review`. Keep package directory and import paths,
+  declarations, code sketches, and validation commands consistent. External test
+  packages retain the `<package>_test` suffix.
 - Apply these import rules while writing or reviewing code, before adding, approving, or keeping a direct import or alias.
 - Before writing code that adds or changes imports, inspect nearby files in the same package and adjacent packages for existing import names and package patterns. Match the existing unaliased package name unless a real collision requires otherwise.
 - Resolve wrapper ownership before deciding import aliases: first decide whether code should use or expand a project wrapper, then decide whether any remaining import needs an alias. Do this before accepting aliases such as `stdtime`, `upstreamjwt`, or `externalbcrypt`.
