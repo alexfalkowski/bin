@@ -1,4 +1,4 @@
 interface:
   display_name: "Go Standards"
   short_description: "Apply Go code, docs, and test conventions"
-  default_prompt: "Use $go-standards for Go code, APIs, docs, imports, tests, benchmarks, and fuzzing. Pair with $naming-standards and $doc-standards as needed; keep contracts simple, follow dominant harnesses before adding *_test.go files, require concrete benchmark/fuzz rationale, avoid thin-wrapper coverage, sketch exported callers, and MUST NOT invent import aliases for readability, caution, brevity, or personal clarity."
+  default_prompt: "Use $go-standards for Go code, APIs, docs, imports, tests, benchmarks, and fuzzing. Pair with $naming-standards and $doc-standards as needed; keep production package names lowercase without separators, preserve external test package suffixes, keep contracts simple, follow dominant harnesses before adding *_test.go files, require concrete benchmark/fuzz rationale, avoid thin-wrapper coverage, sketch exported callers, and MUST NOT invent import aliases for readability, caution, brevity, or personal clarity."
