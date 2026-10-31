@@ -1,4 +1,4 @@
 interface:
   display_name: "Ruby Standards"
   short_description: "Apply Ruby code, docs, and test conventions"
-  default_prompt: "Use $ruby-standards for Ruby code, APIs, docs, task interfaces, and tests. Pair with $naming-standards and $doc-standards as needed; keep contracts simple, avoid imagined-misuse guards, do not extract one-line helpers without real value, sketch documented API call sites first, and follow $testing-standards plus the dominant harness before adding Ruby tests."
+  default_prompt: "Use $ruby-standards for Ruby code, APIs, docs, task interfaces, and tests. Pair with $naming-standards and $doc-standards as needed; keep contracts simple, avoid imagined-misuse guards, do not extract one-line helpers without real value, sketch documented API call sites first, and follow $testing-standards plus the dominant harness before adding Ruby tests. Apply Ruby/Cucumber conventions from references/conventions.md."
