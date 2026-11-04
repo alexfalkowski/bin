@@ -283,6 +283,23 @@ Dockerfile lint targets depend on `shellcheck` and `hadolint`;
 `../docker` checkout, or uses SSH to clone
 `git@github.com:alexfalkowski/docker.git` there when missing.
 
+The service fragments build fully static Docker images by default (`static=1`).
+Set `static=0` to allow native shared-library dependencies, such as those used
+by DuckDB:
+
+```bash
+make build-docker platform=arm64
+make build-docker platform=arm64 static=0
+```
+
+The option accepts only `0` or `1` and also applies to `test-docker` and
+`release-docker`. For Go services, `static=0` enables CGO, removes forced static
+linking, and uses `gcr.io/distroless/cc-debian13` to match the Debian Trixie
+builder. The builder already includes the C/C++ toolchain; libraries beyond
+the supplied C/C++ runtime may require additional development packages and
+runtime libraries. The build wrapper supplies the CGO setting, linker flags,
+and runtime image together; direct Docker builds use static defaults.
+
 `make manifest-docker` requires Docker Buildx and `jq`. It reads the release
 version from `APP_VERSION_FILE` (default `/tmp/workspace/release-version.txt`)
 and does nothing when that file is absent. An existing version must contain

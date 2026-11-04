@@ -1,9 +1,11 @@
+ARG runtime_image=gcr.io/distroless/static
+
 FROM golang:1.27.3-trixie AS build
 
 ARG name=service
 ARG version=latest
-
-ENV CGO_ENABLED=0
+ARG cgo_enabled=0
+ARG ldflags="-s -w -extldflags=-static"
 
 WORKDIR /app
 
@@ -11,9 +13,9 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . ./
-RUN go build -ldflags="-s -w -extldflags '-static'" -buildvcs=false -tags netgo -a -o service .
+RUN CGO_ENABLED="$cgo_enabled" go build -ldflags="$ldflags" -buildvcs=false -tags netgo -a -o service .
 
-FROM gcr.io/distroless/static
+FROM ${runtime_image}
 
 ARG name
 ARG version
