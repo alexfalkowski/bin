@@ -140,5 +140,6 @@ These are mandatory gates, not guidance.
 
 - Read `references/principles.md` when designing, adding, reviewing, or
   refactoring non-trivial tests; when choosing between public boundaries,
-  fixtures, doubles, coverage, determinism, or validation breadth; or when a
-  test candidate risks encoding implementation detail instead of behavior.
+  fixtures, doubles, coverage, determinism, or validation breadth; when writing
+  Cucumber/Gherkin scenarios; when evaluating AI output quality; or when a test
+  candidate risks encoding implementation detail instead of behavior.
