@@ -13,6 +13,7 @@ override export gem := $(value gem)
 override export package := $(value package)
 override export platform := $(value platform)
 override export image_type := $(value image_type)
+override export static := $(value static)
 override export module := $(value module)
 override export id := $(value id)
 override export kind := $(value kind)
@@ -198,9 +199,9 @@ build:
 build-test:
 	@go test -vet=off -race -mod vendor -c -tags features -covermode=atomic -coverpkg=$(COVER_PACKAGES) -o "$${NAME}" "$${MODULE}"
 
-# Build Docker image for platform=amd64|arm64; production no-ops without a release version file.
+# Build Docker image for platform=amd64|arm64; static=0 allows native dependencies (default 1); production no-ops without a release version file.
 build-docker:
-	@$(BIN_ROOT)/build/docker/build "$${NAME}" "$${platform}" "$(or $(image_type),test)"
+	@$(BIN_ROOT)/build/docker/build "$${NAME}" "$${platform}" "$(or $(image_type),test)" "$${static:-1}"
 
 # Build and scan the test docker image.
 test-docker: build-docker trivy-image

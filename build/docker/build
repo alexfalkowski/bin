@@ -7,6 +7,7 @@ set -eo pipefail
 readonly name="$1"
 readonly platform="$2"
 readonly image_type="${3:-test}"
+readonly static="${4:-1}"
 readonly dir="$(dirname "$(readlink -f "$0")")"
 readonly dockerfile="$dir/go/Dockerfile"
 readonly version_file="${APP_VERSION_FILE:-/tmp/workspace/release-version.txt}"
@@ -17,7 +18,7 @@ die() {
   exit 1
 }
 
-# Validate Docker image reference components before invoking Docker.
+# Validate image components and build mode before invoking Docker.
 validate() {
   [[ "$name" =~ ^[a-z0-9]+([._-][a-z0-9]+)*$ ]] || die "invalid image name: $name"
   if [[ "$name" =~ ^(test|latest)$ ]]; then
@@ -25,6 +26,7 @@ validate() {
   fi
   [[ "$platform" =~ ^(amd64|arm64)$ ]] || die "invalid platform: $platform"
   [[ "$image_type" =~ ^(test|production)$ ]] || die "invalid image type: $image_type"
+  [[ "$static" =~ ^[01]$ ]] || die "invalid static mode: $static (expected 0 or 1)"
 }
 
 # Validate Docker image tag components before invoking Docker.
@@ -37,6 +39,19 @@ validate_tag() {
 
 # Build docker.
 validate
+case "$static" in
+  1)
+    readonly cgo_enabled=0
+    readonly ldflags="-s -w -extldflags=-static"
+    readonly runtime_image="gcr.io/distroless/static"
+    ;;
+  0)
+    readonly cgo_enabled=1
+    readonly ldflags="-s -w"
+    readonly runtime_image="gcr.io/distroless/cc-debian13"
+    ;;
+esac
+
 case "$image_type" in
   test)
     readonly image_tag="test.$platform"
@@ -52,4 +67,9 @@ case "$image_type" in
 esac
 
 readonly image="alexfalkowski/$name:$image_tag"
-docker build --platform "linux/$platform" --build-arg "name=$name" --build-arg "version=$version" -t "$image" -f "$dockerfile" .
+docker build --platform "linux/$platform" \
+  --build-arg "cgo_enabled=$cgo_enabled" \
+  --build-arg "ldflags=$ldflags" \
+  --build-arg "runtime_image=$runtime_image" \
+  --build-arg "name=$name" --build-arg "version=$version" \
+  -t "$image" -f "$dockerfile" .
