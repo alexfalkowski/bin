@@ -85,10 +85,19 @@ classification, rate limiting, and health checks.
 
 When implementing a cross-cutting reliability control:
 
-- Prefer established local mechanisms before adding a new abstraction.
+- Prefer established local middleware, wrappers, decorators, and lifecycle
+  hooks before adding an abstraction. Preserve those boundaries when extending
+  a feature; where logging already wraps an operation, extend that boundary
+  instead of moving logs into domain decisions. Preserve the meaning of
+  acceptance versus completion, log fields and levels, and timeout and error
+  reporting.
 - Centralize policy where consistency matters and the repository has a natural
   integration point, such as middleware, client wrappers, shared command helpers,
   framework hooks, libraries, or Make/script helpers.
+- Deduplicate policy definitions without deleting required evaluations against
+  fresh state. Separate shared validity from action-specific eligibility;
+  preserve refresh, identity, and eligibility checks at mutation boundaries.
+  An initial discovery filter does not replace a required final recheck.
 - Keep the mechanism understandable during debugging and incidents. Avoid hidden
   behavior that operators and maintainers cannot trace.
 - Allow explicit exceptions near the policy so reviewers can see why a path is

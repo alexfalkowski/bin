@@ -57,10 +57,11 @@ documented promise, code path, or operational risk.
    high-confidence reliability concerns unless a supported consumer, executable
    example, integration test, module wiring path, documented contract, CI
    workflow, or comparable real usage path can trigger the failure mode.
-10. Prefer small, locally consistent fixes: bounded retries before new
-   infrastructure, useful logs before broad telemetry redesigns, rollback-safe
-   migrations before process-only mitigations, and documented runbook steps
-   before vague operational advice.
+10. Prefer small, locally consistent fixes. Justify added controls with workload
+    and failure-mode evidence, and preserve established integration boundaries.
+    Prefer bounded retries before new infrastructure, useful logs before broad
+    telemetry redesigns, rollback-safe migrations before process-only
+    mitigations, and documented runbook steps before vague operational advice.
 11. Report uncertainty explicitly. When scale, SLO, traffic, durability, or
    recovery targets are unknown, ask for the missing assumption or record the
    need for a concrete assumption only when the code or docs already imply one.

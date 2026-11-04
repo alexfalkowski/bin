@@ -29,6 +29,13 @@ durability, or cost assumptions matter.
 7. Iterate until the design is concrete enough to evaluate or the missing
    assumptions are explicit.
 
+Use observed workload, shared budgets, bursts, retries, and deadlines to justify
+proposed controls. When that evidence supports a simpler design, remove
+unnecessary configuration, coordination, and progress state from the plan.
+Omitting a dependency is not simplification if custom code recreates the same
+unneeded control. Preserve required provider constraints and failure handling;
+low average traffic alone does not rule out throttling or starvation.
+
 ## Evidence To Look For
 
 - Workload assumptions: QPS, events/sec, data size, payload size, cardinality,

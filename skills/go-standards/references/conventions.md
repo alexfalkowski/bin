@@ -4,12 +4,13 @@ Use this reference when working in Go repositories.
 
 ## User-Facing APIs
 
-- Before adding or changing exported Go packages, types, interfaces,
-  constructors, functions, methods, or documented examples, sketch the intended
-  Go caller first. Use that call site to decide package home, public noun,
-  ownership, lifecycle symmetry, and whether callers should construct the value
-  or receive it from an owner.
 - Keep user-facing or documented Go packages, types, functions, and methods consistent with the repository's existing Go style and API shape.
+- Assess visibility through the full caller-facing surface, including types
+  reached through exported fields, parameters, results, and methods. An
+  unexported type can already be exposed as a value; check whether supported
+  callers need to name, construct, or use its methods before retaining or
+  changing visibility. Do not automatically export every reachable
+  implementation type.
 - Prefer straightforward package and type names over clever aliases or indirection.
 - Keep implementation contracts as simple as the supported path allows. Do not
   add defensive state, nil guards, idempotency guards, synchronization, recovery
@@ -29,6 +30,11 @@ Use this reference when working in Go repositories.
   owned config or helpers.
 - Prefer native domain types over wrapper types unless the wrapper adds
   validation, behavior, compatibility, or a repository-owned abstraction.
+- Where the local design separates adapters from domain operations, keep JSON
+  argument decoding and domain-to-HTTP error conversion at the transport or
+  tool boundary. Pass typed arguments to internal operations instead of routing
+  ordinary internal calls through serialized tool inputs. Preserve protocol
+  handling when it is itself the operation's supported contract.
 
 ## Abstractions And Helpers
 

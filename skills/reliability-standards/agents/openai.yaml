@@ -1,4 +1,4 @@
 interface:
   display_name: "Reliability Standards"
   short_description: "Assess production reliability and readiness"
-  default_prompt: "Use $reliability-standards to assess this change's production reliability, failure recovery, operational readiness, and SLO impact."
+  default_prompt: "Use $reliability-standards to assess this change's production reliability, failure recovery, operational readiness, and SLO impact; size controls from workload evidence and preserve established integration boundaries, logging contracts, and required fresh-state checks."

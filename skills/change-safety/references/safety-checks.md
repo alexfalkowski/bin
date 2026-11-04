@@ -58,6 +58,14 @@ When safety notes are the final response, use exactly this Markdown structure an
 
 ## Tool And Dependency Choices
 
+- Before adding infrastructure, subprocesses, custom adapters, or packaging
+  changes to work around an apparent service or SDK limitation, verify the
+  capability in official service API and SDK documentation. Check relevant API
+  surfaces even when the SDK does not expose them; identify unresolved gaps
+  instead of treating an absent SDK method as proof the service cannot do it.
+- Separate confidence in that capability assessment from confidence in the
+  implementation's tested behavior. Passing tests for a chosen workaround do
+  not establish that the workaround is necessary.
 - For a new tool or dependency class, compare its benefits over the established option with the costs of adoption and ongoing support.
 - Account for relevant integration, migration, maintenance, operational support, team familiarity, and knowledge transfer. Base team capabilities and support ownership on available evidence; identify unknowns rather than inventing them.
 - Keep the assessment proportional to the change. Routine updates within the established stack need no separate technology-choice assessment unless they materially change support or operating requirements.

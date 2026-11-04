@@ -8,11 +8,15 @@ description: Use when writing, reviewing, refactoring, or documenting Go package
 ## Steps
 
 1. Confirm the task is in a Go repository or touches Go code, Go tests, Go documentation, or Go package APIs.
-2. Read `references/conventions.md` before editing exported APIs, documentation, imports, naming, method layout, or tests.
+2. Read `references/conventions.md` before editing exported APIs, documentation, imports, naming, method layout, transport/tool adapters, or tests.
 3. Before adding or changing exported Go packages, types, interfaces,
    constructors, functions, methods, or documented examples, sketch the intended
-   Go caller first. Use that call site to decide package home, public noun,
-   ownership, and lifecycle symmetry before writing tests or implementation.
+   Go caller and package dependency direction. Use the sketch to decide package
+   home, public noun, lifecycle symmetry, and whether callers construct values
+   or receive them from an owner. Check ownership of domain policy, remote
+   access, scheduling, configuration defaults, and construction against the
+   closest supported local or sibling implementation when those roles apply.
+   Resolve these boundaries before writing tests or implementation.
 4. Before writing Go code that adds or changes imports, inspect nearby files in the same package and adjacent packages for existing import names, package ownership, wrappers, and dependency direction.
 5. Before adding an alias for a project package and the package it wraps, decide whether the code should use or extend the project wrapper instead. A wrapper-package collision is not enough reason to import the wrapped package with aliases such as `stdtime`.
 6. Do not invent Go import aliases while writing code. Agents MUST NOT add an import alias unless the file would not compile without it or a confirmed repository pattern requires it. Readability, caution, brevity, personal clarity, or avoiding visual ambiguity are not valid reasons. Document every new alias choice in your reasoning, including why an existing wrapper package could not own the needed surface. When reviewing or cleaning existing code, do not remove or rename an existing alias solely because the collision is not obvious or the alias reads awkwardly; flag it for human review instead.

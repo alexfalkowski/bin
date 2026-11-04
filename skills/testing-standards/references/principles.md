@@ -36,6 +36,15 @@
 - Do not test that an underlying library or framework works. Test
   repository-owned validation, mapping, error handling, lifecycle,
   compatibility promises, or consumer-visible composition.
+- For AI features, separate integration correctness from model usefulness.
+  Fake providers verify protocol, authorization, lifecycle, and rendering, not
+  finding quality. When live evaluation is explicitly authorized, use realistic
+  known regressions and clean controls, record expectations before calls, and
+  keep grading notes out of model inputs. Report misses, false positives, model,
+  and supplied context separately from integration results. A few passing cases
+  or manually selected context for known bugs do not establish broad accuracy
+  or automated retrieval quality. When requested quality criteria remain unmet,
+  report a completion gap even if integration checks pass.
 - Prefer extending the local test shape over inventing parallel structure.
 - For DI, configuration, module, or wiring code, avoid exhaustive registration,
   pointer-projection, or container-resolution tests unless they protect a
@@ -56,6 +65,11 @@
   data, ordering assumptions, real home directories, and shared mutable state.
 - Build data with complete valid defaults and local overrides. Prefer existing
   production constructors, parsers, schemas, or validation helpers.
+- When a suite uses or requests checked-in configuration profiles, select the
+  needed file through the existing launcher and keep those fixtures immutable
+  during scenarios. Add a named profile only for a distinct scenario requirement;
+  do not substitute baseline rewrites, runtime YAML merging, or temporary copies
+  for profile selection.
 - Prefer fresh test data per test over shared mutable setup.
 - Watch for coverage theater: tests that mock the code under test, assert only
   internal calls, exercise trivial accessors, or hit lines without branches,
@@ -65,6 +79,14 @@
   CI runs that mode, or the change adds that mode.
 - Structure tests so setup, action, and assertion are easy to follow; use
   Arrange-Act-Assert or Given-When-Then when local style has no clearer pattern.
+- In Cucumber/Gherkin, write from the user's or operator's perspective: one
+  domain situation, event, and outcome using the local Given/When/Then
+  convention. Avoid interleaving setup, actions, and assertions as a procedural
+  script. A Given may establish and verify relevant prior history, such as
+  repeated failures before recovery. Keep process startup, log inspection, and
+  fixture mechanics in established steps and harness lifecycle helpers.
+  Preserve failure, recovery, and safety assertions when simplifying the
+  story, and use tables for repeated domain examples when they improve clarity.
 - Make failures descriptive. For repeated low-information boolean or numeric
   assertions, add named subtests or assertion messages.
 - Keep tests readable. Use helpers, fixtures, builders, or assertions only when
