@@ -126,6 +126,13 @@ Use this reference when working in Go repositories.
 
 ## Method Layout
 
+- Place package-level functions unrelated to structs at the top of the file
+  when exported and at the bottom when unexported. Keep constructors and
+  methods in their struct's group.
+- Within a file, group each constructor, struct, and its methods in that
+  order; keep unrelated declarations outside the group.
+- Preserve existing file boundaries when a type's methods are split by
+  responsibility.
 - For types with both exported and unexported methods, keep exported methods near the top of the type's method group and unexported methods below them.
 
 ## External Style References

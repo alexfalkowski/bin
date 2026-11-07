@@ -8,7 +8,7 @@ description: Use when writing, reviewing, refactoring, or documenting Go package
 ## Steps
 
 1. Confirm the task is in a Go repository or touches Go code, Go tests, Go documentation, or Go package APIs.
-2. Read `references/conventions.md` before editing exported APIs, documentation, imports, naming, method layout, transport/tool adapters, or tests.
+2. Read `references/conventions.md` before editing exported APIs, documentation, imports, naming, function and method layout, transport/tool adapters, or tests.
 3. Before adding or changing exported Go packages, types, interfaces,
    constructors, functions, methods, or documented examples, sketch the intended
    Go caller and package dependency direction. Use the sketch to decide package
@@ -41,4 +41,4 @@ description: Use when writing, reviewing, refactoring, or documenting Go package
 
 ## References
 
-- Read `references/conventions.md` for Go API, GoDoc, testing, method layout, import, and naming idiom conventions.
+- Read `references/conventions.md` for Go API, GoDoc, testing, function and method layout, import, and naming idiom conventions.
