@@ -76,6 +76,21 @@ Use this reference when working in Go repositories.
 - When package documentation needs to change, update `doc.go` rather than scattering package comments across implementation files.
 - Preserve `Deprecated:` paragraphs in doc comments when documenting compatibility guidance for identifiers that remain available but should not be used.
 
+## Constants
+
+- Declare each exported constant in its own standalone `const` declaration
+  with its own doc comment. Never group exported constants in a `const (...)`
+  block or a multi-name declaration. Separate declarations with a blank line,
+  keeping each comment directly above its declaration.
+- Group unexported constants in `const (...)` blocks by responsibility.
+  Consolidate standalone private constants and existing groups that serve the
+  same responsibility into one block; keep unrelated responsibilities in
+  separate blocks. When commenting an individual constant, separate its comment
+  and declaration from the previous entry with a blank line. Keep the comment
+  directly above the constant; do not require comments for every private constant.
+- When regrouping constants, preserve values and types, including
+  those derived from `iota` or inherited expressions.
+
 ## Testing
 
 - Follow `$testing-standards` for cross-language test design, coverage, fixtures, determinism, and test-layer decisions.
