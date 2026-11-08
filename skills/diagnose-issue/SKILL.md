@@ -49,10 +49,20 @@ folder.
    script cannot cover, or an unavailable Ruby or `jq` command. State why the
    collector was insufficient before relying on manual `gh`, CircleCI,
    `kubectl`, DigitalOcean, UptimeRobot, or local-git commands.
-5. Separate facts from inference. Label source gaps, stale data, partial
-   windows, missing credentials, and collection-time Kubernetes state.
-6. Give fixes as ordered suggestions. Prefer the smallest likely fix first, and
-   identify what evidence would confirm or reject each suggestion.
+5. Apply a diagnosis-before-fix checkpoint before proposing implementation:
+   - Trace the failing path through existing source, configuration, logs, and
+     exact dependency versions. Separate confirmed facts, causal hypotheses,
+     and missing evidence; label stale data, partial windows, missing
+     credentials, and collection-time Kubernetes state.
+   - Investigate plausible causes before concluding more instrumentation is
+     needed. Unless the user explicitly requests instrumentation, propose it
+     only when a specific evidence gap blocks diagnosis, stating the question
+     it will answer. Distinguish diagnostic improvements from corrective fixes.
+   - If the exact historical cause cannot be proven, state that limitation
+     separately from any verified failure path.
+6. Give fixes as ordered suggestions. Recommend the smallest change that
+   addresses the demonstrated failure mechanism, and identify what evidence
+   would confirm or reject each suggestion.
 
 ## Evidence Rules
 
