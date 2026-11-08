@@ -10,6 +10,7 @@ export PREFIX := $(shell $(BIN_ROOT)/build/git/prefix)
 override export msg := $(value msg)
 override export desc := $(value desc)
 override export desc_file := $(value desc_file)
+override export labels := $(value labels)
 
 # Checkout the master branch.
 master:
@@ -158,13 +159,13 @@ push:
 # Amend the last commit and force-push with a lease.
 force: amend push
 
-# Create a draft PR for the current branch (gh pr create --draft).
+# Create a draft PR with commit-type labels (labels=<extra-labels> optional).
 draft:
-	@gh pr create -d -a @me --fill-first --head "$$BRANCH"
+	@$(BIN_ROOT)/build/git/pr --draft
 
-# Create a PR for the current branch (gh pr create).
+# Create a PR with commit-type labels (labels=<extra-labels> optional).
 pr:
-	@gh pr create -a @me --fill-first --head "$$BRANCH"
+	@$(BIN_ROOT)/build/git/pr
 
 # Enable auto squash-merge for the current PR.
 merge:

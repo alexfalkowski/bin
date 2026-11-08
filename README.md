@@ -74,6 +74,35 @@ Projects that use the shared git workflow can include it separately:
 include bin/build/make/git.mak
 ```
 
+### PR Labels
+
+The shared `pr` and `draft` targets expect one commit per PR. They read the
+current commit's subject and pass a label based on its conventional prefix to
+GitHub CLI when creating the PR. The `review` and `ready` flows inherit this
+behavior.
+
+| Commit type | Label |
+| --- | --- |
+| `feat`, `build`, `test`, `refactor`, `release` | `enhancement` |
+| `fix` | `bug` |
+| `docs` | `documentation` |
+
+Scopes and breaking-change markers do not change the type's label.
+
+GitHub CLI must be installed and authenticated, and its default labels must be
+present. The script does not create labels or edit a PR after creation.
+Unknown types and detection failures produce warnings without blocking PR
+creation.
+
+Add other existing labels with a comma-separated list:
+
+```bash
+make draft labels="dependencies,hold"
+```
+
+Labels are passed to GitHub CLI during creation; missing labels or
+insufficient permissions can fail that command.
+
 ### Git Worktrees
 
 The git fragment can create local worktrees for independently checked-out

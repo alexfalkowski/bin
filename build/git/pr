@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# Create a PR through the shared Make targets with conventional-commit labels.
+
+set -eo pipefail
+
+# Print the GitHub label for the current commit's conventional prefix.
+detect_labels() {
+  local subject
+
+  subject="$(git log -1 --format=%s)" || return
+
+  case "$subject" in
+  feat*|build*|test*|refactor*|release*)
+    printf '%s\n' enhancement
+    ;;
+  fix*)
+    printf '%s\n' bug
+    ;;
+  docs*)
+    printf '%s\n' documentation
+    ;;
+  *)
+    printf '%s\n' 'bin: warning: no label mapping for the current commit' >&2
+    ;;
+  esac
+}
+
+readonly branch="${BRANCH:-$(git branch --show-current)}"
+args=()
+
+if [[ -n ${labels:-} ]]; then
+  args+=(--label "$labels")
+fi
+
+if label="$(detect_labels)"; then
+  if [[ -n $label ]]; then
+    args+=(--label "$label")
+  fi
+else
+  printf '%s\n' 'bin: warning: automatic label detection failed; creating the PR without inferred labels' >&2
+fi
+
+gh pr create -a @me --fill-first --head "$branch" "${args[@]}" "$@"
