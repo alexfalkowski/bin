@@ -160,6 +160,14 @@ configuration, documentation, and validation surfaces. Agents MUST preserve
 local import, naming, file layout, configuration key, test-layer, and validation
 patterns unless the task explicitly requires changing them.
 
+Before nontrivial code changes, show a brief design: intended behavior, affected
+code, and the simplest implementation. Prefer direct edits using existing
+patterns. Justify new abstractions, callbacks, wrappers, interfaces, or mutable
+state with a concrete current requirement, and explain why a simpler approach
+is insufficient before choosing a more elaborate design. If a small task starts
+spreading across many files, reassess the design. Showing the design does not
+add an approval gate for routine implementation choices.
+
 Do not introduce import aliases, new helper layers, new test layers, or new
 validation paths merely to avoid ambiguity. Use the existing local style. If the
 existing style appears unsafe or insufficient, stop and ask before changing it.
