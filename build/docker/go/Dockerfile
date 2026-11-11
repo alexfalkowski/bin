@@ -1,6 +1,6 @@
 ARG runtime_image=gcr.io/distroless/static
 
-FROM golang:1.27.3-trixie AS build
+FROM golang:1.27.4-trixie AS build
 
 ARG name=service
 ARG version=latest
