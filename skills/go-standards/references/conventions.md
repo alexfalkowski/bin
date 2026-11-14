@@ -61,6 +61,12 @@ Use this reference when working in Go repositories.
 - User-facing or documented Go APIs need clear, accurate, and detailed GoDoc for packages, exported types, functions, methods, constants, variables, and other supported entrypoints.
 - Go doc comments should directly precede the declaration they document with no intervening blank line.
 - Go doc comments for exported identifiers should start with the documented identifier where appropriate so generated documentation and summaries read clearly.
+- Every exported struct field MUST have its own GoDoc comment directly above
+  its declaration, including embedded fields and fields of exported structs in
+  internal packages. Explain the field's meaning and relevant defaults (including
+  zero or nil behavior), valid values, units, or ownership constraints. A type
+  comment does not replace individual field comments; do not group exported
+  fields under a shared comment.
 - GoDoc must still follow `$doc-standards`: do not write comments that only restate the declaration, obvious type shape, or implementation. Prefer contract, behavior, error semantics, compatibility, side effects, constraints, or examples that generated docs cannot infer from the signature.
 - For Go aliases, re-exports, and thin wrappers, keep GoDoc minimal: say that the identifier aliases, re-exports, or wraps the canonical identifier to keep call sites on the project-owned surface or reduce repeated imports, and link to the canonical package documentation when practical. Mention compatibility only when that is the real reason. Do not copy the upstream GoDoc into the alias.
 - Keep package-level GoDoc in `doc.go` files.
