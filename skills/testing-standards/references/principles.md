@@ -16,7 +16,9 @@
   future maintainers might remove it, and normal validation.
 - Do not write source-inspection tests to enforce implementation absence unless
   the repository owns that rule as lint, static analysis, or generation.
-- Keep each test or scenario narrow enough to verify useful behavior. Define the
+- Give each test or scenario one coherent behavior to verify. Split unrelated
+  contracts into focused tests or named subtests without removing meaningful
+  coverage, ownership checks, or prerequisite distinctions. Define the
   expected observable behavior and validation evidence before production edits;
   use validation instead of new tests for docs, policy, config, metadata,
   formatting, mechanical, generated, or non-executable changes.
@@ -56,7 +58,9 @@
 - Follow the majority relevant harness even when production code is written in
   another language.
 - Prefer table-driven tests for multiple inputs, branches, edge cases, or
-  examples unless local style uses another readable pattern.
+  examples unless local style uses another readable pattern. Use descriptive
+  case names and keep rows as data where practical; avoid switches on case names
+  or positional/numeric labels that obscure the behavior.
 - Cover meaningful consumer-visible decision points and failure paths: empty
   input, boundary values, malformed input, missing files or tools, non-zero
   commands, path errors, permissions, parsing failures, and argument
@@ -79,6 +83,8 @@
   CI runs that mode, or the change adds that mode.
 - Structure tests so setup, action, and assertion are easy to follow; use
   Arrange-Act-Assert or Given-When-Then when local style has no clearer pattern.
+  In test code and helpers, separate these steps into visual paragraphs while
+  keeping each operation beside its error/result checks.
 - In Cucumber/Gherkin, write from the user's or operator's perspective: one
   domain situation, event, and outcome using the local Given/When/Then
   convention. Avoid interleaving setup, actions, and assertions as a procedural
@@ -87,10 +93,17 @@
   fixture mechanics in established steps and harness lifecycle helpers.
   Preserve failure, recovery, and safety assertions when simplifying the
   story, and use tables for repeated domain examples when they improve clarity.
-- Make failures descriptive. For repeated low-information boolean or numeric
-  assertions, add named subtests or assertion messages.
+- Name tests, subtests, and scenarios after expected behavior, following
+  `$naming-standards`. Check the names displayed by the established harness;
+  failures should identify the behavior and case. For repeated low-information
+  boolean or numeric assertions, add named subtests or assertion messages.
 - Keep tests readable. Use helpers, fixtures, builders, or assertions only when
   they clarify behavior without hiding the scenario.
+- Keep assertion blocks short. Prefer complete result comparisons over repeated
+  field-by-field checks when they make the expected behavior clearer. Use small
+  shared helpers for repeated success/error shapes, keeping expected behavior
+  visible in their arguments. Avoid repeating evidence already established by
+  the same scenario.
 - Put repeated configuration literals in the established fixture/helper
   location and keep call sites focused on scenario-specific values.
 - Keep local tests scoped to changed packages and graph-proven direct

@@ -147,6 +147,13 @@ Use this reference when working in Go repositories.
 
 ## Method Layout
 
+- Group related steps into visual paragraphs. Keep an operation beside its
+  error/result checks, related assertions together, and short cleanup sequences
+  together. Do not insert a blank line after every call or assertion. Use
+  `$testing-standards` for setup, action, and observation boundaries in tests.
+- Write named functions, anonymous functions, and callbacks as multiline
+  blocks, even when short. Keep each statement on its own line; do not compress
+  test cases, cleanup, or error handling into one-line functions.
 - Place package-level functions unrelated to structs at the top of the file
   when exported and at the bottom when unexported. Keep constructors and
   methods in their struct's group.
