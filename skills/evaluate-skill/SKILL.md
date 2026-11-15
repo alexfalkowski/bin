@@ -91,7 +91,10 @@ Before `quick`, `standard`, or `thorough`:
 1. Snapshot the current skill in temporary storage and create a candidate that
    changes only the selected section or idea.
 2. Choose realistic tasks from supported usage evidence. Include the boundary
-   the candidate instruction is intended to protect.
+   the candidate instruction is intended to protect. For `standard` or
+   `thorough` comparisons, include a supported case not used to develop the
+   candidate within the selected mode's run budget. If all cases informed the
+   revision, report that limitation.
 3. Define two to four observable assertions before starting the runs. Assert
    user-visible outcomes and contracts, not exact wording, internal reasoning,
    tool call order, or implementation timing.
