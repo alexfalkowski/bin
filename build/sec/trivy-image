@@ -47,4 +47,4 @@ case "$image_type" in
     ;;
 esac
 
-trivy image --db-repository public.ecr.aws/aquasecurity/trivy-db:2 --exit-code 1 --severity CRITICAL "alexfalkowski/$name:$image_tag"
+trivy image --quiet --db-repository public.ecr.aws/aquasecurity/trivy-db:2 --exit-code 1 --severity CRITICAL "alexfalkowski/$name:$image_tag"
