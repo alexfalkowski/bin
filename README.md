@@ -312,6 +312,10 @@ Dockerfile lint targets depend on `shellcheck` and `hadolint`;
 `../docker` checkout, or uses SSH to clone
 `git@github.com:alexfalkowski/docker.git` there when missing.
 
+Trivy repository and image scans use `--quiet` to suppress progress bars and log
+output. Scan results are still printed, and critical vulnerabilities cause a
+nonzero exit status.
+
 The service fragments build fully static Docker images by default (`static=1`).
 Set `static=0` to allow native shared-library dependencies, such as those used
 by DuckDB:
