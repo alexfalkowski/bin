@@ -54,6 +54,8 @@ folder.
      exact dependency versions. Separate confirmed facts, causal hypotheses,
      and missing evidence; label stale data, partial windows, missing
      credentials, and collection-time Kubernetes state.
+   - When multiple plausible causes remain, identify an observation that would
+     distinguish them and inspect the smallest available evidence source.
    - Investigate plausible causes before concluding more instrumentation is
      needed. Unless the user explicitly requests instrumentation, propose it
      only when a specific evidence gap blocks diagnosis, stating the question
