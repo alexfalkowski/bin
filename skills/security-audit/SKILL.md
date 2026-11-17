@@ -1,6 +1,6 @@
 ---
 name: security-audit
-description: Use when the user asks for a security audit, vulnerability or secret check, unsafe shell/filesystem/network/auth review, or language-specific security inspection. Review security-sensitive code, scripts, Makefile glue, Docker helpers, skills, dependencies, and configuration.
+description: Use when the user asks for a security audit, vulnerability or secret check, unsafe shell/filesystem/network/auth review, or language-specific security inspection. Review security-sensitive code, APIs, scripts, Makefile glue, Docker helpers, skills, dependencies, and CI/release configuration.
 ---
 
 # Security Audit
@@ -29,14 +29,16 @@ to documentation instead.
    - `references/go.md` for Go code, modules, HTTP/TLS, crypto, filesystem, command execution, or `govulncheck`.
    - `references/ruby.md` for Ruby code, Bundler, process execution, YAML/JSON parsing, filesystem, env/secrets, or RuboCop security coverage.
    - `references/shell.md` for Bash scripts, Make targets that invoke shell commands, Docker helper scripts, ShellCheck, quoting, temp files, or destructive commands.
-   - `references/skills.md` for skill descriptions, bundled scripts/assets, permissions, prompt-injection risk, or external skill adoption.
+   - `references/api.md` for API authorization, tenant isolation, sessions, tokens, HTTP/RPC security parity, or business-flow abuse.
+   - `references/supply-chain.md` for dependency resolution, CI privileges, caches/artifacts, generated inputs, signing, or release integrity.
+   - `references/skills.md` for skill descriptions, bundled scripts/assets, permissions, prompt injection, agent/tool authority, or external skill adoption.
    - `references/shared.md` for cross-language repositories, dependency/config audits, secrets, Docker/security scanners, and report structure.
 3. Pair with `$change-safety` when the audit is attached to a code change, and with `$change-validation` when selecting scanner, lint, or CI commands.
 4. Identify whether scanners or dependency checks require network, SSH, GitHub
    auth, registry auth, or remote writes. Rely on the active agent
    configuration for command approval behavior; do not add a separate
    model-level permission request.
-5. Inspect concrete data/control flow before reporting a risk. Prefer file and line references over general advice.
+5. Follow the applicable diff-review and source-to-sink procedures in `references/shared.md`: compare security behavior when auditing changes, trace callers and controls, and identify the attacker's authority and unauthorized result. Keep investigation within the approved scope and prefer file and line references over general advice.
 6. When a candidate depends on prose contradicting implementation, first prove the implementation is insecure or wrong with non-prose evidence. If current code, tests, runtime behavior, scanner output, or history support the implementation, do not report a security finding; use `$doc-gaps-audit` or `$doc-gaps-fix` for the stale prose.
 7. Report exploitable findings first.
 8. For standalone output, use `references/shared.md`; when embedded, preserve
