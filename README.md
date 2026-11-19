@@ -74,6 +74,34 @@ Projects that use the shared git workflow can include it separately:
 include bin/build/make/git.mak
 ```
 
+### Git Configuration
+
+The branch targets require Git 2.23 or later for `git switch`. With Git 2.35 or
+later, apply the optional workflow and performance settings:
+
+```bash
+make configure
+```
+
+This sets `diff.algorithm=histogram`, `diff.colorMoved=default`, and
+`diff.colorMovedWS=allow-indentation-change` for diff display, plus
+`merge.conflictStyle=zdiff3` for conflict markers with common-ancestor context.
+It enables `rerere.enabled` to record and reuse conflict resolutions, and sets
+`rerere.autoUpdate=false` so reused resolutions can be reviewed before staging.
+
+Performance configuration enables `feature.manyFiles` and
+`fetch.writeCommitGraph`, converts the current worktree's index to version 4,
+and runs `git gc`.
+
+The command replaces these settings in the current repository's local Git
+configuration; it does not change global settings or configure submodules.
+Linked worktrees share this local configuration. Run it in each clone; rerunning
+reapplies the settings and repeats garbage collection. Use `make configure` in
+place of the removed `make optimise` target.
+
+The `fetch` target contacts `origin` and prunes stale remote-tracking refs;
+the `sync` target inherits this behavior.
+
 ### PR Labels
 
 The shared `pr` and `draft` targets expect one commit per PR. They read the
