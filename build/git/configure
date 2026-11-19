@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Configure local Git defaults and performance settings, then run garbage collection.
+
+set -eo pipefail
+
+git config --local diff.algorithm histogram
+git config --local diff.colorMoved default
+git config --local diff.colorMovedWS allow-indentation-change
+git config --local merge.conflictStyle zdiff3
+git config --local rerere.enabled true
+git config --local rerere.autoUpdate false
+
+git config --local feature.manyFiles true
+git update-index --index-version 4
+git config --local fetch.writeCommitGraph true
+git gc

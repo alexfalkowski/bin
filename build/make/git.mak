@@ -12,17 +12,17 @@ override export desc := $(value desc)
 override export desc_file := $(value desc_file)
 override export labels := $(value labels)
 
-# Checkout the master branch.
+# Switch to the master branch.
 master:
-	@git checkout master
+	@git switch master
 
 # Pull latest changes with rebase.
 pull:
 	@git pull --rebase
 
-# Fetch remote refs.
+# Fetch origin and prune stale remote-tracking refs.
 fetch:
-	@git fetch origin
+	@git fetch --prune origin
 
 # Stage all changes (tracked + untracked).
 add:
@@ -50,7 +50,7 @@ branch:
 
 # Create and checkout username-random/$(branch).
 checkout:
-	@git checkout -b "$(USER)/$(branch)"
+	@git switch -c "$(USER)/$(branch)"
 
 new-branch: latest checkout
 	@echo "bin: new branch '$(USER)/$(branch)'"
@@ -220,6 +220,6 @@ purge: purge-local purge-remote
 delete-version:
 	@git push --delete origin $(version) && git tag -d $(version)
 
-# Enable performance-related git settings and run git gc.
-optimise:
-	@$(BIN_ROOT)/build/git/optimise
+# Configure local Git settings, optimise the index, and run git gc.
+configure:
+	@$(BIN_ROOT)/build/git/configure
