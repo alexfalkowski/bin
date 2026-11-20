@@ -5,4 +5,9 @@ set -eo pipefail
 
 name="${1:?name is required}"
 
-air -c /dev/null --build.cmd "make dep build" --build.entrypoint "./$name" --build.full_bin "cd test && ../$name server -config file:.config/server.yaml" --build.exclude_dir "assets,bin,vendor,test"
+air -c /dev/null \
+  --build.cmd "make dep build" \
+  --build.entrypoint "./$name" \
+  --build.full_bin "cd test && ../$name server -config file:.config/server.yaml" \
+  --build.include_ext "go,tpl,tmpl,html,css,js" \
+  --build.exclude_dir "assets,bin,vendor,test"
