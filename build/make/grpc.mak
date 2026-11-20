@@ -48,6 +48,6 @@ proto-update-all-dep:
 # Update all Go modules, test/ gems, and api/ buf deps.
 update-all-dep: go-update-all-dep go-dep ruby-update-all-dep ruby-dep proto-update-all-dep
 
-# Run in dev mode with air; builds and runs "$(NAME) server" using test config.
+# Run the server with test config and rebuild on Go, template, HTML, CSS, or JavaScript changes using Air.
 dev:
 	@$(BIN_ROOT)/build/go/dev "$${NAME}"
