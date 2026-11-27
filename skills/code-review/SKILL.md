@@ -22,6 +22,18 @@ runtime behavior, public API usage, or history showing an unintended code
 regression. If implementation and tests agree while historical prose disagrees,
 route the finding to documentation instead of changing code.
 
+## Follow-up Reviews
+
+When reviewing a revision, verify each open blocker against the current
+change. Use the last reviewed head and base when available to identify what
+changed, then focus on those changes and their effects on callers, contracts,
+and tests. State any evidence gap that prevents verifying an earlier blocker.
+Report newly discovered material defects introduced or worsened by the change.
+When evidence establishes when a late blocker arose, say whether it was present
+in the original change or introduced by a later revision. Group findings that
+share one correction and recommend the smallest fix that preserves required
+behavior.
+
 ## Steps
 
 1. Identify the changed files or requested review scope. Include README,
@@ -46,6 +58,10 @@ route the finding to documentation instead of changing code.
 8. If any changed path from step 1 is a README, user-facing doc, example, or command/config doc, you MUST apply `$doc-standards` to that file as part of this review; this is not optional based on scope size. Also use `$doc-standards` for public API comments, docstrings, or changed behavior that may make nearby existing documentation stale. Keep review scope to the current change and directly affected nearby docs unless the user explicitly asks for `$doc-gaps-fix` or a broader documentation audit.
 9. Pair with relevant language standards (`$go-standards`, `$ruby-standards`, `$shell-standards`) when reviewing language-specific code, APIs, docs, tests, or tooling behavior. Pair with `$naming-standards` when names create concrete ambiguity, misuse risk, public contract confusion, inconsistent vocabulary, or maintenance cost. Treat idiomatic style concerns as findings only when they create concrete readability, maintenance, correctness, compatibility, or public API risk; use `$style-review` instead for non-blocking polish when the user asks for style nits or a readability pass.
 10. Use `$testing-standards` when judging whether tests are missing, weak, overfit to internals, hard to read, cryptic, or at the wrong layer.
+    For a changed safeguard, trace a supported failure through the normal
+    entry point and identify the existing assertion that would catch it.
+    Account for nearby coverage. Treat a test gap as blocking only when the
+    current tests could miss a failure with a material consequence.
 11. Route dependency, tool, framework, and upstream-library defects to the owner
     of the fix before recording a local finding.
 12. Treat unnecessary abstraction as a code-review finding only when it creates
